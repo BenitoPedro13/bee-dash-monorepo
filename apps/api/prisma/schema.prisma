@@ -1,0 +1,102 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum PostsType {
+  STORIES
+  FEED
+  TIKTOK
+}
+
+// User model
+model User {
+  id                          Int           @id @default(autoincrement())
+  email                       String        @unique
+  password                    String
+  name                        String
+  createdAt                   DateTime      @default(now())
+  updatedAt                   DateTime      @updatedAt
+  totalInitialInvestment      Float         @map(name: "total_initial_investment")
+  color                       String?
+  campaignName                String
+  estimatedExecutedInvestment Float         @map(name: "estimated_executed_investment")
+  byPosts                     Boolean       @default(false)
+  urlProfilePicture           String?       @map(name: "url_profile_picture")
+  attachments                 Attachments[]
+  performances                Performance[]
+  Posts                       Posts[]
+}
+
+// model Campaign {
+//   id                          Int           @id @default(autoincrement())
+//   name                        String
+//   createdAt                   DateTime      @default(now())
+//   updatedAt                   DateTime      @updatedAt
+//   totalInitialInvestment      Float         @map(name: "total_initial_investment")
+//   color                       String?
+//   estimatedExecutedInvestment Float         @map(name: "estimated_executed_investment")
+//   attachments                 Attachments[]
+//   performances                Performance[]
+//   influencers                 Influencers[]
+//   Posts                       Posts[]
+// }
+
+model Performance {
+  id               Int      @id @default(autoincrement())
+  uniqueFilename   String
+  originalFilename String
+  fileSize         Int
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  user             User     @relation(fields: [userEmail], references: [email])
+  userEmail        String
+  // Campaign         Campaign? @relation(fields: [campaignId], references: [id])
+  // campaignId       Int?
+}
+
+model Attachments {
+  id               Int      @id @default(autoincrement())
+  uniqueFilename   String
+  originalFilename String
+  fileSize         Int
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  user             User     @relation(fields: [userEmail], references: [email])
+  userEmail        String
+  // Campaign         Campaign? @relation(fields: [campaignId], references: [id])
+  // campaignId       Int?
+}
+
+// model Influencers {
+//   id          Int     @id @default(autoincrement())
+//   creatorId   String  @unique
+//   creatorName String
+//   Posts       Posts[]
+// }
+
+model Posts {
+  id           Int       @id @default(autoincrement())
+  type         PostsType
+  isVideo      Boolean
+  impressions  Int
+  interactions Int
+  clicks       Int
+  videoViews   Int
+  engagement   Float
+  price        Float
+  postDate     DateTime
+  creatorId    String
+  creatorName  String
+  // influencersId Int?
+  // influencer    Influencers @relation(fields: [influencerId], references: [id])
+  userEmail    String
+  user         User      @relation(fields: [userEmail], references: [email])
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
