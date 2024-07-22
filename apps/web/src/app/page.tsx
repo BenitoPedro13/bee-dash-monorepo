@@ -1,8 +1,8 @@
-"use client"
+"use client";
 import useDataStore, { LoginFormData } from "@/store";
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useRouter } from 'next/navigation'
+import { useRouter } from "next/navigation";
 import { parseCookies } from "nookies";
 
 const SignIn = () => {
@@ -13,22 +13,21 @@ const SignIn = () => {
 
   const onSubmit = async (data: LoginFormData) => {
     const isAuthenticated = await signIn(data); // Handle form submission data
-    
-    isAuthenticated ? router.push('/dashboard'): null;
+
+    isAuthenticated ? router.push("/dashboard") : null;
   };
 
   useEffect(() => {
-    const { 'juicy-admin-token' :access_token} = parseCookies()
-    
-    if(access_token) {
+    const { "bee-dash-token": access_token } = parseCookies();
+
+    if (access_token) {
       (async () => {
         return await getUserByToken(access_token);
-      })().then(isAuthenticated => isAuthenticated ? router.push('/dashboard'): null)
-      
-      
+      })().then((isAuthenticated) =>
+        isAuthenticated ? router.push("/dashboard") : null
+      );
     }
-  }, [getUserByToken, router])
-  
+  }, [getUserByToken, router]);
 
   return (
     <div className="h-[100vh] w-full flex justify-center items-center">
