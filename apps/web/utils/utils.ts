@@ -34,17 +34,22 @@ export const handleSort = (
 
 export const parseCurrencyString = (value: string) => {
   const numericValue = Number(
-    value.replace(/[^\d,-]/g, '').replace(',', '.').replace('R$', '').replace('-', '')
+    value
+      .replace(/[^\d,-]/g, "")
+      .replace(",", ".")
+      .replace("R$", "")
+      .replace("-", "")
   );
 
   return Number.isNaN(numericValue) ? 0 : numericValue;
 };
 
-export const parsePercentageString = (value:string) => {
-  const numericValue = parseFloat(value.replace(/[^\d,.]/g, '').replace(',', '.'));
+export const parsePercentageString = (value: string) => {
+  const numericValue = parseFloat(
+    value.replace(/[^\d,.]/g, "").replace(",", ".")
+  );
   return Number.isNaN(numericValue) ? 0 : numericValue;
 };
-
 
 export function hexToRgba(hex: string, alpha: number = 1): string {
   const hexPattern = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i;
@@ -53,7 +58,7 @@ export function hexToRgba(hex: string, alpha: number = 1): string {
   const result = hexPattern.exec(hex) || shortHexPattern.exec(hex);
 
   if (!result) {
-    return hexToRgba('#E624CF');
+    return hexToRgba("#E624CF");
   }
 
   const [r, g, b] = result.slice(1).map((x) => Number.parseInt(x, 16));
@@ -64,8 +69,10 @@ export function hexToRgba(hex: string, alpha: number = 1): string {
   return returnValue;
 }
 
-
-export function generateShadesAndTints(mainColor: string, count: number): string[] {
+export function generateShadesAndTints(
+  mainColor: string,
+  count: number
+): string[] {
   const [r, g, b] = colorConvert.hex.rgb(mainColor);
   const RGB = r + g + b;
   let max = Math.round(RGB / 38.25);
@@ -83,7 +90,7 @@ export function generateShadesAndTints(mainColor: string, count: number): string
     subVariations.push(`#${hexSubColor}`);
   }
 
-  max = 20 - max +10;
+  max = 20 - max + 10;
   for (let i = 10; i < max; i++) {
     const f = i / max;
     const adjustedR = Math.min(Math.round((255 - r) * f + r), 255);
