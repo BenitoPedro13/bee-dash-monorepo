@@ -9,15 +9,15 @@ import { useRouter } from "next/navigation";
 import { destroyCookie } from "nookies";
 
 const Header = () => {
-  const router = useRouter()
+  const router = useRouter();
 
   const handleLogout = () => {
-        // Remove the authentication token or relevant cookie here
-        destroyCookie(null, 'juicy-admin-token');
+    // Remove the authentication token or relevant cookie here
+    destroyCookie(null, "bee-dash-token");
 
-        // Redirect to the login page or any other page after logout
-        router.push('/'); // Change '/login' to the desired destination
-  }
+    // Redirect to the login page or any other page after logout
+    router.push("/"); // Change '/login' to the desired destination
+  };
 
   return (
     <header className="bg-white h-[72px] border-b border-gray-100 shadow-header lg:h-20 xl:hidden">
@@ -81,7 +81,6 @@ const Header = () => {
                 <p className="text-base font-semibold text-gray-600">Pricing</p>
               </button>
             </nav> */}
-                        
           </div>
           <div className="flex flex-row justify-center items-center p-2 gap-2 w-10 h-10 cursor-pointer lg:p-0 lg:flex-col">
             <div className="w-fit h-fit flex justify-center items-center">
@@ -97,24 +96,25 @@ const Header = () => {
                   <img src="/avatar.jpeg" alt="Avatar Picture" />
                 </div>
               </div> */}
-              <button 
-            onClick={() => handleLogout()}
-            className="btn btn-ghost box-border flex-shrink-0 w-12 h-12 flex flex-row justify-start items-start p-3 bg-transparent overflow-hidden relative content-start flex-nowrap gap-2 rounded-full">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="#000"
-                className="w-6 h-6"
+              <button
+                onClick={() => handleLogout()}
+                className="btn btn-ghost box-border flex-shrink-0 w-12 h-12 flex flex-row justify-start items-start p-3 bg-transparent overflow-hidden relative content-start flex-nowrap gap-2 rounded-full"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75"
-                />
-              </svg>
-            </button>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="#000"
+                  className="w-6 h-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75"
+                  />
+                </svg>
+              </button>
             </div>
           </div>
         </div>

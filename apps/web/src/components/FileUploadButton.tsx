@@ -11,7 +11,7 @@ const FileUploadButton = ({
   attachments,
   setAttachments,
 }: FileUploadButtonProps) => {
-  const { 'juicy-admin-token' :access_token} = parseCookies()
+  const { "bee-dash-token": access_token } = parseCookies();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const newAttachments = [...attachments];
 

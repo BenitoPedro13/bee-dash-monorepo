@@ -10,22 +10,22 @@ import { useRouter } from "next/navigation";
 
 const SidenavDesktop = () => {
   const session = useDataStore((state) => state.session);
-  const router = useRouter()
+  const router = useRouter();
 
   const handleLogout = () => {
-        // Remove the authentication token or relevant cookie here
-        destroyCookie(null, 'juicy-admin-token');
+    // Remove the authentication token or relevant cookie here
+    destroyCookie(null, "bee-dash-token");
 
-        // Redirect to the login page or any other page after logout
-        router.push('/'); // Change '/login' to the desired destination
-  }
+    // Redirect to the login page or any other page after logout
+    router.push("/"); // Change '/login' to the desired destination
+  };
 
   return (
     <div className="hidden w-[82px] h-[100vh] xl:flex flex-row justify-start items-start bg-white overflow-hidden z-1 p-0 content-start flex-nowrap gap-0 fixed rounded-none border-[#475466] border-solid border-r z-10">
       <div className="w-[81px] h-[100vh] flex flex-col justify-between items-start overflow-visible flex-grow flex-shrink-0 relative p-0 content-start flex-nowrap rounded-none">
         <nav className="navbar box-border flex-shrink-0 w-full h-min flex flex-col justify-start items-center pt-8 overflow-visible relative content-center flex-nowrap gap-6 rounded-none">
           <Link href="/">
-            <Image src={logo} width={42} height={38} alt="Juicy Logo" />
+            <Image src={logo} width={42} height={38} alt="Bee Company Logo" />
           </Link>
           <div className="box-border flex-shrink-0 w-full h-min flex flex-col justify-center items-center px-4 overflow-visible relative content-start flex-nowrap gap-2 rounded-none">
             <button className="btn btn-ghost box-border flex-shrink-0 w-12 h-12 flex flex-row justify-start items-start p-3 bg-transparent overflow-hidden relative content-start flex-nowrap gap-2 rounded-full opacity-20 hover:opacity-80">
@@ -120,9 +120,10 @@ const SidenavDesktop = () => {
                 />
               </svg>
             </button>
-            <button 
-            onClick={() => handleLogout()}
-            className="btn btn-ghost box-border flex-shrink-0 w-12 h-12 flex flex-row justify-start items-start p-3 bg-transparent overflow-hidden relative content-start flex-nowrap gap-2 rounded-full">
+            <button
+              onClick={() => handleLogout()}
+              className="btn btn-ghost box-border flex-shrink-0 w-12 h-12 flex flex-row justify-start items-start p-3 bg-transparent overflow-hidden relative content-start flex-nowrap gap-2 rounded-full"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -140,8 +141,8 @@ const SidenavDesktop = () => {
             </button>
           </div>
           {!session?.user?.urlProfilePicture ? (
-                <div className="mask mask-squircle w-12 h-12 aspect-square flex flex-grow flex-shrink-0 rounded-full border-black border-[1px] border-solid bg-[url('/bg-contact-cta.webp')] bg-cover bg-no-repeat bg-center relative">
-                  {/* <svg
+            <div className="mask mask-squircle w-12 h-12 aspect-square flex flex-grow flex-shrink-0 rounded-full border-black border-[1px] border-solid bg-[url('/bg-contact-cta.webp')] bg-cover bg-no-repeat bg-center relative">
+              {/* <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -155,8 +156,12 @@ const SidenavDesktop = () => {
                       d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z"
                     />
                   </svg> */}
-                  <img src="/juicy-artwork-limo.svg" alt="Default Juicy Avatar" className="absolute right-[3px]"/>
-                </div>
+              <img
+                src="/juicy-artwork-limo.svg"
+                alt="Default Bee Company Avatar"
+                className="absolute right-[3px]"
+              />
+            </div>
           ) : (
             <img
               src={`${baseApiUrl}${session.user.urlProfilePicture}`}

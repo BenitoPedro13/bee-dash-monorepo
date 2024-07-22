@@ -108,7 +108,7 @@ const useDataStore = create<DataState>((set) => ({
 
       const data = await response.json();
 
-      setCookie(undefined, "juicy-admin-token", data.access_token, {
+      setCookie(undefined, "bee-dash-token", data.access_token, {
         maxAge: 60 * 60 * 1, // 1 hora
       });
 

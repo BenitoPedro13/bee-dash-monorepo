@@ -48,7 +48,7 @@ export default function Home() {
   }, [router, session.isAuthenticated]);
 
   useEffect(() => {
-    const { "juicy-admin-token": access_token } = parseCookies();
+    const { "bee-dash-token": access_token } = parseCookies();
     fetchData(access_token);
     fetchAttachment(access_token);
   }, [fetchData, fetchAttachment]);
@@ -296,7 +296,7 @@ export default function Home() {
                   </svg> */}
                   <img
                     src="/juicy-artwork-limo.svg"
-                    alt="Default Juicy Avatar"
+                    alt="Default Bee Company Avatar"
                     className="absolute right-[3px]"
                   />
                 </div>

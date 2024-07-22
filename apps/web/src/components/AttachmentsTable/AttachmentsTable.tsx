@@ -103,7 +103,7 @@ const AttachmentsTable = () => {
             className="hidden sm:block"
           /> */}
 
-          <AttachmentIcon className="hidden sm:block"/>
+          <AttachmentIcon className="hidden sm:block" />
 
           <div className="sm:hidden flex w-full h-min flex-shrink-0 justify-between items-center flex-nowrap">
             {/* <Image
@@ -154,7 +154,7 @@ const AttachmentsTable = () => {
             <p
               className={`flex-shrink-0 flex-grow w-auto h-auto whitespace-pre-wrap break-words relative ${inter.className} text-[#475466] text-sm`}
             >
-              Arquivos e documentos anexados ao seu projeto Juicy
+              Arquivos e documentos anexados ao seu projeto Bee
             </p>
           </div>
           <div className="hidden sm:flex flex-shrink-0 w-min h-min justify-start items-center overflow-visible relative p-0 content-center flex-nowrap gap-3 rounded-none">

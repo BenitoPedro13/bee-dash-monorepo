@@ -46,12 +46,14 @@ const ContactCTA = () => {
               Sua experiência está suculenta?
             </p>
             <p className="flex-shrink-0 w-fit h-auto whitespace-pre-wrap break-words relative text-[#475466] text-sm">
-              Nós adorariamos te ouvir e ajudar em sua campanha Juicy.
+              Nós adorariamos te ouvir e ajudar em sua campanha Bee.
             </p>
           </div>
           <div className="flex-shrink-0 w-full h-min flex flex-col justify-start items-start overflow-visible relative p-0 content-start flex-nowrap gap-3 rounded-none">
             <Link
-              href={"https://api.whatsapp.com/send/?phone=5511988776571&text&type=phone_number&app_absent=0"}
+              href={
+                "https://api.whatsapp.com/send/?phone=5511988776571&text&type=phone_number&app_absent=0"
+              }
               target="_blank"
               className="btn btn-ghost box-border w-full h-min flex justify-center items-center px-4 py-[10px] shadow-cost-per-metrics hover:shadow-metrics-hover hover:bg-[#04ff93] bg-[#04ff93] overflow-hidden relative content-center flex-nowrap gap-2 rounded-lg border border-solid border-black"
             >

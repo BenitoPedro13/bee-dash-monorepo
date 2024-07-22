@@ -4,7 +4,7 @@ import { parseCookies } from "nookies";
 
 export function useAuth() {
   const router = useRouter();
-  const isAuthenticated = !!parseCookies()["juicy-admin-token"];
+  const isAuthenticated = !!parseCookies()["bee-dash-token"];
 
   useEffect(() => {
     if (!isAuthenticated) {
