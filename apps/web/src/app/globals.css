@@ -1,0 +1,344 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+    https://github.com/tailwindlabs/tailwindcss/discussions/2394
+    https://github.com/tailwindlabs/tailwindcss/pull/5732
+*/
+@layer utilities {
+  /* Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+}
+
+@font-face {
+  font-family: "Balgin Black SmCondensed";
+  src: url("/fonts/BalginBlackSmCondensedBold.woff2") format("woff2"),
+    url("/fonts/BalginBlackSmCondensedBold.woff") format("woff");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Balgin";
+  src: url("/fonts/BalginBold.woff2") format("woff2"),
+    url("/fonts/BalginBold.woff") format("woff");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Balgin";
+  src: url("/fonts/BalginBold.woff2") format("woff2"),
+    url("/fonts/BalginBold.woff") format("woff");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Balgin Regular";
+  src: url("/fonts/Studio_Sun_-_Balgin_Regular.otf") format("opentype");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Balgin Text Bold";
+  src: url("/fonts/Studio_Sun_-_Balgin_Text_Bold.otf") format("opentype");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Balgin Text Old";
+  src: url("/fonts/BalgintextBold.otf") format("opentype");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Balgin Text Old";
+  src: url("/fonts/BalgintextRegular.otf") format("opentype");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Balgin Expanded";
+  src: url("/fonts/BalginExpandedBold.woff2") format("woff2"),
+    url("/fonts/BalginExpandedBold.woff") format("woff");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Balgin";
+  src: url("/fonts/BalginBlackBoldItalic.woff2") format("woff2"),
+    url("/fonts/BalginBlackBoldItalic.woff") format("woff");
+  font-weight: bold;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Balgin";
+  src: url("/fonts/BalginBlackBold.woff2") format("woff2"),
+    url("/fonts/BalginBlackBold.woff") format("woff");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Balgin Black Expanded";
+  src: url("/fonts/BalginBlackExpandedBoldItalic.woff2") format("woff2"),
+    url("/fonts/BalginBlackExpandedBoldItalic.woff") format("woff");
+  font-weight: bold;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Balgin Black Expanded";
+  src: url("/fonts/BalginBlackExpandedBold.woff2") format("woff2"),
+    url("/fonts/BalginBlackExpandedBold.woff") format("woff");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Balgin Black SmCondensed";
+  src: url("/fonts/BalginBlackSmCondensedBoldItalic.woff2") format("woff2"),
+    url("/fonts/BalginBlackSmCondensedBoldItalic.woff") format("woff");
+  font-weight: bold;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Balgin SmCondensed";
+  src: url("/fonts/BalginSmCondensedBold.woff2") format("woff2"),
+    url("/fonts/BalginSmCondensedBold.woff") format("woff");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Balgin Display";
+  src: url("/fonts/BalginDisplayExtraBoldBold.woff2") format("woff2"),
+    url("/fonts/BalginDisplayExtraBoldBold.woff") format("woff");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Balgin Display";
+  src: url("/fonts/BalginDisplayBlackBold.woff2") format("woff2"),
+    url("/fonts/BalginDisplayBlackBold.woff") format("woff");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Balgin Display";
+  src: url("/fonts/BalginDisplayBold.woff2") format("woff2"),
+    url("/fonts/BalginDisplayBold.woff") format("woff");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Balgin Display";
+  src: url("/fonts/BalginDisplayRegular.woff2") format("woff2"),
+    url("/fonts/BalginDisplayRegular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Balgin Display";
+  src: url("/fonts/BalginDisplayLightRegular.woff2") format("woff2"),
+    url("/fonts/BalginDisplayLightRegular.woff") format("woff");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Balgin Display";
+  src: url("/fonts/BalginDisplayExtraLightRegular.woff2") format("woff2"),
+    url("/fonts/BalginDisplayExtraLightRegular.woff") format("woff");
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Balgin Display";
+  src: url("/fonts/BalginDisplayMediumRegular.woff2") format("woff2"),
+    url("/fonts/BalginDisplayMediumRegular.woff") format("woff");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Balgin Bold SmCondensed";
+  src: url("/fonts/BalginBoldSmCondensedBoldItalic.woff2") format("woff2"),
+    url("/fonts/BalginBoldSmCondensedBoldItalic.woff") format("woff");
+  font-weight: bold;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Balgin";
+  src: url("/fonts/BalginBoldBoldItalic.woff2") format("woff2"),
+    url("/fonts/BalginBoldBoldItalic.woff") format("woff");
+  font-weight: bold;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Balgin Bold Expanded";
+  src: url("/fonts/BalginBoldExpandedBoldItalic.woff2") format("woff2"),
+    url("/fonts/BalginBoldExpandedBoldItalic.woff") format("woff");
+  font-weight: bold;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Balgin Extra Light SmCondensed";
+  src: url("/fonts/BalginExtraLightSmCondensedItalic.woff2") format("woff2"),
+    url("/fonts/BalginExtraLightSmCondensedItalic.woff") format("woff");
+  font-weight: 200;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Balgin";
+  src: url("/fonts/BalginLightItalic.woff2") format("woff2"),
+    url("/fonts/BalginLightItalic.woff") format("woff");
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Balgin";
+  src: url("/fonts/BalginLightRegular.woff2") format("woff2"),
+    url("/fonts/BalginLightRegular.woff") format("woff");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Balgin Light Expanded";
+  src: url("/fonts/BalginLightExpandedRegular.woff2") format("woff2"),
+    url("/fonts/BalginLightExpandedRegular.woff") format("woff");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Balgin Extra";
+  src: url("/fonts/BalginExtraLightItalic.woff2") format("woff2"),
+    url("/fonts/BalginExtraLightItalic.woff") format("woff");
+  font-weight: 200;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Balgin Light Expanded";
+  src: url("/fonts/BalginLightExpandedItalic.woff2") format("woff2"),
+    url("/fonts/BalginLightExpandedItalic.woff") format("woff");
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Balgin Extra Light Expanded";
+  src: url("/fonts/BalginExtraLightExpandedItalic.woff2") format("woff2"),
+    url("/fonts/BalginExtraLightExpandedItalic.woff") format("woff");
+  font-weight: 200;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Balgin Extra";
+  src: url("/fonts/BalginExtraLightRegular.woff2") format("woff2"),
+    url("/fonts/BalginExtraLightRegular.woff") format("woff");
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Balgin Extra Light Expanded";
+  src: url("/fonts/BalginExtraLightExpandedRegular.woff2") format("woff2"),
+    url("/fonts/BalginExtraLightExpandedRegular.woff") format("woff");
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Balgin Display";
+  src: url("/fonts/BalginDisplaySemiBoldRegular.woff2") format("woff2"),
+    url("/fonts/BalginDisplaySemiBoldRegular.woff") format("woff");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Balgin Extra Light SmCondensed";
+  src: url("/fonts/BalginExtraLightSmCondensedRegular.woff2") format("woff2"),
+    url("/fonts/BalginExtraLightSmCondensedRegular.woff") format("woff");
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
