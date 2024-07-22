@@ -72,7 +72,7 @@ const SidenavDesktop = () => {
         </nav>
         <div className="w-full flex flex-col justify-end items-start pb-6 px-4 overflow-visible relative content-start flex-nowrap gap-6 self-stretch rounded-none">
           <div className="box-border flex-shrink-0 w-full h-auto flex flex-col justify-center items-center px-4 overflow-visible relative content-start flex-nowrap gap-2 self-stretch rounded-none">
-            <button className="btn btn-ghost cursor-not-allowed box-border flex-shrink-0 w-12 h-12 flex flex-row justify-start items-start p-3 bg-transparent overflow-hidden relative content-start flex-nowrap gap-2 rounded-md opacity-30 hover:opacity-80 ">
+            <button className="btn btn-ghost cursor-not-allowed box-border flex-shrink-0 w-12 h-12 flex flex-row justify-center items-start p-3 bg-transparent overflow-hidden relative content-start flex-nowrap gap-2 rounded-md opacity-30 hover:opacity-80 ">
               <Image
                 src={contact}
                 width={19.5}
@@ -80,7 +80,7 @@ const SidenavDesktop = () => {
                 alt="Get in touch with us"
               />
             </button>
-            <button className="btn btn-ghost cursor-not-allowed box-border flex-shrink-0 w-12 h-12 flex flex-row justify-start items-start p-3 bg-transparent overflow-hidden relative content-start flex-nowrap gap-2 rounded-md opacity-30 hover:opacity-80 ">
+            <button className="btn btn-ghost cursor-not-allowed box-border flex-shrink-0 w-12 h-12 flex flex-row justify-center items-start p-3 bg-transparent overflow-hidden relative content-start flex-nowrap gap-2 rounded-md opacity-30 hover:opacity-80 ">
               <Image
                 src={gear}
                 width={24}
@@ -90,14 +90,14 @@ const SidenavDesktop = () => {
             </button>
             <button
               onClick={() => handleLogout()}
-              className="btn btn-ghost box-border flex-shrink-0 w-12 h-12 flex flex-row justify-center items-center p-3 bg-transparent overflow-hidden relative content-start flex-nowrap gap-2 rounded-md hover:opacity-80 rotate-180"
+              className="btn btn-ghost box-border flex-shrink-0 w-12 h-12 flex flex-row justify-center items-center p-3 bg-transparent overflow-hidden relative content-start flex-nowrap gap-2 rounded-md hover:opacity-80"
             >
               <Image
                 src={logout}
                 width={24}
                 height={24}
                 alt="Get in touch with us"
-                className="relative left-[2px]"
+                className="relative right-[2px] rotate-180"
               />
             </button>
           </div>
