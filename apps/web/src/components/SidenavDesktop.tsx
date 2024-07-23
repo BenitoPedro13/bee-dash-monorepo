@@ -6,11 +6,10 @@ import folderstar from "@/../public/folder-star.svg";
 import contact from "@/../public/contact.svg";
 import gear from "@/../public/gear.svg";
 import logout from "@/../public/logout.svg";
-import buserLogo from "@/../public/buser-logo.webp";
 import Link from "next/link";
 import Image from "next/image";
 import useDataStore, { baseApiUrl } from "@/store";
-import DashboardIcon from "./MetricsIcons/DashboardIcon";
+
 import { destroyCookie } from "nookies";
 import { useRouter } from "next/navigation";
 
@@ -64,10 +63,6 @@ const SidenavDesktop = () => {
                 />
               </button>
             </Link>
-
-            {/* <DashboardIcon
-              className={`btn btn-ghost box-border flex-shrink-0 w-12 h-12 flex flex-row justify-start items-start p-0 bg-transparent hover:bg-transparent overflow-hidden relative content-start flex-nowrap gap-2 rounded-full`}
-            /> */}
           </div>
         </nav>
         <div className="w-full flex flex-col justify-end items-start pb-6 px-4 overflow-visible relative content-start flex-nowrap gap-6 self-stretch rounded-none">
