@@ -2,10 +2,9 @@
 module.exports = {
   darkMode: ["class"],
   content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
+    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   prefix: "",
   theme: {
@@ -29,11 +28,8 @@ module.exports = {
         'contact-cta': '0px 1px 2px 0px rgba(16, 24, 40, 0.06), 0px 1px 3px 0px rgba(16, 24, 40, 0.10000000149011612);'
       },
       fontFamily: {
-        'Balgin': 'Balgin',
-        'Balgin-Text': 'Balgin Regular',
-        'Balgin-Expanded': 'Balgin Expanded',
-        'Balgin-Display': 'Balgin Text Bold',
-        'Inter': '__Inter_0ec1f4',
+        'nexa': ['var(--font-nexa)'],
+        'nexa-bold': ['var(--font-nexa-bold)'],
       },
       keyframes: {
         "accordion-down": {
