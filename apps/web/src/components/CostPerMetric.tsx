@@ -31,12 +31,12 @@ const CostPerMetric = ({
   const [siglaActive, setSiglaActive] = useState(sigla?.at(0) ?? "");
 
   return (
-    <motion.div
+    <div
       className="box-border w-full sm:min-w-[200px] h-min flex flex-col items-start p-4 py-5 bg-white overflow-visible content-center flex-nowrap gap-2 rounded-xl border-[#D4D4D4] border"
-      initial={false}
-      whileHover={{ boxShadow: "2px 2px 0px 0px #898989" }}
-      animate={{ boxShadow: "2px 2px 2px 0px rgba(16, 24, 40, 0.06)" }}
-      transition={{ duration: 0.3, ease: "linear" }}
+      // initial={false}
+      // whileHover={{ boxShadow: "2px 2px 0px 0px #898989" }}
+      // animate={{ boxShadow: "2px 2px 2px 0px rgba(16, 24, 40, 0.06)" }}
+      // transition={{ duration: 0.3, ease: "linear" }}
     >
       <div className="flex items-center justify-between self-stretch">
         <p className="text-sm font-nexa font-medium text-[#475467]">
@@ -75,7 +75,7 @@ const CostPerMetric = ({
           <Badge number={10} className=" invisible" />
         )}
       </div>
-    </motion.div>
+    </div>
   );
 };
 

@@ -1,3 +1,5 @@
+"use client";
+
 /* eslint-disable @next/next/no-img-element */
 import React from "react";
 import logo from "@/../public/bee-logo.svg";
@@ -17,7 +19,7 @@ const SidenavDesktop = () => {
   const session = useDataStore((state) => state.session);
   const router = useRouter();
 
-  const windowIsUndefined = typeof window === undefined;
+  const windowIsUndefined = typeof window === "undefined";
   // TODO: implement state to verify if url path is /dashboard
   const isDashboard = windowIsUndefined
     ? false

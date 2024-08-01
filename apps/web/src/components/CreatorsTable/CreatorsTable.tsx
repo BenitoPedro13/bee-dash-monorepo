@@ -115,16 +115,16 @@ const CreatorsTable = () => {
   }, [data, sortColumn, sortOrder, currentPage, itemsPerPage]);
 
   return (
-    <motion.div
+    <div
       className="box-border xl:w-[calc(100%-384px)] w-full flex flex-col justify-start items-start bg-white overflow-hidden p-0 content-start flex-nowrap gap-0 rounded-xl border border-[#D4D4D4]"
-      initial={false}
-      animate={{
-        boxShadow: "2px 2px 2px 0px rgba(16, 24, 40, 0.06)",
-        height:
-          currentData.length / itemsPerPage < 1 ? "fit-content" : "fit-content",
-      }}
-      transition={{ duration: 0.3, ease: "linear" }}
-      whileHover={{ boxShadow: "2px 2px 0px 0px #898989" }}
+      // initial={false}
+      // animate={{
+      //   boxShadow: "2px 2px 2px 0px rgba(16, 24, 40, 0.06)",
+      //   height:
+      //     currentData.length / itemsPerPage < 1 ? "fit-content" : "fit-content",
+      // }}
+      // transition={{ duration: 0.3, ease: "linear" }}
+      // whileHover={{ boxShadow: "2px 2px 0px 0px #898989" }}
     >
       <div className="flex-shrink-0 w-full h-min flex flex-col justify-start items-start overflow-visible relative p-0 content-start flex-nowrap sm:gap-5 gap-0 rounded-none">
         <div className="box-border flex-shrink-0 w-full h-min flex sm:flex-row flex-col justify-start sm:items-center items-start xl:pt-5 xl:pb-0 py-5 px-6 overflow-visible relative sm:content-center content-start flex-nowrap gap-4 rounded-none">
@@ -136,7 +136,7 @@ const CreatorsTable = () => {
             className="hidden sm:block"
           /> */}
 
-          <PerformanceIcon className="hidden sm:block" />
+          {/* <PerformanceIcon className="hidden sm:block" /> */}
 
           <div className="sm:hidden flex w-full h-min flex-shrink-0 justify-between items-center flex-nowrap">
             {/* <Image
@@ -147,7 +147,7 @@ const CreatorsTable = () => {
               className="sm:hidden block"
             /> */}
 
-            <PerformanceIcon />
+            {/* <PerformanceIcon /> */}
 
             <div className="flex-shrink-0 w-min h-min flex justify-start items-center overflow-visible relative p-0 content-center flex-nowrap gap-3 rounded-none">
               {/* <motion.div
@@ -654,7 +654,7 @@ const CreatorsTable = () => {
           </div>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 

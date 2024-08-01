@@ -10,14 +10,14 @@ const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
 const ContactCTA = () => {
   return (
-    <motion.div
+    <div
       className="box-border w-full h-min flex flex-col justify-start items-start shadow-contact-cta hover:shadow-metrics-hover bg-white overflow-hidden p-0 content-start flex-nowrap gap-0 rounded-xl border border-solid border-black"
-      initial={false}
-      whileHover={{ boxShadow: "2px 2px 0px 0px #000000" }}
-      animate={{
-        boxShadow: "0px 1px 3px 0px rgba(16, 24, 40, 0.10000000149011612)",
-      }}
-      transition={{ duration: 0.3, ease: "linear" }}
+      // initial={false}
+      // whileHover={{ boxShadow: "2px 2px 0px 0px #000000" }}
+      // animate={{
+      //   boxShadow: "0px 1px 3px 0px rgba(16, 24, 40, 0.10000000149011612)",
+      // }}
+      // transition={{ duration: 0.3, ease: "linear" }}
     >
       <div className="flex-shrink-0 w-full min-h-[200px] h-fit block bg-[#f4ebff] overflow-hidden relative rounded-none">
         <div className="w-full min-h-[200px] h-fit block overflow-hidden bg-[url('/bg-contact-cta.webp')] bg-cover bg-no-repeat bg-center absolute rounded-none ">
@@ -77,7 +77,7 @@ const ContactCTA = () => {
           </div>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 
