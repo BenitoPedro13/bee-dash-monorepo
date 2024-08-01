@@ -69,33 +69,18 @@ export function hexToRgba(hex: string, alpha: number = 1): string {
   return returnValue;
 }
 
-export function generateShadesAndTints(
-  mainColor: string,
-  count: number
-): string[] {
+export function generateShadesAndTints(mainColor: string, count: number) {
   const [r, g, b] = colorConvert.hex.rgb(mainColor);
-  const RGB = r + g + b;
-  let max = Math.round(RGB / 38.25);
-  if (max === 19) max = 20;
 
   const subVariations = [];
+  const step = 1 / (count + 1);
 
-  for (let i = 10; i < max + 10; i++) {
-    const f = i / max;
-    const adjustedR = Math.min(Math.round(r * f), 255);
-    const adjustedG = Math.min(Math.round(g * f), 255);
-    const adjustedB = Math.min(Math.round(b * f), 255);
-
-    const hexSubColor = colorConvert.rgb.hex([adjustedR, adjustedG, adjustedB]);
-    subVariations.push(`#${hexSubColor}`);
-  }
-
-  max = 20 - max + 10;
-  for (let i = 10; i < max; i++) {
-    const f = i / max;
-    const adjustedR = Math.min(Math.round((255 - r) * f + r), 255);
-    const adjustedG = Math.min(Math.round((255 - g) * f + g), 255);
-    const adjustedB = Math.min(Math.round((255 - b) * f + b), 255);
+  // Generate shades by darkening the color
+  for (let i = 1; i <= count; i++) {
+    const factor = 1 - i * step;
+    const adjustedR = Math.round(r * factor);
+    const adjustedG = Math.round(g * factor);
+    const adjustedB = Math.round(b * factor);
 
     const hexSubColor = colorConvert.rgb.hex([adjustedR, adjustedG, adjustedB]);
     subVariations.push(`#${hexSubColor}`);

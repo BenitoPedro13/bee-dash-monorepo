@@ -5,7 +5,11 @@ import Image from "next/image";
 import { Plus_Jakarta_Sans, Inter } from "next/font/google";
 import CreatorsTableRow from "./CreatorsTableRow";
 import useDataStore, { Influencer } from "@/store";
-import { handleSort, parseCurrencyString, parsePercentageString } from "../../../utils/utils";
+import {
+  handleSort,
+  parseCurrencyString,
+  parsePercentageString,
+} from "../../../utils/utils";
 import TableSortingIcon from "../TableSortingIcon";
 import arrowLeft from "@/../public/arrow-left.svg";
 import arrowRight from "@/../public/arrow-right.svg";
@@ -36,7 +40,7 @@ const CreatorsTable = () => {
   const { data: globalData } = useDataStore((state) => state.data);
   const [data, setData] = useState([...globalData]);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 6;
   const totalPages = Math.ceil(data.length / itemsPerPage);
 
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -65,7 +69,7 @@ const CreatorsTable = () => {
         case "Influencer":
         case "Cidade":
           return a[sortColumn].localeCompare(b[sortColumn]);
-    
+
         case "Investimento":
         case "Posts":
         case "Stories":
@@ -78,22 +82,27 @@ const CreatorsTable = () => {
         case "Cliques Tiktok":
         case "Impressoes Tiktok":
           return parseInt(a[sortColumn]) - parseInt(b[sortColumn]);
-    
+
         case "Engajamento":
         case "Engajamento Tiktok":
         case "CTR":
-          return parsePercentageString(a[sortColumn]) - parsePercentageString(b[sortColumn]);
-    
+          return (
+            parsePercentageString(a[sortColumn]) -
+            parsePercentageString(b[sortColumn])
+          );
+
         case "CPE":
         case "CPC":
         case "CPV":
-          return parseCurrencyString(a[sortColumn]) - parseCurrencyString(b[sortColumn]);
-    
+          return (
+            parseCurrencyString(a[sortColumn]) -
+            parseCurrencyString(b[sortColumn])
+          );
+
         default:
           return 0;
       }
     });
-    
 
     if (sortOrder === "desc") {
       sortedData.reverse();
@@ -107,7 +116,7 @@ const CreatorsTable = () => {
 
   return (
     <motion.div
-      className="box-border w-full flex flex-col justify-start items-start bg-white overflow-hidden p-0 content-start flex-nowrap gap-0 rounded-xl border border-black"
+      className="box-border xl:w-[calc(100%-384px)] w-full flex flex-col justify-start items-start bg-white overflow-hidden p-0 content-start flex-nowrap gap-0 rounded-xl border border-[#D4D4D4]"
       initial={false}
       animate={{
         boxShadow: "2px 2px 2px 0px rgba(16, 24, 40, 0.06)",
@@ -115,7 +124,7 @@ const CreatorsTable = () => {
           currentData.length / itemsPerPage < 1 ? "fit-content" : "fit-content",
       }}
       transition={{ duration: 0.3, ease: "linear" }}
-      whileHover={{ boxShadow: "2px 2px 0px 0px #000000" }}
+      whileHover={{ boxShadow: "2px 2px 0px 0px #898989" }}
     >
       <div className="flex-shrink-0 w-full h-min flex flex-col justify-start items-start overflow-visible relative p-0 content-start flex-nowrap sm:gap-5 gap-0 rounded-none">
         <div className="box-border flex-shrink-0 w-full h-min flex sm:flex-row flex-col justify-start sm:items-center items-start xl:pt-5 xl:pb-0 py-5 px-6 overflow-visible relative sm:content-center content-start flex-nowrap gap-4 rounded-none">

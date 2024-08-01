@@ -41,6 +41,8 @@ import { SearchIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import FirstSection from "@/components/FirstSection";
 import SecondSection from "@/components/SecondSection";
+import { Component } from "@/components/PieChartDonut";
+import MetricsBarStackGraph from "@/components/MetricsBarStackGraph";
 // import { Plus_Jakarta_Sans } from 'next/font/google'
 
 const inter = Inter({ subsets: ["latin"] });
@@ -83,7 +85,7 @@ export default function Home() {
                           <SearchIcon className="w-5 h-5 text-[#64748B]" />
                           <input
                             placeholder="Procure por creators..."
-                            className="w-full outline-none text-sm leading-6 font-nexa"
+                            className="w-full outline-none text-sm leading-6 font-nexa bg-white"
                           />
                         </div>
                       </div>
@@ -108,101 +110,24 @@ export default function Home() {
                   )}
                 </div>
               </div>
-
               <WelcomeTitle />
             </div>
-            {/* <div className="box-border flex-shrink-0 w-full xl:h-[97px] h-min flex flex-col xl:justify-center justify-start items-start xl:px-[22px] px-[15px] overflow-visible relative content-start flex-nowrap xl:gap-[22px] gap-6 rounded-none">
-              <div className="flex-shrink-0 w-full xl:h-auto h-min xl:flex grid xl:justify-start xl:items-center grid-cols-metric auto-rows-fr grid-rows-2 p-0 overflow-visible relative content-center flex-nowrap xl:gap-5 gap-[10px] rounded-none">
-                <Metrics
-                  heading="Total Creators"
-                  metric={totalInfluencers(data)}
-                >
-                  <TotalCreatorsIcon />
-                </Metrics>
-                <Metrics
-                  heading="Total Publicações"
-                  metric={total(data, "Posts")}
-                >
-                  <TotalPostsIcon />
-                </Metrics>
-                <Metrics
-                  heading="Total Feed"
-                  metric={total(data, ["Feed", "Tiktok"])}
-                >
-                  <TotalFeedIcon />
-                </Metrics>
-                <Metrics
-                  heading="Total Stories"
-                  metric={total(data, "Stories")}
-                >
-                  <TotalStoriesIcon />
-                </Metrics>
-              </div>
-            </div> */}
             <FirstSection />
-            {/* <div className="w-full flex-shrink-0 h-min flex flex-col justify-start items-start overflow-visible relative xl:px-[22px] p-0 content-start flex-nowrap gap-6 rounded-none">
-              <div className="box-border flex-shrink-0 w-full h-min flex flex-col justify-start items-start xl:p-0 px-[15px] overflow-visible relative content-start flex-nowrap xl:gap-[22px] gap-6 rounded-none">
-                <div className="flex-shrink-0 flex-grow xl:flex-grow-0 w-full h-min flex xl:flex-row flex-col justify-start items-center overflow-visible relative p-0 content-center flex-nowrap xl:gap-5 gap-[15px] rounded-none">
-                  <CostPerMetric
-                    sigla="CPE"
-                    heading="Engajamento"
-                    metric={totalPercentage(data, "Engajamento")}
-                    costPerMetric={totalCPE(data, "CPE")}
-                  />
-                  <CostPerMetric
-                    sigla="CPV"
-                    heading="Views"
-                    metric={total(data, "Video Views")}
-                    costPerMetric={costPerMetric(
-                      data,
-                      "Video Views",
-                      totalCount(data, "Investimento")
-                    )}
-                  />
-                  <CostPerMetric
-                    sigla="CPC"
-                    heading="Cliques"
-                    metric={total(data, "Cliques")}
-                    costPerMetric={costPerMetric(
-                      data,
-                      "Cliques",
-                      totalCount(data, "Investimento")
-                    )}
-                  />
-                </div>
-              </div>
-            </div> */}
             <SecondSection />
-            <div className="w-full flex-shrink-0 h-min flex flex-col justify-start items-start overflow-visible relative xl:px-[22px] px-[15px] content-start flex-nowrap xl:gap-0 gap-6 rounded-none">
-              <MetricsLineGraph
-                // heading="Interações + Views"
-                // metric={
-                //   total(data, ["Interacoes", "Video Views"])
-                // }
-                data={data}
+            <div className="w-full flex-shrink-0 h-min flex justify-start items-start overflow-visible relative xl:px-[22px] px-[15px] content-start flex-nowrap xl:gap-6 gap-6 rounded-none">
+              <MetricsLineGraph data={data} />
+
+              <MetricsDoughnutGraph
+                heading="Impacto Bruto"
+                metric={total(data, ["Interacoes", "Impressoes"])}
               />
+              {/* <Component /> */}
             </div>
-            {/* <div className="w-full flex-shrink-0 h-min flex flex-col justify-start items-start overflow-visible relative xl:px-[22px] p-0 content-start flex-nowrap gap-6 rounded-none">
-              <div className="box-border flex-shrink-0 w-full h-min flex flex-col justify-start items-start xl:p-0 px-[15px] overflow-visible relative content-start flex-nowrap xl:gap-[22px] gap-6 rounded-none">
-                <div className="flex-shrink-0 w-full h-min flex xl:flex-row flex-col justify-start items-center overflow-visible relative p-0 content-center flex-nowrap xl:gap-5 gap-[15px] rounded-none">
-                  <Metrics
-                    heading="Engajamento Tik Tok"
-                    metric={totalPercentage(data, "Engajamento Tiktok")}
-                  />
-                  <Metrics
-                    heading="Cliques no Link Tik Tok"
-                    metric={total(data, "Cliques Tiktok")}
-                  />
-                  <Metrics
-                    heading="Impressoes Tik Tok"
-                    metric={total(data, "Impressoes Tiktok")}
-                  />
-                </div>
-              </div>
-            </div> */}
+
             <div className="w-full flex-shrink-0 h-min flex flex-col justify-start items-start overflow-visible relative xl:px-[22px] px-[15px] content-start flex-nowrap gap-6 rounded-none">
-              <div className="box-border flex-shrink-0 w-full h-min flex flex-col justify-start items-start overflow-visible relative content-start flex-nowrap gap-6 rounded-none">
+              <div className="box-border flex-shrink-0 w-full h-min flex justify-start items-start overflow-visible relative content-start flex-nowrap gap-6 rounded-none">
                 <CreatorsTable />
+                <MetricsBarStackGraph heading="Audiência" metric="2438" />
               </div>
             </div>
             <div className="w-full flex-shrink-0 h-min flex flex-col justify-start items-start overflow-visible relative xl:px-[22px] px-[15px] content-start flex-nowrap gap-6 rounded-none">
@@ -210,7 +135,7 @@ export default function Home() {
                 <AttachmentsTable />
               </div>
             </div>
-            <div className="xl:hidden box-border flex-shrink-0 xl:w-[379px] w-full flex-grow h-min flex flex-col justify-start items-center xl:pt-8 xl:pr-8 pb-10 px-[15px] bg-transparent overflow-visible content-center flex-nowrap xl:gap-[28px] gap-[15px] rounded-none z-10">
+            {/* <div className="xl:hidden box-border flex-shrink-0 xl:w-[379px] w-full flex-grow h-min flex flex-col justify-start items-center xl:pt-8 xl:pr-8 pb-10 px-[15px] bg-transparent overflow-visible content-center flex-nowrap xl:gap-[28px] gap-[15px] rounded-none z-10">
               <MetricsDoughnutGraph
                 heading="Impressoes"
                 metric={total(data, "Impressoes")}
@@ -230,8 +155,8 @@ export default function Home() {
               />
               <FinancialMetrics />
               <ContactCTA />
-            </div>
-            <Footer />
+            </div> */}
+            {/* <Footer /> */}
           </div>
           {/* <div className="hidden box-border flex-shrink-0 xl:w-[379px] w-auto flex-grow h-min xl:flex flex-col justify-start items-center pt-8 pr-8 pb-12 bg-transparent overflow-visible content-center flex-nowrap gap-[28px] rounded-none z-10">
             <div className="flex-shrink-0 w-full h-fit mb-[48px] flex justify-end items-center overflow-visible relative p-0 content-center flex-nowrap gap-3 rounded-none">

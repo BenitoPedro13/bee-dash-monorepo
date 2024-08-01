@@ -25,7 +25,11 @@ import {
 import { generateShadesAndTints } from "../../utils/utils";
 // import { TrendingUp } from "lucide-react";
 
-export default function BarGraph({ typeOfGraph }: { typeOfGraph: GraphTypes }) {
+export default function BarStackGraph({
+  typeOfGraph,
+}: {
+  typeOfGraph: GraphTypes;
+}) {
   const { data } = useDataStore((state) => state.data);
   const { user } = useDataStore((state) => state.session);
 

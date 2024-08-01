@@ -4,6 +4,9 @@ import LineGraph from "./LineGraph";
 import DoughnutGraph from "./DoughnutGraph";
 import { motion } from "framer-motion";
 import Badge from "./Badge";
+import BarStackGraph from "./BarStackGraph";
+import { Cpu } from "lucide-react";
+import { Component } from "./BarStackedGraph";
 
 const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
@@ -12,7 +15,7 @@ type MetricsDoughnutGraphProps = {
   metric?: string;
 };
 
-const MetricsDoughnutGraph = ({
+const MetricsBarStackGraph = ({
   heading,
   metric,
 }: MetricsDoughnutGraphProps) => {
@@ -64,10 +67,10 @@ const MetricsDoughnutGraph = ({
             <Badge number={20.1} />
           </div>
         </div>
-        <DoughnutGraph />
+        <Component />
       </div>
     </motion.div>
   );
 };
 
-export default MetricsDoughnutGraph;
+export default MetricsBarStackGraph;
