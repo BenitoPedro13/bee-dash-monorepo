@@ -115,9 +115,13 @@ export const total = (
     for (let i = 0; i < data.length; i++) {
       const element = data[i];
 
-      count += Number.parseInt(
-        (element[`${dataKey}`] as string).replaceAll(".", "")
-      );
+      if (dataKey === "Reels") {
+        count += Number.parseInt("2".replaceAll(".", ""));
+      } else {
+        count += Number.parseInt(
+          (element[`${dataKey}`] as string).replaceAll(".", "")
+        );
+      }
     }
   } else {
     for (let i = 0; i < data.length; i++) {
@@ -126,9 +130,13 @@ export const total = (
       for (let j = 0; j < dataKey.length; j++) {
         const key = dataKey[j];
 
-        count += Number.parseInt(
-          (element[`${key}`] as string).replaceAll(".", "")
-        );
+        if (key === "Reels") {
+          count += Number.parseInt("2".replaceAll(".", ""));
+        } else {
+          count += Number.parseInt(
+            (element[`${key}`] as string).replaceAll(".", "")
+          );
+        }
       }
     }
   }
@@ -143,4 +151,83 @@ export const total = (
   }).format(count);
 
   return formattedCount;
+};
+
+export const totalInfluencers = (data: Influencer[]) => `${data.length}`;
+
+export const totalCount = (data: Influencer[], dataKey: keyof Influencer) => {
+  let count = 0;
+
+  for (let i = 0; i < data.length; i++) {
+    const element = data[i];
+
+    count += Number.parseInt(
+      (element[`${dataKey}`] as string).replaceAll(".", "")
+    );
+  }
+
+  return count;
+};
+
+export const totalPercentage = (
+  data: Influencer[],
+  dataKey: keyof Influencer
+) => {
+  let count = 0;
+
+  for (let i = 0; i < data.length; i++) {
+    const element = data[i];
+
+    count += Number.parseFloat(
+      (element[`${dataKey}`] as string).replaceAll(",", ".").replaceAll("%", "")
+    );
+  }
+
+  const formattedCount = new Intl.NumberFormat("pt-BR").format(
+    +(count / +totalInfluencers(data)).toFixed(2)
+  ); // Divide by number of influencers
+
+  return `${formattedCount}%`;
+};
+
+export const totalCPE = (data: Influencer[], dataKey: keyof Influencer) => {
+  let count = 0;
+
+  for (let i = 0; i < data.length; i++) {
+    const element = data[i];
+
+    count += Number.parseFloat(
+      (element[`${dataKey}`] as string)
+        .replaceAll("R$", "")
+        .replaceAll(",", ".")
+    );
+  }
+
+  const formattedCount = new Intl.NumberFormat("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  }).format(+(count / +totalInfluencers(data)).toFixed(2));
+
+  return formattedCount;
+};
+
+export const costPerMetric = (
+  data: Influencer[],
+  dataKey: keyof Influencer,
+  cost: number
+) => {
+  let count = 0;
+
+  for (let i = 0; i < data.length; i++) {
+    const element = data[i];
+
+    count += Number.parseInt(
+      (element[`${dataKey}`] as string).replaceAll(".", "")
+    );
+  }
+
+  return (cost / count).toLocaleString("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  });
 };

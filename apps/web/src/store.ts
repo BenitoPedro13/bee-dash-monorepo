@@ -4,6 +4,12 @@ import { setCookie } from "nookies";
 // export const baseApiUrl = "https://dashapi.juicy.space";
 export const baseApiUrl = "http://localhost:3000";
 
+export enum DashboardMode {
+  ALL = "all",
+  INSTAGRAM = "instagram",
+  TIKTOK = "tiktok",
+}
+
 export interface Influencer {
   id: number;
   Influencer: string;
@@ -11,6 +17,7 @@ export interface Influencer {
   Cidade: string;
   Investimento: string;
   Posts: string;
+  Reels: string;
   Stories: string;
   Feed: string;
   Tiktok: string;
@@ -68,6 +75,8 @@ export type LoginFormData = {
 
 interface DataState {
   session: Session;
+  mode: DashboardMode;
+  setMode: (mode: DashboardMode) => void;
   signIn: (loginFormData: LoginFormData) => Promise<boolean>;
   getUserByToken: (access_token: string) => Promise<boolean>;
   data: InfluencerData;
@@ -92,6 +101,8 @@ const useDataStore = create<DataState>((set) => ({
       urlProfilePicture: "",
     },
   },
+  mode: DashboardMode.ALL,
+  setMode: (mode: DashboardMode) => set({ mode }),
   signIn: async (loginFormData: LoginFormData) => {
     try {
       const response = await fetch(`${baseApiUrl}/auth/login`, {

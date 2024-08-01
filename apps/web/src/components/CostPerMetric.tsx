@@ -2,55 +2,78 @@
 import Image, { StaticImageData } from "next/image";
 import React, { useState } from "react";
 // import { Inter } from 'next/font/google'
-import { Plus_Jakarta_Sans } from 'next/font/google'
+import { Plus_Jakarta_Sans } from "next/font/google";
 import { motion } from "framer-motion";
+import Badge from "./Badge";
+// import { Tabs } from "@radix-ui/react-tabs";
+import useDataStore, { DashboardMode } from "@/store";
+import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
 
 // const inter = Inter({ subsets: ['latin'] })
-const jakarta = Plus_Jakarta_Sans({ subsets: ['latin'] })
+const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
 type CostPerMetricProps = {
   heading: string;
-  sigla: string;
+  sigla?: string[];
   metric: string;
-  costPerMetric: string;
+  costPerMetric?: string;
+  variation?: number;
 };
 
-const CostPerMetric = ({ heading, sigla, metric, costPerMetric }: CostPerMetricProps) => {
-  const [siglaActive, setSiglaActive] = useState(false);
+const CostPerMetric = ({
+  heading,
+  sigla,
+  metric,
+  costPerMetric,
+  variation,
+}: CostPerMetricProps) => {
+  // const setMode = useDataStore((state) => state.setMode);
+  const [siglaActive, setSiglaActive] = useState(sigla?.at(0) ?? "");
 
   return (
-    <motion.div 
-      className="box-border w-full h-min flex flex-col justify-start items-start p-6 shadow-metrics hover:shadow-metrics-hover bg-white overflow-visible content-start flex-nowrap gap-6 rounded-xl border-black border"
+    <motion.div
+      className="box-border w-full sm:min-w-[200px] h-min flex flex-col items-start p-4 py-5 bg-white overflow-visible content-center flex-nowrap gap-2 rounded-xl border-[#D4D4D4] border"
       initial={false}
-      whileHover={{ boxShadow: '2px 2px 0px 0px #000000' }}
-      animate={{ boxShadow: '2px 2px 2px 0px rgba(16, 24, 40, 0.06)' }}
-      transition={{ duration: 0.3, ease: 'linear' }}
+      whileHover={{ boxShadow: "2px 2px 0px 0px #898989" }}
+      animate={{ boxShadow: "2px 2px 2px 0px rgba(16, 24, 40, 0.06)" }}
+      transition={{ duration: 0.3, ease: "linear" }}
     >
-      <div className="flex-shrink-0 w-full h-min flex flex-col justify-center items-start overflow-visible relative p-0 content-start flex-nowrap gap-5 rounded-none">
-        <div className="flex-shrink-0 w-full h-min flex justify-start items-center overflow-visible relative p-0 content-center flex-nowrap gap-4 rounded-none">
-          <div className="flex-shrink-0 flex-grow w-auto h-full flex flex-col justify-center items-start overflow-visible relative p-0 content-start flex-nowrap gap-1 rounded-none">
-            <p className={`flex-shrink-0 w-full h-auto whitespace-pre-wrap break-words relative font-semibold ${jakarta.className} text-[#0f1728] text-lg`}>{heading}</p>
-          </div>
-          <div className="box-border flex-shrink-0 w-min h-min flex justify-start items-start shadow-cost-per-metrics overflow-hidden relative p-0 content-start flex-nowrap gap-0 rounded-lg border border-[#00000040]">
-            <div onClick={(e) => setSiglaActive(false)} className={`cursor-pointer box-border flex-shrink-0 w-min h-min flex justify-center items-center py-[10px] px-4 ${!siglaActive ? 'bg-white' : 'bg-[#f0f0f0]'} overflow-visible relative p-0 content-center flex-nowrap gap-2 rounded-none border-solid border-r border-[#00000040]`}>
-              <p className={`flex-shrink-0 w-auto h-auto whitespace-pre relative font-semibold ${jakarta.className} text-[#1d2838] text-sm`}>
-                Total
-              </p>
-            </div>
-            <div onClick={(e) => setSiglaActive(true)} className={`cursor-pointer box-border flex-shrink-0 w-min h-min flex justify-center items-center py-[10px] px-4 ${!siglaActive ? 'bg-[#f0f0f0]' : 'bg-white'} overflow-visible relative p-0 content-center flex-nowrap gap-2 rounded-none border-solid border-r border-[#00000040]`}>
-              <p className={`flex-shrink-0 w-auto h-auto whitespace-pre relative font-semibold ${jakarta.className} text-[#1d2838] text-sm`}>
-                {sigla}
-              </p>
-            </div>
-          </div>
-        </div>
+      <div className="flex items-center justify-between self-stretch">
+        <p className="text-sm font-nexa font-medium text-[#475467]">
+          {heading}
+        </p>
+
+        <Tabs
+          defaultValue={sigla ? sigla[0] : ""}
+          onValueChange={(value) => setSiglaActive(value)}
+          className="flex p-[5px] items-center rounded-lg border border-[#E2E8F0] h-[42px]"
+          style={{
+            visibility: sigla && costPerMetric ? "visible" : "hidden",
+          }}
+        >
+          <TabsList>
+            <TabsTrigger value={sigla ? sigla[0] : ""} className="text-black">
+              {sigla ? sigla[0] : ""}
+            </TabsTrigger>
+            <TabsTrigger value={sigla ? sigla[1] : ""}>
+              {sigla ? sigla[1] : ""}
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
       </div>
-      <div className="flex-shrink-0 w-full h-min flex justify-start items-end overflow-visible relative p-0 content-end flex-nowrap gap-4 rounded-none">
-        <div className="flex-shrink-0 flex-grow w-auto h-min flex flex-col justify-start items-start overflow-visible relative p-0 content-start flex-nowrap gap-4 rounded-none">
-          <p className="flex-shrink-0 w-full h-auto whitespace-pre-wrap break-words relative font-Balgin-Display font-bold text-[#0f1728] text-3xl leading-[38px]">
-            { !siglaActive ? metric : costPerMetric}
-          </p>
-        </div>
+      <div className="flex flex-col items-start justify-center gap-[2px]">
+        <p className="flex-shrink-0 w-auto h-auto whitespace-pre relative font-bold font-nexa-bold text-[#101828] text-3xl leading-[38px]">
+          {sigla && costPerMetric
+            ? siglaActive === sigla?.at(0)
+              ? metric
+              : costPerMetric
+            : metric}
+        </p>
+        {typeof variation === "number" ? (
+          <Badge number={variation} />
+        ) : (
+          <Badge number={10} className=" invisible" />
+        )}
       </div>
     </motion.div>
   );

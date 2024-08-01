@@ -17,11 +17,11 @@ const SidenavDesktop = () => {
   const session = useDataStore((state) => state.session);
   const router = useRouter();
 
+  const windowIsUndefined = typeof window === undefined;
   // TODO: implement state to verify if url path is /dashboard
-  const isDashboard =
-    typeof window === undefined
-      ? false
-      : window.location.pathname === "/dashboard";
+  const isDashboard = windowIsUndefined
+    ? false
+    : window.location.pathname === "/dashboard";
 
   const handleLogout = () => {
     // Remove the authentication token or relevant cookie here
@@ -52,7 +52,7 @@ const SidenavDesktop = () => {
             <Link href="/dashboard">
               <button
                 className={`btn btn-ghost box-border flex-shrink-0 w-12 h-12 flex flex-row justify-start items-start p-3 bg-transparent overflow-hidden relative content-start flex-nowrap gap-2 rounded-md ${
-                  isDashboard ? "bg-[#F5F5F5]" : "hover:bg-[#F5F5F5]"
+                  isDashboard ? "!bg-[#F5F5F5]" : "!hover:bg-[#F5F5F5]"
                 }`}
               >
                 <Image
@@ -110,7 +110,7 @@ const SidenavDesktop = () => {
               width="57"
               height="57"
               alt={`${session.user.name} profile picture`}
-              className="btn btn-circle btn-outline border-black border-[1px] border-solid"
+              className="border-black border-[1px] border-solid rounded-full"
             />
           )}
         </div>
