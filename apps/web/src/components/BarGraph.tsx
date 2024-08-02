@@ -12,7 +12,7 @@ import useDataStore, { Influencer } from "@/store";
 
 import { GraphTypes } from "./MetricsLineGraph";
 
-import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from "recharts";
+import { Bar, BarChart, CartesianGrid, Cell, LabelList, XAxis } from "recharts";
 
 import {
   ChartConfig,
@@ -22,7 +22,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { generateShadesAndTints } from "../../utils/utils";
+import { addAlphaToHex, generateShadesAndTints } from "../../utils/utils";
 // import { TrendingUp } from "lucide-react";
 
 export default function BarGraph({ typeOfGraph }: { typeOfGraph: GraphTypes }) {
@@ -62,6 +62,8 @@ export default function BarGraph({ typeOfGraph }: { typeOfGraph: GraphTypes }) {
     }
   };
 
+  const chartData = getChartData(typeOfGraph, data);
+
   return (
     // <Card>
     //   <CardHeader>
@@ -73,7 +75,7 @@ export default function BarGraph({ typeOfGraph }: { typeOfGraph: GraphTypes }) {
     <ChartContainer config={chartConfig} width="100%" height="288px">
       <BarChart
         accessibilityLayer
-        data={getChartData(typeOfGraph, data)}
+        data={chartData}
         margin={{
           top: 20,
         }}
@@ -88,17 +90,55 @@ export default function BarGraph({ typeOfGraph }: { typeOfGraph: GraphTypes }) {
           // tickFormatter={(value) => value}
         />
         <ChartTooltip
-          cursor={true}
+          cursor={false}
           content={<ChartTooltipContent className="w-[180px]" />}
         />
-        <Bar dataKey={typeOfGraph} fill="var(--color-desktop)" radius={4}>
-          {/* <LabelList
+
+        <defs>
+          {chartData.map((item, index) => (
+            <linearGradient
+              key={index}
+              id={`colorUv${index}`}
+              x1="0"
+              y1="100%"
+              x2="0"
+              y2="0"
+              spreadMethod="reflect"
+            >
+              <stop offset="0" stopColor={addAlphaToHex(item.fill, 0.2)} />
+              <stop offset="1" stopColor={item.fill} />
+            </linearGradient>
+          ))}
+        </defs>
+
+        <Bar dataKey={typeOfGraph} radius={4}>
+          {data.map((_item, index) => (
+            <Cell
+              key={`cell-${index}`}
+              fill={`url(#colorUv${index})`}
+              style={{
+                // outlineOffset: "-2px",
+                border: `2px solid ${chartData[index].fill}`,
+                boxShadow: `0 -1px 0 #000`,
+                // border: `2px solid ${addAlphaToHex(
+                //   chartData[index].fill,
+                //   0.2
+                // )}`,
+              }}
+            />
+          ))}
+          {/* <LabelList dataKey="pv" position="insideRight" fill="#f5f5f5" />
+          <LabelList dataKey="name" position="insideLeft" fill="#f5f5f5" /> */}
+        </Bar>
+
+        {/* <Bar dataKey={typeOfGraph} fill="var(--color-desktop)" radius={4}>
+          <LabelList
             position="top"
             offset={12}
             className="fill-foreground"
             fontSize={12}
-          /> */}
-        </Bar>
+          />
+        </Bar> */}
       </BarChart>
     </ChartContainer>
     // </div>

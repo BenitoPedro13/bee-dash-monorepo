@@ -216,3 +216,32 @@ export const costPerMetric = (
     currency: "BRL",
   });
 };
+
+export function addAlphaToHex(hex: string, alpha: number) {
+  // Remove the hash at the start if it's there
+  hex = hex.replace(/^#/, "");
+
+  // Convert 3-digit hex to 6-digit hex
+  if (hex.length === 3) {
+    hex = hex
+      .split("")
+      .map((x) => x + x)
+      .join("");
+  }
+
+  // Ensure the hex is 6 digits long
+  if (hex.length !== 6) {
+    throw new Error("Invalid hex color format.");
+  }
+
+  // Convert the alpha value from a float to a two-digit hex number
+  const alphaHex = Math.round(alpha * 255)
+    .toString(16)
+    .padStart(2, "0")
+    .toUpperCase();
+
+  console.log(`#${hex}${alphaHex}`);
+
+  // Return the combined hex color with alpha
+  return `#${hex}${alphaHex}`;
+}
