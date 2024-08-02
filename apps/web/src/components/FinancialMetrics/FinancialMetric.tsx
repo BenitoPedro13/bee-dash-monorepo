@@ -13,7 +13,7 @@ type FinancialMetricProps = {
 const FinancialMetric = ({ heading, metric }: FinancialMetricProps) => {
   return (
     <div
-      className="box-border w-full h-fit flex justify-start items-center p-4 shadow-financial-metrics hover:shadow-metrics-hover bg-white overflow-visible content-center flex-nowrap gap-[10px] rounded-none border-b border-solid border-[#222]"
+      className="box-border w-full h-fit flex justify-start items-center p-4 shadow-financial-metrics   bg-white overflow-visible content-center flex-nowrap gap-[10px] rounded-none border-b border-solid border-[#222]"
       // initial={false}
       // whileHover={{ boxShadow: "2px 2px 0px 0px #000000" }}
       // animate={{ boxShadow: "0px 1px 2px 0px rgba(0, 0, 0, 0.25)" }}

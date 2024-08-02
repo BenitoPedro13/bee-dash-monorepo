@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Plus_Jakarta_Sans } from "next/font/google";
-import { motion } from "framer-motion";
 import { Influencer } from "@/store";
 import { total } from "../../utils/utils";
 import BarGraph from "./BarGraph";
@@ -46,7 +45,7 @@ const MetricsGraph = ({ data }: MetricsGraphProps) => {
 
   return (
     <div
-      className="box-border xl:w-[calc(100%-384px)] w-full h-min flex flex-col justify-start items-start shadow-metrics hover:shadow-metrics-hover bg-white xl:overflow-hidden overflow-visible p-0 content-start flex-nowrap xl:gap-0 gap-5 rounded-xl border-[#D4D4D4] border"
+      className="box-border xl:w-[calc(100%-384px)] w-full h-min flex flex-col justify-start items-start shadow-metrics   bg-white xl:overflow-hidden overflow-visible p-0 content-start flex-nowrap xl:gap-0 gap-5 rounded-xl border-[#D4D4D4] border"
       // initial={false}
       // whileHover={{ boxShadow: "2px 2px 0px 0px #898989" }}
       // animate={{ boxShadow: "2px 2px 2px 0px rgba(16, 24, 40, 0.06)" }}

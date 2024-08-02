@@ -11,7 +11,7 @@ const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 const ContactCTA = () => {
   return (
     <div
-      className="box-border w-full h-min flex flex-col justify-start items-start shadow-contact-cta hover:shadow-metrics-hover bg-white overflow-hidden p-0 content-start flex-nowrap gap-0 rounded-xl border border-solid border-black"
+      className="box-border w-full h-min flex flex-col justify-start items-start shadow-contact-cta   bg-white overflow-hidden p-0 content-start flex-nowrap gap-0 rounded-xl border border-solid border-black"
       // initial={false}
       // whileHover={{ boxShadow: "2px 2px 0px 0px #000000" }}
       // animate={{
@@ -55,7 +55,7 @@ const ContactCTA = () => {
                 "https://api.whatsapp.com/send/?phone=5511988776571&text&type=phone_number&app_absent=0"
               }
               target="_blank"
-              className="btn btn-ghost box-border w-full h-min flex justify-center items-center px-4 py-[10px] shadow-cost-per-metrics hover:shadow-metrics-hover hover:bg-[#04ff93] bg-[#04ff93] overflow-hidden relative content-center flex-nowrap gap-2 rounded-lg border border-solid border-black"
+              className="btn btn-ghost box-border w-full h-min flex justify-center items-center px-4 py-[10px] shadow-cost-per-metrics   hover:bg-[#04ff93] bg-[#04ff93] overflow-hidden relative content-center flex-nowrap gap-2 rounded-lg border border-solid border-black"
             >
               <p
                 className={`flex-shrink-0 w-auto h-auto whitespace-pre relative font-semibold ${jakarta.className} text-black text-sm normal-case`}

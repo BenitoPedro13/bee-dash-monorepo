@@ -11,7 +11,7 @@ const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 const FinancialMetrics = () => {
   return (
     <div
-      className="box-border w-full h-min flex flex-col justify-center items-center bg-white shadow-metrics hover:shadow-metrics-hover overflow-hidden p-0 content-center flex-nowrap gap-0 rounded-xl border border-solid border-[#222]"
+      className="box-border w-full h-min flex flex-col justify-center items-center bg-white shadow-metrics   overflow-hidden p-0 content-center flex-nowrap gap-0 rounded-xl border border-solid border-[#222]"
       // initial={false}
       // whileHover={{ boxShadow: "2px 2px 0px 0px #000000" }}
       // animate={{ boxShadow: "2px 2px 2px 0px rgba(16, 24, 40, 0.06)" }}
