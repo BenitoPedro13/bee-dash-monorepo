@@ -1,6 +1,9 @@
 import useDataStore, { Influencer } from "@/store";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import { generateShadesAndTints } from "../../utils/utils";
+import {
+  generateShadesAndTints,
+  generateShadesAndTintsRandomly,
+} from "../../utils/utils";
 import {
   ChartConfig,
   ChartContainer,
@@ -18,7 +21,7 @@ export default function DoughnutGraph() {
   const { user } = useDataStore((state) => state.session);
 
   const mainColor = !user?.color ? "#FF77EF" : user.color; // Assuming user.color is the main color in hex format
-  const subVariations = generateShadesAndTints(mainColor, data.length);
+  const subVariations = generateShadesAndTintsRandomly(mainColor, data.length);
 
   const chartConfig = {
     desktop: {

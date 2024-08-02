@@ -22,7 +22,11 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { addAlphaToHex, generateShadesAndTints } from "../../utils/utils";
+import {
+  addAlphaToHex,
+  generateShadesAndTints,
+  generateShadesAndTintsRandomly,
+} from "../../utils/utils";
 // import { TrendingUp } from "lucide-react";
 
 export default function BarGraph({ typeOfGraph }: { typeOfGraph: GraphTypes }) {
@@ -30,7 +34,7 @@ export default function BarGraph({ typeOfGraph }: { typeOfGraph: GraphTypes }) {
   const { user } = useDataStore((state) => state.session);
 
   const mainColor = !user?.color ? "#FF77EF" : user.color; // Assuming user.color is the main color in hex format
-  const subVariations = generateShadesAndTints(mainColor, data.length);
+  const subVariations = generateShadesAndTintsRandomly(mainColor, data.length);
 
   const chartConfig = {
     desktop: {
@@ -105,14 +109,14 @@ export default function BarGraph({ typeOfGraph }: { typeOfGraph: GraphTypes }) {
               y2="0"
               spreadMethod="reflect"
             >
-              <stop offset="0" stopColor={addAlphaToHex(item.fill, 0.2)} />
+              <stop offset="0" stopColor={item.fill} />
               <stop offset="1" stopColor={item.fill} />
             </linearGradient>
           ))}
         </defs>
 
         <Bar dataKey={typeOfGraph} radius={4}>
-          {data.map((_item, index) => (
+          {/* {data.map((_item, index) => (
             <Cell
               key={`cell-${index}`}
               fill={`url(#colorUv${index})`}
@@ -125,8 +129,8 @@ export default function BarGraph({ typeOfGraph }: { typeOfGraph: GraphTypes }) {
                 //   0.2
                 // )}`,
               }}
-            />
-          ))}
+            /> 
+          ))}*/}
           {/* <LabelList dataKey="pv" position="insideRight" fill="#f5f5f5" />
           <LabelList dataKey="name" position="insideLeft" fill="#f5f5f5" /> */}
         </Bar>

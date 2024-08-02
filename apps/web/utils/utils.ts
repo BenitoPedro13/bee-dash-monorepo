@@ -89,6 +89,37 @@ export function generateShadesAndTints(mainColor: string, count: number) {
   return subVariations;
 }
 
+export function generateShadesAndTintsRandomly(
+  mainColor: string,
+  count: number
+) {
+  const [r, g, b] = colorConvert.hex.rgb(mainColor);
+
+  let variations = [];
+  const step = 1 / (count + 1);
+
+  // Generate shades by darkening the color
+  for (let i = 1; i <= Math.floor(count / 2); i++) {
+    const factor = 1 - i * step;
+    const adjustedR = Math.round(r * factor);
+    const adjustedG = Math.round(g * factor);
+    const adjustedB = Math.round(b * factor);
+
+    const hexSubColor = colorConvert.rgb.hex([adjustedR, adjustedG, adjustedB]);
+    variations.push(`#${hexSubColor}`);
+  }
+
+  variations = variations.concat(...[variations.reverse()]);
+
+  // Shuffle the array
+  for (let i = variations.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [variations[i], variations[j]] = [variations[j], variations[i]];
+  }
+
+  return variations;
+}
+
 export const total = (
   data: Influencer[],
   dataKey: keyof Influencer | (keyof Influencer)[],
