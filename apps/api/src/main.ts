@@ -25,7 +25,8 @@ async function bootstrap() {
   app.enableCors({
     origin: (origin, callback) => {
       const allowedOrigins = [
-        /\.juicy\.space$/,
+        /\.thatsbee\.co$/,
+        /\.gopark\.app\.br$/,
         /\.vercel\.app$/,
         /^http:\/\/localhost:\d{4}/,
       ];
