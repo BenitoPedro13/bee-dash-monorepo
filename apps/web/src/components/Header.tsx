@@ -1,4 +1,4 @@
-import logo from "@/../public/logo.svg";
+import logo from "@/../public/bee-logo.svg";
 import menu from "@/../public/menu.svg";
 import avatar from "@/../public/avatar.jpeg";
 
@@ -25,9 +25,9 @@ const Header = () => {
         <div className="flex flex-row justify-between items-center pr-3 pl-4 h-10 w-[100%] lg:px-8">
           <div className="flex flex-row items-center gap-10 lg:gap-[94px]">
             <div className="flex flex-row items-start p-0 h-8 w-auto cursor-pointer">
-              <div className="h-8 w-auto">
+              <div className="flex items-center h-8 w-auto">
                 <Link href="/">
-                  <Image src={logo} width={88} height={undefined} alt="Logo" />
+                  <Image src={logo} height={undefined} alt="Logo" />
                 </Link>
               </div>
             </div>
