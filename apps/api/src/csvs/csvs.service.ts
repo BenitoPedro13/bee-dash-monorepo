@@ -92,7 +92,7 @@ export class CsvsService {
           : creator['Impressoes Tiktok'],
       );
 
-    const cpe = Number.parseInt(creator['Investimento']) / engajamentoTiktok;
+    const cpe = Number.parseInt(creator['Investimento']) / engajamento;
     const cpeTiktok =
       Number.parseInt(creator['Investimento']) / engajamentoTiktok;
 
@@ -133,7 +133,7 @@ export class CsvsService {
     creator['Engajamento'] = engajamento.toFixed(2) + '%';
     creator['CPE'] = 'R$' + cpe.toFixed(2);
 
-    creator['Engajamento Tiktok'] = engajamento.toFixed(2) + '%';
+    creator['Engajamento Tiktok'] = engajamentoTiktok.toFixed(2) + '%';
     creator['CPE Tiktok'] = 'R$' + cpeTiktok.toFixed(2);
 
     creator['CPC'] = 'R$' + cpc.toFixed(2);
