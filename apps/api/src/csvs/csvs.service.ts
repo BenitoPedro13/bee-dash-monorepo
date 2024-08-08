@@ -75,6 +75,74 @@ export class CsvsService {
     });
   }
 
+  addCPToTable = (creator: Influencer) => {
+    console.log(creator, 'creator');
+
+    const engajamento =
+      Number.parseInt(creator['Impacto Bruto']) /
+      Number.parseInt(
+        creator['Impressoes'] === '0' ? '1' : creator['Impressoes'],
+      );
+
+    const engajamentoTiktok =
+      Number.parseInt(creator['Impacto Bruto Tiktok']) /
+      Number.parseInt(
+        creator['Impressoes Tiktok'] === '0'
+          ? '1'
+          : creator['Impressoes Tiktok'],
+      );
+
+    const cpe = Number.parseInt(creator['Investimento']) / engajamentoTiktok;
+    const cpeTiktok =
+      Number.parseInt(creator['Investimento']) / engajamentoTiktok;
+
+    const cpc =
+      Number.parseInt(creator['Investimento']) /
+      Number.parseInt(creator['Cliques'] === '0' ? '1' : creator['Cliques']);
+
+    const cpcTiktok =
+      Number.parseInt(creator['Investimento']) /
+      Number.parseInt(
+        creator['Cliques Tiktok'] === '0' ? '1' : creator['Cliques Tiktok'],
+      );
+
+    const cpv =
+      Number.parseInt(creator['Investimento']) /
+      (Number.parseInt(
+        creator['Impressoes'] === '0' ? '1' : creator['Impressoes'],
+      ) /
+        1000);
+
+    const cpvTiktok =
+      Number.parseInt(creator['Investimento']) /
+      (Number.parseInt(
+        creator['Impressoes Tiktok'] === '0'
+          ? '1'
+          : creator['Impressoes Tiktok'],
+      ) /
+        1000);
+
+    const posts =
+      Number.parseInt(creator['Reels']) +
+      Number.parseInt(creator['Tiktok']) +
+      Number.parseInt(creator['Stories']) +
+      Number.parseInt(creator['Feed']);
+
+    creator['Posts'] = posts.toString();
+
+    creator['Engajamento'] = engajamento.toFixed(2) + '%';
+    creator['CPE'] = 'R$' + cpe.toFixed(2);
+
+    creator['Engajamento Tiktok'] = engajamento.toFixed(2) + '%';
+    creator['CPE Tiktok'] = 'R$' + cpeTiktok.toFixed(2);
+
+    creator['CPC'] = 'R$' + cpc.toFixed(2);
+    creator['CPC Tiktok'] = 'R$' + cpcTiktok.toFixed(2);
+
+    creator['CPV'] = 'R$' + cpv.toFixed(2);
+    creator['CPV Tiktok'] = 'R$' + cpvTiktok.toFixed(2);
+  };
+
   async getAllData(userEmail: string): Promise<{
     updatedAt: Date;
     data: Influencer[];
@@ -101,7 +169,10 @@ export class CsvsService {
         const result = await new Promise<Influencer[]>((resolve, reject) => {
           stream
             .pipe(csvParser())
-            .on('data', (data) => results.push(data))
+            .on('data', (data) => {
+              console.log('data', this.addCPToTable(data));
+              return results.push(data);
+            })
             .on('end', () => resolve(results))
             .on('error', (error) => reject(error));
         });
