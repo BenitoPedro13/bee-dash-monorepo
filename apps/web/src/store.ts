@@ -1,8 +1,8 @@
 import { create } from "zustand";
 import { setCookie } from "nookies";
 
-export const baseApiUrl = "https://backend.gopark.app.br";
-// export const baseApiUrl = "http://localhost:3000";
+// export const baseApiUrl = "https://backend.gopark.app.br";
+export const baseApiUrl = "http://localhost:3000";
 
 export enum DashboardMode {
   ALL = "all",
@@ -10,11 +10,18 @@ export enum DashboardMode {
   TIKTOK = "tiktok",
 }
 
+export enum DashbordDateRange {
+  SEVEN = "7",
+  FOURTEEN = "14",
+  THIRTY = "30",
+}
+
 export interface Influencer {
   id: number;
   Influencer: string;
   Username: string;
   Cidade: string;
+  "Impacto Bruto": string;
   Investimento: string;
   Posts: string;
   Reels: string;
@@ -26,16 +33,19 @@ export interface Influencer {
   Cliques: string;
   "Video Views": string;
   Engajamento: string;
+  "Impacto Bruto Tiktok": string;
   "Engajamento Tiktok": string;
+  "Interacoes Tiktok": string;
   "Cliques Tiktok": string;
   "Impressoes Tiktok": string;
   "Url Foto Perfil": string;
   CPE: string;
-  CTR: string;
   CPC: string;
   CPV: string;
-  createdAt: string;
-  updatedAt: string;
+  "CPE Tiktok": string;
+  "CPC Tiktok": string;
+  "CPV Tiktok": string;
+  "Data de Postagem": string;
 }
 
 type InfluencerData = {
@@ -76,7 +86,9 @@ export type LoginFormData = {
 interface DataState {
   session: Session;
   mode: DashboardMode;
+  dateRange: DashbordDateRange;
   setMode: (mode: DashboardMode) => void;
+  setDateRange: (dateRange: DashbordDateRange) => void;
   signIn: (loginFormData: LoginFormData) => Promise<boolean>;
   getUserByToken: (access_token: string) => Promise<boolean>;
   data: InfluencerData;
@@ -102,7 +114,9 @@ const useDataStore = create<DataState>((set) => ({
     },
   },
   mode: DashboardMode.ALL,
+  dateRange: DashbordDateRange.SEVEN,
   setMode: (mode: DashboardMode) => set({ mode }),
+  setDateRange: (dateRange: DashbordDateRange) => set({ dateRange }),
   signIn: async (loginFormData: LoginFormData) => {
     try {
       const response = await fetch(`${baseApiUrl}/auth/login`, {

@@ -73,6 +73,7 @@ const CreatorsTable = () => {
         case "Investimento":
         case "Posts":
         case "Stories":
+        case "Reels":
         case "Feed":
         case "Tiktok":
         case "Impressoes":
@@ -81,11 +82,13 @@ const CreatorsTable = () => {
         case "Video Views":
         case "Cliques Tiktok":
         case "Impressoes Tiktok":
+        case "Impacto Bruto":
+        case "Impacto Bruto Tiktok":
+        case "Interacoes Tiktok":
           return parseInt(a[sortColumn]) - parseInt(b[sortColumn]);
 
         case "Engajamento":
         case "Engajamento Tiktok":
-        case "CTR":
           return (
             parsePercentageString(a[sortColumn]) -
             parsePercentageString(b[sortColumn])
@@ -231,7 +234,7 @@ const CreatorsTable = () => {
           <thead className="sticky top-0 z-10 bg-white">
             <tr className="border-box flex-shrink-0 w-full h-min bg-[#f8f9fb] overflow-visible relative content-center flex-nowrap gap-[5px] rounded-none border-b border-[#eaecf0]">
               <th
-                className={`cursor-pointer flex-shrink-0 w-auto max-w-[215px] h-auto whitespace-pre-wrap break-words relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
+                className={`cursor-pointer flex-shrink-0 w-auto max-w-[300px] h-auto whitespace-pre-wrap break-words relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
                 onClick={() =>
                   handleSort(
                     "Influencer",
@@ -251,7 +254,7 @@ const CreatorsTable = () => {
                 </div>
               </th>
               <th
-                className={`cursor-pointer flex-shrink-0 w-auto max-w-[215px] h-auto whitespace-pre-wrap break-words relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
+                className={`cursor-pointer flex-shrink-0 w-auto max-w-[300px] h-auto whitespace-pre-wrap break-words relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
                 onClick={() =>
                   handleSort("Cidade", sortColumn, setSortColumn, setSortOrder)
                 }
@@ -266,7 +269,7 @@ const CreatorsTable = () => {
                 </div>
               </th>
               <th
-                className={`cursor-pointer flex-shrink-0 w-auto max-w-[215px] h-auto whitespace-pre-wrap break-words relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
+                className={`cursor-pointer flex-shrink-0 w-auto max-w-[300px] h-auto whitespace-pre-wrap break-words relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
                 onClick={() =>
                   handleSort(
                     "Investimento",
@@ -286,7 +289,7 @@ const CreatorsTable = () => {
                 </div>
               </th>
               <th
-                className={`cursor-pointer flex-shrink-0 w-auto max-w-[215px] h-auto whitespace-pre-wrap break-words relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
+                className={`cursor-pointer flex-shrink-0 w-auto max-w-[300px] h-auto whitespace-pre-wrap break-words relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
                 onClick={() =>
                   handleSort("Posts", sortColumn, setSortColumn, setSortOrder)
                 }
@@ -301,7 +304,22 @@ const CreatorsTable = () => {
                 </div>
               </th>
               <th
-                className={`cursor-pointer flex-shrink-0 w-auto max-w-[215px] h-auto whitespace-pre-wrap break-words relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
+                className={`cursor-pointer flex-shrink-0 w-auto max-w-[300px] h-auto whitespace-pre-wrap break-words relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
+                onClick={() =>
+                  handleSort("Reels", sortColumn, setSortColumn, setSortOrder)
+                }
+              >
+                <div className="flex justify-start items-center gap-6">
+                  Reels
+                  <TableSortingIcon
+                    sortColumn={sortColumn}
+                    sortOrder={sortOrder}
+                    actualColumn={"Reels"}
+                  />
+                </div>
+              </th>
+              <th
+                className={`cursor-pointer flex-shrink-0 w-auto max-w-[300px] h-auto whitespace-pre-wrap break-words relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
                 onClick={() =>
                   handleSort("Stories", sortColumn, setSortColumn, setSortOrder)
                 }
@@ -316,7 +334,7 @@ const CreatorsTable = () => {
                 </div>
               </th>
               <th
-                className={`cursor-pointer flex-shrink-0 w-auto max-w-[215px] h-auto whitespace-pre-wrap break-words relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
+                className={`cursor-pointer flex-shrink-0 w-auto max-w-[300px] h-auto whitespace-pre-wrap break-words relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
                 onClick={() =>
                   handleSort("Feed", sortColumn, setSortColumn, setSortOrder)
                 }
@@ -331,7 +349,7 @@ const CreatorsTable = () => {
                 </div>
               </th>
               <th
-                className={`cursor-pointer flex-shrink-0 w-auto max-w-[215px] h-auto whitespace-pre-wrap break-words relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
+                className={`cursor-pointer flex-shrink-0 w-auto max-w-[300px] h-auto whitespace-pre-wrap break-words relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
                 onClick={() =>
                   handleSort("Tiktok", sortColumn, setSortColumn, setSortOrder)
                 }
@@ -346,7 +364,27 @@ const CreatorsTable = () => {
                 </div>
               </th>
               <th
-                className={`cursor-pointer flex-shrink-0 w-auto max-w-[215px] h-auto whitespace-pre-wrap break-words relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
+                className={`cursor-pointer flex-shrink-0 w-auto max-w-[300px] h-auto whitespace-pre-wrap break-words relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
+                onClick={() =>
+                  handleSort(
+                    "Impacto Bruto",
+                    sortColumn,
+                    setSortColumn,
+                    setSortOrder
+                  )
+                }
+              >
+                <div className="flex justify-start items-center gap-6">
+                  Impacto
+                  <TableSortingIcon
+                    sortColumn={sortColumn}
+                    sortOrder={sortOrder}
+                    actualColumn={"Impacto Bruto"}
+                  />
+                </div>
+              </th>
+              <th
+                className={`cursor-pointer flex-shrink-0 w-auto max-w-[300px] h-auto whitespace-pre-wrap break-words relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
                 onClick={() =>
                   handleSort(
                     "Impressoes",
@@ -366,7 +404,7 @@ const CreatorsTable = () => {
                 </div>
               </th>
               <th
-                className={`cursor-pointer flex-shrink-0 w-auto max-w-[215px] h-auto whitespace-pre-wrap break-words relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
+                className={`cursor-pointer flex-shrink-0 w-auto max-w-[300px] h-auto whitespace-pre-wrap break-words relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
                 onClick={() =>
                   handleSort(
                     "Interacoes",
@@ -386,13 +424,13 @@ const CreatorsTable = () => {
                 </div>
               </th>
               <th
-                className={`cursor-pointer flex-shrink-0 w-auto max-w-[215px] h-auto whitespace-pre-wrap break-words relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
+                className={`cursor-pointer flex-shrink-0 w-auto max-w-[300px] h-auto whitespace-pre-wrap break-words relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
                 onClick={() =>
                   handleSort("Cliques", sortColumn, setSortColumn, setSortOrder)
                 }
               >
                 <div className="flex justify-start items-center gap-6">
-                  Clicks
+                  Cliques
                   <TableSortingIcon
                     sortColumn={sortColumn}
                     sortOrder={sortOrder}
@@ -400,8 +438,8 @@ const CreatorsTable = () => {
                   />
                 </div>
               </th>
-              <th
-                className={`cursor-pointer flex-shrink-0 w-auto max-w-[215px] h-auto relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
+              {/* <th
+                className={`cursor-pointer flex-shrink-0 w-auto max-w-[300px] h-auto relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
                 onClick={() =>
                   handleSort(
                     "Video Views",
@@ -419,9 +457,9 @@ const CreatorsTable = () => {
                     actualColumn={"Video Views"}
                   />
                 </div>
-              </th>
+              </th> */}
               <th
-                className={`cursor-pointer flex-shrink-0 w-auto max-w-[215px] h-auto relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
+                className={`cursor-pointer flex-shrink-0 w-auto max-w-[300px] h-auto relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
                 onClick={() =>
                   handleSort(
                     "Engajamento",
@@ -441,10 +479,10 @@ const CreatorsTable = () => {
                 </div>
               </th>
               <th
-                className={`cursor-pointer flex-shrink-0 w-auto max-w-[215px] h-auto relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
+                className={`cursor-pointer flex-shrink-0 w-auto max-w-[300px] h-auto whitespace-pre-wrap break-words relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
                 onClick={() =>
                   handleSort(
-                    "Engajamento Tiktok",
+                    "Impacto Bruto Tiktok",
                     sortColumn,
                     setSortColumn,
                     setSortOrder
@@ -452,16 +490,56 @@ const CreatorsTable = () => {
                 }
               >
                 <div className="flex justify-start items-center gap-6">
-                  Engajamento Tiktok
+                  Impacto Tiktok
                   <TableSortingIcon
                     sortColumn={sortColumn}
                     sortOrder={sortOrder}
-                    actualColumn={"Engajamento Tiktok"}
+                    actualColumn={"Impacto Bruto Tiktok"}
                   />
                 </div>
               </th>
               <th
-                className={`cursor-pointer flex-shrink-0 w-auto max-w-[215px] h-auto relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
+                className={`cursor-pointer flex-shrink-0 w-auto max-w-[300px] h-auto relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
+                onClick={() =>
+                  handleSort(
+                    "Impressoes Tiktok",
+                    sortColumn,
+                    setSortColumn,
+                    setSortOrder
+                  )
+                }
+              >
+                <div className="flex justify-start items-center gap-6">
+                  Impressões Tiktok
+                  <TableSortingIcon
+                    sortColumn={sortColumn}
+                    sortOrder={sortOrder}
+                    actualColumn={"Impressoes Tiktok"}
+                  />
+                </div>
+              </th>
+              <th
+                className={`cursor-pointer flex-shrink-0 w-auto max-w-[300px] h-auto relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
+                onClick={() =>
+                  handleSort(
+                    "Interacoes Tiktok",
+                    sortColumn,
+                    setSortColumn,
+                    setSortOrder
+                  )
+                }
+              >
+                <div className="flex justify-start items-center gap-6">
+                  Interações Tiktok
+                  <TableSortingIcon
+                    sortColumn={sortColumn}
+                    sortOrder={sortOrder}
+                    actualColumn={"Interacoes Tiktok"}
+                  />
+                </div>
+              </th>
+              <th
+                className={`cursor-pointer flex-shrink-0 w-auto max-w-[300px] h-auto relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
                 onClick={() =>
                   handleSort(
                     "Cliques Tiktok",
@@ -481,10 +559,10 @@ const CreatorsTable = () => {
                 </div>
               </th>
               <th
-                className={`cursor-pointer flex-shrink-0 w-auto max-w-[215px] h-auto relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
+                className={`cursor-pointer flex-shrink-0 w-auto max-w-[300px] h-auto relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
                 onClick={() =>
                   handleSort(
-                    "Impressoes Tiktok",
+                    "Engajamento Tiktok",
                     sortColumn,
                     setSortColumn,
                     setSortOrder
@@ -492,16 +570,16 @@ const CreatorsTable = () => {
                 }
               >
                 <div className="flex justify-start items-center gap-6">
-                  Impressoes Tiktok
+                  Engajamento Tiktok
                   <TableSortingIcon
                     sortColumn={sortColumn}
                     sortOrder={sortOrder}
-                    actualColumn={"Impressoes Tiktok"}
+                    actualColumn={"Engajamento Tiktok"}
                   />
                 </div>
               </th>
               <th
-                className={`cursor-pointer flex-shrink-0 w-auto max-w-[215px] h-auto whitespace-pre-wrap break-words relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
+                className={`cursor-pointer flex-shrink-0 w-auto max-w-[300px] h-auto whitespace-pre-wrap break-words relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
                 onClick={() =>
                   handleSort("CPE", sortColumn, setSortColumn, setSortOrder)
                 }
@@ -516,7 +594,7 @@ const CreatorsTable = () => {
                 </div>
               </th>
               <th
-                className={`cursor-pointer flex-shrink-0 w-auto max-w-[215px] h-auto whitespace-pre-wrap break-words relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
+                className={`cursor-pointer flex-shrink-0 w-auto max-w-[300px] h-auto whitespace-pre-wrap break-words relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
                 onClick={() =>
                   handleSort("CPC", sortColumn, setSortColumn, setSortOrder)
                 }
@@ -531,7 +609,7 @@ const CreatorsTable = () => {
                 </div>
               </th>
               <th
-                className={`cursor-pointer flex-shrink-0 w-auto max-w-[215px] h-auto whitespace-pre-wrap break-words relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
+                className={`cursor-pointer flex-shrink-0 w-auto max-w-[300px] h-auto whitespace-pre-wrap break-words relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
                 onClick={() =>
                   handleSort("CPV", sortColumn, setSortColumn, setSortOrder)
                 }
@@ -546,17 +624,62 @@ const CreatorsTable = () => {
                 </div>
               </th>
               <th
-                className={`cursor-pointer flex-shrink-0 w-auto max-w-[215px] h-auto whitespace-pre-wrap break-words relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
+                className={`cursor-pointer flex-shrink-0 w-auto max-w-[300px] h-auto whitespace-pre-wrap break-words relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
                 onClick={() =>
-                  handleSort("CTR", sortColumn, setSortColumn, setSortOrder)
+                  handleSort(
+                    "CPE Tiktok",
+                    sortColumn,
+                    setSortColumn,
+                    setSortOrder
+                  )
                 }
               >
                 <div className="flex justify-start items-center gap-6">
-                  CTR
+                  CPE Tiktok
                   <TableSortingIcon
                     sortColumn={sortColumn}
                     sortOrder={sortOrder}
-                    actualColumn={"CTR"}
+                    actualColumn={"CPE Tiktok"}
+                  />
+                </div>
+              </th>
+              <th
+                className={`cursor-pointer flex-shrink-0 w-auto max-w-[300px] h-auto whitespace-pre-wrap break-words relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
+                onClick={() =>
+                  handleSort(
+                    "CPC Tiktok",
+                    sortColumn,
+                    setSortColumn,
+                    setSortOrder
+                  )
+                }
+              >
+                <div className="flex justify-start items-center gap-6">
+                  CPC Tiktok
+                  <TableSortingIcon
+                    sortColumn={sortColumn}
+                    sortOrder={sortOrder}
+                    actualColumn={"CPC Tiktok"}
+                  />
+                </div>
+              </th>
+              <th
+                className={`cursor-pointer flex-shrink-0 w-auto max-w-[300px] h-auto whitespace-pre-wrap break-words relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
+                onClick={() =>
+                  handleSort(
+                    "CPV Tiktok",
+                    sortColumn,
+                    setSortColumn,
+                    setSortOrder
+                  )
+                }
+              >
+                <div className="flex justify-start items-center gap-6">
+                  CPV Tiktok
+                  <TableSortingIcon
+                    sortColumn={sortColumn}
+                    sortOrder={sortOrder}
+                    actualColumn={"CPV Tiktok"}
                   />
                 </div>
               </th>

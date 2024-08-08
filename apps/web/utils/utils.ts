@@ -14,6 +14,12 @@ export function parseUpdatedAt(updatedAt: string) {
   return `${day}/${month}/${year} ${hours}:${minutes}`;
 }
 
+// Helper function to parse date strings in 'dd/mm/yyyy' format
+const parseDate = (dateString: string): Date => {
+  const [day, month, year] = dateString.split("/").map(Number);
+  return new Date(year, month - 1, day); // Months are 0-indexed in JavaScript
+};
+
 export const handleSort = (
   column: string,
   sortColumn: string,
@@ -131,13 +137,13 @@ export const total = (
     for (let i = 0; i < data.length; i++) {
       const element = data[i];
 
-      if (dataKey === "Reels") {
-        count += Number.parseInt("2".replaceAll(".", ""));
-      } else {
-        count += Number.parseInt(
-          (element[`${dataKey}`] as string).replaceAll(".", "")
-        );
-      }
+      // if (dataKey === "Reels") {
+      //   count += Number.parseInt("2".replaceAll(".", ""));
+      // } else {
+      count += Number.parseInt(
+        (element[`${dataKey}`] as string).replaceAll(".", "")
+      );
+      // }
     }
   } else {
     for (let i = 0; i < data.length; i++) {
@@ -146,13 +152,13 @@ export const total = (
       for (let j = 0; j < dataKey.length; j++) {
         const key = dataKey[j];
 
-        if (key === "Reels") {
-          count += Number.parseInt("2".replaceAll(".", ""));
-        } else {
-          count += Number.parseInt(
-            (element[`${key}`] as string).replaceAll(".", "")
-          );
-        }
+        // if (key === "Reels") {
+        //   count += Number.parseInt("2".replaceAll(".", ""));
+        // } else {
+        count += Number.parseInt(
+          (element[`${key}`] as string).replaceAll(".", "")
+        );
+        // }
       }
     }
   }
@@ -167,6 +173,60 @@ export const total = (
   }).format(count);
 
   return formattedCount;
+};
+
+export const calculateVariation = (
+  current: string,
+  previous: string
+): number => {
+  const currentNumber = Number.parseInt(current);
+  const previousNumber = Number.parseInt(previous);
+
+  if (previousNumber === 0) return 0;
+  return ((currentNumber - previousNumber) / previousNumber) * 100;
+};
+
+// Filter data by date range
+export const filterDataByDateRange = (
+  data: Influencer[],
+  days: number
+): Influencer[] => {
+  const currentDate = new Date();
+  return data.filter((influencer) => {
+    const postDate = parseDate(influencer["Data de Postagem"]);
+    const diffTime = currentDate.getTime() - postDate.getTime();
+    const diffDays = diffTime / (1000 * 3600 * 24);
+
+    return diffDays >= days;
+  });
+};
+
+// Calculate variations comparing current total with previous periods
+export const calculateVariations = (
+  data: Influencer[],
+  keys: keyof Influencer | (keyof Influencer)[]
+) => {
+  const currentTotal = total(data, keys);
+
+  const last7DaysData = filterDataByDateRange(data, 7);
+  const last14DaysData = filterDataByDateRange(data, 14);
+  const last30DaysData = filterDataByDateRange(data, 30);
+
+  const total7Days = total(last7DaysData, keys);
+  const total14Days = total(last14DaysData, keys);
+  const total30Days = total(last30DaysData, keys);
+
+  console.log({
+    7: calculateVariation(currentTotal, total7Days),
+    14: calculateVariation(currentTotal, total14Days),
+    30: calculateVariation(currentTotal, total30Days),
+  });
+
+  return {
+    7: calculateVariation(currentTotal, total7Days),
+    14: calculateVariation(currentTotal, total14Days),
+    30: calculateVariation(currentTotal, total30Days),
+  };
 };
 
 export const totalInfluencers = (data: Influencer[]) => `${data.length}`;

@@ -1,8 +1,12 @@
 "use client";
 
-import useDataStore, { DashboardMode, Influencer } from "@/store";
+import useDataStore, {
+  DashboardMode,
+  DashbordDateRange,
+  Influencer,
+} from "@/store";
 import Metrics from "./Metrics";
-import { total } from "../../utils/utils";
+import { calculateVariations, total } from "../../utils/utils";
 import TotalPostsIcon from "./MetricsIcons/TotalPostsIcon";
 import TotalFeedIcon from "./MetricsIcons/TotalFeedIcon";
 import TotalStoriesIcon from "./MetricsIcons/TotalStoriesIcon";
@@ -15,29 +19,30 @@ const metricConfig: Record<
     heading: string;
     metric: (data: Influencer[]) => string;
     icon: JSX.Element | null;
-    variation?: number;
+    variation: (data: Influencer[]) => Record<DashbordDateRange, number>;
   }[]
 > = {
   tiktok: [
     {
       heading: "Total Posts",
-      metric: (data) => total(data, ["Stories", "Feed", "Reels", "Tiktok"]),
+      metric: (data) => total(data, "Tiktok"),
       icon: null,
-      variation: 20.1,
+      variation: (data) => calculateVariations(data, "Tiktok"),
     },
     {
       heading: "Total TikToks",
       metric: (data) => total(data, "Tiktok"),
       icon: <TotalTiktokIcon />,
-      variation: -20.1,
+      variation: (data) => calculateVariations(data, "Tiktok"),
     },
   ],
   instagram: [
     {
       heading: "Total Posts",
-      metric: (data) => total(data, ["Stories", "Feed", "Reels", "Tiktok"]),
+      metric: (data) => total(data, ["Stories", "Feed", "Reels"]),
       icon: null,
-      variation: -20.1,
+      variation: (data) =>
+        calculateVariations(data, ["Stories", "Feed", "Reels"]),
     },
     {
       heading: "Total Stories",
@@ -47,19 +52,19 @@ const metricConfig: Record<
           <TotalStoriesIcon />
         </div>
       ),
-      variation: 20,
+      variation: (data) => calculateVariations(data, "Stories"),
     },
     {
       heading: "Total Feed",
       metric: (data) => total(data, "Feed"),
       icon: <TotalFeedIcon />,
-      variation: -20.1,
+      variation: (data) => calculateVariations(data, "Feed"),
     },
     {
       heading: "Total Reels",
       metric: (data) => total(data, "Reels"),
       icon: <TotalReelsIcon />,
-      variation: 20,
+      variation: (data) => calculateVariations(data, "Reels"),
     },
   ],
   all: [
@@ -67,7 +72,8 @@ const metricConfig: Record<
       heading: "Total Posts",
       metric: (data) => total(data, ["Stories", "Feed", "Reels", "Tiktok"]),
       icon: null,
-      variation: 20,
+      variation: (data) =>
+        calculateVariations(data, ["Stories", "Feed", "Reels", "Tiktok"]),
     },
     {
       heading: "Total Stories",
@@ -77,25 +83,25 @@ const metricConfig: Record<
           <TotalStoriesIcon />
         </div>
       ),
-      variation: 20,
+      variation: (data) => calculateVariations(data, "Stories"),
     },
     {
       heading: "Total Feed",
       metric: (data) => total(data, "Feed"),
       icon: <TotalFeedIcon />,
-      variation: 20,
+      variation: (data) => calculateVariations(data, "Feed"),
     },
     {
       heading: "Total Reels",
       metric: (data) => total(data, "Reels"),
       icon: <TotalReelsIcon />,
-      variation: -20.1,
+      variation: (data) => calculateVariations(data, "Reels"),
     },
     {
       heading: "Total TikToks",
       metric: (data) => total(data, "Tiktok"),
       icon: <TotalTiktokIcon />,
-      variation: 13.1,
+      variation: (data) => calculateVariations(data, "Tiktok"),
     },
   ],
 };
@@ -113,7 +119,7 @@ const FirstSection = () => {
             key={heading}
             heading={heading}
             metric={metric(data)}
-            variation={variation}
+            variation={variation(data)}
           >
             {icon}
           </Metrics>

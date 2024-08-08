@@ -20,14 +20,20 @@ const CreatorsTableRow = ({ data }: CreatorsTableRowProps) => {
             <div className="mask mask-squircle w-[38px] h-[38px] aspect-square block rounded-full border-black border-[1px] border-solid bg-[url('/bg-contact-cta.webp')] bg-cover bg-no-repeat bg-center relative">
               {!data["Url Foto Perfil"] ? (
                 <div className="">
-                  <Image src={juicyLimoArt} alt="Creator Avatar" width={38} height={38} className="absolute right-[2px]"/>
+                  <Image
+                    src={juicyLimoArt}
+                    alt="Creator Avatar"
+                    width={38}
+                    height={38}
+                    className="absolute right-[2px]"
+                  />
                 </div>
               ) : (
                 <img
                   src={`${data["Url Foto Perfil"]}`}
                   width="38"
                   height="38"
-                  alt='Creator Avatar'
+                  alt="Creator Avatar"
                   className=""
                 />
               )}
@@ -75,6 +81,13 @@ const CreatorsTableRow = ({ data }: CreatorsTableRowProps) => {
         <p
           className={`flex-shrink-0 flex-grow w-auto h-auto whitespace-nowrap break-words relative ${inter.className} text-[#475466] text-sm`}
         >
+          {Number.parseInt(data.Reels).toLocaleString("pt-BR")}
+        </p>
+      </td>
+      <td>
+        <p
+          className={`flex-shrink-0 flex-grow w-auto h-auto whitespace-nowrap break-words relative ${inter.className} text-[#475466] text-sm`}
+        >
           {Number.parseInt(data.Stories).toLocaleString("pt-BR")}
         </p>
       </td>
@@ -90,6 +103,13 @@ const CreatorsTableRow = ({ data }: CreatorsTableRowProps) => {
           className={`flex-shrink-0 flex-grow w-auto h-auto whitespace-nowrap break-words relative ${inter.className} text-[#475466] text-sm`}
         >
           {Number.parseInt(data.Tiktok).toLocaleString("pt-BR")}
+        </p>
+      </td>
+      <td>
+        <p
+          className={`flex-shrink-0 flex-grow w-auto h-auto whitespace-nowrap break-words relative ${inter.className} text-[#475466] text-sm`}
+        >
+          {Number.parseInt(data["Impacto Bruto"]).toLocaleString("pt-BR")}
         </p>
       </td>
       <td>
@@ -113,13 +133,13 @@ const CreatorsTableRow = ({ data }: CreatorsTableRowProps) => {
           {Number.parseInt(data.Cliques).toLocaleString("pt-BR")}
         </p>
       </td>
-      <td>
+      {/* <td>
         <p
           className={`flex-shrink-0 flex-grow w-auto h-auto whitespace-nowrap break-words relative ${inter.className} text-[#475466] text-sm`}
         >
           {Number.parseInt(data["Video Views"]).toLocaleString("pt-BR")}
         </p>
-      </td>
+      </td> */}
       <td>
         <p
           className={`flex-shrink-0 flex-grow w-auto h-auto whitespace-nowrap break-words relative ${inter.className} text-[#475466] text-sm`}
@@ -131,7 +151,23 @@ const CreatorsTableRow = ({ data }: CreatorsTableRowProps) => {
         <p
           className={`flex-shrink-0 flex-grow w-auto h-auto whitespace-nowrap break-words relative ${inter.className} text-[#475466] text-sm`}
         >
-          {data["Engajamento Tiktok"]}
+          {Number.parseInt(data["Impacto Bruto Tiktok"]).toLocaleString(
+            "pt-BR"
+          )}
+        </p>
+      </td>
+      <td>
+        <p
+          className={`flex-shrink-0 flex-grow w-auto h-auto whitespace-nowrap break-words relative ${inter.className} text-[#475466] text-sm`}
+        >
+          {Number.parseInt(data["Impressoes Tiktok"]).toLocaleString("pt-BR")}
+        </p>
+      </td>
+      <td>
+        <p
+          className={`flex-shrink-0 flex-grow w-auto h-auto whitespace-nowrap break-words relative ${inter.className} text-[#475466] text-sm`}
+        >
+          {Number.parseInt(data["Interacoes Tiktok"]).toLocaleString("pt-BR")}
         </p>
       </td>
       <td>
@@ -145,7 +181,7 @@ const CreatorsTableRow = ({ data }: CreatorsTableRowProps) => {
         <p
           className={`flex-shrink-0 flex-grow w-auto h-auto whitespace-nowrap break-words relative ${inter.className} text-[#475466] text-sm`}
         >
-          {Number.parseInt(data["Impressoes Tiktok"]).toLocaleString("pt-BR")}
+          {data["Engajamento Tiktok"]}
         </p>
       </td>
       <td>
@@ -173,9 +209,30 @@ const CreatorsTableRow = ({ data }: CreatorsTableRowProps) => {
         <p
           className={`flex-shrink-0 flex-grow w-auto h-auto whitespace-nowrap break-words relative ${inter.className} text-[#475466] text-sm`}
         >
-          {data.CTR}
+          {data["CPE Tiktok"]}
         </p>
       </td>
+      <td>
+        <p
+          className={`flex-shrink-0 flex-grow w-auto h-auto whitespace-nowrap break-words relative ${inter.className} text-[#475466] text-sm`}
+        >
+          {data["CPC Tiktok"]}
+        </p>
+      </td>
+      <td>
+        <p
+          className={`flex-shrink-0 flex-grow w-auto h-auto whitespace-nowrap break-words relative ${inter.className} text-[#475466] text-sm`}
+        >
+          {data["CPV Tiktok"]}
+        </p>
+      </td>
+      {/* <td>
+        <p
+          className={`flex-shrink-0 flex-grow w-auto h-auto whitespace-nowrap break-words relative ${inter.className} text-[#475466] text-sm`}
+        >
+          {data.CTR}
+        </p>
+      </td> */}
       <th>
         <button className="btn btn-ghost p-0 text-xs h-6 min-h-[24px] !bg-transparent">
           <svg

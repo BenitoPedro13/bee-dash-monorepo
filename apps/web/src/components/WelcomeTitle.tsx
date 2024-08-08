@@ -2,6 +2,7 @@ import useDataStore, { DashboardMode } from "@/store";
 import React from "react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DatePickerWithRange } from "./RangedDatePicker";
+import { SelectComponent } from "./Select";
 const WelcomeTitle = () => {
   const session = useDataStore((state) => state.session);
   const setMode = useDataStore((state) => state.setMode);
@@ -85,7 +86,7 @@ const WelcomeTitle = () => {
               </TabsTrigger>
             </TabsList>
           </Tabs>
-          <DatePickerWithRange />
+          <SelectComponent />
         </div>
       </div>
     </div>

@@ -128,10 +128,10 @@ const SecondSection = () => {
           <CostPerMetric
             sigla={["Total", "CPV"]}
             heading="Custo por Mil Views"
-            metric={total(data, "Video Views")}
+            metric={total(data, "Impressoes")}
             costPerMetric={costPerMetric(
               data,
-              "Video Views",
+              "Impressoes",
               totalCount(data, "Investimento")
             )}
             variation={12.1}

@@ -29,11 +29,6 @@ const MetricsGraph = ({ data }: MetricsGraphProps) => {
         heading: "Impressões (Views)",
         computeMetric: (data: Influencer[]) => total(data, ["Impressoes"]),
       },
-      // Total: {
-      //   heading: "Interações + Views",
-      //   computeMetric: (data: Influencer[]) =>
-      //     total(data, ["Interacoes", "Video Views"]),
-      // },
     };
 
     if (typeOfGraph in graphTypes) {

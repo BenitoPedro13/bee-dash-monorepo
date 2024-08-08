@@ -4,6 +4,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import Badge from "./Badge";
+import useDataStore, { DashbordDateRange } from "@/store";
 
 const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
@@ -11,10 +12,14 @@ type MetricsProps = {
   children?: React.ReactNode;
   heading: string;
   metric: string;
-  variation?: number;
+  variation: Record<DashbordDateRange, number>;
 };
 
 const Metrics = ({ children, heading, metric, variation }: MetricsProps) => {
+  const dateRange = useDataStore((store) => store.dateRange);
+
+  const variationValue = variation[dateRange];
+
   return (
     <div
       className="box-border w-full sm:min-w-[200px] h-min flex flex-col items-start p-4 bg-white overflow-visible content-center flex-nowrap gap-2 rounded-xl border-[#D4D4D4] border"
@@ -36,7 +41,12 @@ const Metrics = ({ children, heading, metric, variation }: MetricsProps) => {
         <p className="flex-shrink-0 w-auto h-auto whitespace-pre relative font-bold font-nexa-bold text-[#101828] text-3xl leading-[38px]">
           {metric}
         </p>
-        {typeof variation === "number" && <Badge number={variation} />}
+        {/* <Badge number={variationValue} /> */}
+        {typeof variationValue === "number" && (
+          <div>
+            <Badge number={variationValue} />
+          </div>
+        )}
       </div>
     </div>
   );
