@@ -31,27 +31,27 @@ const WelcomeTitle = () => {
                   viewBox="0 0 16 16"
                   fill="none"
                 >
-                  <g clip-path="url(#clip0_4849_4542)">
+                  <g clipPath="url(#clip0_4849_4542)">
                     <path
                       d="M8.00016 14.6667C11.6821 14.6667 14.6668 11.6819 14.6668 8.00001C14.6668 4.31811 11.6821 1.33334 8.00016 1.33334C4.31826 1.33334 1.3335 4.31811 1.3335 8.00001C1.3335 11.6819 4.31826 14.6667 8.00016 14.6667Z"
                       stroke="#020617"
-                      stroke-width="1.25"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      strokeWidth="1.25"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     />
                     <path
                       d="M1.3335 8H14.6668"
                       stroke="#020617"
-                      stroke-width="1.25"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      strokeWidth="1.25"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     />
                     <path
                       d="M8.00016 1.33334C9.66768 3.15891 10.6153 5.52803 10.6668 8.00001C10.6153 10.472 9.66768 12.8411 8.00016 14.6667C6.33264 12.8411 5.38499 10.472 5.3335 8.00001C5.38499 5.52803 6.33264 3.15891 8.00016 1.33334Z"
                       stroke="#020617"
-                      stroke-width="1.25"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      strokeWidth="1.25"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     />
                   </g>
                   <defs>

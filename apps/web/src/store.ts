@@ -11,6 +11,7 @@ export enum DashboardMode {
 }
 
 export enum DashbordDateRange {
+  ZERO = "0",
   SEVEN = "7",
   FOURTEEN = "14",
   THIRTY = "30",
@@ -114,7 +115,7 @@ const useDataStore = create<DataState>((set) => ({
     },
   },
   mode: DashboardMode.ALL,
-  dateRange: DashbordDateRange.SEVEN,
+  dateRange: DashbordDateRange.ZERO,
   setMode: (mode: DashboardMode) => set({ mode }),
   setDateRange: (dateRange: DashbordDateRange) => set({ dateRange }),
   signIn: async (loginFormData: LoginFormData) => {
@@ -196,6 +197,19 @@ const useDataStore = create<DataState>((set) => ({
           Authorization: `Bearer ${access_token}`, // Set the token in the Authorization header
         },
       });
+
+      if (!response.ok || response.status === 401) {
+        return set((prevState) => {
+          return {
+            ...prevState,
+            session: {
+              ...prevState.session,
+              isAuthenticated: false,
+            },
+          };
+        });
+      }
+
       const data = await response.json();
       set({ data });
     } catch (error) {
@@ -210,6 +224,19 @@ const useDataStore = create<DataState>((set) => ({
           Authorization: `Bearer ${access_token}`, // Set the token in the Authorization header
         },
       }); // Replace with your API endpoint
+
+      if (!response.ok || response.status === 401) {
+        return set((prevState) => {
+          return {
+            ...prevState,
+            session: {
+              ...prevState.session,
+              isAuthenticated: false,
+            },
+          };
+        });
+      }
+
       const attachments: Attachment[] = await response.json();
       set({ attachments });
     } catch (error) {

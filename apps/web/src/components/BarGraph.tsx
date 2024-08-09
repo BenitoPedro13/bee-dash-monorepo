@@ -94,7 +94,7 @@ export default function BarGraph({ typeOfGraph }: { typeOfGraph: GraphTypes }) {
           // tickFormatter={(value) => value}
         />
         <ChartTooltip
-          cursor={false}
+          // cursor={false}
           content={<ChartTooltipContent className="w-[180px]" />}
         />
 

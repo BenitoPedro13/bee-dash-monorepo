@@ -19,16 +19,17 @@ export function SelectComponent() {
     <Select onValueChange={(value: DashbordDateRange) => setDateRange(value)}>
       <SelectTrigger
         className="w-[180px] text-black"
-        defaultValue={DashbordDateRange.SEVEN}
+        defaultValue={DashbordDateRange.ZERO}
         defaultChecked
       >
         <SelectValue
           className="text-black"
-          defaultValue={DashbordDateRange.SEVEN}
+          defaultValue={DashbordDateRange.ZERO}
           defaultChecked
           placeholder={
             <div className="flex items-center gap-2">
-              <CalendarDays width={16} />7 Dias
+              <CalendarDays width={16} />
+              Total
             </div>
           }
         />
@@ -36,6 +37,12 @@ export function SelectComponent() {
       <SelectContent>
         <SelectGroup>
           <SelectLabel>Período</SelectLabel>
+          <SelectItem value={DashbordDateRange.ZERO}>
+            <div className="flex items-center gap-2">
+              <CalendarDays width={16} />
+              Total
+            </div>
+          </SelectItem>
           <SelectItem value={DashbordDateRange.SEVEN}>
             <div className="flex items-center gap-2">
               <CalendarDays width={16} />7 Dias

@@ -691,8 +691,13 @@ const CreatorsTable = () => {
             </tr>
           </thead>
           <tbody>
-            {currentData.map((item) => {
-              return <CreatorsTableRow data={item} key={item.id} />;
+            {currentData.map((item, index) => {
+              return (
+                <CreatorsTableRow
+                  data={item}
+                  key={`${item.Username}-${index}`}
+                />
+              );
             })}
           </tbody>
         </table>

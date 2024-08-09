@@ -12,13 +12,16 @@ type MetricsProps = {
   children?: React.ReactNode;
   heading: string;
   metric: string;
-  variation: Record<DashbordDateRange, number>;
+  variation: Record<
+    DashbordDateRange,
+    { total: number; variation: number | null }
+  >;
 };
 
 const Metrics = ({ children, heading, metric, variation }: MetricsProps) => {
   const dateRange = useDataStore((store) => store.dateRange);
 
-  const variationValue = variation[dateRange];
+  const { variation: variationValue, total } = variation[dateRange];
 
   return (
     <div
@@ -39,7 +42,7 @@ const Metrics = ({ children, heading, metric, variation }: MetricsProps) => {
       </div>
       <div className="flex flex-col items-start self-stretch gap-[2px]">
         <p className="flex-shrink-0 w-auto h-auto whitespace-pre relative font-bold font-nexa-bold text-[#101828] text-3xl leading-[38px]">
-          {metric}
+          {dateRange !== "0" ? total : metric}
         </p>
         {/* <Badge number={variationValue} /> */}
         {typeof variationValue === "number" && (

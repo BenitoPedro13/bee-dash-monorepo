@@ -87,31 +87,31 @@ const TotalStoriesIcon = () => {
         height="14.4444"
         rx="4.44444"
         stroke="black"
-        stroke-width="1.11111"
+        strokeWidth="1.11111"
       />
       <path
         d="M11.1631 8.62964L4.49642 8.62964"
         stroke="black"
-        stroke-width="1.11111"
-        stroke-linecap="round"
+        strokeWidth="1.11111"
+        strokeLinecap="round"
       />
       <path
         d="M11.1631 8.62964L4.49642 8.62964"
         stroke="black"
-        stroke-width="1.11111"
-        stroke-linecap="round"
+        strokeWidth="1.11111"
+        strokeLinecap="round"
       />
       <path
         d="M7.83105 5.57397L7.83105 12.2406"
         stroke="black"
-        stroke-width="1.11111"
-        stroke-linecap="round"
+        strokeWidth="1.11111"
+        strokeLinecap="round"
       />
       <path
         d="M7.83105 5.57397L7.83105 12.2406"
         stroke="black"
-        stroke-width="1.11111"
-        stroke-linecap="round"
+        strokeWidth="1.11111"
+        strokeLinecap="round"
       />
     </svg>
   );

@@ -26,9 +26,9 @@ const Badge = ({
           <path
             d="M6 10V3M6 3L2.5 6.5M6 3L9.5 6.5"
             stroke="#12B76A"
-            stroke-width="1.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           />
         </svg>
       </div>
@@ -48,9 +48,9 @@ const Badge = ({
           <path
             d="M6.5 2.5V9.5M6.5 9.5L10 6M6.5 9.5L3 6"
             stroke="#F04438"
-            stroke-width="1.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           />
         </svg>
       </div>
@@ -60,7 +60,7 @@ const Badge = ({
   return (
     <div
       className={
-        "flex py-[2px] pl-2 pr-[10px] max-h-[15px] items-center gap-1 rounded-2xl mix-blend-multiply]" +
+        "flex py-[2px] pl-2 pr-[10px] max-h-[15px] items-center gap-1 rounded-2xl mix-blend-multiply " +
         className
       }
       style={{

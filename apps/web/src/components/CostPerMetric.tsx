@@ -6,7 +6,7 @@ import { Plus_Jakarta_Sans } from "next/font/google";
 import { motion } from "framer-motion";
 import Badge from "./Badge";
 // import { Tabs } from "@radix-ui/react-tabs";
-import useDataStore, { DashboardMode } from "@/store";
+import useDataStore, { DashboardMode, DashbordDateRange } from "@/store";
 import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
 
 // const inter = Inter({ subsets: ['latin'] })
@@ -17,7 +17,10 @@ type CostPerMetricProps = {
   sigla?: string[];
   metric: string;
   costPerMetric?: string;
-  variation?: number;
+  variation: Record<
+    DashbordDateRange,
+    { total: number; variation: number | null }
+  >;
 };
 
 const CostPerMetric = ({
@@ -27,7 +30,9 @@ const CostPerMetric = ({
   costPerMetric,
   variation,
 }: CostPerMetricProps) => {
-  // const setMode = useDataStore((state) => state.setMode);
+  const dateRange = useDataStore((store) => store.dateRange);
+
+  const { variation: variationValue, total } = variation[dateRange];
   const [siglaActive, setSiglaActive] = useState(sigla?.at(0) ?? "");
 
   return (
@@ -69,11 +74,11 @@ const CostPerMetric = ({
               : costPerMetric
             : metric}
         </p>
-        {typeof variation === "number" ? (
-          <Badge number={variation} />
-        ) : (
-          <Badge number={10} className=" invisible" />
-        )}
+        {/* {typeof variationValue === "number" && (
+          <div>
+            <Badge number={variationValue} />
+          </div>
+        )} */}
       </div>
     </div>
   );

@@ -53,9 +53,10 @@ const SidenavDesktop = () => {
             </button>
             <Link href="/dashboard">
               <button
-                className={`btn btn-ghost box-border flex-shrink-0 w-12 h-12 flex flex-row justify-start items-start p-3 bg-transparent overflow-hidden relative content-start flex-nowrap gap-2 rounded-md ${
-                  isDashboard ? "!bg-[#F5F5F5]" : "!hover:bg-[#F5F5F5]"
-                }`}
+                className={`btn btn-ghost box-border flex-shrink-0 w-12 h-12 flex flex-row justify-start items-start p-3 bg-transparent overflow-hidden relative content-start flex-nowrap gap-2 rounded-md`}
+                style={{
+                  backgroundColor: isDashboard ? "#F5F5F5" : "",
+                }}
               >
                 <Image
                   src={folderstar}

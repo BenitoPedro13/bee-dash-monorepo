@@ -51,7 +51,7 @@ export function Component() {
           tickFormatter={(value) => value.slice(0, 3)}
         />
         <ChartTooltip content={<ChartTooltipContent hideLabel />} />
-        <ChartLegend content={<ChartLegendContent />} />
+        {/* <ChartLegend content={<ChartLegendContent />} /> */}
         <Bar
           dataKey="instagram"
           stackId="a"

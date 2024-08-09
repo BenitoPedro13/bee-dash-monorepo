@@ -177,13 +177,16 @@ export const total = (
 
 export const calculateVariation = (
   current: string,
-  previous: string
-): number => {
-  const currentNumber = Number.parseInt(current);
-  const previousNumber = Number.parseInt(previous);
+  previous?: string
+): number | null => {
+  const currentNumber = Number.parseFloat(current);
+  const previousNumber = Number.parseFloat(previous ?? "0");
 
+  if (previous === undefined) return null;
   if (previousNumber === 0) return 0;
-  return ((currentNumber - previousNumber) / previousNumber) * 100;
+  return +(((currentNumber - previousNumber) / previousNumber) * 100).toFixed(
+    1
+  );
 };
 
 // Filter data by date range
@@ -197,7 +200,7 @@ export const filterDataByDateRange = (
     const diffTime = currentDate.getTime() - postDate.getTime();
     const diffDays = diffTime / (1000 * 3600 * 24);
 
-    return diffDays >= days;
+    return diffDays <= days;
   });
 };
 
@@ -216,16 +219,87 @@ export const calculateVariations = (
   const total14Days = total(last14DaysData, keys);
   const total30Days = total(last30DaysData, keys);
 
-  console.log({
-    7: calculateVariation(currentTotal, total7Days),
-    14: calculateVariation(currentTotal, total14Days),
-    30: calculateVariation(currentTotal, total30Days),
-  });
+  // console.log(total7Days, total14Days, total30Days);
 
   return {
-    7: calculateVariation(currentTotal, total7Days),
-    14: calculateVariation(currentTotal, total14Days),
-    30: calculateVariation(currentTotal, total30Days),
+    0: {
+      total: Number.parseInt(currentTotal),
+      variation: calculateVariation(currentTotal),
+    },
+    7: {
+      total: Number.parseInt(total7Days),
+      variation: calculateVariation(
+        currentTotal,
+        `${+currentTotal - +total7Days}`
+      ),
+    },
+    14: {
+      total: Number.parseInt(total14Days),
+      variation: calculateVariation(
+        currentTotal,
+        `${+currentTotal - +total14Days}`
+      ),
+    },
+    30: {
+      total: Number.parseInt(total30Days),
+      variation: calculateVariation(
+        currentTotal,
+        `${+currentTotal - +total30Days}`
+      ),
+    },
+  };
+};
+
+export const calculateVariationsPercentage = (
+  data: Influencer[],
+  keys: keyof Influencer | (keyof Influencer)[]
+) => {
+  const currentTotal = totalPercentage(data, keys)
+    .replace(",", ".")
+    .replaceAll("%", "");
+
+  const last7DaysData = filterDataByDateRange(data, 7);
+  const last14DaysData = filterDataByDateRange(data, 14);
+  const last30DaysData = filterDataByDateRange(data, 30);
+
+  const total7Days = totalPercentage(last7DaysData, keys)
+    .replace(",", ".")
+    .replace("%", "");
+  const total14Days = totalPercentage(last14DaysData, keys)
+    .replace(",", ".")
+    .replace("%", "");
+  const total30Days = totalPercentage(last30DaysData, keys)
+    .replace(",", ".")
+    .replace("%", "");
+
+  console.log(last7DaysData, last14DaysData, last30DaysData);
+
+  return {
+    0: {
+      total: Number.parseFloat(currentTotal),
+      variation: calculateVariation(currentTotal),
+    },
+    7: {
+      total: Number.parseFloat(total7Days),
+      variation: calculateVariation(
+        currentTotal,
+        `${+currentTotal - +total7Days}`
+      ),
+    },
+    14: {
+      total: Number.parseFloat(total14Days),
+      variation: calculateVariation(
+        currentTotal,
+        `${+currentTotal - +total14Days}`
+      ),
+    },
+    30: {
+      total: Number.parseFloat(total30Days),
+      variation: calculateVariation(
+        currentTotal,
+        `${+currentTotal - +total30Days}`
+      ),
+    },
   };
 };
 
@@ -247,44 +321,95 @@ export const totalCount = (data: Influencer[], dataKey: keyof Influencer) => {
 
 export const totalPercentage = (
   data: Influencer[],
-  dataKey: keyof Influencer
+  dataKey: keyof Influencer | (keyof Influencer)[]
 ) => {
   let count = 0;
 
-  for (let i = 0; i < data.length; i++) {
-    const element = data[i];
+  if (!Array.isArray(dataKey)) {
+    for (let i = 0; i < data.length; i++) {
+      const element = data[i];
 
-    count += Number.parseFloat(
-      (element[`${dataKey}`] as string).replaceAll(",", ".").replaceAll("%", "")
-    );
+      count += Number.parseFloat(
+        (element[`${dataKey}`] as string).replaceAll("%", "")
+      );
+    }
+
+    const formattedCount = new Intl.NumberFormat("pt-BR").format(
+      +(count / +totalInfluencers(data)).toFixed(2)
+    ); // Divide by number of influencers
+
+    return `${formattedCount}%`;
+  } else {
+    for (let i = 0; i < data.length; i++) {
+      const element = data[i];
+
+      for (let j = 0; j < dataKey.length; j++) {
+        const key = dataKey[j];
+
+        // if (key === "Reels") {
+        //   count += Number.parseInt("2".replaceAll(".", ""));
+        // } else {
+        count += Number.parseFloat(
+          (element[`${key}`] as string).replaceAll("%", "")
+        );
+        // }
+      }
+    }
+
+    const formattedCount = new Intl.NumberFormat("pt-BR").format(
+      +(count / (+totalInfluencers(data) * dataKey.length)).toFixed(2)
+    ); // Divide by number of influencers and of datakey
+
+    // console.log(dataKey, `${formattedCount}%`);
+
+    return `${formattedCount}%`;
   }
-
-  const formattedCount = new Intl.NumberFormat("pt-BR").format(
-    +(count / +totalInfluencers(data)).toFixed(2)
-  ); // Divide by number of influencers
-
-  return `${formattedCount}%`;
 };
 
-export const totalCPE = (data: Influencer[], dataKey: keyof Influencer) => {
+export const totalCPE = (
+  data: Influencer[],
+  dataKey: keyof Influencer | (keyof Influencer)[]
+) => {
   let count = 0;
 
-  for (let i = 0; i < data.length; i++) {
-    const element = data[i];
+  if (!Array.isArray(dataKey)) {
+    for (let i = 0; i < data.length; i++) {
+      const element = data[i];
 
-    count += Number.parseFloat(
-      (element[`${dataKey}`] as string)
-        .replaceAll("R$", "")
-        .replaceAll(",", ".")
-    );
+      count += Number.parseFloat(
+        (element[`${dataKey}`] as string)
+          .replaceAll("R$", "")
+          .replaceAll(",", ".")
+      );
+    }
+
+    const formattedCount = new Intl.NumberFormat("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    }).format(+(count / +totalInfluencers(data)).toFixed(2));
+
+    return formattedCount;
+  } else {
+    for (let i = 0; i < data.length; i++) {
+      const element = data[i];
+      for (let j = 0; j < dataKey.length; j++) {
+        const key = dataKey[j];
+
+        count += Number.parseFloat(
+          (element[`${key}`] as string)
+            .replaceAll("R$", "")
+            .replaceAll(",", ".")
+        );
+      }
+    }
+
+    const formattedCount = new Intl.NumberFormat("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    }).format(+(count / (+totalInfluencers(data) * dataKey.length)).toFixed(2));
+
+    return formattedCount;
   }
-
-  const formattedCount = new Intl.NumberFormat("pt-BR", {
-    style: "currency",
-    currency: "BRL",
-  }).format(+(count / +totalInfluencers(data)).toFixed(2));
-
-  return formattedCount;
 };
 
 export const costPerMetric = (

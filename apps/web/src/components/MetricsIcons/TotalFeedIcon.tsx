@@ -44,7 +44,7 @@ const TotalFeedIcon = () => {
         height="5.92593"
         fill="white"
         stroke="black"
-        stroke-width="1.11111"
+        strokeWidth="1.11111"
       />
       <rect
         x="4.13232"
@@ -53,7 +53,7 @@ const TotalFeedIcon = () => {
         height="5.92593"
         fill="white"
         stroke="black"
-        stroke-width="1.11111"
+        strokeWidth="1.11111"
       />
       <rect
         x="10.7983"
@@ -62,7 +62,7 @@ const TotalFeedIcon = () => {
         height="5.92593"
         fill="white"
         stroke="black"
-        stroke-width="1.11111"
+        strokeWidth="1.11111"
       />
       <rect
         x="10.7983"
@@ -71,7 +71,7 @@ const TotalFeedIcon = () => {
         height="5.92593"
         fill="white"
         stroke="black"
-        stroke-width="1.11111"
+        strokeWidth="1.11111"
       />
     </svg>
   );
