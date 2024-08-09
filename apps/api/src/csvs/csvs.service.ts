@@ -94,7 +94,8 @@ export class CsvsService {
 
     const cpe = Number.parseInt(creator['Investimento']) / engajamento;
     const cpeTiktok =
-      Number.parseInt(creator['Investimento']) / engajamentoTiktok;
+      Number.parseInt(creator['Investimento']) /
+      (engajamentoTiktok === 0 ? 1 : engajamentoTiktok);
 
     const cpc =
       Number.parseInt(creator['Investimento']) /
@@ -130,17 +131,31 @@ export class CsvsService {
 
     creator['Posts'] = posts.toString();
 
-    creator['Engajamento'] = engajamento.toFixed(2) + '%';
-    creator['CPE'] = 'R$' + cpe.toFixed(2);
+    creator['Engajamento'] =
+      (engajamento === +creator['Impressoes'] ? 0 : engajamento).toFixed(2) +
+      '%';
+    creator['CPE'] =
+      'R$' + (cpe === +creator['Investimento'] ? 0 : cpe).toFixed(2);
 
-    creator['Engajamento Tiktok'] = engajamentoTiktok.toFixed(2) + '%';
-    creator['CPE Tiktok'] = 'R$' + cpeTiktok.toFixed(2);
+    creator['Engajamento Tiktok'] =
+      (engajamentoTiktok === +creator['Impressoes Tiktok']
+        ? 0
+        : engajamentoTiktok
+      ).toFixed(2) + '%';
+    creator['CPE Tiktok'] =
+      'R$' +
+      (cpeTiktok === +creator['Investimento'] ? 0 : cpeTiktok).toFixed(2);
 
-    creator['CPC'] = 'R$' + cpc.toFixed(2);
-    creator['CPC Tiktok'] = 'R$' + cpcTiktok.toFixed(2);
+    creator['CPC'] =
+      'R$' + (cpc === +creator['Investimento'] ? 0 : cpc).toFixed(2);
+    creator['CPC Tiktok'] =
+      'R$' +
+      (cpcTiktok === +creator['Investimento'] ? 0 : cpcTiktok).toFixed(2);
 
     creator['CPV'] = 'R$' + cpv.toFixed(2);
-    creator['CPV Tiktok'] = 'R$' + cpvTiktok.toFixed(2);
+    creator['CPV Tiktok'] =
+      'R$' +
+      (cpvTiktok === +creator['Investimento'] ? 0 : cpvTiktok).toFixed(2);
   };
 
   async getAllData(userEmail: string): Promise<{
