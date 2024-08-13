@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect, useState } from "react";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import { Influencer } from "@/store";
@@ -19,6 +21,8 @@ const MetricsGraph = ({ data }: MetricsGraphProps) => {
   const [metric, setMetric] = useState<string>(total(data, "Impressoes"));
   const [typeOfGraph, setTypeOfGraph] = useState<GraphTypes>("Impressoes");
 
+  const windowIsUndefined = typeof window === "undefined";
+
   useEffect(() => {
     const graphTypes = {
       Interacoes: {
@@ -33,14 +37,23 @@ const MetricsGraph = ({ data }: MetricsGraphProps) => {
 
     if (typeOfGraph in graphTypes) {
       const { heading, computeMetric } = graphTypes[typeOfGraph];
+
       setHeading(heading);
       setMetric(computeMetric(data));
+
+      if (
+        !windowIsUndefined &&
+        window.innerWidth < 425 &&
+        heading === "Impressões (Views)"
+      ) {
+        setHeading("Impressões");
+      }
     }
-  }, [typeOfGraph, data]);
+  }, [typeOfGraph, data, window]);
 
   return (
     <div
-      className="box-border xl:w-[calc(100%-384px)] w-full h-min flex flex-col justify-start items-start shadow-metrics   bg-white xl:overflow-hidden overflow-visible p-0 content-start flex-nowrap xl:gap-0 gap-5 rounded-xl border-[#D4D4D4] border"
+      className="box-border lg:w-[calc(100%-384px)] w-full h-min flex flex-col justify-start items-start shadow-metrics   bg-white xl:overflow-hidden overflow-visible p-0 content-start flex-nowrap xl:gap-0 gap-5 rounded-xl border-[#D4D4D4] border"
       // initial={false}
       // whileHover={{ boxShadow: "2px 2px 0px 0px #898989" }}
       // animate={{ boxShadow: "2px 2px 2px 0px rgba(16, 24, 40, 0.06)" }}

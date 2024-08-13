@@ -9,6 +9,7 @@ import useDataStore, { DashbordDateRange } from "@/store";
 const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
 type MetricsProps = {
+  className: string;
   children?: React.ReactNode;
   heading: string;
   metric: string;
@@ -18,14 +19,23 @@ type MetricsProps = {
   >;
 };
 
-const Metrics = ({ children, heading, metric, variation }: MetricsProps) => {
+const Metrics = ({
+  children,
+  className,
+  heading,
+  metric,
+  variation,
+}: MetricsProps) => {
   const dateRange = useDataStore((store) => store.dateRange);
 
   const { variation: variationValue, total } = variation[dateRange];
 
   return (
     <div
-      className="box-border w-full sm:min-w-[200px] h-min flex flex-col items-start p-4 bg-white overflow-visible content-center flex-nowrap gap-2 rounded-xl border-[#D4D4D4] border"
+      className={
+        `box-border w-full sm:min-w-[200px] h-min flex flex-col items-start p-4 bg-white overflow-visible content-center flex-nowrap gap-2 rounded-xl border-[#D4D4D4] border ` +
+        className
+      }
       // initial={false}
       // whileHover={{ boxShadow: "2px 2px 0px 0px #898989" }}
       // animate={{ boxShadow: "2px 2px 2px 0px rgba(16, 24, 40, 0.06)" }}

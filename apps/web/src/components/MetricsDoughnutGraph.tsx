@@ -9,15 +9,19 @@ const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 type MetricsDoughnutGraphProps = {
   heading: string;
   metric?: string;
+  mobile?: boolean;
 };
 
 const MetricsDoughnutGraph = ({
   heading,
   metric,
+  mobile,
 }: MetricsDoughnutGraphProps) => {
   return (
     <div
-      className="box-border xl:w-[360px] w-full max-h-[428px] h-full flex flex-col justify-start items-start shadow-metrics   bg-white overflow-hidden p-0 content-start flex-nowrap gap-0 rounded-xl border-[#D4D4D4] border"
+      className={`box-border lg:w-[360px] w-full max-h-[428px] h-full lg:flex ${
+        mobile ? "lg:hidden" : "hidden"
+      } flex-col justify-start items-start shadow-metrics   bg-white overflow-hidden p-0 content-start flex-nowrap gap-0 rounded-xl border-[#D4D4D4] border`}
       // initial={false}
       // whileHover={{ boxShadow: "2px 2px 0px 0px #898989" }}
       // animate={{ boxShadow: "2px 2px 2px 0px rgba(16, 24, 40, 0.06)" }}

@@ -43,6 +43,7 @@ import FirstSection from "@/components/FirstSection";
 import SecondSection from "@/components/SecondSection";
 import { Component } from "@/components/PieChartDonut";
 import MetricsBarStackGraph from "@/components/MetricsBarStackGraph";
+import DashboardBG from "@/components/DashboardBG";
 // import { Plus_Jakarta_Sans } from 'next/font/google'
 
 const inter = Inter({ subsets: ["latin"] });
@@ -73,19 +74,24 @@ export default function Home() {
       <main>
         <SidenavDesktop />
         <div
-          className="w-full h-full flex xl:flex-row flex-col justify-start items-start bg-white overflow-hidden p-0 xl:pl-[82px] content-start flex-nowrap gap-0 rounded-none"
-          // style={{
-          //   backgroundImage: 'url("/honeycomb.svg")',
-          //   backgroundPosition: "center center",
-          //   backfaceOpaco
-          // }}
+          className="w-full h-full flex xl:flex-row flex-col justify-start items-start bg-white overflow-hidden p-0 xl:pl-[82px] content-start flex-nowrap gap-0 rounded-none relative"
+          style={
+            {
+              // backgroundImage: 'url("/honeycomb.svg")',
+              // backgroundPosition: "center center",
+              // backfaceOpaco
+            }
+          }
         >
-          <div className="box-border flex-shrink-0 w-full h-min flex flex-col justify-start items-center xl:pt-8 xl:pb-12 py-[15px] overflow-visible content-center flex-nowrap xl:gap-6 gap-[15px] rounded-none">
+          <div className="absolute z-0">
+            <DashboardBG />
+          </div>
+          <div className="box-border flex-shrink-0 w-full h-min flex flex-col justify-start items-center xl:pt-8 xl:pb-8 py-[15px] overflow-visible content-center flex-nowrap xl:gap-6 gap-[15px] rounded-none">
             <div className="box-border flex-shrink-0 w-full xl:h-auto h-min flex flex-col justify-center items-start xl:px-8 px-[15px] overflow-visible relative content-start flex-nowrap gap-6 rounded-none">
               <div className="flex justify-between items-center self-stretch">
                 <BreadcrumbComponent />
                 <div className="w-fit flex items-start gap-4">
-                  <div className="w-fit flex flex-col items-start gap-[6px]">
+                  {/* <div className="w-fit flex flex-col items-start gap-[6px]">
                     <div className="w-full min-w-[384px] flex items-center gap-2">
                       <div className="w-full flex flex-col items-start gap-[6px] flex-grow flex-shrink-0">
                         <div className="w-full flex py-2 pr-14 pl-3 items-center gap-1 self-stretch rounded-lg border border-[#E2E8F0]">
@@ -97,7 +103,7 @@ export default function Home() {
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </div> */}
                   {!session?.user?.urlProfilePicture ? (
                     <div className="mask mask-squircle w-12 h-12 aspect-square block rounded-full border-black border-[1px] border-solid bg-[url('/bg-contact-cta.webp')] bg-cover bg-no-repeat bg-center relative">
                       <img
@@ -129,6 +135,15 @@ export default function Home() {
                 metric={total(data, ["Interacoes", "Impressoes"])}
               />
               {/* <Component /> */}
+            </div>
+
+            <div className="w-full flex-shrink-0 h-min flex flex-col lg:hidden justify-start items-center overflow-visible relative xl:px-[22px] px-[15px] content-start flex-nowrap xl:gap-6 gap-[15px] rounded-none sm:flex-row sm:justify-start sm:items-start">
+              <MetricsDoughnutGraph
+                mobile
+                heading="Impacto Bruto"
+                metric={total(data, ["Interacoes", "Impressoes"])}
+              />
+              <MetricsBarStackGraph mobile heading="Audiência" metric="2438" />
             </div>
 
             <div className="w-full flex-shrink-0 h-min flex flex-col justify-start items-start overflow-visible relative xl:px-[22px] px-[15px] content-start flex-nowrap gap-6 rounded-none">
@@ -163,7 +178,7 @@ export default function Home() {
               <FinancialMetrics />
               <ContactCTA />
             </div> */}
-            {/* <Footer /> */}
+            <Footer />
           </div>
           {/* <div className="hidden box-border flex-shrink-0 xl:w-[379px] w-auto flex-grow h-min xl:flex flex-col justify-start items-center pt-8 pr-8 pb-12 bg-transparent overflow-visible content-center flex-nowrap gap-[28px] rounded-none z-10">
             <div className="flex-shrink-0 w-full h-fit mb-[48px] flex justify-end items-center overflow-visible relative p-0 content-center flex-nowrap gap-3 rounded-none">

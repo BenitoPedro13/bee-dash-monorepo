@@ -18,7 +18,7 @@ export function SelectComponent() {
   return (
     <Select onValueChange={(value: DashbordDateRange) => setDateRange(value)}>
       <SelectTrigger
-        className="w-[180px] text-black"
+        className="w-[140px] text-black"
         defaultValue={DashbordDateRange.ZERO}
         defaultChecked
       >

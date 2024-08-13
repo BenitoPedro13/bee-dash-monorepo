@@ -14,6 +14,7 @@ import TableSortingIcon from "../TableSortingIcon";
 import arrowLeft from "@/../public/arrow-left.svg";
 import arrowRight from "@/../public/arrow-right.svg";
 import PerformanceIcon from "../MetricsIcons/PerformanceIcon";
+import { SearchIcon } from "lucide-react";
 
 const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 const inter = Inter({ subsets: ["latin"] });
@@ -119,7 +120,7 @@ const CreatorsTable = () => {
 
   return (
     <div
-      className="box-border xl:w-[calc(100%-384px)] w-full flex flex-col justify-start items-start bg-white overflow-hidden p-0 content-start flex-nowrap gap-0 rounded-xl border border-[#D4D4D4]"
+      className="box-border lg:w-[calc(100%-384px)] w-full flex flex-col justify-start items-start self-stretch bg-white overflow-hidden p-0 content-start flex-nowrap gap-0 rounded-xl border border-[#D4D4D4]"
       // initial={false}
       // animate={{
       //   boxShadow: "2px 2px 2px 0px rgba(16, 24, 40, 0.06)",
@@ -129,31 +130,31 @@ const CreatorsTable = () => {
       // transition={{ duration: 0.3, ease: "linear" }}
       // whileHover={{ boxShadow: "2px 2px 0px 0px #898989" }}
     >
-      <div className="flex-shrink-0 w-full h-min flex flex-col justify-start items-start overflow-visible relative p-0 content-start flex-nowrap sm:gap-5 gap-0 rounded-none">
-        <div className="box-border flex-shrink-0 w-full h-min flex sm:flex-row flex-col justify-start sm:items-center items-start xl:pt-5 xl:pb-0 py-5 px-6 overflow-visible relative sm:content-center content-start flex-nowrap gap-4 rounded-none">
-          {/* <Image
+      <div className="flex-shrink-0 w-full h-min flex flex-col justify-start items-start  self-stretch overflow-visible relative p-0 content-start flex-nowrap sm:gap-5 gap-0 rounded-none">
+        {/* <div className="box-border flex-shrink-0 w-full h-min flex sm:flex-row flex-col justify-start sm:items-center items-start xl:pt-5 xl:pb-0 py-5 px-6 overflow-visible relative sm:content-center content-start flex-nowrap gap-4 rounded-none">
+          <Image
             src={performanceIcon}
             alt="Performance Icon"
             width={40}
             height={40}
             className="hidden sm:block"
-          /> */}
+          />
 
-          {/* <PerformanceIcon className="hidden sm:block" /> */}
+          <PerformanceIcon className="hidden sm:block" />
 
           <div className="sm:hidden flex w-full h-min flex-shrink-0 justify-between items-center flex-nowrap">
-            {/* <Image
+            <Image
               src={performanceIcon}
               alt="Performance Icon"
               width={40}
               height={40}
               className="sm:hidden block"
-            /> */}
+            />
 
-            {/* <PerformanceIcon /> */}
+            <PerformanceIcon />
 
             <div className="flex-shrink-0 w-min h-min flex justify-start items-center overflow-visible relative p-0 content-center flex-nowrap gap-3 rounded-none">
-              {/* <motion.div
+              <motion.div
                 onClick={toggleOpen}
                 className="btn btn-ghost box-border flex-shrink-0 w-min h-auto flex justify-center items-center py-[10px] px-[8px] shadow-cost-per-metrics bg-white overflow-hidden self-stretch relative content-center flex-nowrap gap-2 rounded-lg border border-solid border-[#cfd4dc]"
                 initial={false}
@@ -174,14 +175,14 @@ const CreatorsTable = () => {
                     d="M15.75 19.5L8.25 12l7.5-7.5"
                   />
                 </svg>
-              </motion.div> */}
+              </motion.div>
             </div>
           </div>
-          <div className="flex-shrink-0 flex-grow w-auto sm:h-full h-[52px] flex flex-col justify-center items-start overflow-visible relative p-0 content-start flex-nowrap gap-1 rounded-none">
+          <div className="flex-shrink-0 flex-grow w-auto sm:h-full h-[52px] flex flex-col justify-center items-start self-stretch overflow-visible relative p-0 content-start flex-nowrap gap-1 rounded-none">
             <h3
               className={`flex-shrink-0 flex-grow w-auto h-auto whitespace-pre-wrap break-words relative font-semibold ${jakarta.className} text-[#0f1728] text-lg`}
             >
-              Performance dos Creators
+              Performance dos Influencers
             </h3>
             <p
               className={`flex-shrink-0 flex-grow w-auto h-auto whitespace-pre-wrap break-words relative ${inter.className} text-[#475466] text-sm`}
@@ -190,7 +191,7 @@ const CreatorsTable = () => {
             </p>
           </div>
           <div className="hidden sm:flex flex-shrink-0 w-min h-min justify-start items-center overflow-visible relative p-0 content-center flex-nowrap gap-3 rounded-none">
-            {/* <motion.div
+            <motion.div
               onClick={toggleOpen}
               className="btn btn-ghost box-border flex-shrink-0 w-min h-auto flex justify-center items-center py-[10px] px-[8px] shadow-cost-per-metrics bg-white overflow-hidden self-stretch relative content-center flex-nowrap gap-2 rounded-lg border border-solid border-[#cfd4dc]"
               initial={false}
@@ -211,7 +212,7 @@ const CreatorsTable = () => {
                   d="M15.75 19.5L8.25 12l7.5-7.5"
                 />
               </svg>
-            </motion.div> */}
+            </motion.div>
           </div>
         </div>
         <svg
@@ -227,7 +228,37 @@ const CreatorsTable = () => {
             d="M1096 1H0V0H1096V1Z"
             fill="transparent"
           ></path>
-        </svg>
+        </svg> */}
+        <div className="flex flex-col items-start self-stretch">
+          <div className="flex px-5 py-6 items-start gap-4 self-stretch">
+            <div className="flex flex-col justify-center items-start gap-1 flex-grow self-stretch">
+              <h3 className="font-nexa-bold text-lg font-semibold text-[#101828] self-stretch">
+                Performance dos Influencers
+              </h3>
+              <p className="font-nexa text-sm text-[#475467] self-stretch">
+                Acompanhe a tabela de todos os dados dos seus creators
+              </p>
+            </div>
+            <div className="w-fit flex flex-col items-start gap-[6px]">
+              <div className="w-full flex items-center gap-2">
+                <div className="w-full flex flex-col items-start gap-[6px] flex-grow flex-shrink-0">
+                  <div className="w-full flex py-[5px] pr-14 pl-3 items-center gap-1 self-stretch rounded-lg border border-[#E2E8F0]">
+                    <SearchIcon className="w-5 h-5 text-[#64748B]" />
+                    <input
+                      placeholder="Procure por creators..."
+                      className="w-full outline-none text-sm leading-6 font-nexa bg-white text-[#101828]"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button className="flex py-2 px-4 justify-center items-center gap-[10px] rounded-lg bg-[#FF8C00]">
+              <p className="text-white opacity-95 font-nexa-bold text-sm font-semibold">
+                Abrir Planilha
+              </p>
+            </button>
+          </div>
+        </div>
       </div>
       <div className="overflow-x-auto w-full no-scrollbar border-t border-gray">
         <table className="table">
