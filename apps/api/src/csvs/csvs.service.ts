@@ -92,10 +92,23 @@ export class CsvsService {
           : creator['Impressoes Tiktok'],
       );
 
+    const engajamentoMedium =
+      Number.parseInt(creator['Impacto Bruto']) +
+      Number.parseInt(creator['Impacto Bruto']) /
+        (Number.parseInt(creator['Impressoes']) +
+          Number.parseInt(creator['Impressoes Tiktok']) ===
+        0
+          ? 1
+          : Number.parseInt(creator['Impressoes']) +
+            Number.parseInt(creator['Impressoes Tiktok']));
+
     const cpe = Number.parseInt(creator['Investimento']) / engajamento;
     const cpeTiktok =
       Number.parseInt(creator['Investimento']) /
       (engajamentoTiktok === 0 ? 1 : engajamentoTiktok);
+
+    const cpeMedium =
+      Number.parseInt(creator['Investimento']) / engajamentoMedium;
 
     const cpc =
       Number.parseInt(creator['Investimento']) /
@@ -106,6 +119,15 @@ export class CsvsService {
       Number.parseInt(
         creator['Cliques Tiktok'] === '0' ? '1' : creator['Cliques Tiktok'],
       );
+
+    const cpcMedium =
+      Number.parseInt(creator['Investimento']) /
+      (Number.parseInt(creator['Cliques Tiktok']) +
+        Number.parseInt(creator['Cliques']) ===
+      0
+        ? 1
+        : Number.parseInt(creator['Cliques Tiktok']) +
+          Number.parseInt(creator['Cliques']));
 
     const cpv =
       Number.parseInt(creator['Investimento']) /
@@ -122,6 +144,15 @@ export class CsvsService {
           : creator['Impressoes Tiktok'],
       ) /
         1000);
+
+    const cpvMedium =
+      Number.parseInt(creator['Investimento']) /
+      (Number.parseInt(creator['Impressoes Tiktok']) +
+        Number.parseInt(creator['Impressoes']) ===
+      0
+        ? 1
+        : Number.parseInt(creator['Impressoes Tiktok']) +
+          Number.parseInt(creator['Impressoes']));
 
     const posts =
       Number.parseInt(creator['Reels']) +
@@ -142,9 +173,16 @@ export class CsvsService {
         ? 0
         : engajamentoTiktok
       ).toFixed(2) + '%';
+
+    creator['Engajamento Media'] =
+      (engajamentoMedium === Infinity ? 0 : engajamentoMedium).toFixed(2) + '%';
+
     creator['CPE Tiktok'] =
       'R$' +
       (cpeTiktok === +creator['Investimento'] ? 0 : cpeTiktok).toFixed(2);
+
+    creator['CPE Media'] =
+      'R$' + (cpeMedium === Infinity ? 0 : cpeMedium).toFixed(2);
 
     creator['CPC'] =
       'R$' + (cpc === +creator['Investimento'] ? 0 : cpc).toFixed(2);
@@ -152,10 +190,15 @@ export class CsvsService {
       'R$' +
       (cpcTiktok === +creator['Investimento'] ? 0 : cpcTiktok).toFixed(2);
 
+    creator['CPC Media'] =
+      'R$' + (cpcMedium === Infinity ? 0 : cpcMedium).toFixed(2);
+
     creator['CPV'] = 'R$' + cpv.toFixed(2);
     creator['CPV Tiktok'] =
       'R$' +
       (cpvTiktok === +creator['Investimento'] ? 0 : cpvTiktok).toFixed(2);
+    creator['CPV Media'] =
+      'R$' + (cpvMedium === Infinity ? 0 : cpvMedium).toFixed(2);
   };
 
   async getAllData(userEmail: string): Promise<{
