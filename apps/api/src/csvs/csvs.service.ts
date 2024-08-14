@@ -93,14 +93,10 @@ export class CsvsService {
       );
 
     const engajamentoMedium =
-      Number.parseInt(creator['Impacto Bruto']) +
-      Number.parseInt(creator['Impacto Bruto']) /
-        (Number.parseInt(creator['Impressoes']) +
-          Number.parseInt(creator['Impressoes Tiktok']) ===
-        0
-          ? 1
-          : Number.parseInt(creator['Impressoes']) +
-            Number.parseInt(creator['Impressoes Tiktok']));
+      (Number.parseInt(creator['Impacto Bruto']) +
+        Number.parseInt(creator['Impacto Bruto Tiktok'])) /
+      (Number.parseInt(creator['Impressoes']) +
+        Number.parseInt(creator['Impressoes Tiktok']));
 
     const cpe = Number.parseInt(creator['Investimento']) / engajamento;
     const cpeTiktok =
@@ -123,12 +119,7 @@ export class CsvsService {
     const cpcMedium =
       Number.parseInt(creator['Investimento']) /
       (Number.parseInt(creator['Cliques Tiktok']) +
-        Number.parseInt(creator['Cliques']) ===
-      0
-        ? 1
-        : Number.parseInt(creator['Cliques Tiktok']) +
-          Number.parseInt(creator['Cliques']));
-
+        Number.parseInt(creator['Cliques']));
     const cpv =
       Number.parseInt(creator['Investimento']) /
       (Number.parseInt(
@@ -148,11 +139,7 @@ export class CsvsService {
     const cpvMedium =
       Number.parseInt(creator['Investimento']) /
       (Number.parseInt(creator['Impressoes Tiktok']) +
-        Number.parseInt(creator['Impressoes']) ===
-      0
-        ? 1
-        : Number.parseInt(creator['Impressoes Tiktok']) +
-          Number.parseInt(creator['Impressoes']));
+        Number.parseInt(creator['Impressoes']));
 
     const posts =
       Number.parseInt(creator['Reels']) +
