@@ -41,17 +41,15 @@ const MetricsGraph = ({ data }: MetricsGraphProps) => {
       setHeading(heading);
       setMetric(computeMetric(data));
 
-      if (windowIsUndefined === false) {
-        if (
-          !windowIsUndefined &&
-          window.innerWidth < 425 &&
-          heading === "Impressões (Views)"
-        ) {
-          setHeading("Impressões");
-        }
+      if (
+        !windowIsUndefined &&
+        window.innerWidth < 425 &&
+        heading === "Impressões (Views)"
+      ) {
+        setHeading("Impressões");
       }
     }
-  }, [typeOfGraph, data, window]);
+  }, [typeOfGraph, data]);
 
   return (
     <div
