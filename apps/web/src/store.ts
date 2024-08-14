@@ -46,6 +46,10 @@ export interface Influencer {
   "CPE Tiktok": string;
   "CPC Tiktok": string;
   "CPV Tiktok": string;
+  "Engajamento Media": string;
+  "CPE Media": string;
+  "CPC Media": string;
+  "CPV Media": string;
   "Data de Postagem": string;
 }
 

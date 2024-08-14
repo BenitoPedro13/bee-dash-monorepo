@@ -14,7 +14,7 @@ import TableSortingIcon from "../TableSortingIcon";
 import arrowLeft from "@/../public/arrow-left.svg";
 import arrowRight from "@/../public/arrow-right.svg";
 import PerformanceIcon from "../MetricsIcons/PerformanceIcon";
-import { SearchIcon } from "lucide-react";
+import { SearchIcon, X } from "lucide-react";
 
 const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 const inter = Inter({ subsets: ["latin"] });
@@ -41,6 +41,8 @@ const CreatorsTable = () => {
   const { data: globalData } = useDataStore((state) => state.data);
   const [data, setData] = useState([...globalData]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [search, setSearch] = useState("");
   const itemsPerPage = 6;
   const totalPages = Math.ceil(data.length / itemsPerPage);
 
@@ -63,6 +65,16 @@ const CreatorsTable = () => {
     // Update attachments whenever globalAttachments changes
     setData([...globalData]);
   }, [globalData]);
+
+  useEffect(() => {
+    if (search.length > 0) {
+      const filteredData = data.filter((item) =>
+        item.Influencer.toLocaleLowerCase().includes(search.toLocaleLowerCase())
+      );
+      return setData(filteredData);
+    }
+    setData([...globalData]);
+  }, [search]);
 
   useEffect(() => {
     const sortedData = data.sort((a, b) => {
@@ -239,14 +251,41 @@ const CreatorsTable = () => {
                 Acompanhe a tabela de todos os dados dos seus creators
               </p>
             </div>
+
             <div className="w-fit flex flex-col items-start gap-[6px]">
               <div className="w-full flex items-center gap-2">
                 <div className="w-full flex flex-col items-start gap-[6px] flex-grow flex-shrink-0">
-                  <div className="w-full flex py-[5px] pr-14 pl-3 items-center gap-1 self-stretch rounded-lg border border-[#E2E8F0]">
-                    <SearchIcon className="w-5 h-5 text-[#64748B]" />
+                  <div
+                    className={`w-full flex ${
+                      searchOpen ? "py-[5px] pr-14 pl-3" : "px-2 py-2"
+                    } items-center gap-1 self-stretch rounded-lg border border-[#E2E8F0] ${
+                      searchOpen ? "border-[1px]" : "border-[0px]"
+                    } transition-all `}
+                  >
+                    <div className="cursor-pointer">
+                      {searchOpen ? (
+                        <X
+                          onClick={() => {
+                            setSearch("");
+                            setSearchOpen(() => false);
+                          }}
+                          className="w-5 h-5 text-[#64748B]"
+                        />
+                      ) : (
+                        <SearchIcon
+                          onClick={() => setSearchOpen(() => true)}
+                          className="w-5 h-5 text-[#64748B]"
+                        />
+                      )}
+                    </div>
+
                     <input
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
                       placeholder="Procure por creators..."
-                      className="w-full outline-none text-sm leading-6 font-nexa bg-white text-[#101828]"
+                      className={`w-full outline-none text-sm leading-6 font-nexa bg-white text-[#101828] ${
+                        searchOpen ? "flex" : "hidden"
+                      }`}
                     />
                   </div>
                 </div>

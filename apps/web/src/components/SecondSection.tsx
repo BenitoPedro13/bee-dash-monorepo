@@ -92,20 +92,16 @@ const metricConfig: Record<
     {
       heading: "Engajamento Médio",
       sigla: ["Total", "CPE"],
-      metric: (data) =>
-        totalPercentage(data, ["Engajamento", "Engajamento Tiktok"]),
+      metric: (data) => totalPercentage(data, "Engajamento Media"),
       costPerMetric: (data) => totalCPE(data, ["CPE", "CPE Tiktok"]),
       variation: (data) =>
-        calculateVariationsPercentage(data, [
-          "Engajamento",
-          "Engajamento Tiktok",
-        ]),
+        calculateVariationsPercentage(data, "Engajamento Media"),
     },
     {
       heading: "Cliques no Link",
       sigla: ["Total", "CPC"],
       metric: (data) => total(data, ["Cliques", "Cliques Tiktok"]),
-      costPerMetric: (data) => totalCPE(data, ["CPC", "CPC Tiktok"]),
+      costPerMetric: (data) => totalCPE(data, "CPC Media"),
       variation: (data) =>
         calculateVariations(data, ["Cliques", "Cliques Tiktok"]),
     },
@@ -113,8 +109,8 @@ const metricConfig: Record<
       heading: "Custo por Mil Views",
       sigla: ["Total", "CPV"],
       metric: (data) => total(data, ["Impressoes", "Impressoes Tiktok"]),
-      costPerMetric: (data) => totalCPE(data, ["CPV", "CPV Tiktok"]),
-      variation: (data) => calculateVariations(data, ["CPV", "CPV Tiktok"]),
+      costPerMetric: (data) => totalCPE(data, "CPV Media"),
+      variation: (data) => calculateVariations(data, "CPV Media"),
     },
     {
       heading: "Investimento Total",

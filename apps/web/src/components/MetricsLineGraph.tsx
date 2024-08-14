@@ -77,9 +77,9 @@ const MetricsGraph = ({ data }: MetricsGraphProps) => {
               >
                 <TabsList>
                   <TabsTrigger value={"Impressoes"} className="text-black">
-                    Impressoes
+                    Impressões
                   </TabsTrigger>
-                  <TabsTrigger value={"Interacoes"}>Interacoes</TabsTrigger>
+                  <TabsTrigger value={"Interacoes"}>Interações</TabsTrigger>
                 </TabsList>
               </Tabs>
             </div>
