@@ -489,7 +489,7 @@ export default function UsersEdit() {
         </List>
       </Form.Item>
 
-      <Form.Item label="Posts">
+      {/* <Form.Item label="Posts">
         <Input
           placeholder="Filter Posts By Creator Name"
           // value={searchTerm}
@@ -506,7 +506,7 @@ export default function UsersEdit() {
         <Button onClick={() => createModalShow()} type="primary">
           Criar Novo
         </Button>
-        {/* <CreatePostsModalForm /> */}
+        <CreatePostsModalForm />
         <List>
           <Table
             rowKey="id"
@@ -539,13 +539,13 @@ export default function UsersEdit() {
             <Table.Column dataIndex="price" title="Price" />
             <Table.Column dataIndex="postDate" title="Post Date" />
             <Table.Column dataIndex="creatorName" title="Creator Name" />
-            {/* <Table.Column dataIndex="userEmail" title="User Email" /> */}
+            <Table.Column dataIndex="userEmail" title="User Email" />
             <Table.Column
               title="Actions"
               dataIndex="actions"
               render={(_, record: ICreatorsSearch) => (
                 <Space>
-                  {/* <EditButton
+                  <EditButton
                     hideText
                     resource="posts"
                     size="small"
@@ -556,7 +556,7 @@ export default function UsersEdit() {
                     resource="posts"
                     size="small"
                     recordItemId={record.id}
-                  /> */}
+                  />
                   <DeleteButton
                     size="small"
                     hideText
@@ -944,24 +944,12 @@ export default function UsersEdit() {
               <Table.Column dataIndex="price" title="Price" />
               <Table.Column dataIndex="postDate" title="Post Date" />
               <Table.Column dataIndex="creatorName" title="Creator Name" />
-              {/* <Table.Column dataIndex="userEmail" title="User Email" /> */}
+              <Table.Column dataIndex="userEmail" title="User Email" />
               <Table.Column
                 title="Actions"
                 dataIndex="actions"
                 render={(_, record: ICreatorsSearch) => (
                   <Space>
-                    {/* <EditButton
-                    hideText
-                    resource="posts"
-                    size="small"
-                    recordItemId={record.id}
-                  />
-                  <ShowButton
-                    hideText
-                    resource="posts"
-                    size="small"
-                    recordItemId={record.id}
-                  /> */}
                     <DeleteButton
                       size="small"
                       hideText
@@ -974,7 +962,7 @@ export default function UsersEdit() {
             </Table>
           </List>
         </p>
-      </Modal>
+      </Modal> */}
     </Edit>
   );
 }
