@@ -75,6 +75,119 @@ export class CsvsService {
     });
   }
 
+  addCPToTable = (creator: Influencer) => {
+    console.log(creator, 'creator');
+
+    const engajamento =
+      Number.parseInt(creator['Impacto Bruto']) /
+      Number.parseInt(
+        creator['Impressoes'] === '0' ? '1' : creator['Impressoes'],
+      );
+
+    const engajamentoTiktok =
+      Number.parseInt(creator['Impacto Bruto Tiktok']) /
+      Number.parseInt(
+        creator['Impressoes Tiktok'] === '0'
+          ? '1'
+          : creator['Impressoes Tiktok'],
+      );
+
+    const engajamentoMedium =
+      (Number.parseInt(creator['Impacto Bruto']) +
+        Number.parseInt(creator['Impacto Bruto Tiktok'])) /
+      (Number.parseInt(creator['Impressoes']) +
+        Number.parseInt(creator['Impressoes Tiktok']));
+
+    const cpe = Number.parseInt(creator['Investimento']) / engajamento;
+    const cpeTiktok =
+      Number.parseInt(creator['Investimento']) /
+      (engajamentoTiktok === 0 ? 1 : engajamentoTiktok);
+
+    const cpeMedium =
+      Number.parseInt(creator['Investimento']) / engajamentoMedium;
+
+    const cpc =
+      Number.parseInt(creator['Investimento']) /
+      Number.parseInt(creator['Cliques'] === '0' ? '1' : creator['Cliques']);
+
+    const cpcTiktok =
+      Number.parseInt(creator['Investimento']) /
+      Number.parseInt(
+        creator['Cliques Tiktok'] === '0' ? '1' : creator['Cliques Tiktok'],
+      );
+
+    const cpcMedium =
+      Number.parseInt(creator['Investimento']) /
+      (Number.parseInt(creator['Cliques Tiktok']) +
+        Number.parseInt(creator['Cliques']));
+    const cpv =
+      Number.parseInt(creator['Investimento']) /
+      (Number.parseInt(
+        creator['Impressoes'] === '0' ? '1' : creator['Impressoes'],
+      ) /
+        1000);
+
+    const cpvTiktok =
+      Number.parseInt(creator['Investimento']) /
+      (Number.parseInt(
+        creator['Impressoes Tiktok'] === '0'
+          ? '1'
+          : creator['Impressoes Tiktok'],
+      ) /
+        1000);
+
+    const cpvMedium =
+      Number.parseInt(creator['Investimento']) /
+      (Number.parseInt(creator['Impressoes Tiktok']) +
+        Number.parseInt(creator['Impressoes']));
+
+    const posts =
+      Number.parseInt(creator['Reels']) +
+      Number.parseInt(creator['Tiktok']) +
+      Number.parseInt(creator['Stories']) +
+      Number.parseInt(creator['Feed']);
+
+    creator['Posts'] = posts.toString();
+
+    creator['Engajamento'] =
+      (engajamento === +creator['Impressoes'] ? 0 : engajamento).toFixed(2) +
+      '%';
+    creator['CPE'] =
+      'R$' + (cpe === +creator['Investimento'] ? 0 : cpe).toFixed(2);
+
+    creator['Engajamento Tiktok'] =
+      (engajamentoTiktok === +creator['Impressoes Tiktok']
+        ? 0
+        : engajamentoTiktok
+      ).toFixed(2) + '%';
+
+    creator['Engajamento Media'] =
+      (engajamentoMedium === Infinity ? 0 : engajamentoMedium).toFixed(2) + '%';
+
+    creator['CPE Tiktok'] =
+      'R$' +
+      (cpeTiktok === +creator['Investimento'] ? 0 : cpeTiktok).toFixed(2);
+
+    creator['CPE Media'] =
+      'R$' + (cpeMedium === Infinity ? 0 : cpeMedium).toFixed(2);
+
+    creator['CPC'] =
+      'R$' + (cpc === +creator['Investimento'] ? 0 : cpc).toFixed(2);
+    creator['CPC Tiktok'] =
+      'R$' +
+      (cpcTiktok === +creator['Investimento'] ? 0 : cpcTiktok).toFixed(2);
+
+    creator['CPC Media'] =
+      'R$' + (cpcMedium === Infinity ? 0 : cpcMedium).toFixed(2);
+
+    creator['CPV'] = 'R$' + cpv.toFixed(2);
+    creator['CPV Tiktok'] =
+      'R$' +
+      (cpvTiktok === +creator['Investimento'] ? 0 : cpvTiktok).toFixed(2);
+    creator['CPV Media'] =
+      'R$' + (cpvMedium === Infinity ? 0 : cpvMedium).toFixed(2);
+  };
+
   async getAllData(userEmail: string): Promise<{
     updatedAt: Date;
     data: Influencer[];
@@ -101,7 +214,10 @@ export class CsvsService {
         const result = await new Promise<Influencer[]>((resolve, reject) => {
           stream
             .pipe(csvParser())
-            .on('data', (data) => results.push(data))
+            .on('data', (data) => {
+              console.log('data', this.addCPToTable(data));
+              return results.push(data);
+            })
             .on('end', () => resolve(results))
             .on('error', (error) => reject(error));
         });

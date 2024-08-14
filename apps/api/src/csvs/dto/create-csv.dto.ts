@@ -32,4 +32,8 @@ export interface Influencer {
   CPV: string;
   createdAt?: string;
   updatedAt?: string;
+  'Engajamento Media'?: string;
+  'CPE Media'?: string;
+  'CPC Media'?: string;
+  'CPV Media'?: string;
 }
