@@ -1,8 +1,8 @@
 import { create } from "zustand";
 import { setCookie } from "nookies";
 
-// export const baseApiUrl = "https://backend.gopark.app.br";
-export const baseApiUrl = "http://localhost:3000";
+export const baseApiUrl = "https://backend.gopark.app.br";
+// export const baseApiUrl = "http://localhost:3000";
 
 export enum DashboardMode {
   ALL = "all",
