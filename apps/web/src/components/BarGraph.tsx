@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useState } from "react";
 
 import {
   Card,
@@ -24,6 +26,7 @@ import {
 } from "@/components/ui/chart";
 import {
   addAlphaToHex,
+  filterDataByDateRange,
   generateShadesAndTints,
   generateShadesAndTintsRandomly,
 } from "../../utils/utils";
@@ -32,6 +35,13 @@ import {
 export default function BarGraph({ typeOfGraph }: { typeOfGraph: GraphTypes }) {
   const { data } = useDataStore((state) => state.data);
   const { user } = useDataStore((state) => state.session);
+  const mode = useDataStore((store) => store.mode);
+  const dateRange = useDataStore((store) => store.dateRange);
+
+  const [chartDataState, setChartDataState] = useState<
+    | { influencer: string; Impressoes: number; fill: string }[]
+    | { influencer: string; Interacoes: number; fill: string }[]
+  >([]);
 
   const mainColor = !user?.color ? "#FF77EF" : user.color; // Assuming user.color is the main color in hex format
   const subVariations = generateShadesAndTintsRandomly(mainColor, data.length);
@@ -46,18 +56,42 @@ export default function BarGraph({ typeOfGraph }: { typeOfGraph: GraphTypes }) {
   const getChartData = (typeOfGraph: GraphTypes, data: Influencer[]) => {
     switch (typeOfGraph) {
       case "Impressoes":
-        return data.map((item, index) => {
+        return filterDataByDateRange(data, +dateRange).map((item, index) => {
+          let metric: number = 0;
+
+          if (mode === "all") {
+            metric =
+              Number.parseFloat(item["Impressoes"]) +
+              Number.parseFloat(item["Impressoes Tiktok"]);
+          } else if (mode === "tiktok") {
+            metric = Number.parseFloat(item["Impressoes Tiktok"]);
+          } else if (mode === "instagram") {
+            metric = Number.parseFloat(item["Impressoes"]);
+          }
+
           return {
             influencer: item.Influencer,
-            Impressoes: Number.parseInt(item["Impressoes"].replaceAll(".", "")),
+            Impressoes: metric,
             fill: subVariations[index],
           };
         });
       case "Interacoes":
-        return data.map((item, index) => {
+        return filterDataByDateRange(data, +dateRange).map((item, index) => {
+          let metric: number = 0;
+
+          if (mode === "all") {
+            metric =
+              Number.parseFloat(item["Interacoes"]) +
+              Number.parseFloat(item["Interacoes Tiktok"]);
+          } else if (mode === "tiktok") {
+            metric = Number.parseFloat(item["Interacoes Tiktok"]);
+          } else if (mode === "instagram") {
+            metric = Number.parseFloat(item["Interacoes"]);
+          }
+
           return {
             influencer: item.Influencer,
-            Interacoes: Number.parseInt(item["Interacoes"].replaceAll(".", "")),
+            Interacoes: metric,
             fill: subVariations[index],
           };
         });
@@ -66,7 +100,11 @@ export default function BarGraph({ typeOfGraph }: { typeOfGraph: GraphTypes }) {
     }
   };
 
-  const chartData = getChartData(typeOfGraph, data);
+  useEffect(() => {
+    const chartData = getChartData(typeOfGraph, data);
+    // console.log("chartData", chartData);
+    setChartDataState(chartData);
+  }, [data, mode, dateRange, typeOfGraph]);
 
   return (
     // <Card>
@@ -79,7 +117,7 @@ export default function BarGraph({ typeOfGraph }: { typeOfGraph: GraphTypes }) {
     <ChartContainer config={chartConfig} width="100%" height="288px">
       <BarChart
         accessibilityLayer
-        data={chartData}
+        data={chartDataState}
         margin={{
           top: 20,
         }}
@@ -99,7 +137,7 @@ export default function BarGraph({ typeOfGraph }: { typeOfGraph: GraphTypes }) {
         />
 
         <defs>
-          {chartData.map((item, index) => (
+          {chartDataState.map((item, index) => (
             <linearGradient
               key={index}
               id={`colorUv${index}`}

@@ -15,25 +15,37 @@ const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 type CostPerMetricProps = {
   heading: string;
   sigla?: string[];
-  metric: string;
-  costPerMetric?: string;
-  variation: Record<
-    DashbordDateRange,
-    { total: number; variation: number | null }
-  >;
+  metric: [string, string];
+
+  variation: [
+    Record<
+      DashbordDateRange,
+      { total: number | string; variation: number | null }
+    >,
+    Record<
+      DashbordDateRange,
+      { total: number | string; variation: number | null }
+    >
+  ];
 };
 
 const CostPerMetric = ({
   heading,
   sigla,
   metric,
-  costPerMetric,
   variation,
 }: CostPerMetricProps) => {
   const dateRange = useDataStore((store) => store.dateRange);
 
-  const { variation: variationValue, total } = variation[dateRange];
-  const [siglaActive, setSiglaActive] = useState(sigla?.at(0) ?? "");
+  const [siglaActive, setSiglaActive] = useState<0 | 1>(0);
+  const { variation: variationValue, total } =
+    variation[siglaActive][dateRange];
+
+  // console.log(variation);
+
+  const hasOptions = sigla && sigla?.length === 2;
+
+  console.log(heading === "Investimento Total" ? metric : total, "asdiajjdoi");
 
   return (
     <div
@@ -49,36 +61,30 @@ const CostPerMetric = ({
         </p>
 
         <Tabs
-          defaultValue={sigla ? sigla[0] : ""}
-          onValueChange={(value) => setSiglaActive(value)}
+          defaultValue="0"
+          onValueChange={(value) => setSiglaActive(+value as 0 | 1)}
           className="flex p-[5px] items-center rounded-lg border border-[#E2E8F0] h-[42px]"
           style={{
-            visibility: sigla && costPerMetric ? "visible" : "hidden",
+            visibility: hasOptions ? "visible" : "hidden",
           }}
         >
           <TabsList>
-            <TabsTrigger value={sigla ? sigla[0] : ""} className="text-black">
+            <TabsTrigger value="0" className="text-black">
               {sigla ? sigla[0] : ""}
             </TabsTrigger>
-            <TabsTrigger value={sigla ? sigla[1] : ""}>
-              {sigla ? sigla[1] : ""}
-            </TabsTrigger>
+            <TabsTrigger value="1">{sigla ? sigla[1] : ""}</TabsTrigger>
           </TabsList>
         </Tabs>
       </div>
       <div className="flex flex-col items-start justify-center gap-[2px]">
         <p className="flex-shrink-0 w-auto h-auto whitespace-pre relative font-bold font-nexa-bold text-[#101828] text-3xl leading-[38px]">
-          {sigla && costPerMetric
-            ? siglaActive === sigla?.at(0)
-              ? metric
-              : costPerMetric
-            : metric}
+          {heading === "Investimento Total" ? metric[1] : total}
         </p>
-        {/* {typeof variationValue === "number" && (
+        {typeof variationValue === "number" && (
           <div>
             <Badge number={variationValue} />
           </div>
-        )} */}
+        )}
       </div>
     </div>
   );

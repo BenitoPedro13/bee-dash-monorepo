@@ -7,6 +7,7 @@ import useDataStore, {
 } from "@/store";
 import {
   calculateVariations,
+  calculateVariationsCurrency,
   calculateVariationsPercentage,
   costPerMetric,
   total,
@@ -21,102 +22,166 @@ const metricConfig: Record<
   DashboardMode,
   {
     heading: string;
-    metric: (data: Influencer[]) => string;
+    metric: (data: Influencer[]) => [string, string];
     variation: (
       data: Influencer[]
-    ) => Record<DashbordDateRange, { total: number; variation: number | null }>;
+    ) => [
+      Record<
+        DashbordDateRange,
+        { total: number | string; variation: number | null }
+      >,
+      Record<
+        DashbordDateRange,
+        { total: number | string; variation: number | null }
+      >
+    ];
     sigla?: string[];
-    costPerMetric: (data: Influencer[]) => string;
   }[]
 > = {
   tiktok: [
     {
       heading: "Engajamento Médio",
       sigla: ["Total", "CPE"],
-      metric: (data) => totalPercentage(data, "Engajamento Tiktok"),
-      costPerMetric: (data) => totalCPE(data, "CPE Tiktok"),
-      variation: (data) =>
+      metric: (data) => [
+        totalPercentage(data, "Engajamento Tiktok"),
+        totalCPE(data, "CPE Tiktok"),
+      ],
+      variation: (data) => [
         calculateVariationsPercentage(data, "Engajamento Tiktok"),
+        calculateVariationsCurrency(data, "CPE Tiktok"),
+      ],
     },
     {
       heading: "Cliques no Link",
       sigla: ["Total", "CPC"],
-      metric: (data) => total(data, "Cliques Tiktok"),
-      costPerMetric: (data) => totalCPE(data, "CPC Tiktok"),
-      variation: (data) => calculateVariations(data, "Cliques Tiktok"),
+      metric: (data) => [
+        total(data, "Cliques Tiktok"),
+        totalCPE(data, "CPC Tiktok"),
+      ],
+      variation: (data) => [
+        calculateVariations(data, "Cliques Tiktok"),
+        calculateVariationsCurrency(data, "CPC Tiktok"),
+      ],
     },
     {
       heading: "Custo por Mil Views",
       sigla: ["Total", "CPV"],
-      metric: (data) => total(data, "Impressoes Tiktok"),
-      costPerMetric: (data) => totalCPE(data, "CPV Tiktok"),
-      variation: (data) => calculateVariations(data, "CPV Tiktok"),
+      metric: (data) => [
+        total(data, "Impressoes Tiktok"),
+        totalCPE(data, "CPV Tiktok"),
+      ],
+      variation: (data) => [
+        calculateVariations(data, "Impressoes Tiktok"),
+        calculateVariationsCurrency(data, "CPV Tiktok"),
+      ],
     },
     {
       heading: "Investimento Total",
-      metric: (data) => total(data, "Investimento", true),
-      costPerMetric: (data) => total(data, "Investimento", true),
-      variation: (data) => calculateVariations(data, "CPV Tiktok"),
+      metric: (data) => [
+        total(data, "Investimento", true),
+        total(data, "Investimento", true),
+      ],
+      variation: (data) => [
+        calculateVariations(data, "Investimento"),
+        calculateVariations(data, "Investimento"),
+      ],
     },
   ],
   instagram: [
     {
       heading: "Engajamento Médio",
       sigla: ["Total", "CPE"],
-      metric: (data) => totalPercentage(data, "Engajamento"),
-      costPerMetric: (data) => totalCPE(data, "CPE"),
-      variation: (data) => calculateVariationsPercentage(data, "Engajamento"),
+      metric: (data) => [
+        totalPercentage(data, "Engajamento"),
+        totalCPE(data, "CPE"),
+      ],
+      variation: (data) => [
+        calculateVariationsPercentage(data, "Engajamento"),
+        calculateVariationsCurrency(data, "CPE"),
+      ],
     },
     {
       heading: "Cliques no Link",
       sigla: ["Total", "CPC"],
-      metric: (data) => total(data, "Cliques"),
-      costPerMetric: (data) => totalCPE(data, "CPC"),
-      variation: (data) => calculateVariations(data, "Cliques"),
+      metric: (data) => [total(data, "Cliques"), totalCPE(data, "CPC")],
+
+      variation: (data) => [
+        calculateVariations(data, "Cliques"),
+        calculateVariationsCurrency(data, "CPV"),
+      ],
     },
     {
       heading: "Custo por Mil Views",
       sigla: ["Total", "CPV"],
-      metric: (data) => total(data, "Impressoes"),
-      costPerMetric: (data) => totalCPE(data, "CPV"),
-      variation: (data) => calculateVariations(data, "CPV"),
+      metric: (data) => [total(data, "Impressoes"), totalCPE(data, "CPV")],
+
+      variation: (data) => [
+        calculateVariations(data, "Impressoes"),
+        calculateVariationsCurrency(data, "CPV"),
+      ],
     },
     {
       heading: "Investimento Total",
-      metric: (data) => total(data, "Investimento", true),
-      costPerMetric: (data) => total(data, "Investimento", true),
-      variation: (data) => calculateVariations(data, "CPV"),
+      metric: (data) => [
+        total(data, "Investimento", true),
+        total(data, "Investimento", true),
+      ],
+
+      variation: (data) => [
+        calculateVariations(data, "Investimento"),
+        calculateVariations(data, "Investimento"),
+      ],
     },
   ],
   all: [
     {
       heading: "Engajamento Médio",
       sigla: ["Total", "CPE"],
-      metric: (data) => totalPercentage(data, "Engajamento Media"),
-      costPerMetric: (data) => totalCPE(data, ["CPE", "CPE Tiktok"]),
-      variation: (data) =>
+      metric: (data) => [
+        totalPercentage(data, "Engajamento Media"),
+        totalCPE(data, ["CPE", "CPE Tiktok"]),
+      ],
+      variation: (data) => [
         calculateVariationsPercentage(data, "Engajamento Media"),
+        calculateVariationsCurrency(data, "CPE Media"),
+      ],
     },
     {
       heading: "Cliques no Link",
       sigla: ["Total", "CPC"],
-      metric: (data) => total(data, ["Cliques", "Cliques Tiktok"]),
-      costPerMetric: (data) => totalCPE(data, "CPC Media"),
-      variation: (data) =>
+      metric: (data) => [
+        total(data, ["Cliques", "Cliques Tiktok"]),
+        totalCPE(data, "CPC Media"),
+      ],
+
+      variation: (data) => [
         calculateVariations(data, ["Cliques", "Cliques Tiktok"]),
+        calculateVariationsCurrency(data, "CPV Media"),
+      ],
     },
     {
       heading: "Custo por Mil Views",
       sigla: ["Total", "CPV"],
-      metric: (data) => total(data, ["Impressoes", "Impressoes Tiktok"]),
-      costPerMetric: (data) => totalCPE(data, "CPV Media"),
-      variation: (data) => calculateVariations(data, "CPV Media"),
+      metric: (data) => [
+        total(data, ["Impressoes", "Impressoes Tiktok"]),
+        totalCPE(data, "CPV Media"),
+      ],
+
+      variation: (data) => [
+        calculateVariations(data, ["Impressoes", "Impressoes Tiktok"]),
+        calculateVariationsCurrency(data, "CPV Media"),
+      ],
     },
     {
       heading: "Investimento Total",
-      metric: (data) => total(data, "Investimento", true),
-      costPerMetric: (data) => total(data, "Investimento", true),
-      variation: (data) => calculateVariations(data, ["CPV", "CPV Tiktok"]),
+      metric: (data) => [
+        total(data, "Investimento", true),
+        total(data, "Investimento", true),
+      ],
+      variation: (data) => [
+        calculateVariations(data, "Investimento"),
+        calculateVariations(data, "Investimento"),
+      ],
     },
   ],
 };
@@ -130,50 +195,15 @@ const SecondSection = () => {
     <div className="w-full flex-shrink-0 h-min flex flex-col justify-start items-start overflow-visible relative xl:px-[22px] p-0 content-start flex-nowrap gap-6 rounded-none">
       <div className="box-border flex-shrink-0 w-full h-min flex flex-col justify-start items-start xl:p-0 px-[15px] overflow-visible relative content-start flex-nowrap xl:gap-[22px] gap-6 rounded-none">
         <div className="flex-shrink-0 flex-grow xl:flex-grow-0 w-full h-min flex xl:flex-row flex-col justify-start items-center overflow-visible relative p-0 content-center flex-nowrap xl:gap-6 gap-[15px] rounded-none">
-          {/* <CostPerMetric
-            sigla={["Total", "CPE"]}
-            heading="Engajamento Médio"
-            metric={totalPercentage(data, "Engajamento")}
-            variation={12.1}
-          />
-          <CostPerMetric
-            sigla={["Total", "CPC"]}
-            heading="Cliques no Link"
-            metric={total(data, "Cliques")}
-            costPerMetric={costPerMetric(
-              data,
-              "Cliques",
-              totalCount(data, "Investimento")
-            )}
-            variation={12.1}
-          />
-          <CostPerMetric
-            sigla={["Total", "CPV"]}
-            heading="Custo por Mil Views"
-            metric={total(data, "Impressoes")}
-            costPerMetric={costPerMetric(
-              data,
-              "Impressoes",
-              totalCount(data, "Investimento")
-            )}
-            variation={12.1}
-          />
-          <CostPerMetric
-            heading="Investimento Total"
-            metric={total(data, "Investimento", true)}
-          /> */}
-          {metrics.map(
-            ({ heading, metric, sigla, variation, costPerMetric }) => (
-              <CostPerMetric
-                key={heading}
-                heading={heading}
-                sigla={sigla}
-                costPerMetric={costPerMetric(data)}
-                metric={metric(data)}
-                variation={variation(data)}
-              />
-            )
-          )}
+          {metrics.map(({ heading, metric, sigla, variation }) => (
+            <CostPerMetric
+              key={heading}
+              heading={heading}
+              sigla={sigla}
+              metric={metric(data)}
+              variation={variation(data)}
+            />
+          ))}
         </div>
       </div>
     </div>

@@ -2,8 +2,12 @@
 
 import React, { useEffect, useState } from "react";
 import { Plus_Jakarta_Sans } from "next/font/google";
-import { Influencer } from "@/store";
-import { total } from "../../utils/utils";
+import useDataStore, {
+  DashboardMode,
+  DashbordDateRange,
+  Influencer,
+} from "@/store";
+import { calculateVariations, total } from "../../utils/utils";
 import BarGraph from "./BarGraph";
 import Badge from "./Badge";
 import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
@@ -17,29 +21,75 @@ type MetricsGraphProps = {
 export type GraphTypes = "Impressoes" | "Interacoes";
 
 const MetricsGraph = ({ data }: MetricsGraphProps) => {
+  const mode = useDataStore((store) => store.mode);
+  const dateRange = useDataStore((store) => store.dateRange);
   const [heading, setHeading] = useState<string>("Impressões (Views)");
   const [metric, setMetric] = useState<string>(total(data, "Impressoes"));
+  const [metricVariation, setMetricVariation] = useState<number | null>(null);
   const [typeOfGraph, setTypeOfGraph] = useState<GraphTypes>("Impressoes");
 
   const windowIsUndefined = typeof window === "undefined";
 
-  useEffect(() => {
-    const graphTypes = {
+  const graphTypes: Record<
+    DashboardMode,
+    Record<
+      "Interacoes" | "Impressoes",
+      {
+        heading: string;
+        computeMetric: (
+          data: Influencer[]
+        ) => Record<
+          DashbordDateRange,
+          { total: string; variation: number | null }
+        >;
+      }
+    >
+  > = {
+    tiktok: {
       Interacoes: {
         heading: "Interações",
-        computeMetric: (data: Influencer[]) => total(data, ["Interacoes"]),
+        computeMetric: (data: Influencer[]) =>
+          calculateVariations(data, "Interacoes Tiktok"),
       },
       Impressoes: {
         heading: "Impressões (Views)",
-        computeMetric: (data: Influencer[]) => total(data, ["Impressoes"]),
+        computeMetric: (data: Influencer[]) =>
+          calculateVariations(data, "Impressoes Tiktok"),
       },
-    };
+    },
+    instagram: {
+      Interacoes: {
+        heading: "Interações",
+        computeMetric: (data: Influencer[]) =>
+          calculateVariations(data, "Interacoes"),
+      },
+      Impressoes: {
+        heading: "Impressões (Views)",
+        computeMetric: (data: Influencer[]) =>
+          calculateVariations(data, "Impressoes"),
+      },
+    },
+    all: {
+      Interacoes: {
+        heading: "Interações",
+        computeMetric: (data: Influencer[]) =>
+          calculateVariations(data, ["Interacoes", "Interacoes Tiktok"]),
+      },
+      Impressoes: {
+        heading: "Impressões (Views)",
+        computeMetric: (data: Influencer[]) =>
+          calculateVariations(data, ["Impressoes", "Impressoes Tiktok"]),
+      },
+    },
+  };
 
-    if (typeOfGraph in graphTypes) {
-      const { heading, computeMetric } = graphTypes[typeOfGraph];
+  useEffect(() => {
+    if (typeOfGraph in graphTypes[mode]) {
+      const { heading, computeMetric } = graphTypes[mode][typeOfGraph];
 
       setHeading(heading);
-      setMetric(computeMetric(data));
+      setMetric(computeMetric(data)[dateRange].total);
+      setMetricVariation(computeMetric(data)[dateRange].variation);
 
       if (
         !windowIsUndefined &&
@@ -49,7 +99,7 @@ const MetricsGraph = ({ data }: MetricsGraphProps) => {
         setHeading("Impressões");
       }
     }
-  }, [typeOfGraph, data]);
+  }, [typeOfGraph, data, mode, dateRange]);
 
   return (
     <div
@@ -89,7 +139,11 @@ const MetricsGraph = ({ data }: MetricsGraphProps) => {
             <p className="flex-shrink-0 w-auto h-auto whitespace-pre relative font-bold font-nexa-bold text-[#101828] text-3xl leading-[38px]">
               {metric}
             </p>
-            <Badge number={20.1} />
+            {typeof metricVariation === "number" && (
+              <div>
+                <Badge number={metricVariation} />
+              </div>
+            )}
           </div>
         </div>
 

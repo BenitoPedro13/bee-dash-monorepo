@@ -1,6 +1,6 @@
 import useDataStore, { Influencer } from "@/store";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import {
+  filterDataByDateRange,
   generateShadesAndTints,
   generateShadesAndTintsRandomly,
 } from "../../utils/utils";
@@ -13,12 +13,18 @@ import {
   ChartLegendContent,
 } from "./ui/chart";
 import { Pie, PieChart } from "recharts";
-
-ChartJS.register(ArcElement, Tooltip, Legend);
+import { useEffect, useState } from "react";
 
 export default function DoughnutGraph() {
   const { data } = useDataStore((state) => state.data);
   const { user } = useDataStore((state) => state.session);
+
+  const mode = useDataStore((store) => store.mode);
+  const dateRange = useDataStore((store) => store.dateRange);
+
+  const [chartDataState, setChartDataState] = useState<
+    { influencer: string; Impressoes: number; fill: string }[]
+  >([]);
 
   const mainColor = !user?.color ? "#FF77EF" : user.color; // Assuming user.color is the main color in hex format
   const subVariations = generateShadesAndTintsRandomly(mainColor, data.length);
@@ -31,16 +37,32 @@ export default function DoughnutGraph() {
   } satisfies ChartConfig;
 
   const getChartData = (data: Influencer[]) => {
-    return data.map((item, index) => {
+    return filterDataByDateRange(data, +dateRange).map((item, index) => {
+      let metric: number = 0;
+
+      if (mode === "all") {
+        metric =
+          Number.parseFloat(item["Impacto Bruto"]) +
+          Number.parseFloat(item["Impacto Bruto Tiktok"]);
+      } else if (mode === "tiktok") {
+        metric = Number.parseFloat(item["Impacto Bruto Tiktok"]);
+      } else if (mode === "instagram") {
+        metric = Number.parseFloat(item["Impacto Bruto"]);
+      }
+
       return {
         influencer: item.Influencer,
-        Impressoes:
-          Number.parseInt(item["Impressoes"].replaceAll(".", "")) +
-          Number.parseInt(item["Interacoes"].replaceAll(".", "")),
+        Impressoes: metric,
         fill: subVariations[index],
       };
     });
   };
+
+  useEffect(() => {
+    const chartData = getChartData(data);
+    // console.log("chartData", chartData);
+    setChartDataState(chartData);
+  }, [data, mode, dateRange]);
 
   return (
     <ChartContainer
@@ -55,7 +77,7 @@ export default function DoughnutGraph() {
           content={<ChartTooltipContent className="w-[180px]" />}
         />
         <Pie
-          data={getChartData(data)}
+          data={chartDataState}
           dataKey="Impressoes"
           nameKey="influencer"
           innerRadius={80}
