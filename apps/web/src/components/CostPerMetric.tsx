@@ -45,8 +45,6 @@ const CostPerMetric = ({
 
   const hasOptions = sigla && sigla?.length === 2;
 
-  console.log(heading === "Investimento Total" ? metric : total, "asdiajjdoi");
-
   return (
     <div
       className="box-border w-full sm:min-w-[200px] h-min flex flex-col items-start p-4 py-5 bg-white overflow-visible content-center flex-nowrap gap-2 rounded-xl border-[#D4D4D4] border"
@@ -78,7 +76,16 @@ const CostPerMetric = ({
       </div>
       <div className="flex flex-col items-start justify-center gap-[2px]">
         <p className="flex-shrink-0 w-auto h-auto whitespace-pre relative font-bold font-nexa-bold text-[#101828] text-3xl leading-[38px]">
-          {heading === "Investimento Total" ? metric[1] : total}
+          {heading === "Investimento Total"
+            ? new Intl.NumberFormat("pt-BR", {
+                style: "currency",
+                currency: "BRL",
+              }).format(
+                +Number.parseFloat(
+                  (total as string).replaceAll(".", "").replaceAll(",", ".")
+                ).toFixed(2)
+              )
+            : total}
         </p>
         {typeof variationValue === "number" && (
           <div>
