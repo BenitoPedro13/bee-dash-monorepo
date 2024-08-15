@@ -15,7 +15,7 @@ type MetricsProps = {
   metric: string;
   variation: Record<
     DashbordDateRange,
-    { total: number; variation: number | null }
+    { total: number | string; variation: number | null }
   >;
 };
 
