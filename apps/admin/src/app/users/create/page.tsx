@@ -53,6 +53,7 @@ export default function UserCreate() {
         <Form.Item
           label={"Usar dados dos Posts dos Creators"}
           name={["byPosts"]}
+          initialValue={false}
           rules={[
             {
               required: true,
@@ -71,6 +72,7 @@ export default function UserCreate() {
         <Form.Item
           label={"Total Initial Investment"}
           name={["totalInitialInvestment"]}
+          initialValue={0}
           rules={[
             {
               required: true,
@@ -79,12 +81,13 @@ export default function UserCreate() {
             },
           ]}
         >
-          <InputNumber min={0} style={{ width: "100%" }} />
+          <InputNumber disabled min={0} style={{ width: "100%" }} />
         </Form.Item>
 
         <Form.Item
           label={"Estimated Executed Investment"}
           name={["estimatedExecutedInvestment"]}
+          initialValue={0}
           rules={[
             {
               required: true,
@@ -93,7 +96,7 @@ export default function UserCreate() {
             },
           ]}
         >
-          <InputNumber min={0} style={{ width: "100%" }} />
+          <InputNumber disabled min={0} style={{ width: "100%" }} />
         </Form.Item>
 
         <Form.Item
@@ -112,6 +115,7 @@ export default function UserCreate() {
         <Form.Item
           label={"Color"}
           name={["color"]}
+          initialValue={"#FF8C00"}
           rules={[
             {
               required: false,
@@ -119,7 +123,7 @@ export default function UserCreate() {
             },
           ]}
         >
-          <Input />
+          <Input disabled />
         </Form.Item>
 
         <Form.Item
@@ -133,7 +137,7 @@ export default function UserCreate() {
             },
           ]}
         >
-          <Input />
+          <Input disabled />
         </Form.Item>
       </Form>
     </Create>
