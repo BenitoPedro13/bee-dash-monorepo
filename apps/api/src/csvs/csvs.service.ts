@@ -122,19 +122,17 @@ export class CsvsService {
         Number.parseInt(creator['Cliques']));
     const cpv =
       Number.parseInt(creator['Investimento']) /
-      (Number.parseInt(
+      Number.parseInt(
         creator['Impressoes'] === '0' ? '1' : creator['Impressoes'],
-      ) /
-        1000);
+      );
 
     const cpvTiktok =
       Number.parseInt(creator['Investimento']) /
-      (Number.parseInt(
+      Number.parseInt(
         creator['Impressoes Tiktok'] === '0'
           ? '1'
           : creator['Impressoes Tiktok'],
-      ) /
-        1000);
+      );
 
     const cpvMedium =
       Number.parseInt(creator['Investimento']) /
