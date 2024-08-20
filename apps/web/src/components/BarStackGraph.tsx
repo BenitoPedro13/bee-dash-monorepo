@@ -33,7 +33,7 @@ export default function BarStackGraph({
   const { data } = useDataStore((state) => state.data);
   const { user } = useDataStore((state) => state.session);
 
-  const mainColor = !user?.color ? "#FF77EF" : user.color; // Assuming user.color is the main color in hex format
+  const mainColor = !user?.color ? "#FF8C00" : user.color; // Assuming user.color is the main color in hex format
   const subVariations = generateShadesAndTints(mainColor, data.length);
 
   const chartConfig = {

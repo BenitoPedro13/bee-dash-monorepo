@@ -74,7 +74,7 @@ const Footer = (props: Props) => {
     //                   </Link>
     //                 </div>
     //                 <div className="box-border flex justify-start items-center flex-grow-0 flex-shrink-0 relative px-2 py-0.5 rounded-2xl bg-[#f9f5ff] mix-blend-multiply">
-    //                   <p className="whitespace-pre-wrap flex-grow-0 flex-shrink-0 text-xs leading-[18px] font-medium text-center text-[#ff77ef]">
+    //                   <p className="whitespace-pre-wrap flex-grow-0 flex-shrink-0 text-xs leading-[18px] font-medium text-center text-[#FF8C00]">
     //                     New
     //                   </p>
     //                 </div>

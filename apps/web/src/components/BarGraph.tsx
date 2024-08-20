@@ -43,7 +43,7 @@ export default function BarGraph({ typeOfGraph }: { typeOfGraph: GraphTypes }) {
     | { influencer: string; Interacoes: number; fill: string }[]
   >([]);
 
-  const mainColor = !user?.color ? "#FF77EF" : user.color; // Assuming user.color is the main color in hex format
+  const mainColor = !user?.color ? "#FF8C00" : user.color; // Assuming user.color is the main color in hex format
   const subVariations = generateShadesAndTintsRandomly(mainColor, data.length);
 
   const chartConfig = {

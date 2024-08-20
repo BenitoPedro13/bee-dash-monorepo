@@ -20,7 +20,7 @@ const TotalFeedIcon = () => {
     //     width="39"
     //     height="39"
     //     rx="7.5"
-    //     fill={session?.user?.color ? session.user.color : "#FF77EF"}
+    //     fill={session?.user?.color ? session.user.color : "#FF8C00"}
     //   />
     //   <rect x="10.5" y="12" width="9" height="8" fill="white" stroke="black" />
     //   <rect x="10.5" y="20" width="9" height="8" fill="white" stroke="black" />

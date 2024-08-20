@@ -4,7 +4,8 @@ import { Attachment, baseApiUrl } from "@/store";
 import Image from "next/image";
 import fileIcon from "@/../public/fileIcon.svg";
 import Link from "next/link";
-import { parseUpdatedAt } from "../../../utils/utils";
+import { addAlphaToHex, parseUpdatedAt } from "../../../utils/utils";
+import { File } from "lucide-react";
 
 const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 const inter = Inter({ subsets: ["latin"] });
@@ -31,10 +32,13 @@ const AttachmentsTableRow = ({ data }: AttachmentsTableRowProps) => {
     <tr>
       <td>
         <div className="flex-shrink-0 flex justify-start items-center overflow-visible content-center flex-nowrap p-0 gap-[6px]">
-          <div className="avatar">
-            <div className="mask mask-squircle w-[38px] h-[38px] aspect-square block rounded-full">
-              <Image src={fileIcon} alt="File Icon" width={38} height={38} />
-            </div>
+          <div
+            className="flex items-center justify-center w-[38px] h-[38px] rounded-full"
+            style={{
+              backgroundColor: addAlphaToHex("#FF8C00", 0.15),
+            }}
+          >
+            <File color="#FF8C00" strokeWidth="1.66px" />
           </div>
           <div className="flex-shrink-0 w-min h-min flex flex-col justify-start items-start overflow-visible relative p-0 content-start flex-nowrap gap-0 rounded-none">
             <h5

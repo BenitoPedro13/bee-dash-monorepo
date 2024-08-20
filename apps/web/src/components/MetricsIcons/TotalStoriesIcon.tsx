@@ -19,7 +19,7 @@ const TotalStoriesIcon = () => {
     //     width="39"
     //     height="39"
     //     rx="7.5"
-    //     fill={session?.user?.color ? session.user.color : "#FF77EF"}
+    //     fill={session?.user?.color ? session.user.color : "#FF8C00"}
     //   />
     //   <rect
     //     x="11.75"

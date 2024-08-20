@@ -28,7 +28,7 @@ export function Component() {
     { month: string; instagram?: number; tiktok?: number }[]
   >([]);
 
-  const mainColor = !user?.color ? "#FF77EF" : user.color; // Assuming user.color is the main color in hex format
+  const mainColor = !user?.color ? "#FF8C00" : user.color; // Assuming user.color is the main color in hex format
   const subVariations = generateShadesAndTints(mainColor, 2);
 
   const getChartData = (
