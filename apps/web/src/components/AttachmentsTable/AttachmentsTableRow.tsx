@@ -69,6 +69,7 @@ const AttachmentsTableRow = ({ data }: AttachmentsTableRowProps) => {
           <Link
             href={`${baseApiUrl}/public/${data.uniqueFilename}`}
             target="_blank"
+            download={data.originalFilename}
           >
             <p
               className={`flex-shrink-0 w-auto h-auto whitespace-pre relative font-semibold ${jakarta.className} text-[#FF5100] text-sm`}

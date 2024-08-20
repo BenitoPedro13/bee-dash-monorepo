@@ -143,13 +143,13 @@ export default function Home() {
                 heading="Impacto Bruto"
                 metric={total(data, ["Interacoes", "Impressoes"])}
               />
-              <MetricsBarStackGraph mobile heading="Audiência" metric="2438" />
+              <MetricsBarStackGraph mobile heading="Audiência" />
             </div>
 
             <div className="w-full flex-shrink-0 h-min flex flex-col justify-start items-start overflow-visible relative xl:px-[22px] px-[15px] content-start flex-nowrap gap-6 rounded-none">
               <div className="box-border flex-shrink-0 w-full h-min flex justify-start items-start overflow-visible relative content-start flex-nowrap gap-6 rounded-none">
                 <CreatorsTable />
-                <MetricsBarStackGraph heading="Audiência" metric="2438" />
+                <MetricsBarStackGraph heading="Audiência" />
               </div>
             </div>
             <div className="w-full flex-shrink-0 h-min flex flex-col justify-start items-start overflow-visible relative xl:px-[22px] px-[15px] content-start flex-nowrap gap-6 rounded-none">

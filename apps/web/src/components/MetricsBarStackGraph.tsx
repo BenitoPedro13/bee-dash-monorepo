@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useState } from "react";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import DoughnutGraph from "./DoughnutGraph";
 import { motion } from "framer-motion";
@@ -6,20 +8,64 @@ import Badge from "./Badge";
 import BarStackGraph from "./BarStackGraph";
 import { Cpu } from "lucide-react";
 import { Component } from "./BarStackedGraph";
+import useDataStore, {
+  DashboardMode,
+  DashbordDateRange,
+  Influencer,
+} from "@/store";
+import { calculateVariations, total } from "../../utils/utils";
 
 const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
 type MetricsDoughnutGraphProps = {
   heading: string;
-  metric?: string;
   mobile?: boolean;
 };
 
 const MetricsBarStackGraph = ({
   heading,
-  metric,
   mobile,
 }: MetricsDoughnutGraphProps) => {
+  const { data } = useDataStore((store) => store.data);
+  const mode = useDataStore((store) => store.mode);
+  const dateRange = useDataStore((store) => store.dateRange);
+  const [metric, setMetric] = useState<string>(total(data, "Impressoes"));
+  const [metricVariation, setMetricVariation] = useState<number | null>(null);
+
+  const graphTypes: Record<
+    DashboardMode,
+    Record<
+      "Impressoes",
+      Record<
+        DashbordDateRange,
+        {
+          total: string;
+          variation: number | null;
+        }
+      >
+    >
+  > = {
+    tiktok: {
+      Impressoes: calculateVariations(data, "Impressoes Tiktok"),
+    },
+    instagram: {
+      Impressoes: calculateVariations(data, "Impressoes"),
+    },
+    all: {
+      Impressoes: calculateVariations(data, [
+        "Impressoes",
+        "Impressoes Tiktok",
+      ]),
+    },
+  };
+
+  useEffect(() => {
+    const { total, variation } = graphTypes[mode].Impressoes[dateRange];
+
+    setMetric(total);
+    setMetricVariation(variation);
+  }, [data, mode, dateRange]);
+
   return (
     <div
       className={`box-border lg:w-[360px] w-full max-h-[428px] h-full lg:flex flex-col justify-start items-start shadow-metrics ${
@@ -67,7 +113,11 @@ const MetricsBarStackGraph = ({
             <p className="flex-shrink-0 w-auto h-auto whitespace-pre relative font-bold font-nexa-bold text-[#101828] text-3xl leading-[38px]">
               {metric}
             </p>
-            <Badge number={20.1} />
+            {typeof metricVariation === "number" && (
+              <div>
+                <Badge number={metricVariation} />
+              </div>
+            )}
           </div>
         </div>
         <Component />

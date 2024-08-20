@@ -21,26 +21,20 @@ import Metrics from "./Metrics";
 const metricConfig: Record<
   DashboardMode,
   {
-    heading: string;
-    metric: (data: Influencer[]) => [string, string];
+    heading: string[];
+    metric: (data: Influencer[]) => string[];
     variation: (
       data: Influencer[]
-    ) => [
-      Record<
-        DashbordDateRange,
-        { total: number | string; variation: number | null }
-      >,
-      Record<
-        DashbordDateRange,
-        { total: number | string; variation: number | null }
-      >
-    ];
+    ) => Record<
+      DashbordDateRange,
+      { total: number | string; variation: number | null }
+    >[];
     sigla?: string[];
   }[]
 > = {
   tiktok: [
     {
-      heading: "Engajamento Médio",
+      heading: ["Engajamento Médio", "Custo por Engajamento"],
       sigla: ["Total", "CPE"],
       metric: (data) => [
         totalPercentage(data, "Engajamento Tiktok"),
@@ -52,7 +46,7 @@ const metricConfig: Record<
       ],
     },
     {
-      heading: "Cliques no Link",
+      heading: ["Cliques", "Custo por Clique"],
       sigla: ["Total", "CPC"],
       metric: (data) => [
         total(data, "Cliques Tiktok"),
@@ -64,32 +58,35 @@ const metricConfig: Record<
       ],
     },
     {
-      heading: "Custo por Mil Views",
-      sigla: ["Total", "CPV"],
+      heading: ["Views", "Custo por View", "Custo por Mil Views"],
+      sigla: ["Total", "CPV", "CPM"],
       metric: (data) => [
         total(data, "Impressoes Tiktok"),
+        totalCPE(data, "CPV Tiktok"),
         totalCPE(data, "CPV Tiktok"),
       ],
       variation: (data) => [
         calculateVariations(data, "Impressoes Tiktok"),
         calculateVariationsCurrency(data, "CPV Tiktok"),
+        calculateVariationsCurrency(data, "CPV Tiktok", true),
       ],
     },
     {
-      heading: "Investimento Total",
+      heading: ["Investimento Total", "Investimento Médio"],
       metric: (data) => [
         total(data, "Investimento", true),
         total(data, "Investimento", true),
       ],
+      sigla: ["Total", "Média"],
       variation: (data) => [
         calculateVariations(data, "Investimento"),
-        calculateVariations(data, "Investimento"),
+        calculateVariations(data, "Investimento", true),
       ],
     },
   ],
   instagram: [
     {
-      heading: "Engajamento Médio",
+      heading: ["Engajamento Médio", "Custo por Engajamento"],
       sigla: ["Total", "CPE"],
       metric: (data) => [
         totalPercentage(data, "Engajamento"),
@@ -101,41 +98,44 @@ const metricConfig: Record<
       ],
     },
     {
-      heading: "Cliques no Link",
+      heading: ["Cliques", "Custo por Clique"],
       sigla: ["Total", "CPC"],
       metric: (data) => [total(data, "Cliques"), totalCPE(data, "CPC")],
-
       variation: (data) => [
         calculateVariations(data, "Cliques"),
         calculateVariationsCurrency(data, "CPV"),
       ],
     },
     {
-      heading: "Custo por Mil Views",
-      sigla: ["Total", "CPV"],
-      metric: (data) => [total(data, "Impressoes"), totalCPE(data, "CPV")],
-
+      heading: ["Views", "Custo por View", "Custo por Mil Views"],
+      sigla: ["Total", "CPV", "CPM"],
+      metric: (data) => [
+        total(data, "Impressoes"),
+        totalCPE(data, "CPV"),
+        totalCPE(data, "CPV"),
+      ],
       variation: (data) => [
         calculateVariations(data, "Impressoes"),
         calculateVariationsCurrency(data, "CPV"),
+        calculateVariationsCurrency(data, "CPV", true),
       ],
     },
     {
-      heading: "Investimento Total",
+      heading: ["Investimento Total", "Investimento Médio"],
       metric: (data) => [
         total(data, "Investimento", true),
         total(data, "Investimento", true),
       ],
-
+      sigla: ["Total", "Média"],
       variation: (data) => [
         calculateVariations(data, "Investimento"),
-        calculateVariations(data, "Investimento"),
+        calculateVariations(data, "Investimento", true),
       ],
     },
   ],
   all: [
     {
-      heading: "Engajamento Médio",
+      heading: ["Engajamento Médio", "Custo por Engajamento"],
       sigla: ["Total", "CPE"],
       metric: (data) => [
         totalPercentage(data, "Engajamento Media"),
@@ -147,7 +147,7 @@ const metricConfig: Record<
       ],
     },
     {
-      heading: "Cliques no Link",
+      heading: ["Cliques", "Custo por Clique"],
       sigla: ["Total", "CPC"],
       metric: (data) => [
         total(data, ["Cliques", "Cliques Tiktok"]),
@@ -160,27 +160,30 @@ const metricConfig: Record<
       ],
     },
     {
-      heading: "Custo por Mil Views",
-      sigla: ["Total", "CPV"],
+      heading: ["Views", "Custo por View", "Custo por Mil Views"],
+      sigla: ["Total", "CPV", "CPM"],
       metric: (data) => [
         total(data, ["Impressoes", "Impressoes Tiktok"]),
+        totalCPE(data, "CPV Media"),
         totalCPE(data, "CPV Media"),
       ],
 
       variation: (data) => [
         calculateVariations(data, ["Impressoes", "Impressoes Tiktok"]),
         calculateVariationsCurrency(data, "CPV Media"),
+        calculateVariationsCurrency(data, "CPV Media", true),
       ],
     },
     {
-      heading: "Investimento Total",
+      heading: ["Investimento Total", "Investimento Médio"],
+      sigla: ["Total", "Média"],
       metric: (data) => [
         total(data, "Investimento", true),
         total(data, "Investimento", true),
       ],
       variation: (data) => [
         calculateVariations(data, "Investimento"),
-        calculateVariations(data, "Investimento"),
+        calculateVariations(data, "Investimento", true),
       ],
     },
   ],
@@ -197,7 +200,7 @@ const SecondSection = () => {
         <div className="flex-shrink-0 flex-grow xl:flex-grow-0 w-full h-min flex xl:flex-row flex-col justify-start items-center overflow-visible relative p-0 content-center flex-nowrap xl:gap-6 gap-[15px] rounded-none">
           {metrics.map(({ heading, metric, sigla, variation }) => (
             <CostPerMetric
-              key={heading}
+              key={heading.join("-")}
               heading={heading}
               sigla={sigla}
               metric={metric(data)}

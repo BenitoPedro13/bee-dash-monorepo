@@ -13,20 +13,13 @@ import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
 const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
 type CostPerMetricProps = {
-  heading: string;
+  heading: string[];
   sigla?: string[];
-  metric: [string, string];
-
-  variation: [
-    Record<
-      DashbordDateRange,
-      { total: number | string; variation: number | null }
-    >,
-    Record<
-      DashbordDateRange,
-      { total: number | string; variation: number | null }
-    >
-  ];
+  metric: string[];
+  variation: Record<
+    DashbordDateRange,
+    { total: number | string; variation: number | null }
+  >[];
 };
 
 const CostPerMetric = ({
@@ -43,7 +36,7 @@ const CostPerMetric = ({
 
   // console.log(variation);
 
-  const hasOptions = sigla && sigla?.length === 2;
+  const hasOptions = sigla && sigla?.length > 1;
 
   return (
     <div
@@ -55,7 +48,7 @@ const CostPerMetric = ({
     >
       <div className="flex items-center justify-between self-stretch">
         <p className="text-sm font-nexa font-medium text-[#475467]">
-          {heading}
+          {heading[siglaActive]}
         </p>
 
         <Tabs
@@ -71,12 +64,15 @@ const CostPerMetric = ({
               {sigla ? sigla[0] : ""}
             </TabsTrigger>
             <TabsTrigger value="1">{sigla ? sigla[1] : ""}</TabsTrigger>
+            {sigla?.length === 3 ? (
+              <TabsTrigger value="2">{sigla ? sigla[2] : ""}</TabsTrigger>
+            ) : null}
           </TabsList>
         </Tabs>
       </div>
       <div className="flex flex-col items-start justify-center gap-[2px]">
         <p className="flex-shrink-0 w-auto h-auto whitespace-pre relative font-bold font-nexa-bold text-[#101828] text-3xl leading-[38px]">
-          {heading === "Investimento Total"
+          {heading[siglaActive].includes("Investimento ")
             ? new Intl.NumberFormat("pt-BR", {
                 style: "currency",
                 currency: "BRL",

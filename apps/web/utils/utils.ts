@@ -15,7 +15,7 @@ export function parseUpdatedAt(updatedAt: string) {
 }
 
 // Helper function to parse date strings in 'dd/mm/yyyy' format
-const parseDate = (dateString: string): Date => {
+export const parseDate = (dateString: string): Date => {
   const [day, month, year] = dateString.split("/").map(Number);
   return new Date(year, month - 1, day); // Months are 0-indexed in JavaScript
 };
@@ -129,7 +129,8 @@ export function generateShadesAndTintsRandomly(
 export const total = (
   data: Influencer[],
   dataKey: keyof Influencer | (keyof Influencer)[],
-  currency = false
+  currency = false,
+  investmentMedium?: boolean
 ) => {
   let count = 0;
 
@@ -137,11 +138,11 @@ export const total = (
     for (let i = 0; i < data.length; i++) {
       const element = data[i];
 
-      // if (dataKey === "Reels") {
-      //   count += Number.parseInt("2".replaceAll(".", ""));
-      // } else {
       count += Number.parseFloat(element[`${dataKey}`] as string);
-      // }
+    }
+
+    if (investmentMedium) {
+      count = count / +totalInfluencers(data);
     }
   } else {
     for (let i = 0; i < data.length; i++) {
@@ -150,11 +151,7 @@ export const total = (
       for (let j = 0; j < dataKey.length; j++) {
         const key = dataKey[j];
 
-        // if (key === "Reels") {
-        //   count += Number.parseInt("2".replaceAll(".", ""));
-        // } else {
         count += Number.parseFloat(element[`${key}`] as string);
-        // }
       }
     }
   }
@@ -210,19 +207,36 @@ export const filterDataByDateRange = (
 // Calculate variations comparing current total with previous periods
 export const calculateVariations = (
   data: Influencer[],
-  keys: keyof Influencer | (keyof Influencer)[]
+  keys: keyof Influencer | (keyof Influencer)[],
+  investmentMedium?: boolean
 ) => {
-  const currentTotal = total(data, keys).replaceAll(".", "");
+  const currentTotal = total(data, keys, false, investmentMedium).replaceAll(
+    ".",
+    ""
+  );
 
   const last7DaysData = filterDataByDateRange(data, 7);
   const last14DaysData = filterDataByDateRange(data, 14);
   const last30DaysData = filterDataByDateRange(data, 30);
 
-  const total7Days = total(last7DaysData, keys).replaceAll(".", "");
-  const total14Days = total(last14DaysData, keys).replaceAll(".", "");
-  const total30Days = total(last30DaysData, keys).replaceAll(".", "");
-
-  // console.log(total7Days, total14Days, total30Days);
+  const total7Days =
+    last7DaysData.length === 0
+      ? "0"
+      : total(last7DaysData, keys, false, investmentMedium).replaceAll(".", "");
+  const total14Days =
+    last14DaysData.length === 0
+      ? "0"
+      : total(last14DaysData, keys, false, investmentMedium).replaceAll(
+          ".",
+          ""
+        );
+  const total30Days =
+    last30DaysData.length === 0
+      ? "0"
+      : total(last30DaysData, keys, false, investmentMedium).replaceAll(
+          ".",
+          ""
+        );
 
   return {
     0: {
@@ -269,35 +283,48 @@ export const calculateVariationsPercentage = (
   const total7Days =
     last7DaysData.length === 0
       ? "0"
-      : totalPercentage(last7DaysData, keys).replace(",", ".").replace("%", "");
+      : totalPercentage(last7DaysData, keys)
+          .replace(".", "")
+          .replace(",", ".")
+          .replace("%", "");
   const total14Days =
     last14DaysData.length === 0
       ? "0"
       : totalPercentage(last14DaysData, keys)
+          .replace(".", "")
           .replace(",", ".")
           .replace("%", "");
   const total30Days =
     last30DaysData.length === 0
       ? "0"
       : totalPercentage(last30DaysData, keys)
+          .replace(".", "")
           .replace(",", ".")
           .replace("%", "");
 
   return {
     0: {
-      total: `${Number.parseFloat(currentTotal)}%`,
+      total: `${new Intl.NumberFormat("pt-BR").format(
+        +Number.parseFloat(currentTotal)
+      )}%`,
       variation: calculateVariation(currentTotal),
     },
     7: {
-      total: `${Number.parseFloat(total7Days)}%`,
+      total: `${new Intl.NumberFormat("pt-BR").format(
+        +Number.parseFloat(total7Days)
+      )}%`,
       variation: calculateVariation(currentTotal, total7Days),
     },
     14: {
-      total: `${Number.parseFloat(total14Days)}%`,
+      total: `${new Intl.NumberFormat("pt-BR").format(
+        +Number.parseFloat(total14Days)
+      )}%`,
       variation: calculateVariation(currentTotal, total14Days),
     },
     30: {
-      total: `${Number.parseFloat(total30Days)}%`,
+      total: `${new Intl.NumberFormat("pt-BR").format(
+        +Number.parseFloat(total30Days)
+      )}%`,
       variation: calculateVariation(currentTotal, total30Days),
     },
   };
@@ -305,7 +332,8 @@ export const calculateVariationsPercentage = (
 
 export const calculateVariationsCurrency = (
   data: Influencer[],
-  keys: keyof Influencer | (keyof Influencer)[]
+  keys: keyof Influencer | (keyof Influencer)[],
+  cpm?: boolean
 ) => {
   const currentTotal = totalCurrency(data, keys)
     .replaceAll(",", ".")
@@ -339,28 +367,52 @@ export const calculateVariationsCurrency = (
       total: new Intl.NumberFormat("pt-BR", {
         style: "currency",
         currency: "BRL",
-      }).format(+Number.parseFloat(currentTotal).toFixed(2)),
+      }).format(
+        +(
+          cpm
+            ? +Number.parseFloat(currentTotal) * 1000
+            : +Number.parseFloat(currentTotal)
+        ).toFixed(2)
+      ),
       variation: calculateVariation(currentTotal),
     },
     7: {
       total: new Intl.NumberFormat("pt-BR", {
         style: "currency",
         currency: "BRL",
-      }).format(+Number.parseFloat(total7Days).toFixed(2)),
+      }).format(
+        +(
+          cpm
+            ? +Number.parseFloat(total7Days) * 1000
+            : +Number.parseFloat(total7Days)
+        ).toFixed(2)
+      ),
       variation: calculateVariation(currentTotal, total7Days),
     },
     14: {
       total: new Intl.NumberFormat("pt-BR", {
         style: "currency",
         currency: "BRL",
-      }).format(+Number.parseFloat(total14Days).toFixed(2)),
+      }).format(
+        +(
+          cpm
+            ? +Number.parseFloat(total14Days) * 1000
+            : +Number.parseFloat(total14Days)
+        ).toFixed(2)
+      ),
       variation: calculateVariation(currentTotal, total14Days),
     },
     30: {
       total: new Intl.NumberFormat("pt-BR", {
         style: "currency",
         currency: "BRL",
-      }).format(+Number.parseFloat(total30Days).toFixed(2)),
+      }).format(
+        +(
+          cpm
+            ? +Number.parseFloat(total30Days) * 1000
+            : +Number.parseFloat(total30Days)
+        ).toFixed(2)
+      ),
       variation: calculateVariation(currentTotal, total30Days),
     },
   };
