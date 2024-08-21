@@ -62,14 +62,14 @@ export class UsersService {
     // user             User     @relation(fields: [userEmail], references: [email])
     // userEmail        String
 
-    await this.prisma.attachments.create({
-      data: {
-        uniqueFilename: multerFile.uniqueFilename,
-        originalFilename: file.originalname,
-        fileSize: file.buffer.length,
-        userEmail: userEmail,
-      },
-    });
+    // await this.prisma.attachments.create({
+    //   data: {
+    //     uniqueFilename: multerFile.uniqueFilename,
+    //     originalFilename: file.originalname,
+    //     fileSize: file.buffer.length,
+    //     userEmail: userEmail,
+    //   },
+    // });
 
     await this.prisma.user.update({
       data: {
