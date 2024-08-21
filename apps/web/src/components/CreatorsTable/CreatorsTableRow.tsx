@@ -28,11 +28,12 @@ const CreatorsTableRow = ({ data }: CreatorsTableRowProps) => {
               <UserIcon color="#FF8C00" strokeWidth="1.66px" />
             ) : (
               <img
+                crossOrigin="anonymous"
                 src={`${data["Url Foto Perfil"]}`}
                 width="38"
                 height="38"
                 alt="Creator Avatar"
-                className=""
+                className="rounded-full"
               />
             )}
           </div>
