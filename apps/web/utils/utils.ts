@@ -426,7 +426,10 @@ export const calculateVariationsCPV = (
   const currentTotalImpressoes = totalCount(data, keys);
   const currentTotalInvestimento = totalCount(data, "Investimento");
 
-  const currentTotalCPV = currentTotalInvestimento / currentTotalImpressoes;
+  const currentTotalCPV =
+    currentTotalImpressoes === 0
+      ? 0
+      : currentTotalInvestimento / currentTotalImpressoes;
 
   const last7DaysData = filterDataByDateRange(data, 7);
   const last14DaysData = filterDataByDateRange(data, 14);
@@ -444,13 +447,19 @@ export const calculateVariationsCPV = (
   const total7Days =
     last7DaysData.length === 0
       ? 0
+      : total7DaysImpressions === 0
+      ? 0
       : total7DaysInvestment / total7DaysImpressions;
   const total14Days =
     last14DaysData.length === 0
       ? 0
+      : total14DaysImpressions === 0
+      ? 0
       : total14DaysInvestment / total14DaysImpressions;
   const total30Days =
     last30DaysData.length === 0
+      ? 0
+      : total30DaysImpressions === 0
       ? 0
       : total30DaysInvestment / total30DaysImpressions;
 
@@ -497,7 +506,9 @@ export const calculateVariationsEngajamento = (
   const currentTotalInvestimento = totalCount(data, "Investimento");
 
   const currentTotalEngajamento =
-    (currentTotalInteractions / currentTotalImpressions) * 100;
+    currentTotalImpressions === 0
+      ? 0
+      : (currentTotalInteractions / currentTotalImpressions) * 100;
 
   const last7DaysData = filterDataByDateRange(data, 7);
   const last14DaysData = filterDataByDateRange(data, 14);
@@ -508,21 +519,27 @@ export const calculateVariationsEngajamento = (
   const total7DaysInvestimento = totalCount(last7DaysData, "Investimento");
 
   const total7DaysEngajamento =
-    (total7DaysInteractions / total7DaysImpressions) * 100;
+    total7DaysImpressions === 0
+      ? 0
+      : (total7DaysInteractions / total7DaysImpressions) * 100;
 
   const total14DaysImpressions = totalCount(last14DaysData, keysImpressions);
   const total14DaysInteractions = totalCount(last14DaysData, keysInteractions);
   const total14DaysInvestimento = totalCount(last14DaysData, "Investimento");
 
   const total14DaysEngajamento =
-    (total14DaysInteractions / total14DaysImpressions) * 100;
+    total14DaysImpressions === 0
+      ? 0
+      : (total14DaysInteractions / total14DaysImpressions) * 100;
 
   const total30DaysImpressions = totalCount(last30DaysData, keysImpressions);
   const total30DaysInteractions = totalCount(last30DaysData, keysInteractions);
   const total30DaysInvestimento = totalCount(last30DaysData, "Investimento");
 
   const total30DaysEngajamento =
-    (total30DaysInteractions / total30DaysImpressions) * 100;
+    total30DaysImpressions === 0
+      ? 0
+      : (total30DaysInteractions / total30DaysImpressions) * 100;
 
   const totalDays = cpe
     ? currentTotalInvestimento / currentTotalEngajamento
@@ -595,7 +612,10 @@ export const calculateVariationsCTR = (
   const currentTotalImpressions = totalCount(data, keysImpressions);
   const currentTotalCliques = totalCount(data, keysCliques);
 
-  const currentTotalCTR = (currentTotalCliques / currentTotalImpressions) * 100;
+  const currentTotalCTR =
+    (currentTotalCliques /
+      (currentTotalImpressions === 0 ? 1 : currentTotalImpressions)) *
+    100;
 
   const last7DaysData = filterDataByDateRange(data, 7);
   const last14DaysData = filterDataByDateRange(data, 14);
@@ -604,17 +624,26 @@ export const calculateVariationsCTR = (
   const total7DaysImpressions = totalCount(last7DaysData, keysImpressions);
   const total7DaysCliques = totalCount(last7DaysData, keysCliques);
 
-  const total7DaysCTR = (total7DaysCliques / total7DaysImpressions) * 100;
+  const total7DaysCTR =
+    (total7DaysCliques /
+      (total7DaysImpressions === 0 ? 1 : total7DaysImpressions)) *
+    100;
 
   const total14DaysImpressions = totalCount(last14DaysData, keysImpressions);
   const total14DaysCliques = totalCount(last14DaysData, keysCliques);
 
-  const total14DaysCTR = (total14DaysCliques / total14DaysImpressions) * 100;
+  const total14DaysCTR =
+    (total14DaysCliques /
+      (total14DaysImpressions === 0 ? 1 : total14DaysImpressions)) *
+    100;
 
   const total30DaysImpressions = totalCount(last30DaysData, keysImpressions);
   const total30DaysCliques = totalCount(last30DaysData, keysCliques);
 
-  const total30DaysCTR = (total30DaysCliques / total30DaysImpressions) * 100;
+  const total30DaysCTR =
+    (total30DaysCliques /
+      (total30DaysImpressions === 0 ? 1 : total30DaysImpressions)) *
+    100;
 
   const total7Days = last7DaysData.length === 0 ? 0 : total7DaysCTR;
   const total14Days = last14DaysData.length === 0 ? 0 : total14DaysCTR;
