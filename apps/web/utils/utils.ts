@@ -418,17 +418,263 @@ export const calculateVariationsCurrency = (
   };
 };
 
+export const calculateVariationsCPV = (
+  data: Influencer[],
+  keys: keyof Influencer | (keyof Influencer)[],
+  cpm?: boolean
+) => {
+  const currentTotalImpressoes = totalCount(data, keys);
+  const currentTotalInvestimento = totalCount(data, "Investimento");
+
+  const currentTotalCPV = currentTotalInvestimento / currentTotalImpressoes;
+
+  const last7DaysData = filterDataByDateRange(data, 7);
+  const last14DaysData = filterDataByDateRange(data, 14);
+  const last30DaysData = filterDataByDateRange(data, 30);
+
+  const total7DaysImpressions = totalCount(last7DaysData, keys);
+  const total7DaysInvestment = totalCount(last7DaysData, "Investimento");
+
+  const total14DaysImpressions = totalCount(last14DaysData, keys);
+  const total14DaysInvestment = totalCount(last14DaysData, "Investimento");
+
+  const total30DaysImpressions = totalCount(last30DaysData, keys);
+  const total30DaysInvestment = totalCount(last30DaysData, "Investimento");
+
+  const total7Days =
+    last7DaysData.length === 0
+      ? 0
+      : total7DaysInvestment / total7DaysImpressions;
+  const total14Days =
+    last14DaysData.length === 0
+      ? 0
+      : total14DaysInvestment / total14DaysImpressions;
+  const total30Days =
+    last30DaysData.length === 0
+      ? 0
+      : total30DaysInvestment / total30DaysImpressions;
+
+  return {
+    0: {
+      total: new Intl.NumberFormat("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+      }).format(+(cpm ? currentTotalCPV * 1000 : currentTotalCPV).toFixed(2)),
+      variation: calculateVariation(`${currentTotalCPV}`),
+    },
+    7: {
+      total: new Intl.NumberFormat("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+      }).format(+(cpm ? total7Days * 1000 : total7Days).toFixed(2)),
+      variation: calculateVariation(`${currentTotalCPV}`, `${total7Days}`),
+    },
+    14: {
+      total: new Intl.NumberFormat("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+      }).format(+(cpm ? total14Days * 1000 : total14Days).toFixed(2)),
+      variation: calculateVariation(`${currentTotalCPV}`, `${total14Days}`),
+    },
+    30: {
+      total: new Intl.NumberFormat("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+      }).format(+(cpm ? total30Days * 1000 : total30Days).toFixed(2)),
+      variation: calculateVariation(`${currentTotalCPV}`, `${total30Days}`),
+    },
+  };
+};
+
+export const calculateVariationsEngajamento = (
+  data: Influencer[],
+  keysImpressions: keyof Influencer | (keyof Influencer)[],
+  keysInteractions: keyof Influencer | (keyof Influencer)[],
+  cpe?: boolean
+) => {
+  const currentTotalImpressions = totalCount(data, keysImpressions);
+  const currentTotalInteractions = totalCount(data, keysInteractions);
+  const currentTotalInvestimento = totalCount(data, "Investimento");
+
+  const currentTotalEngajamento =
+    (currentTotalInteractions / currentTotalImpressions) * 100;
+
+  const last7DaysData = filterDataByDateRange(data, 7);
+  const last14DaysData = filterDataByDateRange(data, 14);
+  const last30DaysData = filterDataByDateRange(data, 30);
+
+  const total7DaysImpressions = totalCount(last7DaysData, keysImpressions);
+  const total7DaysInteractions = totalCount(last7DaysData, keysInteractions);
+  const total7DaysInvestimento = totalCount(last7DaysData, "Investimento");
+
+  const total7DaysEngajamento =
+    (total7DaysInteractions / total7DaysImpressions) * 100;
+
+  const total14DaysImpressions = totalCount(last14DaysData, keysImpressions);
+  const total14DaysInteractions = totalCount(last14DaysData, keysInteractions);
+  const total14DaysInvestimento = totalCount(last14DaysData, "Investimento");
+
+  const total14DaysEngajamento =
+    (total14DaysInteractions / total14DaysImpressions) * 100;
+
+  const total30DaysImpressions = totalCount(last30DaysData, keysImpressions);
+  const total30DaysInteractions = totalCount(last30DaysData, keysInteractions);
+  const total30DaysInvestimento = totalCount(last30DaysData, "Investimento");
+
+  const total30DaysEngajamento =
+    (total30DaysInteractions / total30DaysImpressions) * 100;
+
+  const totalDays = cpe
+    ? currentTotalInvestimento / currentTotalEngajamento
+    : currentTotalEngajamento;
+
+  const total7Days =
+    last7DaysData.length === 0
+      ? 0
+      : cpe
+      ? total7DaysInvestimento / total7DaysEngajamento
+      : total7DaysEngajamento;
+  const total14Days =
+    last14DaysData.length === 0
+      ? 0
+      : cpe
+      ? total14DaysInvestimento / total14DaysEngajamento
+      : total14DaysEngajamento;
+  const total30Days =
+    last30DaysData.length === 0
+      ? 0
+      : cpe
+      ? total30DaysInvestimento / total30DaysEngajamento
+      : total30DaysEngajamento;
+
+  return {
+    0: {
+      total: !cpe
+        ? `${new Intl.NumberFormat("pt-BR").format(+totalDays.toFixed(2))}%`
+        : new Intl.NumberFormat("pt-BR", {
+            style: "currency",
+            currency: "BRL",
+          }).format(+totalDays.toFixed(2)),
+      variation: calculateVariation(`${totalDays}`),
+    },
+    7: {
+      total: !cpe
+        ? `${new Intl.NumberFormat("pt-BR").format(+total7Days.toFixed(2))}%`
+        : new Intl.NumberFormat("pt-BR", {
+            style: "currency",
+            currency: "BRL",
+          }).format(+total7Days.toFixed(2)),
+      variation: calculateVariation(`${totalDays}`, `${total7Days}`),
+    },
+    14: {
+      total: !cpe
+        ? `${new Intl.NumberFormat("pt-BR").format(+total14Days.toFixed(2))}%`
+        : new Intl.NumberFormat("pt-BR", {
+            style: "currency",
+            currency: "BRL",
+          }).format(+total14Days.toFixed(2)),
+      variation: calculateVariation(`${totalDays}`, `${total14Days}`),
+    },
+    30: {
+      total: !cpe
+        ? `${new Intl.NumberFormat("pt-BR").format(+total30Days.toFixed(2))}%`
+        : new Intl.NumberFormat("pt-BR", {
+            style: "currency",
+            currency: "BRL",
+          }).format(+total30Days.toFixed(2)),
+      variation: calculateVariation(`${totalDays}`, `${total30Days}`),
+    },
+  };
+};
+
+export const calculateVariationsCTR = (
+  data: Influencer[],
+  keysImpressions: keyof Influencer | (keyof Influencer)[],
+  keysCliques: keyof Influencer | (keyof Influencer)[]
+) => {
+  const currentTotalImpressions = totalCount(data, keysImpressions);
+  const currentTotalCliques = totalCount(data, keysCliques);
+
+  const currentTotalCTR = (currentTotalCliques / currentTotalImpressions) * 100;
+
+  const last7DaysData = filterDataByDateRange(data, 7);
+  const last14DaysData = filterDataByDateRange(data, 14);
+  const last30DaysData = filterDataByDateRange(data, 30);
+
+  const total7DaysImpressions = totalCount(last7DaysData, keysImpressions);
+  const total7DaysCliques = totalCount(last7DaysData, keysCliques);
+
+  const total7DaysCTR = (total7DaysCliques / total7DaysImpressions) * 100;
+
+  const total14DaysImpressions = totalCount(last14DaysData, keysImpressions);
+  const total14DaysCliques = totalCount(last14DaysData, keysCliques);
+
+  const total14DaysCTR = (total14DaysCliques / total14DaysImpressions) * 100;
+
+  const total30DaysImpressions = totalCount(last30DaysData, keysImpressions);
+  const total30DaysCliques = totalCount(last30DaysData, keysCliques);
+
+  const total30DaysCTR = (total30DaysCliques / total30DaysImpressions) * 100;
+
+  const total7Days = last7DaysData.length === 0 ? 0 : total7DaysCTR;
+  const total14Days = last14DaysData.length === 0 ? 0 : total14DaysCTR;
+  const total30Days = last30DaysData.length === 0 ? 0 : total30DaysCTR;
+
+  return {
+    0: {
+      total: `${new Intl.NumberFormat("pt-BR").format(
+        +currentTotalCTR.toFixed(2)
+      )}%`,
+      variation: calculateVariation(`${currentTotalCTR}`),
+    },
+    7: {
+      total: `${new Intl.NumberFormat("pt-BR").format(
+        +total7Days.toFixed(2)
+      )}%`,
+      variation: calculateVariation(`${currentTotalCTR}`, `${total7Days}`),
+    },
+    14: {
+      total: `${new Intl.NumberFormat("pt-BR").format(
+        +total14Days.toFixed(2)
+      )}%`,
+      variation: calculateVariation(`${currentTotalCTR}`, `${total14Days}`),
+    },
+    30: {
+      total: `${new Intl.NumberFormat("pt-BR").format(
+        +total30Days.toFixed(2)
+      )}%`,
+      variation: calculateVariation(`${currentTotalCTR}`, `${total30Days}`),
+    },
+  };
+};
+
 export const totalInfluencers = (data: Influencer[]) => `${data.length}`;
 
-export const totalCount = (data: Influencer[], dataKey: keyof Influencer) => {
+export const totalCount = (
+  data: Influencer[],
+  dataKey: keyof Influencer | (keyof Influencer)[]
+) => {
   let count = 0;
+  if (!Array.isArray(dataKey)) {
+    for (let i = 0; i < data.length; i++) {
+      const element = data[i];
 
-  for (let i = 0; i < data.length; i++) {
-    const element = data[i];
+      count += Number.parseInt(
+        (element[`${dataKey}`] as string).replaceAll(".", "")
+      );
+    }
+  } else {
+    for (let i = 0; i < data.length; i++) {
+      for (let j = 0; j < dataKey.length; j++) {
+        const key = dataKey[j];
 
-    count += Number.parseInt(
-      (element[`${dataKey}`] as string).replaceAll(".", "")
-    );
+        const element = data[i];
+
+        count += Number.parseInt(
+          (element[`${key}`] as string).replaceAll(".", "")
+        );
+      }
+    }
   }
 
   return count;

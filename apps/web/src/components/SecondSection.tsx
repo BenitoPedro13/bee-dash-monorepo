@@ -7,7 +7,10 @@ import useDataStore, {
 } from "@/store";
 import {
   calculateVariations,
+  calculateVariationsCPV,
+  calculateVariationsCTR,
   calculateVariationsCurrency,
+  calculateVariationsEngajamento,
   calculateVariationsPercentage,
   costPerMetric,
   total,
@@ -41,20 +44,29 @@ const metricConfig: Record<
         totalCPE(data, "CPE Tiktok"),
       ],
       variation: (data) => [
-        calculateVariationsPercentage(data, "Engajamento Tiktok"),
-        calculateVariationsCurrency(data, "CPE Tiktok"),
+        calculateVariationsEngajamento(
+          data,
+          "Impressoes Tiktok",
+          "Interacoes Tiktok"
+        ),
+        calculateVariationsEngajamento(
+          data,
+          "Impressoes Tiktok",
+          "Interacoes Tiktok",
+          true
+        ),
       ],
     },
     {
-      heading: ["Cliques", "Custo por Clique"],
-      sigla: ["Total", "CPC"],
+      heading: ["Cliques", "Taxa de Cliques"],
+      sigla: ["Total", "CTR"],
       metric: (data) => [
         total(data, "Cliques Tiktok"),
         totalCPE(data, "CPC Tiktok"),
       ],
       variation: (data) => [
         calculateVariations(data, "Cliques Tiktok"),
-        calculateVariationsCurrency(data, "CPC Tiktok"),
+        calculateVariationsCTR(data, "Impressoes Tiktok", "Cliques Tiktok"),
       ],
     },
     {
@@ -67,8 +79,8 @@ const metricConfig: Record<
       ],
       variation: (data) => [
         calculateVariations(data, "Impressoes Tiktok"),
-        calculateVariationsCurrency(data, "CPV Tiktok"),
-        calculateVariationsCurrency(data, "CPV Tiktok", true),
+        calculateVariationsCPV(data, "Impressoes Tiktok"),
+        calculateVariationsCPV(data, "Impressoes Tiktok", true),
       ],
     },
     {
@@ -93,17 +105,17 @@ const metricConfig: Record<
         totalCPE(data, "CPE"),
       ],
       variation: (data) => [
-        calculateVariationsPercentage(data, "Engajamento"),
-        calculateVariationsCurrency(data, "CPE"),
+        calculateVariationsEngajamento(data, "Impressoes", "Interacoes"),
+        calculateVariationsEngajamento(data, "Impressoes", "Interacoes", true),
       ],
     },
     {
-      heading: ["Cliques", "Custo por Clique"],
-      sigla: ["Total", "CPC"],
+      heading: ["Cliques", "Taxa de Cliques"],
+      sigla: ["Total", "CTR"],
       metric: (data) => [total(data, "Cliques"), totalCPE(data, "CPC")],
       variation: (data) => [
         calculateVariations(data, "Cliques"),
-        calculateVariationsCurrency(data, "CPV"),
+        calculateVariationsCTR(data, "Impressoes", "Cliques"),
       ],
     },
     {
@@ -116,8 +128,8 @@ const metricConfig: Record<
       ],
       variation: (data) => [
         calculateVariations(data, "Impressoes"),
-        calculateVariationsCurrency(data, "CPV"),
-        calculateVariationsCurrency(data, "CPV", true),
+        calculateVariationsCPV(data, "Impressoes"),
+        calculateVariationsCPV(data, "Impressoes", true),
       ],
     },
     {
@@ -142,13 +154,22 @@ const metricConfig: Record<
         totalCPE(data, ["CPE", "CPE Tiktok"]),
       ],
       variation: (data) => [
-        calculateVariationsPercentage(data, "Engajamento Media"),
-        calculateVariationsCurrency(data, "CPE Media"),
+        calculateVariationsEngajamento(
+          data,
+          ["Impressoes", "Impressoes Tiktok"],
+          ["Interacoes", "Interacoes Tiktok"]
+        ),
+        calculateVariationsEngajamento(
+          data,
+          ["Impressoes", "Impressoes Tiktok"],
+          ["Interacoes", "Interacoes Tiktok"],
+          true
+        ),
       ],
     },
     {
-      heading: ["Cliques", "Custo por Clique"],
-      sigla: ["Total", "CPC"],
+      heading: ["Cliques", "Taxa de Cliques"],
+      sigla: ["Total", "CTR"],
       metric: (data) => [
         total(data, ["Cliques", "Cliques Tiktok"]),
         totalCPE(data, "CPC Media"),
@@ -156,7 +177,11 @@ const metricConfig: Record<
 
       variation: (data) => [
         calculateVariations(data, ["Cliques", "Cliques Tiktok"]),
-        calculateVariationsCurrency(data, "CPV Media"),
+        calculateVariationsCTR(
+          data,
+          ["Impressoes", "Impressoes Tiktok"],
+          ["Cliques", "Cliques Tiktok"]
+        ),
       ],
     },
     {
@@ -170,8 +195,8 @@ const metricConfig: Record<
 
       variation: (data) => [
         calculateVariations(data, ["Impressoes", "Impressoes Tiktok"]),
-        calculateVariationsCurrency(data, "CPV Media"),
-        calculateVariationsCurrency(data, "CPV Media", true),
+        calculateVariationsCPV(data, ["Impressoes", "Impressoes Tiktok"]),
+        calculateVariationsCPV(data, ["Impressoes", "Impressoes Tiktok"], true),
       ],
     },
     {

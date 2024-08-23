@@ -42,9 +42,11 @@ export interface Influencer {
   "Url Foto Perfil": string;
   CPE: string;
   CPC: string;
+  CTR: string;
   CPV: string;
   "CPE Tiktok": string;
   "CPC Tiktok": string;
+  "CTR Tiktok": string;
   "CPV Tiktok": string;
   "Engajamento Media": string;
   "CPE Media": string;

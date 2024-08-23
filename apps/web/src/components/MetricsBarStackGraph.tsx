@@ -109,7 +109,7 @@ const MetricsBarStackGraph = ({
               </div>
             </div>
           </div>
-          <div className="flex items-center gap-4 self-stretch">
+          {/* <div className="flex items-center gap-4 self-stretch">
             <p className="flex-shrink-0 w-auto h-auto whitespace-pre relative font-bold font-nexa-bold text-[#101828] text-3xl leading-[38px]">
               {metric}
             </p>
@@ -118,7 +118,7 @@ const MetricsBarStackGraph = ({
                 <Badge number={metricVariation} />
               </div>
             )}
-          </div>
+          </div> */}
         </div>
         <Component />
       </div>

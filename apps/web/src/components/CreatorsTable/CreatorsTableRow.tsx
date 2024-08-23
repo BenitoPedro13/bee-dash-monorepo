@@ -194,7 +194,7 @@ const CreatorsTableRow = ({ data }: CreatorsTableRowProps) => {
         <p
           className={`flex-shrink-0 flex-grow w-auto h-auto whitespace-nowrap break-words relative ${inter.className} text-[#475466] text-sm`}
         >
-          {data.CPC}
+          {data.CTR}
         </p>
       </td>
       <td>
@@ -215,7 +215,7 @@ const CreatorsTableRow = ({ data }: CreatorsTableRowProps) => {
         <p
           className={`flex-shrink-0 flex-grow w-auto h-auto whitespace-nowrap break-words relative ${inter.className} text-[#475466] text-sm`}
         >
-          {data["CPC Tiktok"]}
+          {data["CTR Tiktok"]}
         </p>
       </td>
       <td>

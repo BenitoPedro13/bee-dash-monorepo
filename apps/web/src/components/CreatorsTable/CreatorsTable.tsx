@@ -102,6 +102,8 @@ const CreatorsTable = () => {
 
         case "Engajamento":
         case "Engajamento Tiktok":
+        case "CTR Tiktok":
+        case "CTR":
           return (
             parsePercentageString(a[sortColumn]) -
             parsePercentageString(b[sortColumn])
@@ -666,15 +668,15 @@ const CreatorsTable = () => {
               <th
                 className={`cursor-pointer flex-shrink-0 w-auto max-w-[300px] h-auto whitespace-pre-wrap break-words relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
                 onClick={() =>
-                  handleSort("CPC", sortColumn, setSortColumn, setSortOrder)
+                  handleSort("CTR", sortColumn, setSortColumn, setSortOrder)
                 }
               >
                 <div className="flex justify-start items-center gap-6">
-                  CPC
+                  CTR
                   <TableSortingIcon
                     sortColumn={sortColumn}
                     sortOrder={sortOrder}
-                    actualColumn={"CPC"}
+                    actualColumn={"CTR"}
                   />
                 </div>
               </th>
@@ -717,7 +719,7 @@ const CreatorsTable = () => {
                 className={`cursor-pointer flex-shrink-0 w-auto max-w-[300px] h-auto whitespace-pre-wrap break-words relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
                 onClick={() =>
                   handleSort(
-                    "CPC Tiktok",
+                    "CTR Tiktok",
                     sortColumn,
                     setSortColumn,
                     setSortOrder
@@ -725,11 +727,11 @@ const CreatorsTable = () => {
                 }
               >
                 <div className="flex justify-start items-center gap-6">
-                  CPC Tiktok
+                  CTR Tiktok
                   <TableSortingIcon
                     sortColumn={sortColumn}
                     sortOrder={sortOrder}
-                    actualColumn={"CPC Tiktok"}
+                    actualColumn={"CTR Tiktok"}
                   />
                 </div>
               </th>
