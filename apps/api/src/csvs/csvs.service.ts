@@ -79,26 +79,26 @@ export class CsvsService {
     console.log(creator, 'creator');
 
     const engajamento =
-      (Number.parseInt(creator['Impressoes']) /
+      (Number.parseInt(creator['Interacoes']) /
         Number.parseInt(
-          creator['Impacto Bruto'] === '0' ? '1' : creator['Impacto Bruto'],
+          creator['Impressoes'] === '0' ? '1' : creator['Impressoes'],
         )) *
       100;
 
     const engajamentoTiktok =
-      (Number.parseInt(creator['Impressoes Tiktok']) /
+      (Number.parseInt(creator['Interacoes Tiktok']) /
         Number.parseInt(
-          creator['Impacto Bruto Tiktok'] === '0'
+          creator['Impressoes Tiktok'] === '0'
             ? '1'
-            : creator['Impacto Bruto Tiktok'],
+            : creator['Impressoes Tiktok'],
         )) *
       100;
 
     const engajamentoMedium =
-      ((Number.parseInt(creator['Impressoes']) +
-        Number.parseInt(creator['Impressoes Tiktok'])) /
-        (Number.parseInt(creator['Impacto Bruto']) +
-          Number.parseInt(creator['Impacto Bruto Tiktok']))) *
+      ((Number.parseInt(creator['Interacoes']) +
+        Number.parseInt(creator['Interacoes Tiktok'])) /
+        (Number.parseInt(creator['Impressoes']) +
+          Number.parseInt(creator['Impressoes Tiktok']))) *
       100;
 
     const cpe = Number.parseInt(creator['Investimento']) / engajamento;
@@ -123,6 +123,23 @@ export class CsvsService {
       Number.parseInt(creator['Investimento']) /
       (Number.parseInt(creator['Cliques Tiktok']) +
         Number.parseInt(creator['Cliques']));
+
+    const ctr =
+      (Number.parseInt(creator['Cliques']) /
+        Number.parseInt(
+          creator['Impressoes'] === '0' ? '1' : creator['Impressoes'],
+        )) *
+      100;
+
+    const ctrTiktok =
+      (Number.parseInt(creator['Cliques Tiktok']) /
+        Number.parseInt(
+          creator['Impressoes Tiktok'] === '0'
+            ? '1'
+            : creator['Impressoes Tiktok'],
+        )) *
+      100;
+
     const cpv =
       Number.parseInt(creator['Investimento']) /
       Number.parseInt(
@@ -151,13 +168,14 @@ export class CsvsService {
     creator['Posts'] = posts.toString();
 
     creator['Engajamento'] =
-      (engajamento === +creator['Impressoes'] ? 0 : engajamento).toFixed(2) +
-      '%';
+      (engajamento === +creator['Impressoes'] * 100 ? 0 : engajamento).toFixed(
+        2,
+      ) + '%';
     creator['CPE'] =
       'R$' + (cpe === +creator['Investimento'] ? 0 : cpe).toFixed(2);
 
     creator['Engajamento Tiktok'] =
-      (engajamentoTiktok === +creator['Impressoes Tiktok']
+      (engajamentoTiktok === +creator['Impressoes Tiktok'] * 100
         ? 0
         : engajamentoTiktok
       ).toFixed(2) + '%';
@@ -177,6 +195,13 @@ export class CsvsService {
     creator['CPC Tiktok'] =
       'R$' +
       (cpcTiktok === +creator['Investimento'] ? 0 : cpcTiktok).toFixed(2);
+
+    creator['CTR'] =
+      (ctr === +creator['Cliques'] * 100 ? 0 : ctr).toFixed(2) + '%';
+    creator['CTR Tiktok'] =
+      (ctrTiktok === +creator['Cliques Tiktok'] * 100 ? 0 : ctrTiktok).toFixed(
+        2,
+      ) + '%';
 
     creator['CPC Media'] =
       'R$' + (cpcMedium === Infinity ? 0 : cpcMedium).toFixed(2);
