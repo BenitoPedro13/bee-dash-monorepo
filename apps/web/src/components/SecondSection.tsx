@@ -38,10 +38,10 @@ const metricConfig: Record<
   tiktok: [
     {
       heading: ["Engajamento Médio", "Custo por Engajamento"],
-      sigla: ["Total", "CPE"],
+      sigla: ["Total"],
       metric: (data) => [
         totalPercentage(data, "Engajamento Tiktok"),
-        totalCPE(data, "CPE Tiktok"),
+        // totalCPE(data, "CPE Tiktok"),
       ],
       variation: (data) => [
         calculateVariationsEngajamento(
@@ -49,12 +49,12 @@ const metricConfig: Record<
           "Impressoes Tiktok",
           "Interacoes Tiktok"
         ),
-        calculateVariationsEngajamento(
-          data,
-          "Impressoes Tiktok",
-          "Interacoes Tiktok",
-          true
-        ),
+        // calculateVariationsEngajamento(
+        //   data,
+        //   "Impressoes Tiktok",
+        //   "Interacoes Tiktok",
+        //   true
+        // ),
       ],
     },
     {
@@ -71,16 +71,16 @@ const metricConfig: Record<
     },
     {
       heading: ["Views", "Custo por View", "Custo por Mil Views"],
-      sigla: ["Total", "CPV", "CPM"],
+      sigla: ["Total", "CPV"],
       metric: (data) => [
         total(data, "Impressoes Tiktok"),
         totalCPE(data, "CPV Tiktok"),
-        totalCPE(data, "CPV Tiktok"),
+        // totalCPE(data, "CPV Tiktok"),
       ],
       variation: (data) => [
         calculateVariations(data, "Impressoes Tiktok"),
         calculateVariationsCPV(data, "Impressoes Tiktok"),
-        calculateVariationsCPV(data, "Impressoes Tiktok", true),
+        // calculateVariationsCPV(data, "Impressoes Tiktok", true),
       ],
     },
     {
@@ -99,14 +99,14 @@ const metricConfig: Record<
   instagram: [
     {
       heading: ["Engajamento Médio", "Custo por Engajamento"],
-      sigla: ["Total", "CPE"],
+      sigla: ["Total"],
       metric: (data) => [
         totalPercentage(data, "Engajamento"),
-        totalCPE(data, "CPE"),
+        // totalCPE(data, "CPE"),
       ],
       variation: (data) => [
         calculateVariationsEngajamento(data, "Impressoes", "Interacoes"),
-        calculateVariationsEngajamento(data, "Impressoes", "Interacoes", true),
+        // calculateVariationsEngajamento(data, "Impressoes", "Interacoes", true),
       ],
     },
     {
@@ -120,16 +120,16 @@ const metricConfig: Record<
     },
     {
       heading: ["Views", "Custo por View", "Custo por Mil Views"],
-      sigla: ["Total", "CPV", "CPM"],
+      sigla: ["Total", "CPV"],
       metric: (data) => [
         total(data, "Impressoes"),
         totalCPE(data, "CPV"),
-        totalCPE(data, "CPV"),
+        // totalCPE(data, "CPV"),
       ],
       variation: (data) => [
         calculateVariations(data, "Impressoes"),
         calculateVariationsCPV(data, "Impressoes"),
-        calculateVariationsCPV(data, "Impressoes", true),
+        // calculateVariationsCPV(data, "Impressoes", true),
       ],
     },
     {
@@ -148,10 +148,10 @@ const metricConfig: Record<
   all: [
     {
       heading: ["Engajamento Médio", "Custo por Engajamento"],
-      sigla: ["Total", "CPE"],
+      sigla: ["Total"],
       metric: (data) => [
         totalPercentage(data, "Engajamento Media"),
-        totalCPE(data, ["CPE", "CPE Tiktok"]),
+        // totalCPE(data, ["CPE", "CPE Tiktok"]),
       ],
       variation: (data) => [
         calculateVariationsEngajamento(
@@ -159,12 +159,12 @@ const metricConfig: Record<
           ["Impressoes", "Impressoes Tiktok"],
           ["Interacoes", "Interacoes Tiktok"]
         ),
-        calculateVariationsEngajamento(
-          data,
-          ["Impressoes", "Impressoes Tiktok"],
-          ["Interacoes", "Interacoes Tiktok"],
-          true
-        ),
+        // calculateVariationsEngajamento(
+        //   data,
+        //   ["Impressoes", "Impressoes Tiktok"],
+        //   ["Interacoes", "Interacoes Tiktok"],
+        //   true
+        // ),
       ],
     },
     {
@@ -186,17 +186,17 @@ const metricConfig: Record<
     },
     {
       heading: ["Views", "Custo por View", "Custo por Mil Views"],
-      sigla: ["Total", "CPV", "CPM"],
+      sigla: ["Total", "CPV"],
       metric: (data) => [
         total(data, ["Impressoes", "Impressoes Tiktok"]),
         totalCPE(data, "CPV Media"),
-        totalCPE(data, "CPV Media"),
+        // totalCPE(data, "CPV Media"),
       ],
 
       variation: (data) => [
         calculateVariations(data, ["Impressoes", "Impressoes Tiktok"]),
         calculateVariationsCPV(data, ["Impressoes", "Impressoes Tiktok"]),
-        calculateVariationsCPV(data, ["Impressoes", "Impressoes Tiktok"], true),
+        // calculateVariationsCPV(data, ["Impressoes", "Impressoes Tiktok"], true),
       ],
     },
     {

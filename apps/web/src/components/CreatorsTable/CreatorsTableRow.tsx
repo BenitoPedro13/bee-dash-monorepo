@@ -183,13 +183,13 @@ const CreatorsTableRow = ({ data }: CreatorsTableRowProps) => {
           {data["Engajamento Tiktok"]}
         </p>
       </td>
-      <td>
+      {/* <td>
         <p
           className={`flex-shrink-0 flex-grow w-auto h-auto whitespace-nowrap break-words relative ${inter.className} text-[#475466] text-sm`}
         >
           {data.CPE}
         </p>
-      </td>
+      </td> */}
       <td>
         <p
           className={`flex-shrink-0 flex-grow w-auto h-auto whitespace-nowrap break-words relative ${inter.className} text-[#475466] text-sm`}
@@ -204,13 +204,13 @@ const CreatorsTableRow = ({ data }: CreatorsTableRowProps) => {
           {data.CPV}
         </p>
       </td>
-      <td>
+      {/* <td>
         <p
           className={`flex-shrink-0 flex-grow w-auto h-auto whitespace-nowrap break-words relative ${inter.className} text-[#475466] text-sm`}
         >
           {data["CPE Tiktok"]}
         </p>
-      </td>
+      </td> */}
       <td>
         <p
           className={`flex-shrink-0 flex-grow w-auto h-auto whitespace-nowrap break-words relative ${inter.className} text-[#475466] text-sm`}

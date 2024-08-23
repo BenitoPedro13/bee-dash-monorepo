@@ -650,7 +650,7 @@ const CreatorsTable = () => {
                   />
                 </div>
               </th>
-              <th
+              {/* <th
                 className={`cursor-pointer flex-shrink-0 w-auto max-w-[300px] h-auto whitespace-pre-wrap break-words relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
                 onClick={() =>
                   handleSort("CPE", sortColumn, setSortColumn, setSortOrder)
@@ -664,7 +664,7 @@ const CreatorsTable = () => {
                     actualColumn={"CPE"}
                   />
                 </div>
-              </th>
+              </th> */}
               <th
                 className={`cursor-pointer flex-shrink-0 w-auto max-w-[300px] h-auto whitespace-pre-wrap break-words relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
                 onClick={() =>
@@ -695,7 +695,7 @@ const CreatorsTable = () => {
                   />
                 </div>
               </th>
-              <th
+              {/* <th
                 className={`cursor-pointer flex-shrink-0 w-auto max-w-[300px] h-auto whitespace-pre-wrap break-words relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
                 onClick={() =>
                   handleSort(
@@ -714,7 +714,7 @@ const CreatorsTable = () => {
                     actualColumn={"CPE Tiktok"}
                   />
                 </div>
-              </th>
+              </th> */}
               <th
                 className={`cursor-pointer flex-shrink-0 w-auto max-w-[300px] h-auto whitespace-pre-wrap break-words relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
                 onClick={() =>
