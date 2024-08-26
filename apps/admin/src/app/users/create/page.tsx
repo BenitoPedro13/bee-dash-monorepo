@@ -113,6 +113,20 @@ export default function UserCreate() {
         </Form.Item>
 
         <Form.Item
+          label={"Table URL"}
+          name={["urlTable"]}
+          rules={[
+            {
+              required: false,
+              type: "url",
+              message: "Please enter a valid URL",
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item
           label={"Color"}
           name={["color"]}
           initialValue={"#FF8C00"}

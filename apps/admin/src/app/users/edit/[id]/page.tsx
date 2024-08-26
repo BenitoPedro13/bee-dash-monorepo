@@ -390,6 +390,14 @@ export default function UsersEdit() {
           <Input />
         </Form.Item>
 
+        <Form.Item
+          label="Table URL"
+          name="urlTable"
+          initialValue={data?.data.urlTable}
+        >
+          <Input />
+        </Form.Item>
+
         <Form.Item label="Color" name="color" initialValue={data?.data.color}>
           <input
             type="color"

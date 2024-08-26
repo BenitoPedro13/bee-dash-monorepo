@@ -79,6 +79,7 @@ export default function UsersList() {
           dataIndex="urlProfilePicture"
           title="Profile Picture URL"
         />
+        {/* <Table.Column dataIndex="urlTable" title="Table URL" /> */}
         <Table.Column
           title="Actions"
           dataIndex="actions"
