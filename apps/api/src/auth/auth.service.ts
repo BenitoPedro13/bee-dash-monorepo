@@ -64,6 +64,7 @@ export class AuthService {
           urlProfilePicture: !user.urlProfilePicture
             ? ''
             : user.urlProfilePicture,
+          urlTable: !user.urlTable ? '' : user.urlTable,
           email: user.email,
           name: user.name,
           campaignName: user.campaignName,
