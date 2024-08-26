@@ -15,6 +15,7 @@ import arrowLeft from "@/../public/arrow-left.svg";
 import arrowRight from "@/../public/arrow-right.svg";
 import PerformanceIcon from "../MetricsIcons/PerformanceIcon";
 import { SearchIcon, X } from "lucide-react";
+import Link from "next/link";
 
 const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 const inter = Inter({ subsets: ["latin"] });
@@ -39,6 +40,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 const CreatorsTable = () => {
   const { data: globalData } = useDataStore((state) => state.data);
+  const { urlTable } = useDataStore((state) => state.session.user);
   const [data, setData] = useState([...globalData]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -293,11 +295,15 @@ const CreatorsTable = () => {
                 </div>
               </div>
             </div>
-            <button className="flex py-2 px-4 justify-center items-center gap-[10px] rounded-lg bg-[#FF8C00]">
+            <Link
+              href={urlTable ?? "#"}
+              target="_blank"
+              className="flex py-2 px-4 justify-center items-center gap-[10px] rounded-lg bg-[#FF8C00]"
+            >
               <p className="text-white opacity-95 font-nexa-bold text-sm font-semibold">
                 Abrir Planilha
               </p>
-            </button>
+            </Link>
           </div>
         </div>
       </div>

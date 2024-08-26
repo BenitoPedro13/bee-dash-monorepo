@@ -80,6 +80,7 @@ export interface Session {
     estimatedExecutedInvestment?: number;
     totalInitialInvestment?: number;
     urlProfilePicture?: string;
+    urlTable?: string;
     createdAt: string;
     updatedAt: string;
   };
