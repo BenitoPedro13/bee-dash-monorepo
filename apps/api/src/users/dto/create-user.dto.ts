@@ -10,4 +10,5 @@ export class CreateUserDto {
   byPosts: boolean;
   color?: string;
   urlProfilePicture?: string;
+  urlTable?: string;
 }
