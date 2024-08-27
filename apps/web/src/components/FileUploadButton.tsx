@@ -1,3 +1,5 @@
+"use client";
+
 import useDataStore, { Attachment, baseApiUrl } from "@/store";
 import React, { useRef } from "react";
 import { parseCookies } from "nookies";
@@ -11,6 +13,9 @@ const FileUploadButton = ({
   attachments,
   setAttachments,
 }: FileUploadButtonProps) => {
+  const { color } = useDataStore((state) => state.session.user);
+  const hexColor =
+    color === undefined ? "#FF8C00" : color.length !== 7 ? "#FF8C00" : color;
   const { "bee-dash-token": access_token } = parseCookies();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const newAttachments = [...attachments];
@@ -52,6 +57,9 @@ const FileUploadButton = ({
       <button
         className="flex py-2 px-4 justify-center items-center gap-[10px] rounded-lg bg-[#FF8C00]"
         onClick={handleButtonClick}
+        style={{
+          backgroundColor: hexColor,
+        }}
       >
         <p className="flex items-center gap-2 text-white opacity-95 font-nexa-bold text-sm font-semibold">
           Enviar Anexo

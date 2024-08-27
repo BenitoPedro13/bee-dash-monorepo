@@ -40,7 +40,9 @@ const inter = Inter({ subsets: ["latin"] });
 
 const CreatorsTable = () => {
   const { data: globalData } = useDataStore((state) => state.data);
-  const { urlTable } = useDataStore((state) => state.session.user);
+  const { urlTable, color } = useDataStore((state) => state.session.user);
+  const hexColor =
+    color === undefined ? "#FF8C00" : color.length !== 7 ? "#FF8C00" : color;
   const [data, setData] = useState([...globalData]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -298,7 +300,10 @@ const CreatorsTable = () => {
             <Link
               href={urlTable ?? "#"}
               target="_blank"
-              className="flex py-2 px-4 justify-center items-center gap-[10px] rounded-lg bg-[#FF8C00]"
+              className="flex py-2 px-4 justify-center items-center gap-[10px] rounded-lg"
+              style={{
+                backgroundColor: hexColor,
+              }}
             >
               <p className="text-white opacity-95 font-nexa-bold text-sm font-semibold">
                 Abrir Planilha
