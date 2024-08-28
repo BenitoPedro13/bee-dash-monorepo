@@ -105,7 +105,7 @@ export function generateShadesAndTintsRandomly(
   const step = 1 / (count + 1);
 
   // Generate shades by darkening the color
-  for (let i = 1; i <= Math.floor(count / 2); i++) {
+  for (let i = 1; i <= Math.ceil(count / 2); i++) {
     const factor = 1 - i * step;
     const adjustedR = Math.round(r * factor);
     const adjustedG = Math.round(g * factor);
@@ -122,6 +122,8 @@ export function generateShadesAndTintsRandomly(
     const j = Math.floor(Math.random() * (i + 1));
     [variations[i], variations[j]] = [variations[j], variations[i]];
   }
+
+  console.log(variations, "variations", Math.ceil(count / 2), 1 / (count + 1));
 
   return variations;
 }
