@@ -27,7 +27,11 @@ import {
 import { UploadOutlined } from "@ant-design/icons";
 import { useParams } from "next/navigation";
 import axios from "axios";
-import { dataProvider, LOCAL_API_URL } from "@providers/data-provider";
+import {
+  BACKEND_API_URL,
+  dataProvider,
+  LOCAL_API_URL,
+} from "@providers/data-provider";
 import { RcFile } from "antd/es/upload";
 import { useState, useEffect } from "react";
 import {
@@ -36,6 +40,7 @@ import {
   ICreatorsSearchResponse,
 } from "@database/services/CreatorService";
 import { Posts } from "@types";
+import Link from "next/link";
 
 export default function UsersEdit() {
   const params = useParams<{ id: string }>();
@@ -178,6 +183,29 @@ export default function UsersEdit() {
     try {
       const response = await axios.post(
         `${baseApiUrl}/users/upload-attachment`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      return true;
+    } catch (error) {
+      console.error("Error uploading file", error);
+      return false;
+    }
+  };
+
+  const handleUploadCreatorImage = async ({ file }: { file: RcFile }) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("user_email", data?.data.email);
+
+    try {
+      const response = await axios.post(
+        `${baseApiUrl}/users/upload-creator-image`,
         formData,
         {
           headers: {
@@ -449,6 +477,69 @@ export default function UsersEdit() {
         </Upload>
       </Form.Item>
 
+      <Form.Item label="Creator Images">
+        <Upload
+          beforeUpload={async (file) =>
+            await handleUploadCreatorImage({ file: file })
+          }
+        >
+          <Button icon={<UploadOutlined />}>
+            Cique para fazer o upload da Imagem de um Influencer
+          </Button>
+        </Upload>
+        <List>
+          <Table
+            scroll={{
+              x: true,
+            }}
+            rowKey="id"
+            dataSource={attachments?.data.filter((item) =>
+              item.uniqueFilename.includes("-creatorImage-")
+            )}
+            pagination={{
+              current: attachmentsCurrentPage,
+              pageSize: attachments?.data.filter((item) =>
+                item.uniqueFilename.includes("-creatorImage-")
+              ).length,
+              total: attachments?.data.filter((item) =>
+                item.uniqueFilename.includes("-creatorImage-")
+              ).length,
+              onChange: (page, pageSize) => {
+                attachmentsSetCurrentPage(page);
+                attachmentsSetCurrentPageSize(pageSize);
+              },
+            }}
+          >
+            <Table.Column dataIndex="id" title="ID" />
+            <Table.Column dataIndex="originalFilename" title="Nome Original" />
+            <Table.Column
+              dataIndex="lintToAtachment"
+              title="Link da Imagem"
+              render={(_, record: BaseRecord) => (
+                <Link
+                  href={`${BACKEND_API_URL}/public/${record.uniqueFilename}`}
+                >{`${BACKEND_API_URL}/public/${record.uniqueFilename}`}</Link>
+              )}
+            />
+            <Table.Column dataIndex="createdAt" title="Criado em" />
+            <Table.Column
+              title="Actions"
+              dataIndex="actions"
+              render={(_, record: BaseRecord) => (
+                <Space>
+                  <DeleteButton
+                    hideText
+                    resource="attachments"
+                    size="small"
+                    recordItemId={record.id}
+                  />
+                </Space>
+              )}
+            />
+          </Table>
+        </List>
+      </Form.Item>
+
       <Form.Item label="Anexos">
         <Upload
           beforeUpload={async (file) =>
@@ -468,8 +559,12 @@ export default function UsersEdit() {
             dataSource={attachments?.data}
             pagination={{
               current: attachmentsCurrentPage,
-              pageSize: attachmentsCurrentPageSize,
-              total: attachments?.total,
+              pageSize: attachments?.data.filter(
+                (item) => !item.uniqueFilename.includes("-creatorImage-")
+              ).length,
+              total: attachments?.data.filter(
+                (item) => !item.uniqueFilename.includes("-creatorImage-")
+              ).length,
               onChange: (page, pageSize) => {
                 attachmentsSetCurrentPage(page);
                 attachmentsSetCurrentPageSize(pageSize);
