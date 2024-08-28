@@ -33,7 +33,7 @@ const CreatorsTableRow = ({ data }: CreatorsTableRowProps) => {
                 width="38"
                 height="38"
                 alt="Creator Avatar"
-                className="rounded-full"
+                className="rounded-full w-[38px] h-[38px]"
               />
             )}
           </div>
