@@ -123,7 +123,7 @@ export function generateShadesAndTintsRandomly(
     [variations[i], variations[j]] = [variations[j], variations[i]];
   }
 
-  console.log(variations, "variations", Math.ceil(count / 2), 1 / (count + 1));
+  // console.log(variations, "variations", Math.ceil(count / 2), 1 / (count + 1));
 
   return variations;
 }
