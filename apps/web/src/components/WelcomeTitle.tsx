@@ -7,12 +7,20 @@ const WelcomeTitle = () => {
   const session = useDataStore((state) => state.session);
   const setMode = useDataStore((state) => state.setMode);
 
+  const getGreeting = () => {
+    const hours = new Date().getHours();
+    if (hours > 0 && hours < 6) return "Boa madrugada";
+    if (hours < 12) return "Bom dia";
+    if (hours < 18) return "Boa tarde";
+    return "Boa noite";
+  };
+
   return (
     <div className="flex flex-col items-start gap-3 self-stretch">
       <div className="flex justify-center items-start self-stretch gap-3 flex-col md:flex-row md:justify-between md:items-center md:gap-0">
         <div className="flex items-center">
           <h1 className="flex-shrink-0 w-full h-auto whitespace-pre-wrap break-words relative font-Balgin-Display text-[#000] text-[36px] font-nexa font-bold leading-none">
-            {session.user.name}
+            {`${getGreeting()}, ${session.user.name}!`}
           </h1>
         </div>
 
