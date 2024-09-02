@@ -55,6 +55,16 @@ export default function RootLayout({
                           canDelete: true,
                         },
                       },
+                      {
+                        name: "campaigns",
+                        list: "/campaigns",
+                        create: "/campaigns/create",
+                        edit: "/campaigns/edit/:id",
+                        show: "/campaigns/show/:id",
+                        meta: {
+                          canDelete: true,
+                        },
+                      },
                     ]}
                     options={{
                       syncWithLocation: true,

@@ -8,6 +8,7 @@ import {
   ShowButton,
   useForm,
   useModalForm,
+  useSelect,
 } from "@refinedev/antd";
 import { EyeOutlined } from "@ant-design/icons";
 import { BaseRecord, useModal, useOne, useTable } from "@refinedev/core";
@@ -45,7 +46,14 @@ import Link from "next/link";
 export default function UsersEdit() {
   const params = useParams<{ id: string }>();
   const { formProps, saveButtonProps } = useForm({});
-  const { data, isLoading } = useOne({ resource: "users", id: params.id });
+  const { data, isLoading } = useOne({ resource: "campaigns", id: params.id });
+  const { selectProps: usersSelectProps, queryResult: usersResult } = useSelect(
+    {
+      resource: "users",
+      optionLabel: "email",
+      optionValue: "id",
+    }
+  );
   const baseApiUrl = dataProvider.getApiUrl();
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -319,21 +327,7 @@ export default function UsersEdit() {
     <Edit saveButtonProps={saveButtonProps}>
       <Form {...formProps} layout="vertical">
         <Form.Item
-          label="Email"
-          name="email"
-          initialValue={data?.data.email}
-          rules={[
-            {
-              required: true,
-              type: "email",
-            },
-          ]}
-        >
-          <Input />
-        </Form.Item>
-
-        <Form.Item
-          label="Name"
+          label="Campaign Name"
           name="name"
           initialValue={data?.data.name}
           rules={[
@@ -346,19 +340,14 @@ export default function UsersEdit() {
         </Form.Item>
 
         <Form.Item
-          label="Password"
-          name="password"
-          initialValue={data?.data.password}
-          rules={[
-            {
-              required: true,
-            },
-          ]}
+          label="Table URL"
+          name="urlTable"
+          initialValue={data?.data.urlTable}
         >
-          <Input.Password />
+          <Input />
         </Form.Item>
 
-        {/* <Form.Item
+        <Form.Item
           label={"Usar dados dos Posts dos Creators"}
           name={"byPosts"}
           rules={[
@@ -376,67 +365,20 @@ export default function UsersEdit() {
         </Form.Item>
 
         <Form.Item
-          label="Total Initial Investment"
-          name="totalInitialInvestment"
-          initialValue={data?.data.totalInitialInvestment}
+          label={"Usuario"}
+          name={["userId"]}
           rules={[
             {
               required: true,
-              type: "number",
-              min: 0,
+              message: "Selecione a qual usuario essa Campanha pertence.",
             },
           ]}
         >
-          <InputNumber style={{ width: "100%" }} />
-        </Form.Item>
-
-        <Form.Item
-          label="Estimated Executed Investment"
-          name="estimatedExecutedInvestment"
-          initialValue={data?.data.estimatedExecutedInvestment}
-          rules={[
-            {
-              required: true,
-              type: "number",
-              min: 0,
-            },
-          ]}
-        >
-          <InputNumber style={{ width: "100%" }} />
-        </Form.Item>
-
-        <Form.Item
-          label="Campaign Name"
-          name="campaignName"
-          initialValue={data?.data.campaignName}
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-        >
-          <Input />
-        </Form.Item>
-
-        <Form.Item
-          label="Table URL"
-          name="urlTable"
-          initialValue={data?.data.urlTable}
-        >
-          <Input />
-        </Form.Item> */}
-
-        <Form.Item label="Color" name="color" initialValue={data?.data.color}>
-          <input
-            type="color"
-            id="color"
-            name="color"
-            value={data?.data.color ?? "#0A0A0A"}
-          />
+          <Select {...usersSelectProps} />
         </Form.Item>
       </Form>
 
-      <Form.Item label="Foto de Perfil">
+      {/* <Form.Item label="Foto de Perfil">
         <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
           {data?.data.urlProfilePicture ? (
             <img
@@ -459,23 +401,25 @@ export default function UsersEdit() {
             </Button>
           </Upload>
         </div>
-      </Form.Item>
-
-      {/* <Form.Item label="Arquivo CSV">
-        <div>
-          {data?.data.performances[0]?.originalFilename ??
-            "Nenhum CSV existente para esse usuario"}
-        </div>
-        <Upload
-          beforeUpload={async (file) => await handleUploadCsv({ file: file })}
-        >
-          <Button icon={<UploadOutlined />}>
-            {data?.data.performances[0]?.originalFilename
-              ? "Clique para substituir o CSV"
-              : "Cique para fazer o upload do CSV"}
-          </Button>
-        </Upload>
       </Form.Item> */}
+
+      {data?.data.byPosts && (
+        <Form.Item label="Arquivo CSV">
+          <div>
+            {data?.data.performances[0]?.originalFilename ??
+              "Nenhum CSV existente para esse usuario"}
+          </div>
+          <Upload
+            beforeUpload={async (file) => await handleUploadCsv({ file: file })}
+          >
+            <Button icon={<UploadOutlined />}>
+              {data?.data.performances[0]?.originalFilename
+                ? "Clique para substituir o CSV"
+                : "Cique para fazer o upload do CSV"}
+            </Button>
+          </Upload>
+        </Form.Item>
+      )}
 
       {/* <Form.Item label="Creator Images">
         <Upload
@@ -540,7 +484,7 @@ export default function UsersEdit() {
         </List>
       </Form.Item> */}
 
-      {/* <Form.Item label="Anexos">
+      <Form.Item label="Anexos">
         <Upload
           beforeUpload={async (file) =>
             await handleUploadAttachment({ file: file })
@@ -590,17 +534,14 @@ export default function UsersEdit() {
             />
           </Table>
         </List>
-      </Form.Item> */}
+      </Form.Item>
 
-      {/* <Form.Item label="Posts">
+      <Form.Item label="Posts">
         <Input
           placeholder="Filter Posts By Creator Name"
           style={{ width: "calc(100% - 200px)", marginRight: "8px" }}
         />
-        <Button
-          type="primary"
-          style={{ marginRight: "8px" }}
-        >
+        <Button type="primary" style={{ marginRight: "8px" }}>
           Search
         </Button>
         <Button onClick={() => createModalShow()} type="primary">
@@ -1061,7 +1002,7 @@ export default function UsersEdit() {
             </Table>
           </List>
         </p>
-      </Modal> */}
+      </Modal>
     </Edit>
   );
 }

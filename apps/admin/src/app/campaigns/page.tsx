@@ -11,7 +11,7 @@ import { CrudFilter, useMany, type BaseRecord } from "@refinedev/core";
 import { Space, Table } from "antd";
 import { useSearchParams } from "next/navigation";
 
-export default function UsersList() {
+export default function CampaignList() {
   const searchParams = useSearchParams();
   const pageSize = searchParams.get("pageSize")
     ? Number(searchParams.get("pageSize"))
@@ -62,24 +62,10 @@ export default function UsersList() {
         }}
       >
         <Table.Column dataIndex="id" title="ID" />
-        <Table.Column dataIndex="email" title="Email" />
-        <Table.Column dataIndex="name" title="Name" />
-        <Table.Column dataIndex="password" title="Password" />
-        {/* <Table.Column
-          dataIndex="totalInitialInvestment"
-          title="Total Initial Investment"
-        />
-        <Table.Column
-          dataIndex="estimatedExecutedInvestment"
-          title="Estimated Executed Investment"
-        />
-        <Table.Column dataIndex="campaignName" title="Campaign Name" /> */}
-        <Table.Column dataIndex="color" title="Color" />
-        <Table.Column
-          dataIndex="urlProfilePicture"
-          title="Profile Picture URL"
-        />
-        {/* <Table.Column dataIndex="urlTable" title="Table URL" /> */}
+        <Table.Column dataIndex="name" title="Campaign Name" />
+        <Table.Column dataIndex="urlTable" title="Table URL" />
+        <Table.Column dataIndex="byPost" title="Usa Posts Table" />
+        <Table.Column dataIndex={["user", "email"]} title="Usuario" />
         <Table.Column
           title="Actions"
           dataIndex="actions"

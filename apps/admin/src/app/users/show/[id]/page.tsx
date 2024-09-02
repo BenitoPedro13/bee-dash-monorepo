@@ -33,10 +33,6 @@ export default function UserShow() {
       <Title level={5}>Updated At</Title>
       <TextField value={new Date(record?.updatedAt).toLocaleString()} />
 
-      <Title level={5}>Total Initial Investment</Title>
-      <TextField value={record?.totalInitialInvestment} />
-
-      <Title level={5}>Color</Title>
       <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
         <TextField value={record?.color} />
         <input
@@ -48,11 +44,17 @@ export default function UserShow() {
         />
       </div>
 
+      {/* <Title level={5}>Total Initial Investment</Title>
+      <TextField value={record?.totalInitialInvestment} />
+
+      <Title level={5}>Color</Title>
+      
+
       <Title level={5}>Campaign Name</Title>
       <TextField value={record?.campaignName} />
 
       <Title level={5}>Estimated Executed Investment</Title>
-      <TextField value={record?.estimatedExecutedInvestment} />
+      <TextField value={record?.estimatedExecutedInvestment} /> */}
 
       <Title level={5}>Profile Picture URL</Title>
       <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>

@@ -50,7 +50,7 @@ export default function UserCreate() {
           <Input.Password />
         </Form.Item>
 
-        <Form.Item
+        {/* <Form.Item
           label={"Usar dados dos Posts dos Creators"}
           name={["byPosts"]}
           initialValue={false}
@@ -125,7 +125,7 @@ export default function UserCreate() {
         >
           <Input />
         </Form.Item>
-
+ */}
         <Form.Item
           label={"Color"}
           name={["color"]}
