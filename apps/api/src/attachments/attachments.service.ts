@@ -17,10 +17,10 @@ export class AttachmentsService {
     });
   }
 
-  async findAll(userEmail: string) {
+  async findAll(campaignId: number) {
     return this.prismaService.attachments.findMany({
       where: {
-        userEmail,
+        campaignId,
       },
     });
   }
@@ -31,14 +31,14 @@ export class AttachmentsService {
     sort,
     order,
     // name,
-    userEmail,
+    campaignId,
   }: {
     start: number;
     end: number;
     sort: sortFields<Attachments>;
     order: sortOrder;
     // name: string | null;
-    userEmail: string;
+    campaignId: number;
   }) {
     const orderBy = sort.map((item, index) => {
       return {
@@ -53,7 +53,7 @@ export class AttachmentsService {
       skip: start,
       orderBy: orderBy,
       where: {
-        userEmail,
+        campaignId,
       },
     });
 
@@ -61,7 +61,7 @@ export class AttachmentsService {
       result,
       total: await this.prismaService.attachments.count({
         where: {
-          userEmail,
+          campaignId,
         },
       }),
     };

@@ -38,9 +38,9 @@ export class AuthService {
           : user.urlProfilePicture,
         email: user.email,
         name: user.name,
-        campaignName: user.campaignName,
-        totalInitialInvestment: user.totalInitialInvestment,
-        estimatedExecutedInvestment: user.estimatedExecutedInvestment,
+        // campaignName: user.campaignName,
+        // totalInitialInvestment: user.totalInitialInvestment,
+        // estimatedExecutedInvestment: user.estimatedExecutedInvestment,
       },
     };
   }
@@ -64,12 +64,12 @@ export class AuthService {
           urlProfilePicture: !user.urlProfilePicture
             ? ''
             : user.urlProfilePicture,
-          urlTable: !user.urlTable ? '' : user.urlTable,
+          // urlTable: !user.urlTable ? '' : user.urlTable,
           email: user.email,
           name: user.name,
-          campaignName: user.campaignName,
-          totalInitialInvestment: user.totalInitialInvestment,
-          estimatedExecutedInvestment: user.estimatedExecutedInvestment,
+          // campaignName: user.campaignName,
+          // totalInitialInvestment: user.totalInitialInvestment,
+          // estimatedExecutedInvestment: user.estimatedExecutedInvestment,
         },
       };
     } catch (error) {

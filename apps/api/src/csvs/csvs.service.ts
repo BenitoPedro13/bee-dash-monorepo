@@ -28,7 +28,11 @@ export class CsvsService {
     private creatorService: CreatorService,
   ) {}
 
-  async processCsv(file: MulterFileDTO, userEmail: string): Promise<void> {
+  async processCsv(
+    file: MulterFileDTO,
+    userEmail: string,
+    campaignId: number,
+  ): Promise<void> {
     const multerFile = {
       uniqueFilename: `${Date.now()}-${file?.originalname ?? ''}`,
       buffer: file.buffer,
@@ -52,7 +56,7 @@ export class CsvsService {
 
     await this.prisma.performance.deleteMany({
       where: {
-        userEmail,
+        campaignId,
       },
     });
 
@@ -70,14 +74,12 @@ export class CsvsService {
         uniqueFilename: multerFile.uniqueFilename,
         originalFilename: file.originalname,
         fileSize: file.buffer.length,
-        userEmail: userEmail,
+        campaignId,
       },
     });
   }
 
   addCPToTable = (creator: Influencer) => {
-    console.log(creator, 'creator');
-
     const engajamento =
       (Number.parseInt(creator['Interacoes']) /
         Number.parseInt(
@@ -214,7 +216,10 @@ export class CsvsService {
       'R$' + (cpvMedium === Infinity ? 0 : cpvMedium).toFixed(2);
   };
 
-  async getAllData(userEmail: string): Promise<{
+  async getAllData(
+    userEmail: string,
+    campaignId: number,
+  ): Promise<{
     updatedAt: Date;
     data: Influencer[];
   }> {
@@ -222,9 +227,13 @@ export class CsvsService {
       where: { email: userEmail },
     });
 
-    if (!user.byPosts) {
+    const campaign = await this.prisma.campaign.findUnique({
+      where: { id: campaignId },
+    });
+
+    if (!campaign.byPosts) {
       const performanceFile = await this.prisma.performance.findFirst({
-        where: { userEmail: userEmail },
+        where: { campaignId },
       });
 
       if (!performanceFile) {
@@ -241,7 +250,6 @@ export class CsvsService {
           stream
             .pipe(csvParser())
             .on('data', (data) => {
-              console.log('data', this.addCPToTable(data));
               return results.push(data);
             })
             .on('end', () => resolve(results))
@@ -259,17 +267,17 @@ export class CsvsService {
 
     const mostRecentUpdatedPost = await this.prisma.posts.findFirst({
       where: {
-        user: { email: user.email },
+        PostsPack: { campaignId },
       },
       orderBy: { updatedAt: 'desc' },
       take: 1,
     });
 
     const posts = await this.prisma.posts.findMany({
-      where: { user: { email: user.email } },
+      where: {
+        PostsPack: { campaignId },
+      },
     });
-
-    console.log('posts.length', posts.length);
 
     const creatorsData = await this.processPostsData(posts);
 
@@ -288,8 +296,6 @@ export class CsvsService {
       return acc;
     }, {});
 
-    console.log('groupedPosts', groupedPosts);
-
     const influencers: Influencer[] = [];
 
     for (const creatorId in groupedPosts) {
@@ -303,7 +309,6 @@ export class CsvsService {
 
   async getCreatorData(creatorId: string, posts: any[]): Promise<Influencer> {
     const creatorInfo = await this.creatorService.getCreatorById(creatorId);
-    console.log('creatorId', creatorId);
 
     const { name, profile, city, image, creator_id } = creatorInfo[0];
 

@@ -46,9 +46,6 @@ export class PostsService {
         take: pageSize,
         skip: start,
         orderBy: orderBy,
-        include: {
-          user: true,
-        },
       };
 
       const result = await this.prisma.posts.findMany(findManyPayload);
@@ -69,6 +66,7 @@ export class PostsService {
     order,
     // name,
     userEmail,
+    campaignId,
   }: {
     start: number;
     end: number;
@@ -76,6 +74,7 @@ export class PostsService {
     order: sortOrder;
     // name: string | null;
     userEmail: string;
+    campaignId: number;
   }) {
     const orderBy = sort.map((item, index) => {
       return {
@@ -90,12 +89,12 @@ export class PostsService {
       skip: start,
       orderBy: orderBy,
       where: {
-        user: {
-          email: userEmail,
+        PostsPack: {
+          campaignId,
         },
       },
       include: {
-        user: true,
+        PostsPack: true,
       },
     });
 
@@ -103,8 +102,8 @@ export class PostsService {
       result,
       total: await this.prisma.posts.count({
         where: {
-          user: {
-            email: userEmail,
+          PostsPack: {
+            campaignId,
           },
         },
       }),
@@ -115,9 +114,6 @@ export class PostsService {
     try {
       return await this.prisma.posts.findUnique({
         where: { id },
-        include: {
-          user: true,
-        },
       });
     } catch (error) {
       console.error('PostsService.findOne: ', error);

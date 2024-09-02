@@ -22,6 +22,7 @@ export class UsersService {
   async processProfileImage(
     file: MulterFileDTO,
     userEmail: string,
+    // campaignId: number,
   ): Promise<void> {
     const multerFile = {
       uniqueFilename: `${Date.now()}-${userEmail}-${file?.originalname ?? ''}`,
@@ -29,7 +30,6 @@ export class UsersService {
       originalname: file.originalname,
       userEmail: userEmail,
     };
-    console.log(multerFile);
 
     // Ensure the /files directory exists
     const directoryPath = path.join(__dirname, '..', '..', '..', 'files');
@@ -49,27 +49,9 @@ export class UsersService {
         uniqueFilename: {
           contains: userEmail,
         },
-        userEmail,
+        // campaignId,
       },
     });
-
-    // id               Int      @id @default(autoincrement())
-    // uniqueFilename   String
-    // originalFilename String
-    // fileSize         Int
-    // createdAt        DateTime @default(now())
-    // updatedAt        DateTime @updatedAt
-    // user             User     @relation(fields: [userEmail], references: [email])
-    // userEmail        String
-
-    // await this.prisma.attachments.create({
-    //   data: {
-    //     uniqueFilename: multerFile.uniqueFilename,
-    //     originalFilename: file.originalname,
-    //     fileSize: file.buffer.length,
-    //     userEmail: userEmail,
-    //   },
-    // });
 
     await this.prisma.user.update({
       data: {
@@ -82,6 +64,7 @@ export class UsersService {
   async processCreatorImage(
     file: MulterFileDTO,
     userEmail: string,
+    // campaignId: number,
   ): Promise<Attachments> {
     const multerFile = {
       uniqueFilename: `${Date.now()}-creatorImage-${userEmail}-${
@@ -91,7 +74,6 @@ export class UsersService {
       originalname: file.originalname,
       userEmail: userEmail,
     };
-    console.log(multerFile);
 
     // Ensure the /files directory exists
     const directoryPath = path.join(__dirname, '..', '..', '..', 'files');
@@ -129,7 +111,6 @@ export class UsersService {
         uniqueFilename: multerFile.uniqueFilename,
         originalFilename: file.originalname,
         fileSize: file.buffer.length,
-        userEmail: userEmail,
       },
     });
 
@@ -144,6 +125,7 @@ export class UsersService {
   async processAttachment(
     file: MulterFileDTO,
     userEmail: string,
+    // campaignId: number,
   ): Promise<void> {
     const multerFile = {
       uniqueFilename: `${Date.now()}-${file?.originalname ?? ''}`,
@@ -151,7 +133,6 @@ export class UsersService {
       originalname: file.originalname,
       userEmail: userEmail,
     };
-    console.log(multerFile);
 
     // Ensure the /files directory exists
     const directoryPath = path.join(__dirname, '..', '..', '..', 'files');
@@ -189,7 +170,7 @@ export class UsersService {
         uniqueFilename: multerFile.uniqueFilename,
         originalFilename: file.originalname,
         fileSize: file.buffer.length,
-        userEmail: userEmail,
+        // campaignId,
       },
     });
 
@@ -236,7 +217,7 @@ export class UsersService {
         take: pageSize,
         skip: start,
         orderBy: orderBy,
-        include: { performances: true },
+        include: { Campaign: true },
       };
 
       if (where !== undefined) {
@@ -260,7 +241,7 @@ export class UsersService {
   async findOne(id: number): Promise<User | null> {
     return await this.prisma.user.findUnique({
       where: { id },
-      include: { performances: true, attachments: true },
+      include: { Campaign: true },
     });
   }
 

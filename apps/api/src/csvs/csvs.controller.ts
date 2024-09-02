@@ -26,24 +26,28 @@ export class CsvsController {
   constructor(private readonly csvsService: CsvsService) {}
 
   // @UseGuards(AuthGuard)
-  @Post('upload')
+  @Post('upload/:id')
   @UseInterceptors(FileInterceptor('file'))
   async uploadCsv(
     @Body() body: { user_email: string },
     @UploadedFile() file: MulterFileDTO,
+    @Param('id') id: string,
   ): Promise<void> {
-    await this.csvsService.processCsv(file, body.user_email);
+    await this.csvsService.processCsv(file, body.user_email, +id);
   }
 
   @UseGuards(AuthGuard)
-  @Get('data')
-  async getAllData(@Req() req: any): Promise<{
+  @Get('data/:id')
+  async getAllData(
+    @Req() req: any,
+    @Param('id') id: string,
+  ): Promise<{
     updatedAt: Date;
     data: Influencer[];
   }> {
     const userEmail = req.user.email;
 
-    return this.csvsService.getAllData(userEmail);
+    return this.csvsService.getAllData(userEmail, +id);
   }
 
   // @Post()

@@ -66,7 +66,7 @@ export class AttachmentsController {
 
   @Get('all')
   async findAllWithoutAuth(
-    @Query('email') email?: string,
+    @Query('campaign_id') campaignId?: number,
     @Query('_start') start?: string,
     @Query('_end') end?: string,
     @Query('_sort') sort?: string,
@@ -84,7 +84,7 @@ export class AttachmentsController {
       end: end ? +end : 10,
       sort: sort ? sortFields : ['id'],
       order: order ? sortOrders : ['asc'],
-      userEmail: email,
+      campaignId: campaignId,
     });
   }
 

@@ -49,6 +49,7 @@ export class PostsController {
 
   @Get('all')
   async findAllByUser(
+    @Query('campaign_id') campaignId?: string,
     @Query('email') email?: string,
     @Query('_start') start?: string,
     @Query('_end') end?: string,
@@ -68,6 +69,7 @@ export class PostsController {
       sort: sort ? sortFields : ['id'],
       order: order ? sortOrders : ['asc'],
       userEmail: email,
+      campaignId: +campaignId,
     });
   }
 
