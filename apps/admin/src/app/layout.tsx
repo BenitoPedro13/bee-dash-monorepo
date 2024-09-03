@@ -86,6 +86,17 @@ export default function RootLayout({
                           label: "Social Networks",
                         },
                       },
+                      {
+                        name: "posts-pack",
+                        list: "/posts-pack",
+                        create: "/posts-pack/create",
+                        edit: "/posts-pack/edit/:id",
+                        show: "/posts-pack/show/:id",
+                        meta: {
+                          canDelete: true,
+                          label: "Posts Pack",
+                        },
+                      },
                     ]}
                     options={{
                       syncWithLocation: true,

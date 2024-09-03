@@ -1,5 +1,7 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
+import { dataProvider } from "@providers/data-provider";
 import {
   DeleteButton,
   EditButton,
@@ -26,7 +28,7 @@ export default function CampaignList() {
     filterField && filterValue !== null
       ? [{ field: filterField, operator: "contains", value: filterValue }]
       : undefined;
-
+  const baseApiUrl = dataProvider.getApiUrl();
   const {
     tableProps,
     tableQueryResult: { data, isLoading },
@@ -62,16 +64,25 @@ export default function CampaignList() {
         }}
       >
         <Table.Column dataIndex="id" title="ID" />
-        <Table.Column dataIndex="name" title="Campaign Name" />
-        <Table.Column dataIndex="urlTable" title="Table URL" />
         <Table.Column
-          dataIndex="byPosts"
-          title="Usa Posts Table"
+          dataIndex="price"
+          title="Price"
           render={(_, record: BaseRecord) => (
-            <>{record?.byPosts ? "Posts Table" : "CSV Table"}</>
+            <>
+              {((record?.price as number) ?? 0).toLocaleString("pt-BR", {
+                currency: "BRL",
+                style: "currency",
+              })}
+            </>
           )}
         />
-        <Table.Column dataIndex={["user", "email"]} title="Usuario" />
+        <Table.Column
+          dataIndex="posts"
+          title="Posts Quantity"
+          render={(_, record: BaseRecord) => <>{record?.posts?.length ?? 0}</>}
+        />
+        <Table.Column dataIndex={["creator", "name"]} title="Creator Name" />
+        <Table.Column dataIndex={["campaign", "name"]} title="Campaign Name" />
         <Table.Column
           title="Actions"
           dataIndex="actions"
