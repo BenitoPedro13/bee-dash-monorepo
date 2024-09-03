@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { CreateCreatorDto } from './dto/create-creator.dto';
 import { UpdateCreatorDto } from './dto/update-creator.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { sortFields, sortOrder } from 'types/queyParams';
+import { Creator } from '@prisma/client';
 
 @Injectable()
 export class CreatorsService {
@@ -20,19 +22,107 @@ export class CreatorsService {
     }
   }
 
-  findAll() {
-    return `This action returns all creators`;
+  async findAll({
+    start,
+    end,
+    sort,
+    order,
+  }: {
+    start: number;
+    end: number;
+    sort: sortFields<Creator>;
+    order: sortOrder;
+  }) {
+    try {
+      const orderBy = sort.map((item, index) => {
+        return {
+          [item]: order[index],
+        };
+      });
+
+      const pageSize = end - start;
+
+      const result = await this.prismaService.creator.findMany({
+        take: pageSize,
+        skip: start,
+        orderBy: orderBy,
+        include: { categories: true, socialNetworks: true },
+      });
+
+      return {
+        result,
+        total: await this.prismaService.creator.count(),
+      };
+    } catch (error) {
+      console.error('CreatorsService.findAll: Error', error);
+      throw error;
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} creator`;
+  async findAllByCampaignId(campaignId: number) {
+    try {
+      const creators = await this.prismaService.postsPack.findUnique({
+        where: {
+          id: campaignId,
+        },
+        select: {
+          posts: {
+            select: { creatorId: true },
+          },
+        },
+      });
+
+      return creators;
+    } catch (error) {
+      console.error('CreatorsService.findAllByCampaignId: Error', error);
+      throw error;
+    }
   }
 
-  update(id: number, updateCreatorDto: UpdateCreatorDto) {
-    return `This action updates a #${id} creator`;
+  async findOne(creatorId: number) {
+    try {
+      const creator = await this.prismaService.creator.findUnique({
+        where: {
+          id: creatorId,
+        },
+        include: {
+          categories: true,
+          socialNetworks: true,
+        },
+      });
+
+      return creator;
+    } catch (error) {
+      console.error('CreatorsService.findOne: Error', error);
+      throw error;
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} creator`;
+  async update(id: number, updateCreatorDto: UpdateCreatorDto) {
+    try {
+      const creator = await this.prismaService.campaign.update({
+        where: { id },
+        data: updateCreatorDto,
+      });
+
+      return creator;
+    } catch (error) {
+      console.error('CreatorsService.update: Error', error);
+      throw error;
+    }
+    return;
+  }
+
+  async remove(id: number) {
+    try {
+      const creator = await this.prismaService.campaign.delete({
+        where: { id },
+      });
+
+      return creator;
+    } catch (error) {
+      console.error('CampaignsService.remove: Error', error);
+      throw error;
+    }
   }
 }

@@ -58,6 +58,7 @@ model SocialNetworks {
   username  String
   Creator   Creator?           @relation(fields: [creatorId], references: [id])
   creatorId Int?
+  Posts     Posts[]
   createdAt DateTime           @default(now())
   updatedAt DateTime           @updatedAt
 
@@ -111,15 +112,16 @@ model PostsPack {
 }
 
 model Posts {
-  id           Int        @id @default(autoincrement())
-  type         PostsType
-  impressions  Int
-  interactions Int
-  clicks       Int
-  postDate     DateTime
-  creatorId    String
-  PostsPack    PostsPack? @relation(fields: [postsPackId], references: [id])
-  postsPackId  Int?
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
+  id              Int             @id @default(autoincrement())
+  type            PostsType
+  impressions     Int
+  interactions    Int
+  clicks          Int
+  postDate        DateTime
+  socialNetork    SocialNetworks? @relation(fields: [socialNetworkId], references: [id])
+  socialNetworkId Int?
+  postsPack       PostsPack?      @relation(fields: [postsPackId], references: [id])
+  postsPackId     Int?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
 }
