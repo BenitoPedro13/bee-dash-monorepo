@@ -123,7 +123,7 @@ export class CreatorsService {
 
       return creator;
     } catch (error) {
-      console.error('CampaignsService.remove: Error', error);
+      console.error('CreatorsService.remove: Error', error);
       throw error;
     }
   }

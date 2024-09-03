@@ -49,6 +49,7 @@ model Creator {
   socialNetworks    SocialNetworks[]
   createdAt         DateTime         @default(now())
   updatedAt         DateTime         @updatedAt
+  PostsPack         PostsPack[]
 }
 
 model SocialNetworks {
@@ -107,6 +108,8 @@ model PostsPack {
   posts      Posts[]
   campaign   Campaign? @relation(fields: [campaignId], references: [id])
   campaignId Int?
+  creator    Creator?  @relation(fields: [creatorId], references: [id])
+  creatorId  Int?
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
 }

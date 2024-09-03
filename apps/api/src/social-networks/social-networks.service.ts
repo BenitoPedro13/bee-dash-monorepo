@@ -113,13 +113,13 @@ export class SocialNetworksService {
 
   async remove(id: number) {
     try {
-      const socialNetwork = await this.prismaService.creator.delete({
+      const socialNetwork = await this.prismaService.socialNetworks.delete({
         where: { id },
       });
 
       return socialNetwork;
     } catch (error) {
-      console.error('CampaignsService.remove: Error', error);
+      console.error('SocialNetworksService.remove: Error', error);
       throw error;
     }
   }

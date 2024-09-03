@@ -13,6 +13,7 @@ import { PostsModule } from './posts/posts.module';
 import { CampaignsModule } from './campaigns/campaigns.module';
 import { CreatorsModule } from './creators/creators.module';
 import { SocialNetworksModule } from './social-networks/social-networks.module';
+import { PostsPackModule } from './posts-pack/posts-pack.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { SocialNetworksModule } from './social-networks/social-networks.module';
     CampaignsModule,
     CreatorsModule,
     SocialNetworksModule,
+    PostsPackModule,
   ],
   controllers: [AppController],
   providers: [AppService],
