@@ -1,19 +1,10 @@
 "use client";
 
-import { Create, useForm, useSelect } from "@refinedev/antd";
-import { Form, Input, InputNumber, Select } from "antd";
+import { Create, useForm } from "@refinedev/antd";
+import { Form, Input } from "antd";
 
 export default function UserCreate() {
   const { formProps, saveButtonProps } = useForm({});
-
-  const { selectProps: usersSelectProps, queryResult: usersResult } = useSelect(
-    {
-      resource: "users",
-      optionLabel: "email",
-      // optionLabel: "name",
-      optionValue: "id",
-    }
-  );
 
   return (
     <Create saveButtonProps={saveButtonProps}>

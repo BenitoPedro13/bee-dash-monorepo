@@ -1,3 +1,8 @@
+export enum SocialNetworksType {
+  INSTAGRAM,
+  TIKTOK,
+}
+
 enum PostsType {
   STORIES,
   FEED,

@@ -75,6 +75,17 @@ export default function RootLayout({
                           canDelete: true,
                         },
                       },
+                      {
+                        name: "social-networks",
+                        list: "/social-networks",
+                        create: "/social-networks/create",
+                        edit: "/social-networks/edit/:id",
+                        show: "/social-networks/show/:id",
+                        meta: {
+                          canDelete: true,
+                          label: "Social Networks",
+                        },
+                      },
                     ]}
                     options={{
                       syncWithLocation: true,
