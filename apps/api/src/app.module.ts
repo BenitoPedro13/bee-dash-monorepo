@@ -11,6 +11,7 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { PostsModule } from './posts/posts.module';
 import { CampaignsModule } from './campaigns/campaigns.module';
+import { CreatorsModule } from './creators/creators.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { CampaignsModule } from './campaigns/campaigns.module';
     UsersModule,
     PostsModule,
     CampaignsModule,
+    CreatorsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
