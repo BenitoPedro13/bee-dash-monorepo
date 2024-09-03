@@ -28,7 +28,7 @@ model User {
   name              String
   color             String?
   urlProfilePicture String?    @map(name: "url_profile_picture")
-  Campaign          Campaign[]
+  campaign          Campaign[]
   createdAt         DateTime   @default(now())
   updatedAt         DateTime   @updatedAt
 }
@@ -56,9 +56,9 @@ model SocialNetworks {
   type      SocialNetworksType
   followers Int
   username  String
-  Creator   Creator?           @relation(fields: [creatorId], references: [id])
+  creator   Creator?           @relation(fields: [creatorId], references: [id])
   creatorId Int?
-  Posts     Posts[]
+  posts     Posts[]
   createdAt DateTime           @default(now())
   updatedAt DateTime           @updatedAt
 
@@ -84,7 +84,7 @@ model Performance {
   uniqueFilename   String
   originalFilename String
   fileSize         Int
-  Campaign         Campaign? @relation(fields: [campaignId], references: [id])
+  campaign         Campaign? @relation(fields: [campaignId], references: [id])
   campaignId       Int?
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
@@ -95,7 +95,7 @@ model Attachments {
   uniqueFilename   String
   originalFilename String
   fileSize         Int
-  Campaign         Campaign? @relation(fields: [campaignId], references: [id])
+  campaign         Campaign? @relation(fields: [campaignId], references: [id])
   campaignId       Int?
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
@@ -105,7 +105,7 @@ model PostsPack {
   id         Int       @id @default(autoincrement())
   price      Float
   posts      Posts[]
-  Campaign   Campaign? @relation(fields: [campaignId], references: [id])
+  campaign   Campaign? @relation(fields: [campaignId], references: [id])
   campaignId Int?
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt

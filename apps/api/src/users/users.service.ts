@@ -204,7 +204,7 @@ export class UsersService {
         take: pageSize,
         skip: start,
         orderBy: orderBy,
-        include: { Campaign: true },
+        include: { campaign: true },
       };
 
       if (where !== undefined) {
@@ -228,7 +228,7 @@ export class UsersService {
   async findOne(id: number): Promise<User | null> {
     return await this.prisma.user.findUnique({
       where: { id },
-      include: { Campaign: true },
+      include: { campaign: true },
     });
   }
 

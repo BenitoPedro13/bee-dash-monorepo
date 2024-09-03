@@ -64,7 +64,7 @@ export class CreatorsService {
 
   async findAllByCampaignId(campaignId: number) {
     try {
-      const creators = await this.prismaService.postsPack.findUnique({
+      const creators = await this.prismaService.postsPack.findMany({
         where: {
           id: campaignId,
         },
@@ -113,7 +113,6 @@ export class CreatorsService {
       console.error('CreatorsService.update: Error', error);
       throw error;
     }
-    return;
   }
 
   async remove(id: number) {

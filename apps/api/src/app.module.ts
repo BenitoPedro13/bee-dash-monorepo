@@ -12,6 +12,7 @@ import { UsersModule } from './users/users.module';
 import { PostsModule } from './posts/posts.module';
 import { CampaignsModule } from './campaigns/campaigns.module';
 import { CreatorsModule } from './creators/creators.module';
+import { SocialNetworksModule } from './social-networks/social-networks.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { CreatorsModule } from './creators/creators.module';
     PostsModule,
     CampaignsModule,
     CreatorsModule,
+    SocialNetworksModule,
   ],
   controllers: [AppController],
   providers: [AppService],
