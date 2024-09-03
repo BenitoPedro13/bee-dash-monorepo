@@ -267,7 +267,7 @@ export class CsvsService {
 
     const mostRecentUpdatedPost = await this.prisma.posts.findFirst({
       where: {
-        PostsPack: { campaignId },
+        postsPack: { campaignId },
       },
       orderBy: { updatedAt: 'desc' },
       take: 1,
@@ -275,7 +275,7 @@ export class CsvsService {
 
     const posts = await this.prisma.posts.findMany({
       where: {
-        PostsPack: { campaignId },
+        postsPack: { campaignId },
       },
     });
 

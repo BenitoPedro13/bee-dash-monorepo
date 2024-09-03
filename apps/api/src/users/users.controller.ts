@@ -36,13 +36,14 @@ export class UsersController {
     await this.usersService.processProfileImage(file, body.user_email);
   }
 
-  @Post('upload-creator-image')
+  @Post('upload-creator-image/:creatorId')
   @UseInterceptors(FileInterceptor('file'))
   async uploadCreatorImage(
     @Body() body: { user_email: string },
     @UploadedFile() file: MulterFileDTO,
+    @Param('creatorId') creatorId: string,
   ): Promise<Attachments> {
-    return await this.usersService.processCreatorImage(file, body.user_email);
+    return await this.usersService.processCreatorImage(file, +creatorId);
   }
 
   @Post('upload-attachment')

@@ -12,7 +12,10 @@ export class CreatorsService {
   async create(createCreatorDto: CreateCreatorDto) {
     try {
       const creator = await this.prismaService.creator.create({
-        data: createCreatorDto,
+        data: {
+          ...createCreatorDto,
+          urlProfilePicture: createCreatorDto?.urlProfilePicture ?? '',
+        },
       });
 
       return creator;
@@ -67,7 +70,7 @@ export class CreatorsService {
         },
         select: {
           posts: {
-            select: { creatorId: true },
+            select: { socialNetork: { select: { creatorId: true } } },
           },
         },
       });
@@ -100,7 +103,7 @@ export class CreatorsService {
 
   async update(id: number, updateCreatorDto: UpdateCreatorDto) {
     try {
-      const creator = await this.prismaService.campaign.update({
+      const creator = await this.prismaService.creator.update({
         where: { id },
         data: updateCreatorDto,
       });
@@ -115,7 +118,7 @@ export class CreatorsService {
 
   async remove(id: number) {
     try {
-      const creator = await this.prismaService.campaign.delete({
+      const creator = await this.prismaService.creator.delete({
         where: { id },
       });
 

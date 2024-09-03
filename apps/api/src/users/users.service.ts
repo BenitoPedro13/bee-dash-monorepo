@@ -49,7 +49,6 @@ export class UsersService {
         uniqueFilename: {
           contains: userEmail,
         },
-        // campaignId,
       },
     });
 
@@ -63,16 +62,14 @@ export class UsersService {
 
   async processCreatorImage(
     file: MulterFileDTO,
-    userEmail: string,
-    // campaignId: number,
+    creatorId: number,
   ): Promise<Attachments> {
     const multerFile = {
-      uniqueFilename: `${Date.now()}-creatorImage-${userEmail}-${
+      uniqueFilename: `${Date.now()}-creatorImage-${creatorId}-${
         file?.originalname ?? ''
       }`,
       buffer: file.buffer,
       originalname: file.originalname,
-      userEmail: userEmail,
     };
 
     // Ensure the /files directory exists
@@ -88,23 +85,20 @@ export class UsersService {
       }
     });
 
-    // await this.prisma.attachments.deleteMany({
-    //   where: {
-    //     uniqueFilename: {
-    //       contains: userEmail,
-    //     },
-    //     userEmail,
-    //   },
-    // });
+    await this.prisma.creator.update({
+      data: {
+        urlProfilePicture: `/public/${multerFile.uniqueFilename}`,
+      },
+      where: { id: creatorId },
+    });
 
-    // id               Int      @id @default(autoincrement())
-    // uniqueFilename   String
-    // originalFilename String
-    // fileSize         Int
-    // createdAt        DateTime @default(now())
-    // updatedAt        DateTime @updatedAt
-    // user             User     @relation(fields: [userEmail], references: [email])
-    // userEmail        String
+    await this.prisma.attachments.deleteMany({
+      where: {
+        uniqueFilename: {
+          contains: `-creatorImage-${creatorId}`,
+        },
+      },
+    });
 
     return await this.prisma.attachments.create({
       data: {
@@ -113,13 +107,6 @@ export class UsersService {
         fileSize: file.buffer.length,
       },
     });
-
-    // await this.prisma.user.update({
-    //   data: {
-    //     urlProfilePicture: `/public/${multerFile.uniqueFilename}`,
-    //   },
-    //   where: { email: userEmail },
-    // });
   }
 
   async processAttachment(

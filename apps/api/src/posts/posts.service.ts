@@ -89,12 +89,12 @@ export class PostsService {
       skip: start,
       orderBy: orderBy,
       where: {
-        PostsPack: {
+        postsPack: {
           campaignId,
         },
       },
       include: {
-        PostsPack: true,
+        postsPack: true,
       },
     });
 
@@ -102,7 +102,7 @@ export class PostsService {
       result,
       total: await this.prisma.posts.count({
         where: {
-          PostsPack: {
+          postsPack: {
             campaignId,
           },
         },
