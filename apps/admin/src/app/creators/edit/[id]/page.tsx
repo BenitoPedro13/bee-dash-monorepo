@@ -46,7 +46,7 @@ import Link from "next/link";
 export default function UsersEdit() {
   const params = useParams<{ id: string }>();
   const { formProps, saveButtonProps } = useForm({});
-  const { data, isLoading } = useOne({ resource: "campaigns", id: params.id });
+  const { data, isLoading } = useOne({ resource: "creators", id: params.id });
   const { selectProps: usersSelectProps, queryResult: usersResult } = useSelect(
     {
       resource: "users",
@@ -206,14 +206,19 @@ export default function UsersEdit() {
     }
   };
 
-  const handleUploadCreatorImage = async ({ file }: { file: RcFile }) => {
+  const handleUploadCreatorImage = async ({
+    file,
+    creatorId,
+  }: {
+    file: RcFile;
+    creatorId: number;
+  }) => {
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("user_email", data?.data.email);
 
     try {
       const response = await axios.post(
-        `${baseApiUrl}/users/upload-creator-image`,
+        `${baseApiUrl}/users/upload-creator-image/${creatorId}`,
         formData,
         {
           headers: {
@@ -327,7 +332,7 @@ export default function UsersEdit() {
     <Edit saveButtonProps={saveButtonProps}>
       <Form {...formProps} layout="vertical">
         <Form.Item
-          label="Campaign Name"
+          label="Creator Name"
           name="name"
           initialValue={data?.data.name}
           rules={[
@@ -339,87 +344,33 @@ export default function UsersEdit() {
           <Input />
         </Form.Item>
 
-        <Form.Item
-          label="Table URL"
-          name="urlTable"
-          initialValue={data?.data.urlTable}
-        >
-          <Input />
-        </Form.Item>
-
-        <Form.Item
-          label={"Usar dados dos Posts dos Creators"}
-          name={"byPosts"}
-          rules={[
-            {
-              required: true,
-              message:
-                "Please indicate if the data should be based on the Posts Table or not.",
-            },
-          ]}
-        >
-          <Select>
-            <Select.Option value={true}>Sim</Select.Option>
-            <Select.Option value={false}>Não</Select.Option>
-          </Select>
-        </Form.Item>
-
-        <Form.Item
-          label={"Usuario"}
-          name={["userId"]}
-          rules={[
-            {
-              required: true,
-              message: "Selecione a qual usuario essa Campanha pertence.",
-            },
-          ]}
-        >
-          <Select {...usersSelectProps} />
+        <Form.Item label="Creator Profile Picture" name="urlProfilePicture">
+          <div
+            style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
+          >
+            {data?.data.urlProfilePicture ? (
+              <img
+                src={baseApiUrl + data?.data.urlProfilePicture}
+                alt={data?.data.name}
+                style={{ maxWidth: "250px", borderRadius: 30 }}
+              />
+            ) : (
+              "Nenhuma Foto de Perfil existente para esse usuario"
+            )}
+            <Upload
+              beforeUpload={async (file) =>
+                await handleUploadCreatorImage({ file, creatorId: +params.id })
+              }
+            >
+              <Button icon={<UploadOutlined />}>
+                {data?.data.urlProfilePicture
+                  ? "Clique para substituir a Foto de Perfil"
+                  : "Cique para fazer o upload da Foto de Perfil"}
+              </Button>
+            </Upload>
+          </div>
         </Form.Item>
       </Form>
-
-      {/* <Form.Item label="Foto de Perfil">
-        <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-          {data?.data.urlProfilePicture ? (
-            <img
-              src={baseApiUrl + data?.data.urlProfilePicture}
-              alt={data?.data.name}
-              style={{ maxWidth: "500px" }}
-            />
-          ) : (
-            "Nenhuma Foto de Perfil existente para esse usuario"
-          )}
-          <Upload
-            beforeUpload={async (file) =>
-              await handleUploadProfileImage({ file: file })
-            }
-          >
-            <Button icon={<UploadOutlined />}>
-              {data?.data.urlProfilePicture
-                ? "Clique para substituir a Foto de Perfil"
-                : "Cique para fazer o upload da Foto de Perfil"}
-            </Button>
-          </Upload>
-        </div>
-      </Form.Item> */}
-
-      {!data?.data.byPosts && (
-        <Form.Item label="Arquivo CSV">
-          <div>
-            {data?.data.performances[0]?.originalFilename ??
-              "Nenhum CSV existente para esse usuario"}
-          </div>
-          <Upload
-            beforeUpload={async (file) => await handleUploadCsv({ file: file })}
-          >
-            <Button icon={<UploadOutlined />}>
-              {data?.data.performances[0]?.originalFilename
-                ? "Clique para substituir o CSV"
-                : "Cique para fazer o upload do CSV"}
-            </Button>
-          </Upload>
-        </Form.Item>
-      )}
 
       {/* <Form.Item label="Creator Images">
         <Upload
@@ -484,61 +435,7 @@ export default function UsersEdit() {
         </List>
       </Form.Item> */}
 
-      <Form.Item label="Anexos">
-        <Upload
-          beforeUpload={async (file) =>
-            await handleUploadAttachment({ file: file })
-          }
-        >
-          <Button icon={<UploadOutlined />}>
-            Cique para fazer o upload de um Anexo
-          </Button>
-        </Upload>
-        <List>
-          <Table
-            scroll={{
-              x: true,
-            }}
-            rowKey="id"
-            dataSource={attachments?.data.filter(
-              (item) => !item.uniqueFilename.includes("-creatorImage-")
-            )}
-            pagination={{
-              current: attachmentsCurrentPage,
-              pageSize: attachments?.data.filter(
-                (item) => !item.uniqueFilename.includes("-creatorImage-")
-              ).length,
-              total: attachments?.data.filter(
-                (item) => !item.uniqueFilename.includes("-creatorImage-")
-              ).length,
-              onChange: (page, pageSize) => {
-                attachmentsSetCurrentPage(page);
-                attachmentsSetCurrentPageSize(pageSize);
-              },
-            }}
-          >
-            <Table.Column dataIndex="id" title="ID" />
-            <Table.Column dataIndex="originalFilename" title="Nome Original" />
-            <Table.Column dataIndex="createdAt" title="Criado em" />
-            <Table.Column
-              title="Actions"
-              dataIndex="actions"
-              render={(_, record: BaseRecord) => (
-                <Space>
-                  <DeleteButton
-                    hideText
-                    resource="attachments"
-                    size="small"
-                    recordItemId={record.id}
-                  />
-                </Space>
-              )}
-            />
-          </Table>
-        </List>
-      </Form.Item>
-
-      <Form.Item label="Posts">
+      {/* <Form.Item label="Posts">
         <Input
           placeholder="Filter Posts By Creator Name"
           style={{ width: "calc(100% - 200px)", marginRight: "8px" }}
@@ -1004,7 +901,7 @@ export default function UsersEdit() {
             </Table>
           </List>
         </p>
-      </Modal>
+      </Modal> */}
     </Edit>
   );
 }
