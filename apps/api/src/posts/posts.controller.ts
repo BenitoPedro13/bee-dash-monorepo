@@ -23,7 +23,7 @@ export class PostsController {
     return this.postsService.create(createPostDto);
   }
 
-  @Get()
+  @Get('all')
   findAll(
     @Query('_start') start?: string,
     @Query('_end') end?: string,
@@ -47,31 +47,31 @@ export class PostsController {
     });
   }
 
-  @Get('all')
-  async findAllByUser(
-    @Query('campaign_id') campaignId?: string,
-    @Query('email') email?: string,
-    @Query('_start') start?: string,
-    @Query('_end') end?: string,
-    @Query('_sort') sort?: string,
-    @Query('_order') order?: string,
-  ) {
-    const sortFields = (
-      sort?.includes(',') ? sort?.split(',') : [sort]
-    ) as sortFields<Posts>;
-    const sortOrders = (
-      order?.includes(',') ? order?.split(',') : [order]
-    ) as sortOrder;
+  // @Get('all')
+  // async findAllByUser(
+  //   @Query('campaign_id') campaignId?: string,
+  //   @Query('email') email?: string,
+  //   @Query('_start') start?: string,
+  //   @Query('_end') end?: string,
+  //   @Query('_sort') sort?: string,
+  //   @Query('_order') order?: string,
+  // ) {
+  //   const sortFields = (
+  //     sort?.includes(',') ? sort?.split(',') : [sort]
+  //   ) as sortFields<Posts>;
+  //   const sortOrders = (
+  //     order?.includes(',') ? order?.split(',') : [order]
+  //   ) as sortOrder;
 
-    return await this.postsService.findAllByUser({
-      start: start ? +start : 0,
-      end: end ? +end : 10,
-      sort: sort ? sortFields : ['id'],
-      order: order ? sortOrders : ['asc'],
-      userEmail: email,
-      campaignId: +campaignId,
-    });
-  }
+  //   return await this.postsService.findAllByUser({
+  //     start: start ? +start : 0,
+  //     end: end ? +end : 10,
+  //     sort: sort ? sortFields : ['id'],
+  //     order: order ? sortOrders : ['asc'],
+  //     userEmail: email,
+  //     campaignId: +campaignId,
+  //   });
+  // }
 
   @Get(':id')
   findOne(@Param('id') id: string) {

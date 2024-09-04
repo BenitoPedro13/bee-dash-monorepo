@@ -12,12 +12,37 @@ export class PostsService {
 
   create(createPostDto: CreatePostDto): Promise<Posts | null> {
     try {
-      const { socialNetworkId, postsPackId, ...rest } = createPostDto;
+      const {
+        socialNetworkId,
+        postsPackId,
+        interactions,
+        likes,
+        shares,
+        comments,
+        saves,
+        clicks,
+        linkClicks,
+        stickerClicks,
+        ...rest
+      } = createPostDto;
+
+      const finalClicks = linkClicks + stickerClicks;
+
+      const finalInteractions = likes + shares + comments + saves + finalClicks;
+
       return this.prisma.posts.create({
         data: {
           ...rest,
           socialNetwork: { connect: { id: socialNetworkId } },
           postsPack: { connect: { id: postsPackId } },
+          clicks: finalClicks,
+          interactions: finalInteractions,
+          likes,
+          shares,
+          comments,
+          saves,
+          linkClicks,
+          stickerClicks,
         },
       });
     } catch (error) {
@@ -51,6 +76,14 @@ export class PostsService {
         take: pageSize,
         skip: start,
         orderBy: orderBy,
+        include: {
+          socialNetwork: { include: { creator: true } },
+          postsPack: { include: { campaign: true } },
+        },
+        // select: {
+        //   socialNetwork: true,
+        //   postsPack: { include: { campaign: true } },
+        // },
       };
 
       const result = await this.prisma.posts.findMany(findManyPayload);
@@ -119,6 +152,10 @@ export class PostsService {
     try {
       return await this.prisma.posts.findUnique({
         where: { id },
+        include: {
+          socialNetwork: { include: { creator: true } },
+          postsPack: { include: { campaign: true } },
+        },
       });
     } catch (error) {
       console.error('PostsService.findOne: ', error);
