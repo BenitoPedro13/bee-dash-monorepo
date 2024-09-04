@@ -10,7 +10,7 @@ const { Title } = Typography;
 
 export default function CampaignShow() {
   const params = useParams<{ id: string }>();
-  const { data, isLoading } = useOne({ resource: "posts-pack", id: params.id });
+  const { data, isLoading } = useOne({ resource: "posts", id: params.id });
   const record = data?.data;
   const baseApiUrl = dataProvider.getApiUrl();
   return (
@@ -18,42 +18,50 @@ export default function CampaignShow() {
       <Title level={5}>ID</Title>
       <TextField value={record?.id} />
 
-      <Title level={5}>Price</Title>
-      <TextField
-        value={((record?.price as number) ?? 0).toLocaleString("pt-BR", {
-          currency: "BRL",
-          style: "currency",
-        })}
-      />
+      <Title level={5}>Post Type</Title>
+      <TextField value={record?.type} />
 
-      <Title level={5}>Posts Quantity</Title>
-      <TextField value={record?.posts?.length ?? 0} />
+      <Title level={5}>Impressions</Title>
+      <TextField value={record?.impressions} />
 
-      <Title level={5}>Creator</Title>
-      {record?.creator ? (
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "1rem",
-            justifyContent: "center",
-          }}
-        >
-          <img
-            src={baseApiUrl + record?.creator?.urlProfilePicture}
-            alt={record?.creator?.name}
-            style={{ maxWidth: "250px", borderRadius: 30 }}
-          />
-          <p style={{ width: "250px", textAlign: "center", fontSize: "16px" }}>
-            {record?.creator?.name}
-          </p>
-        </div>
-      ) : (
-        <TextField value="N/A" />
-      )}
+      <Title level={5}>Impressions</Title>
+      <TextField value={record?.impressions} />
 
-      <Title level={5}>Campaign</Title>
-      <TextField value={record?.campaign?.name} />
+      <Title level={5}>Likes</Title>
+      <TextField value={record?.likes} />
+
+      <Title level={5}>Shares</Title>
+      <TextField value={record?.shares} />
+
+      <Title level={5}>Comments</Title>
+      <TextField value={record?.comments} />
+
+      <Title level={5}>Saves</Title>
+      <TextField value={record?.saves} />
+
+      <Title level={5}>Clicks</Title>
+      <TextField value={record?.clicks} />
+
+      <Title level={5}>Sticker Clicks</Title>
+      <TextField value={record?.stickerClicks} />
+
+      <Title level={5}>Link Clicks</Title>
+      <TextField value={record?.linkClicks} />
+
+      <Title level={5}>Social Network Type</Title>
+      <TextField value={`${record?.socialNetwork?.type}`} />
+
+      <Title level={5}>Social Network Username</Title>
+      <TextField value={`${record?.socialNetwork?.username}`} />
+
+      <Title level={5}>Creator Name</Title>
+      <TextField value={`${record?.socialNetwork?.creator?.name}`} />
+
+      <Title level={5}>Posts Pack Id</Title>
+      <TextField value={record?.postsPack?.id} />
+
+      <Title level={5}>Campaign Name</Title>
+      <TextField value={record?.postsPack?.campaign?.name} />
 
       <Title level={5}>Created At</Title>
       <TextField value={new Date(record?.createdAt).toLocaleString()} />

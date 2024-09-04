@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "cross-env NODE_OPTIONS=--max_old_space_size=4096 refine dev",
     "build": "refine build",
-    "start": "refine start",
+    "start": "refine start --port 3001",
     "lint": "next lint",
     "refine": "refine"
   },
@@ -25,6 +25,7 @@
     "@refinedev/nextjs-router": "^6.0.0",
     "algoliasearch": "^4.24.0",
     "antd": "^5.0.5",
+    "dayjs": "^1.11.13",
     "dotenv": "^16.4.5",
     "js-cookie": "^3.0.5",
     "moment": "^2.30.1",

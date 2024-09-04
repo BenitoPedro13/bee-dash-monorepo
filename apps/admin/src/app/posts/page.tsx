@@ -64,25 +64,19 @@ export default function CampaignList() {
         }}
       >
         <Table.Column dataIndex="id" title="ID" />
+        <Table.Column dataIndex="type" title="Post Type" />
         <Table.Column
-          dataIndex="price"
-          title="Price"
-          render={(_, record: BaseRecord) => (
-            <>
-              {((record?.price as number) ?? 0).toLocaleString("pt-BR", {
-                currency: "BRL",
-                style: "currency",
-              })}
-            </>
-          )}
+          dataIndex={["socialNetwork", "username"]}
+          title="Social Network"
         />
         <Table.Column
-          dataIndex="posts"
-          title="Posts Quantity"
-          render={(_, record: BaseRecord) => <>{record?.posts?.length ?? 0}</>}
+          dataIndex={["postsPack", "campaign", "name"]}
+          title="Campaign Name"
         />
-        <Table.Column dataIndex={["creator", "name"]} title="Creator Name" />
-        <Table.Column dataIndex={["campaign", "name"]} title="Campaign Name" />
+        <Table.Column
+          dataIndex={["socialNetwork", "creator", "name"]}
+          title="Creator Name"
+        />
         <Table.Column
           title="Actions"
           dataIndex="actions"
