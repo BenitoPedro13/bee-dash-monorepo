@@ -97,6 +97,16 @@ export default function RootLayout({
                           label: "Posts Pack",
                         },
                       },
+                      {
+                        name: "posts",
+                        list: "/posts",
+                        create: "/posts/create",
+                        edit: "/posts/edit/:id",
+                        show: "/posts/show/:id",
+                        meta: {
+                          canDelete: true,
+                        },
+                      },
                     ]}
                     options={{
                       syncWithLocation: true,

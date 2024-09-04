@@ -1,175 +1,172 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { Create, useForm } from "@refinedev/antd";
-import {
-  Form,
-  Input,
-  InputNumber,
-  DatePicker,
-  Select,
-  Button,
-  Table,
-  Space,
-} from "antd";
-import { useState, useEffect } from "react";
-import axios from "axios";
-import { dataProvider, LOCAL_API_URL } from "@providers/data-provider";
-import {
-  CreatorService,
-  ICreatorsSearchResponse,
-} from "@database/services/CreatorService";
-
-export default function PostsCreate() {
-  const creatorsService = new CreatorService();
+import { Create, useForm, useSelect } from "@refinedev/antd";
+import { DatePicker, Form, Select } from "antd";
+import { InputNumber } from "antd/lib";
+export default function UserCreate() {
   const { formProps, saveButtonProps } = useForm({});
-  const [searchTerm, setSearchTerm] = useState("");
-  const [creators, setCreators] = useState<ICreatorsSearchResponse>([]);
-  const [creatorsLoading, setCreatorsLoading] = useState(false);
-  const [selectedCreatorId, setSelectedCreatorId] = useState<string | null>(
-    null
-  );
 
-  const handleSearchCreators = async (input: string) => {
-    try {
-      const response = await creatorsService.searchByCreatorName(input);
+  const {
+    selectProps: socialNetworksSelectProps,
+    queryResult: socialNetworksResult,
+  } = useSelect({
+    resource: "social-networks",
+    optionLabel: "username",
+    optionValue: "id",
+  });
 
-      if (!response) {
-        return;
-      }
-
-      setCreators(response);
-    } catch (error) {
-      console.error("Error handleSearchCreators", error);
-    }
-  };
-
-  useEffect(() => {
-    if (searchTerm) {
-      handleSearchCreators(searchTerm);
-    } else {
-      setCreators([]);
-    }
-  }, [searchTerm]);
+  const { selectProps: postsPackSelectProps, queryResult: postsPackResult } =
+    useSelect({
+      resource: "posts-pack",
+      optionLabel: "name",
+      optionValue: "id",
+    });
 
   return (
     <Create saveButtonProps={saveButtonProps}>
       <Form {...formProps} layout="vertical">
         <Form.Item
-          label={"Type"}
+          label={"Post Type"}
           name={["type"]}
           rules={[
             {
               required: true,
-              message: "Please select the type",
+              message: "Please select the Post Type",
             },
           ]}
         >
           <Select>
             <Select.Option value="FEED">Feed</Select.Option>
             <Select.Option value="STORIES">Stories</Select.Option>
+            <Select.Option value="REELS">Reels</Select.Option>
             <Select.Option value="TIKTOK">Tiktok</Select.Option>
           </Select>
         </Form.Item>
 
         <Form.Item
-          label={"Is Video"}
-          name={["isVideo"]}
-          rules={[
-            {
-              required: true,
-              message: "Please indicate if this is a video",
-            },
-          ]}
-        >
-          <Select>
-            <Select.Option value={true}>Sim</Select.Option>
-            <Select.Option value={false}>Não</Select.Option>
-          </Select>
-        </Form.Item>
-
-        <Form.Item
           label={"Impressions"}
+          initialValue={0}
           name={["impressions"]}
           rules={[
             {
-              required: true,
               type: "number",
-              message: "Please enter a valid number of impressions",
+              message: "Please enter a valid number of Impressions",
             },
           ]}
         >
-          <InputNumber min={0} style={{ width: "100%" }} />
+          <InputNumber min={0} />
         </Form.Item>
 
         <Form.Item
           label={"Interactions"}
           name={["interactions"]}
+          initialValue={undefined}
           rules={[
             {
-              required: true,
               type: "number",
-              message: "Please enter a valid number of interactions",
+              message: "Please enter a valid number of Interactions",
             },
           ]}
         >
-          <InputNumber min={0} style={{ width: "100%" }} />
+          <InputNumber disabled min={0} />
+        </Form.Item>
+
+        <Form.Item
+          label={"Likes"}
+          initialValue={0}
+          name={["likes"]}
+          rules={[
+            {
+              type: "number",
+              message: "Please enter a valid number of Likes",
+            },
+          ]}
+        >
+          <InputNumber min={0} />
+        </Form.Item>
+
+        <Form.Item
+          label={"Shares"}
+          initialValue={0}
+          name={["shares"]}
+          rules={[
+            {
+              type: "number",
+              message: "Please enter a valid number of Shares",
+            },
+          ]}
+        >
+          <InputNumber min={0} />
+        </Form.Item>
+
+        <Form.Item
+          label={"Comments"}
+          initialValue={0}
+          name={["comments"]}
+          rules={[
+            {
+              type: "number",
+              message: "Please enter a valid number of Comments",
+            },
+          ]}
+        >
+          <InputNumber min={0} />
+        </Form.Item>
+
+        <Form.Item
+          label={"Saves"}
+          initialValue={0}
+          name={["saves"]}
+          rules={[
+            {
+              type: "number",
+              message: "Please enter a valid number of Saves",
+            },
+          ]}
+        >
+          <InputNumber min={0} />
         </Form.Item>
 
         <Form.Item
           label={"Clicks"}
           name={["clicks"]}
+          initialValue={undefined}
           rules={[
             {
-              required: true,
               type: "number",
-              message: "Please enter a valid number of clicks",
+              message: "Please enter a valid number of Clicks",
             },
           ]}
         >
-          <InputNumber min={0} style={{ width: "100%" }} />
+          <InputNumber disabled min={0} />
         </Form.Item>
 
         <Form.Item
-          label={"Video Views"}
-          name={["videoViews"]}
+          label={"Sticker Clicks"}
+          initialValue={0}
+          name={["stickerClicks"]}
           rules={[
             {
-              required: true,
               type: "number",
-              message: "Please enter a valid number of video views",
+              message: "Please enter a valid number of Sticker Clicks",
             },
           ]}
         >
-          <InputNumber min={0} style={{ width: "100%" }} />
+          <InputNumber min={0} />
         </Form.Item>
 
         <Form.Item
-          label={"Engagement"}
-          name={["engagement"]}
+          label={"Link Clicks"}
+          initialValue={0}
+          name={["linkClicks"]}
           rules={[
             {
-              required: true,
               type: "number",
-              message: "Please enter a valid engagement value",
+              message: "Please enter a valid number of Link Clicks",
             },
           ]}
         >
-          <InputNumber min={0} step={0.01} style={{ width: "100%" }} />
-        </Form.Item>
-
-        <Form.Item
-          label={"Price"}
-          name={["price"]}
-          rules={[
-            {
-              required: true,
-              type: "number",
-              message: "Please enter a valid price",
-            },
-          ]}
-        >
-          <InputNumber min={0} step={0.01} style={{ width: "100%" }} />
+          <InputNumber min={0} />
         </Form.Item>
 
         <Form.Item
@@ -178,86 +175,37 @@ export default function PostsCreate() {
           rules={[
             {
               required: true,
-              message: "Please select the post date",
+              message: "Please select the Post Date",
             },
           ]}
         >
-          <DatePicker style={{ width: "100%" }} />
+          <DatePicker />
         </Form.Item>
 
         <Form.Item
-          label={"Influencer"}
-          name={["creatorId"]}
+          label={"Social Network"}
+          name={["socialNetworkId"]}
           rules={[
             {
               required: true,
-              message: "Please select an influencer",
+              message: "Select the Social Network this Post belongs to",
             },
           ]}
         >
-          <div>
-            <Input
-              placeholder="Search Influencers"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              style={{ width: "calc(100% - 100px)", marginRight: "8px" }}
-            />
-            <Button
-              onClick={() => handleSearchCreators(searchTerm)}
-              type="primary"
-            >
-              Search
-            </Button>
-            <Table
-              rowKey="id"
-              dataSource={creators}
-              pagination={false}
-              loading={creatorsLoading}
-              onRow={(record) => ({
-                onClick: () => {
-                  setSelectedCreatorId(record.creator_id);
-                  formProps.form?.setFieldValue("creatorId", record.id);
-                },
-                style: {
-                  cursor: "pointer",
-                  backgroundColor:
-                    record.id === selectedCreatorId ? "#e6f7ff" : undefined,
-                },
-              })}
-            >
-              <Table.Column dataIndex="name" title="Name" />
-              <Table.Column dataIndex="creator_id" title="Creator ID" />
-              <Table.Column
-                dataIndex="image"
-                title="Image"
-                render={(text, record) => (
-                  <img
-                    src={text}
-                    alt={text}
-                    style={{
-                      width: "50px",
-                      height: "50px",
-                      objectFit: "cover",
-                    }}
-                  />
-                )}
-              />
-            </Table>
-          </div>
+          <Select {...socialNetworksSelectProps} />
         </Form.Item>
 
         <Form.Item
-          label={"Performance ID"}
-          name={["performanceId"]}
+          label={"Post Pack"}
+          name={["postsPackId"]}
           rules={[
             {
               required: true,
-              type: "number",
-              message: "Please enter a valid performance ID",
+              message: "Select the Post Pack this Post belongs to",
             },
           ]}
         >
-          <InputNumber min={0} style={{ width: "100%" }} />
+          <Select {...postsPackSelectProps} />
         </Form.Item>
       </Form>
     </Create>

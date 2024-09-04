@@ -1,5 +1,7 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
+import { dataProvider } from "@providers/data-provider";
 import {
   DeleteButton,
   EditButton,
@@ -11,7 +13,7 @@ import { CrudFilter, useMany, type BaseRecord } from "@refinedev/core";
 import { Space, Table } from "antd";
 import { useSearchParams } from "next/navigation";
 
-export default function PostsList() {
+export default function CampaignList() {
   const searchParams = useSearchParams();
   const pageSize = searchParams.get("pageSize")
     ? Number(searchParams.get("pageSize"))
@@ -26,7 +28,7 @@ export default function PostsList() {
     filterField && filterValue !== null
       ? [{ field: filterField, operator: "contains", value: filterValue }]
       : undefined;
-
+  const baseApiUrl = dataProvider.getApiUrl();
   const {
     tableProps,
     tableQueryResult: { data, isLoading },
@@ -62,17 +64,25 @@ export default function PostsList() {
         }}
       >
         <Table.Column dataIndex="id" title="ID" />
-        <Table.Column dataIndex="type" title="Type" />
-        <Table.Column dataIndex="isVideo" title="Is Video" />
-        <Table.Column dataIndex="impressions" title="Impressions" />
-        <Table.Column dataIndex="interactions" title="Interactions" />
-        <Table.Column dataIndex="clicks" title="Clicks" />
-        <Table.Column dataIndex="videoViews" title="Video Views" />
-        <Table.Column dataIndex="engagement" title="Engagement" />
-        <Table.Column dataIndex="price" title="Price" />
-        <Table.Column dataIndex="postDate" title="Post Date" />
-        <Table.Column dataIndex="creatorId" title="Influencer ID" />
-        <Table.Column dataIndex="performanceId" title="Performance ID" />
+        <Table.Column
+          dataIndex="price"
+          title="Price"
+          render={(_, record: BaseRecord) => (
+            <>
+              {((record?.price as number) ?? 0).toLocaleString("pt-BR", {
+                currency: "BRL",
+                style: "currency",
+              })}
+            </>
+          )}
+        />
+        <Table.Column
+          dataIndex="posts"
+          title="Posts Quantity"
+          render={(_, record: BaseRecord) => <>{record?.posts?.length ?? 0}</>}
+        />
+        <Table.Column dataIndex={["creator", "name"]} title="Creator Name" />
+        <Table.Column dataIndex={["campaign", "name"]} title="Campaign Name" />
         <Table.Column
           title="Actions"
           dataIndex="actions"

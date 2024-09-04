@@ -8,9 +8,9 @@ import { useParams } from "next/navigation";
 
 const { Title } = Typography;
 
-export default function UserShow() {
+export default function CampaignShow() {
   const params = useParams<{ id: string }>();
-  const { data, isLoading } = useOne({ resource: "users", id: params.id });
+  const { data, isLoading } = useOne({ resource: "posts-pack", id: params.id });
   const record = data?.data;
   const baseApiUrl = dataProvider.getApiUrl();
   return (
@@ -18,54 +18,48 @@ export default function UserShow() {
       <Title level={5}>ID</Title>
       <TextField value={record?.id} />
 
-      <Title level={5}>Email</Title>
-      <TextField value={record?.email} />
+      <Title level={5}>Price</Title>
+      <TextField
+        value={((record?.price as number) ?? 0).toLocaleString("pt-BR", {
+          currency: "BRL",
+          style: "currency",
+        })}
+      />
 
-      <Title level={5}>Password</Title>
-      <TextField value={record?.password} />
+      <Title level={5}>Posts Quantity</Title>
+      <TextField value={record?.posts?.length ?? 0} />
 
-      <Title level={5}>Name</Title>
-      <TextField value={record?.name} />
+      <Title level={5}>Creator</Title>
+      {record?.creator ? (
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "1rem",
+            justifyContent: "center",
+          }}
+        >
+          <img
+            src={baseApiUrl + record?.creator?.urlProfilePicture}
+            alt={record?.creator?.name}
+            style={{ maxWidth: "250px", borderRadius: 30 }}
+          />
+          <p style={{ width: "250px", textAlign: "center", fontSize: "16px" }}>
+            {record?.creator?.name}
+          </p>
+        </div>
+      ) : (
+        <TextField value="N/A" />
+      )}
+
+      <Title level={5}>Campaign</Title>
+      <TextField value={record?.campaign?.name} />
 
       <Title level={5}>Created At</Title>
       <TextField value={new Date(record?.createdAt).toLocaleString()} />
 
       <Title level={5}>Updated At</Title>
       <TextField value={new Date(record?.updatedAt).toLocaleString()} />
-
-      <Title level={5}>Total Initial Investment</Title>
-      <TextField value={record?.totalInitialInvestment} />
-
-      <Title level={5}>Color</Title>
-      <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
-        <TextField value={record?.color} />
-        <input
-          type="color"
-          id="color"
-          name="color"
-          value={data?.data.color}
-          // onChange={(e) => e.preventDefault()}
-        />
-      </div>
-
-      <Title level={5}>Campaign Name</Title>
-      <TextField value={record?.campaignName} />
-
-      <Title level={5}>Estimated Executed Investment</Title>
-      <TextField value={record?.estimatedExecutedInvestment} />
-
-      <Title level={5}>Profile Picture URL</Title>
-      <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-        {data?.data.urlProfilePicture ? (
-          <img
-            src={baseApiUrl + data?.data.urlProfilePicture}
-            alt={data?.data.name}
-            style={{ maxWidth: "500px" }}
-          />
-        ) : (
-          "Nenhum Foto de Perfil existente para esse usuario"
-        )}
-      </div>
     </Show>
   );
 }
