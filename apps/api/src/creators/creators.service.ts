@@ -70,7 +70,7 @@ export class CreatorsService {
         },
         select: {
           posts: {
-            select: { socialNetork: { select: { creatorId: true } } },
+            select: { socialNetwork: { select: { creatorId: true } } },
           },
         },
       });

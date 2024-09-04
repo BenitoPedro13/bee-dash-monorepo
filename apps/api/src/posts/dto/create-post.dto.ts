@@ -1,27 +1,17 @@
-import {
-  //  Influencers,
-  Performance,
-  PostsType,
-  User,
-} from '@prisma/client';
+import { PostsType } from '@prisma/client';
 
 export class CreatePostDto {
   type: PostsType;
-  isVideo: boolean;
-  impressions: number;
+  impressions?: number;
   interactions: number;
-  clicks: number;
-  videoViews: number;
-  engagement: number;
-  price: number;
+  likes?: number;
+  shares?: number;
+  comments?: number;
+  saves?: number;
+  clicks?: number;
+  stickerClicks?: number;
+  linkClicks?: number;
   postDate: string;
-  creatorId: string;
-  creatorName: string;
-  // influencerId?: string;
-  // influencer?: Influencers;
-  // performanceId?: number;
-  // performance?: Performance;
-
-  userEmail?: string;
-  user?: User;
+  socialNetworkId: number;
+  postsPackId: number;
 }

@@ -100,6 +100,8 @@ model Attachments {
   campaignId       Int?
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
+  Posts            Posts?    @relation(fields: [postsId], references: [id])
+  postsId          Int?
 }
 
 model PostsPack {
@@ -117,14 +119,21 @@ model PostsPack {
 model Posts {
   id              Int             @id @default(autoincrement())
   type            PostsType
-  impressions     Int
-  interactions    Int
-  clicks          Int
+  impressions     Int?            @default(0)
+  interactions    Int?            @default(0)
+  likes           Int?            @default(0)
+  shares          Int?            @default(0)
+  comments        Int?            @default(0)
+  saves           Int?            @default(0)
+  clicks          Int?            @default(0)
+  stickerClicks   Int?            @default(0)
+  linkClicks      Int?            @default(0)
   postDate        DateTime
-  socialNetork    SocialNetworks? @relation(fields: [socialNetworkId], references: [id])
-  socialNetworkId Int?
+  socialNetworkId Int
+  socialNetwork   SocialNetworks? @relation(fields: [socialNetworkId], references: [id])
+  postsPackId     Int
   postsPack       PostsPack?      @relation(fields: [postsPackId], references: [id])
-  postsPackId     Int?
+  attachments     Attachments[]
   createdAt       DateTime        @default(now())
   updatedAt       DateTime        @updatedAt
 }

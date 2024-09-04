@@ -12,8 +12,13 @@ export class PostsService {
 
   create(createPostDto: CreatePostDto): Promise<Posts | null> {
     try {
+      const { socialNetworkId, postsPackId, ...rest } = createPostDto;
       return this.prisma.posts.create({
-        data: createPostDto as Prisma.PostsCreateInput,
+        data: {
+          ...rest,
+          socialNetwork: { connect: { id: socialNetworkId } },
+          postsPack: { connect: { id: postsPackId } },
+        },
       });
     } catch (error) {
       console.error('PostsService.create Error: ', error);
