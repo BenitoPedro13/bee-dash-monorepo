@@ -4,8 +4,13 @@ import useDataStore, {
   DashboardMode,
   DashbordDateRange,
   Influencer,
+  Posts,
 } from "@/store";
 import {
+  calculatePostsPropertiesVariationsBySocialNetworksType,
+  calculatePostsVariationsCPV,
+  calculatePostsVariationsCTR,
+  calculatePostsVariationsEngajamento,
   calculateVariations,
   calculateVariationsCPV,
   calculateVariationsCTR,
@@ -25,9 +30,8 @@ const metricConfig: Record<
   DashboardMode,
   {
     heading: string[];
-    metric: (data: Influencer[]) => string[];
     variation: (
-      data: Influencer[]
+      data: Posts[]
     ) => Record<
       DashbordDateRange,
       { total: number | string; variation: number | null }
@@ -39,15 +43,12 @@ const metricConfig: Record<
     {
       heading: ["Engajamento Médio", "Custo por Engajamento"],
       sigla: ["Total"],
-      metric: (data) => [
-        totalPercentage(data, "Engajamento Tiktok"),
-        // totalCPE(data, "CPE Tiktok"),
-      ],
       variation: (data) => [
-        calculateVariationsEngajamento(
+        calculatePostsVariationsEngajamento(
           data,
-          "Impressoes Tiktok",
-          "Interacoes Tiktok"
+          ["impressions"],
+          ["interactions"],
+          ["TIKTOK"]
         ),
         // calculateVariationsEngajamento(
         //   data,
@@ -60,39 +61,48 @@ const metricConfig: Record<
     {
       heading: ["Cliques", "Taxa de Cliques"],
       sigla: ["Total", "CTR"],
-      metric: (data) => [
-        total(data, "Cliques Tiktok"),
-        totalCPE(data, "CPC Tiktok"),
-      ],
       variation: (data) => [
-        calculateVariations(data, "Cliques Tiktok"),
-        calculateVariationsCTR(data, "Impressoes Tiktok", "Cliques Tiktok"),
+        calculatePostsPropertiesVariationsBySocialNetworksType(
+          data,
+          ["clicks"],
+          ["TIKTOK"]
+        ),
+        calculatePostsVariationsCTR(
+          data,
+          ["impressions"],
+          ["clicks"],
+          ["TIKTOK"]
+        ),
       ],
     },
     {
       heading: ["Views", "Custo por View", "Custo por Mil Views"],
       sigla: ["Total", "CPV"],
-      metric: (data) => [
-        total(data, "Impressoes Tiktok"),
-        totalCPE(data, "CPV Tiktok"),
-        // totalCPE(data, "CPV Tiktok"),
-      ],
       variation: (data) => [
-        calculateVariations(data, "Impressoes Tiktok"),
-        calculateVariationsCPV(data, "Impressoes Tiktok"),
+        calculatePostsPropertiesVariationsBySocialNetworksType(
+          data,
+          ["impressions"],
+          ["TIKTOK"]
+        ),
+        calculatePostsVariationsCPV(data, ["impressions"], ["TIKTOK"]),
         // calculateVariationsCPV(data, "Impressoes Tiktok", true),
       ],
     },
     {
       heading: ["Investimento Total", "Investimento Médio"],
-      metric: (data) => [
-        total(data, "Investimento", true),
-        total(data, "Investimento", true),
-      ],
       sigla: ["Total", "Média"],
       variation: (data) => [
-        calculateVariations(data, "Investimento"),
-        calculateVariations(data, "Investimento", true),
+        calculatePostsPropertiesVariationsBySocialNetworksType(
+          data,
+          ["mediumPrice"],
+          ["TIKTOK"]
+        ),
+        calculatePostsPropertiesVariationsBySocialNetworksType(
+          data,
+          ["mediumPrice"],
+          ["TIKTOK"],
+          true
+        ),
       ],
     },
   ],
@@ -100,48 +110,63 @@ const metricConfig: Record<
     {
       heading: ["Engajamento Médio", "Custo por Engajamento"],
       sigla: ["Total"],
-      metric: (data) => [
-        totalPercentage(data, "Engajamento"),
-        // totalCPE(data, "CPE"),
-      ],
       variation: (data) => [
-        calculateVariationsEngajamento(data, "Impressoes", "Interacoes"),
+        calculatePostsVariationsEngajamento(
+          data,
+          ["impressions"],
+          ["interactions"],
+          ["INSTAGRAM"]
+        ),
         // calculateVariationsEngajamento(data, "Impressoes", "Interacoes", true),
       ],
     },
     {
       heading: ["Cliques", "Taxa de Cliques"],
       sigla: ["Total", "CTR"],
-      metric: (data) => [total(data, "Cliques"), totalCPE(data, "CPC")],
       variation: (data) => [
-        calculateVariations(data, "Cliques"),
-        calculateVariationsCTR(data, "Impressoes", "Cliques"),
+        calculatePostsPropertiesVariationsBySocialNetworksType(
+          data,
+          ["clicks"],
+          ["INSTAGRAM"]
+        ),
+        calculatePostsVariationsCTR(
+          data,
+          ["impressions"],
+          ["clicks"],
+          ["INSTAGRAM"]
+        ),
       ],
     },
     {
       heading: ["Views", "Custo por View", "Custo por Mil Views"],
       sigla: ["Total", "CPV"],
-      metric: (data) => [
-        total(data, "Impressoes"),
-        totalCPE(data, "CPV"),
-        // totalCPE(data, "CPV"),
-      ],
+
       variation: (data) => [
-        calculateVariations(data, "Impressoes"),
-        calculateVariationsCPV(data, "Impressoes"),
+        calculatePostsPropertiesVariationsBySocialNetworksType(
+          data,
+          ["impressions"],
+          ["INSTAGRAM"]
+        ),
+        calculatePostsVariationsCPV(data, ["impressions"], ["INSTAGRAM"]),
         // calculateVariationsCPV(data, "Impressoes", true),
       ],
     },
     {
       heading: ["Investimento Total", "Investimento Médio"],
-      metric: (data) => [
-        total(data, "Investimento", true),
-        total(data, "Investimento", true),
-      ],
+
       sigla: ["Total", "Média"],
       variation: (data) => [
-        calculateVariations(data, "Investimento"),
-        calculateVariations(data, "Investimento", true),
+        calculatePostsPropertiesVariationsBySocialNetworksType(
+          data,
+          ["mediumPrice"],
+          ["INSTAGRAM"]
+        ),
+        calculatePostsPropertiesVariationsBySocialNetworksType(
+          data,
+          ["mediumPrice"],
+          ["INSTAGRAM"],
+          true
+        ),
       ],
     },
   ],
@@ -149,15 +174,13 @@ const metricConfig: Record<
     {
       heading: ["Engajamento Médio", "Custo por Engajamento"],
       sigla: ["Total"],
-      metric: (data) => [
-        totalPercentage(data, "Engajamento Media"),
-        // totalCPE(data, ["CPE", "CPE Tiktok"]),
-      ],
+
       variation: (data) => [
-        calculateVariationsEngajamento(
+        calculatePostsVariationsEngajamento(
           data,
-          ["Impressoes", "Impressoes Tiktok"],
-          ["Interacoes", "Interacoes Tiktok"]
+          ["impressions"],
+          ["interactions"],
+          ["INSTAGRAM", "TIKTOK"]
         ),
         // calculateVariationsEngajamento(
         //   data,
@@ -170,69 +193,74 @@ const metricConfig: Record<
     {
       heading: ["Cliques", "Taxa de Cliques"],
       sigla: ["Total", "CTR"],
-      metric: (data) => [
-        total(data, ["Cliques", "Cliques Tiktok"]),
-        totalCPE(data, "CPC Media"),
-      ],
-
       variation: (data) => [
-        calculateVariations(data, ["Cliques", "Cliques Tiktok"]),
-        calculateVariationsCTR(
+        calculatePostsPropertiesVariationsBySocialNetworksType(
           data,
-          ["Impressoes", "Impressoes Tiktok"],
-          ["Cliques", "Cliques Tiktok"]
+          ["clicks"],
+          ["INSTAGRAM", "TIKTOK"]
+        ),
+        calculatePostsVariationsCTR(
+          data,
+          ["impressions"],
+          ["clicks"],
+          ["INSTAGRAM", "TIKTOK"]
         ),
       ],
     },
     {
       heading: ["Views", "Custo por View", "Custo por Mil Views"],
       sigla: ["Total", "CPV"],
-      metric: (data) => [
-        total(data, ["Impressoes", "Impressoes Tiktok"]),
-        totalCPE(data, "CPV Media"),
-        // totalCPE(data, "CPV Media"),
-      ],
-
       variation: (data) => [
-        calculateVariations(data, ["Impressoes", "Impressoes Tiktok"]),
-        calculateVariationsCPV(data, ["Impressoes", "Impressoes Tiktok"]),
+        calculatePostsPropertiesVariationsBySocialNetworksType(
+          data,
+          ["impressions"],
+          ["INSTAGRAM", "TIKTOK"]
+        ),
+        calculatePostsVariationsCPV(
+          data,
+          ["impressions"],
+          ["INSTAGRAM", "TIKTOK"]
+        ),
         // calculateVariationsCPV(data, ["Impressoes", "Impressoes Tiktok"], true),
       ],
     },
     {
       heading: ["Investimento Total", "Investimento Médio"],
       sigla: ["Total", "Média"],
-      metric: (data) => [
-        total(data, "Investimento", true),
-        total(data, "Investimento", true),
-      ],
       variation: (data) => [
-        calculateVariations(data, "Investimento"),
-        calculateVariations(data, "Investimento", true),
+        calculatePostsPropertiesVariationsBySocialNetworksType(
+          data,
+          ["mediumPrice"],
+          ["INSTAGRAM", "TIKTOK"]
+        ),
+        calculatePostsPropertiesVariationsBySocialNetworksType(
+          data,
+          ["mediumPrice"],
+          ["INSTAGRAM", "TIKTOK"],
+          true
+        ),
       ],
     },
   ],
 };
 
-const SecondSection = () => {
-  const { data } = useDataStore((state) => state.data);
+const SecondSection = ({ data }: { data?: Posts[] }) => {
+  const postsData = useDataStore((state) => state.postsData);
   const mode = useDataStore((state) => state.mode);
   const metrics = metricConfig[mode] || [];
 
   return (
-    <div className="w-full flex-shrink-0 h-min flex flex-col justify-start items-start overflow-visible relative xl:px-[22px] p-0 content-start flex-nowrap gap-6 rounded-none">
-      <div className="box-border flex-shrink-0 w-full h-min flex flex-col justify-start items-start xl:p-0 px-[15px] overflow-visible relative content-start flex-nowrap xl:gap-[22px] gap-6 rounded-none">
-        <div className="flex-shrink-0 flex-grow xl:flex-grow-0 w-full h-min flex xl:flex-row flex-col justify-start items-center overflow-visible relative p-0 content-center flex-nowrap xl:gap-6 gap-[15px] rounded-none">
-          {metrics.map(({ heading, metric, sigla, variation }) => (
-            <CostPerMetric
-              key={heading.join("-")}
-              heading={heading}
-              sigla={sigla}
-              metric={metric(data)}
-              variation={variation(data)}
-            />
-          ))}
-        </div>
+    <div className="box-border flex-shrink-0 w-full h-min flex flex-col justify-start items-start xl:p-0 px-[15px] overflow-visible relative content-start flex-nowrap xl:gap-[22px] gap-6 rounded-none">
+      <div className="flex-shrink-0 flex-grow xl:flex-grow-0 w-full h-min flex xl:flex-row flex-col justify-start items-center overflow-visible relative p-0 content-center flex-nowrap xl:gap-6 gap-[15px] rounded-none">
+        {metrics.map(({ heading, sigla, variation }) => (
+          <CostPerMetric
+            key={heading.join("-")}
+            heading={heading}
+            sigla={sigla}
+            // metric={metric(data)}
+            variation={variation(data ?? postsData)}
+          />
+        ))}
       </div>
     </div>
   );

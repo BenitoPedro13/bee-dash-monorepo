@@ -17,6 +17,7 @@ import { useEffect, useState } from "react";
 
 export default function DoughnutGraph() {
   const { data } = useDataStore((state) => state.data);
+  const postsData = useDataStore((state) => state.postsData);
   const { user } = useDataStore((state) => state.session);
 
   const mode = useDataStore((store) => store.mode);
@@ -37,7 +38,7 @@ export default function DoughnutGraph() {
   } satisfies ChartConfig;
 
   const getChartData = (data: Influencer[]) => {
-    return filterDataByDateRange(data, +dateRange).map((item, index) => {
+    return data.map((item, index) => {
       let metric: number = 0;
 
       if (mode === "all") {

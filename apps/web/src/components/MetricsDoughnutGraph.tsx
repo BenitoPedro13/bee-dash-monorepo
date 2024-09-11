@@ -10,7 +10,7 @@ import useDataStore, {
   DashbordDateRange,
   Influencer,
 } from "@/store";
-import { calculateVariations } from "../../utils/utils";
+import { calculateVariations, total, totalCount } from "../../utils/utils";
 
 const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
@@ -26,41 +26,35 @@ const MetricsDoughnutGraph = ({
   mobile,
 }: MetricsDoughnutGraphProps) => {
   const { data } = useDataStore((state) => state.data);
+
   const mode = useDataStore((store) => store.mode);
-  const dateRange = useDataStore((store) => store.dateRange);
+
   const [metricValue, setMetricValue] = useState<string>(metric);
-  const [metricVariation, setMetricVariation] = useState<number | null>(null);
 
   const graphTypes: Record<
     DashboardMode,
     Record<
       "Impacto",
       {
-        computeMetric: (
-          data: Influencer[]
-        ) => Record<
-          DashbordDateRange,
-          { total: string; variation: number | null }
-        >;
+        computeMetric: (data: Influencer[]) => string;
       }
     >
   > = {
     tiktok: {
       Impacto: {
         computeMetric: (data: Influencer[]) =>
-          calculateVariations(data, "Impacto Bruto Tiktok"),
+          total(data, "Impacto Bruto Tiktok"),
       },
     },
     instagram: {
       Impacto: {
-        computeMetric: (data: Influencer[]) =>
-          calculateVariations(data, "Impacto Bruto"),
+        computeMetric: (data: Influencer[]) => total(data, "Impacto Bruto"),
       },
     },
     all: {
       Impacto: {
         computeMetric: (data: Influencer[]) =>
-          calculateVariations(data, ["Impacto Bruto", "Impacto Bruto Tiktok"]),
+          total(data, ["Impacto Bruto", "Impacto Bruto Tiktok"]),
       },
     },
   };
@@ -68,9 +62,8 @@ const MetricsDoughnutGraph = ({
   useEffect(() => {
     const { computeMetric } = graphTypes[mode]["Impacto"];
 
-    setMetricValue(computeMetric(data)[dateRange].total);
-    setMetricVariation(computeMetric(data)[dateRange].variation);
-  }, [data, mode, dateRange]);
+    setMetricValue(computeMetric(data));
+  }, [data, mode]);
 
   return (
     <div
@@ -115,11 +108,11 @@ const MetricsDoughnutGraph = ({
             <p className="flex-shrink-0 w-auto h-auto whitespace-pre relative font-bold font-nexa-bold text-[#101828] text-3xl leading-[38px]">
               {metricValue}
             </p>
-            {typeof metricVariation === "number" && (
+            {/* {typeof metricVariation === "number" && (
               <div>
                 <Badge number={metricVariation} />
               </div>
-            )}
+            )} */}
           </div>
         </div>
         <DoughnutGraph />

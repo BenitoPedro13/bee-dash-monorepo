@@ -34,7 +34,13 @@ import {
 } from "../../utils/utils";
 // import { TrendingUp } from "lucide-react";
 
-export default function BarGraph({ typeOfGraph }: { typeOfGraph: GraphTypes }) {
+export default function PostsBarGraph({
+  typeOfGraph,
+  data,
+}: {
+  typeOfGraph: GraphTypes;
+  data: Posts[];
+}) {
   // const { data } = useDataStore((state) => state.data);
   const postsData = useDataStore((state) => state.postsData);
   const { user } = useDataStore((state) => state.session);
@@ -42,8 +48,8 @@ export default function BarGraph({ typeOfGraph }: { typeOfGraph: GraphTypes }) {
   const dateRange = useDataStore((store) => store.dateRange);
 
   const [chartDataState, setChartDataState] = useState<
-    | { influencer: string; Impressoes: number; fill: string }[]
-    | { influencer: string; Interacoes: number; fill: string }[]
+    | { post: string; Impressoes: number; fill: string }[]
+    | { post: string; Interacoes: number; fill: string }[]
   >([]);
 
   const mainColor = !user?.color ? "#FF8C00" : user.color; // Assuming user.color is the main color in hex format
@@ -67,44 +73,44 @@ export default function BarGraph({ typeOfGraph }: { typeOfGraph: GraphTypes }) {
           +dateRange
         );
 
-        const impressionsGroupedByCreator = impressionsDateFilteredPosts.reduce(
-          (acc: Record<string, Posts[]>, post) => {
-            if (!acc[post.socialNetwork.creatorId]) {
-              acc[post.socialNetwork.creatorId] = [];
-            }
-            acc[post.socialNetwork.creatorId].push(post);
-            return acc;
-          },
-          {}
-        );
+        // const impressionsGroupedByCreator = impressionsDateFilteredPosts.reduce(
+        //   (acc: Record<string, Posts[]>, post) => {
+        //     if (!acc[post.socialNetwork.creatorId]) {
+        //       acc[post.socialNetwork.creatorId] = [];
+        //     }
+        //     acc[post.socialNetwork.creatorId].push(post);
+        //     return acc;
+        //   },
+        //   {}
+        // );
 
-        return Object.keys(impressionsGroupedByCreator).map((key, index) => {
-          const finalPosts = impressionsGroupedByCreator[key];
+        return impressionsDateFilteredPosts.map((item, index) => {
+          // const finalPosts = impressionsGroupedByCreator[key];
 
           let metric: number = 0;
 
           if (mode === "all") {
             metric = countPostsPropertiesBySocialNetworksType(
-              finalPosts,
+              [item],
               ["impressions"],
               ["INSTAGRAM", "TIKTOK"]
             );
           } else if (mode === "tiktok") {
             metric = metric = countPostsPropertiesBySocialNetworksType(
-              finalPosts,
+              [item],
               ["impressions"],
               ["TIKTOK"]
             );
           } else if (mode === "instagram") {
             metric = metric = countPostsPropertiesBySocialNetworksType(
-              finalPosts,
+              [item],
               ["impressions"],
               ["INSTAGRAM"]
             );
           }
 
           return {
-            influencer: finalPosts[0].postsPack.creator.name,
+            post: `Post nº ${index + 1}`,
             Impressoes: metric,
             fill: subVariations[index],
           };
@@ -115,44 +121,44 @@ export default function BarGraph({ typeOfGraph }: { typeOfGraph: GraphTypes }) {
           +dateRange
         );
 
-        const interactionGroupedByCreator =
-          interactionsDateFilteredPosts.reduce(
-            (acc: Record<string, Posts[]>, post) => {
-              if (!acc[post.socialNetwork.creatorId]) {
-                acc[post.socialNetwork.creatorId] = [];
-              }
-              acc[post.socialNetwork.creatorId].push(post);
-              return acc;
-            },
-            {}
-          );
-        return Object.keys(interactionGroupedByCreator).map((key, index) => {
-          const finalPosts = interactionGroupedByCreator[key];
+        // const interactionGroupedByCreator =
+        //   interactionsDateFilteredPosts.reduce(
+        //     (acc: Record<string, Posts[]>, post) => {
+        //       if (!acc[post.socialNetwork.creatorId]) {
+        //         acc[post.socialNetwork.creatorId] = [];
+        //       }
+        //       acc[post.socialNetwork.creatorId].push(post);
+        //       return acc;
+        //     },
+        //     {}
+        //   );
+        return interactionsDateFilteredPosts.map((item, index) => {
+          // const finalPosts = interactionGroupedByCreator[key];
 
           let metric: number = 0;
 
           if (mode === "all") {
             metric = countPostsPropertiesBySocialNetworksType(
-              finalPosts,
+              [item],
               ["interactions"],
               ["INSTAGRAM", "TIKTOK"]
             );
           } else if (mode === "tiktok") {
             metric = metric = countPostsPropertiesBySocialNetworksType(
-              finalPosts,
+              [item],
               ["interactions"],
               ["TIKTOK"]
             );
           } else if (mode === "instagram") {
             metric = metric = countPostsPropertiesBySocialNetworksType(
-              finalPosts,
+              [item],
               ["interactions"],
               ["INSTAGRAM"]
             );
           }
 
           return {
-            influencer: finalPosts[0].postsPack.creator.name,
+            post: `Post nº ${index + 1}`,
             Interacoes: metric,
             fill: subVariations[index],
           };
@@ -163,10 +169,10 @@ export default function BarGraph({ typeOfGraph }: { typeOfGraph: GraphTypes }) {
   };
 
   useEffect(() => {
-    const chartData = getChartData(typeOfGraph, postsData);
+    const chartData = getChartData(typeOfGraph, data ?? postsData);
     console.log("chartData", chartData);
     setChartDataState(chartData);
-  }, [postsData, mode, dateRange, typeOfGraph]);
+  }, [data, postsData, mode, dateRange, typeOfGraph]);
 
   return (
     // <Card>
@@ -187,7 +193,7 @@ export default function BarGraph({ typeOfGraph }: { typeOfGraph: GraphTypes }) {
         <CartesianGrid vertical={false} />
         <XAxis
           hide
-          dataKey="influencer"
+          dataKey="post"
           tickLine={false}
           tickMargin={10}
           axisLine={false}

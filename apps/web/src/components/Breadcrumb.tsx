@@ -18,7 +18,11 @@ import Image from "next/image";
 
 const inter = Inter({ subsets: ["latin"] });
 
-const BreadcrumbComponent = () => {
+interface BreadcrumbProps {
+  creator?: string;
+}
+
+const BreadcrumbComponent = ({ creator }: BreadcrumbProps) => {
   const session = useDataStore((state) => state.session);
 
   return (
@@ -65,15 +69,15 @@ const BreadcrumbComponent = () => {
       <Breadcrumb>
         <BreadcrumbList className="flex items-center">
           <BreadcrumbItem className="flex items-center gap-2">
-            <BreadcrumbLink href="/">
+            <Link href="/">
               <Image src={house} alt="Home Icon" />
-            </BreadcrumbLink>
+            </Link>
           </BreadcrumbItem>
           <BreadcrumbSeparator>
             <Image src={chevronright} alt="Home Icon" />
           </BreadcrumbSeparator>
           <BreadcrumbItem>
-            <BreadcrumbLink
+            <Link
               href="/"
               //
             >
@@ -82,18 +86,33 @@ const BreadcrumbComponent = () => {
                   Campanhas
                 </p>
               </div>
-            </BreadcrumbLink>
+            </Link>
           </BreadcrumbItem>
           <BreadcrumbSeparator>
             <Image src={chevronright} alt="Home Icon" />
           </BreadcrumbSeparator>
           <BreadcrumbItem>
-            <BreadcrumbPage>
+            <Link href="/dashboard">
               <p className="text-black font-nexa text-sm font-medium">
-                {session.user.campaignName}
+                {session.user?.campaigns[0]?.name}
               </p>
-            </BreadcrumbPage>
+            </Link>
           </BreadcrumbItem>
+
+          {creator && (
+            <>
+              <BreadcrumbSeparator>
+                <Image src={chevronright} alt="Home Icon" />
+              </BreadcrumbSeparator>
+              <BreadcrumbItem>
+                <BreadcrumbPage>
+                  <p className="text-black font-nexa text-sm font-medium">
+                    {creator}
+                  </p>
+                </BreadcrumbPage>
+              </BreadcrumbItem>
+            </>
+          )}
         </BreadcrumbList>
       </Breadcrumb>
     </div>

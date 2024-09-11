@@ -4,9 +4,15 @@ import useDataStore, {
   DashboardMode,
   DashbordDateRange,
   Influencer,
+  Posts,
 } from "@/store";
 import Metrics from "./Metrics";
-import { calculateVariations, total } from "../../utils/utils";
+import {
+  calculatePostsCountVariations,
+  calculateVariations,
+  countPostsByType,
+  total,
+} from "../../utils/utils";
 import TotalPostsIcon from "./MetricsIcons/TotalPostsIcon";
 import TotalFeedIcon from "./MetricsIcons/TotalFeedIcon";
 import TotalStoriesIcon from "./MetricsIcons/TotalStoriesIcon";
@@ -17,13 +23,15 @@ const metricConfig: Record<
   DashboardMode,
   {
     className: string;
+    classNameCreator: string;
     config: {
       className: string;
+      classNameCreator: string;
       heading: string;
-      metric: (data: Influencer[]) => string;
+      metric: (data: Posts[]) => string | number;
       icon: JSX.Element | null;
       variation: (
-        data: Influencer[]
+        data: Posts[]
       ) => Record<
         DashbordDateRange,
         { total: number | string; variation: number | null }
@@ -34,132 +42,168 @@ const metricConfig: Record<
   tiktok: {
     className:
       "flex-shrink-0 w-full xl:h-auto h-min xl:flex grid xl:justify-start xl:items-center grid-cols-metric auto-rows-fr grid-rows-1 p-0 overflow-visible relative content-center flex-nowrap xl:gap-6 gap-[10px] rounded-none",
+    classNameCreator:
+      "flex-shrink-0 w-full xl:h-auto h-min grid grid-cols-2 auto-rows-fr grid-rows-2 p-0 overflow-visible relative content-center flex-nowrap xl:gap-4 gap-[10px] rounded-none",
+
     config: [
       {
         className: "",
+        classNameCreator: "col-span-2 h-[117px]",
         heading: "Total Posts",
-        metric: (data) => total(data, ["Tiktok"]),
+        metric: (data) => countPostsByType(data, ["TIKTOK"]),
         icon: null,
-        variation: (data) => calculateVariations(data, "Tiktok"),
+        variation: (data) => calculatePostsCountVariations(data, ["TIKTOK"]),
       },
       {
         className: "",
+        classNameCreator: "col-span-2 h-[117px]",
+
         heading: "Total TikToks",
-        metric: (data) => total(data, "Tiktok"),
+        metric: (data) => countPostsByType(data, ["TIKTOK"]),
         icon: <TotalTiktokIcon />,
-        variation: (data) => calculateVariations(data, "Tiktok"),
+        variation: (data) => calculatePostsCountVariations(data, ["TIKTOK"]),
       },
     ],
   },
   instagram: {
     className:
       "flex-shrink-0 w-full xl:h-auto h-min xl:flex grid xl:justify-start xl:items-center grid-cols-metric auto-rows-fr grid-rows-2 p-0 overflow-visible relative content-center flex-nowrap xl:gap-6 gap-[10px] rounded-none",
+    classNameCreator:
+      "flex-shrink-0 w-full xl:h-auto h-min grid grid-cols-2 auto-rows-fr grid-rows-2 p-0 overflow-visible relative content-center flex-nowrap xl:gap-4 gap-[10px] rounded-none",
+
     config: [
       {
         className: "",
+        classNameCreator: "col-span-1 h-[117px]",
+
         heading: "Total Posts",
-        metric: (data) => total(data, ["Stories", "Feed", "Reels"]),
+        metric: (data) => countPostsByType(data, ["STORIES", "FEED", "REELS"]),
         icon: null,
         variation: (data) =>
-          calculateVariations(data, ["Stories", "Feed", "Reels"]),
+          calculatePostsCountVariations(data, ["STORIES", "FEED", "REELS"]),
       },
       {
         className: "",
+        classNameCreator: "col-span-1",
+
         heading: "Total Stories",
-        metric: (data) => total(data, "Stories"),
+        metric: (data) => countPostsByType(data, ["STORIES"]),
         icon: (
           <div className="flex items-center justify-center w-5 h-5">
             <TotalStoriesIcon />
           </div>
         ),
-        variation: (data) => calculateVariations(data, "Stories"),
+        variation: (data) => calculatePostsCountVariations(data, ["STORIES"]),
       },
       {
         className: "",
+        classNameCreator: "col-span-1 h-[117px]",
+
         heading: "Total Feed",
-        metric: (data) => total(data, "Feed"),
+        metric: (data) => countPostsByType(data, ["FEED"]),
         icon: <TotalFeedIcon />,
-        variation: (data) => calculateVariations(data, "Feed"),
+        variation: (data) => calculatePostsCountVariations(data, ["FEED"]),
       },
       {
         className: "",
+        classNameCreator: "col-span-1 h-[117px]",
+
         heading: "Total Reels",
-        metric: (data) => total(data, "Reels"),
+        metric: (data) => countPostsByType(data, ["REELS"]),
         icon: <TotalReelsIcon />,
-        variation: (data) => calculateVariations(data, "Reels"),
+        variation: (data) => calculatePostsCountVariations(data, ["REELS"]),
       },
     ],
   },
   all: {
     className:
       "flex-shrink-0 w-full xl:h-auto h-min xl:flex grid xl:justify-start xl:items-center grid-cols-metric auto-rows-fr grid-rows-2 p-0 overflow-visible relative content-center flex-nowrap xl:gap-6 gap-[10px] rounded-none",
+    classNameCreator:
+      "w-full xl:h-auto h-min grid grid-cols-6 auto-rows-fr grid-rows-2 p-0 overflow-visible relative content-center flex-nowrap xl:gap-4 gap-[10px] rounded-none",
+
     config: [
       {
         className: "",
+        classNameCreator: "col-span-2 h-[117px]",
         heading: "Total Posts",
-        metric: (data) => total(data, ["Stories", "Feed", "Reels", "Tiktok"]),
+        metric: (data) =>
+          countPostsByType(data, ["STORIES", "FEED", "REELS", "TIKTOK"]),
         icon: null,
         variation: (data) =>
-          calculateVariations(data, ["Stories", "Feed", "Reels", "Tiktok"]),
+          calculatePostsCountVariations(data, [
+            "STORIES",
+            "FEED",
+            "REELS",
+            "TIKTOK",
+          ]),
       },
       {
         className: "",
+        classNameCreator: "col-span-2 h-[117px]",
         heading: "Total Stories",
-        metric: (data) => total(data, "Stories"),
+        metric: (data) => countPostsByType(data, ["STORIES"]),
         icon: (
           <div className="flex items-center justify-center w-5 h-5">
             <TotalStoriesIcon />
           </div>
         ),
-        variation: (data) => calculateVariations(data, "Stories"),
+        variation: (data) => calculatePostsCountVariations(data, ["STORIES"]),
       },
       {
         className: "",
+        classNameCreator: "col-span-2 h-[117px]",
         heading: "Total Feed",
-        metric: (data) => total(data, "Feed"),
+        metric: (data) => countPostsByType(data, ["FEED"]),
         icon: <TotalFeedIcon />,
-        variation: (data) => calculateVariations(data, "Feed"),
+        variation: (data) => calculatePostsCountVariations(data, ["FEED"]),
       },
       {
         className: "",
+        classNameCreator: "col-span-3 h-[117px]",
         heading: "Total Reels",
-        metric: (data) => total(data, "Reels"),
+        metric: (data) => countPostsByType(data, ["REELS"]),
         icon: <TotalReelsIcon />,
-        variation: (data) => calculateVariations(data, "Reels"),
+        variation: (data) => calculatePostsCountVariations(data, ["REELS"]),
       },
       {
         className: "col-span-2",
+        classNameCreator: "col-span-3 h-[117px]",
         heading: "Total TikToks",
-        metric: (data) => total(data, "Tiktok"),
+        metric: (data) => countPostsByType(data, ["TIKTOK"]),
         icon: <TotalTiktokIcon />,
-        variation: (data) => calculateVariations(data, "Tiktok"),
+        variation: (data) => calculatePostsCountVariations(data, ["TIKTOK"]),
       },
     ],
   },
 };
 
-const FirstSection = () => {
-  const { data } = useDataStore((state) => state.data);
+const FirstSection = ({
+  creator = false,
+  data,
+}: {
+  creator?: boolean;
+  data?: Posts[];
+}) => {
+  // const { data } = useDataStore((state) => state.data);
+  const postsData = useDataStore((state) => state.postsData);
   const mode = useDataStore((state) => state.mode);
   const metrics = metricConfig[mode] || [];
 
   return (
-    <div className="box-border flex-shrink-0 w-full h-min flex flex-col xl:justify-center justify-start items-start xl:px-[22px] px-[15px] overflow-visible relative content-start flex-nowrap xl:gap-[22px] gap-6 rounded-none">
-      <div className={metrics?.className}>
-        {metrics?.config.map(
-          ({ className, heading, metric, icon, variation }) => (
-            <Metrics
-              className={className}
-              key={heading}
-              heading={heading}
-              metric={metric(data)}
-              variation={variation(data)}
-            >
-              {icon}
-            </Metrics>
-          )
-        )}
-      </div>
+    <div className={creator ? metrics?.classNameCreator : metrics?.className}>
+      {metrics?.config.map(
+        ({ className, classNameCreator, heading, metric, icon, variation }) => (
+          <Metrics
+            className={creator ? classNameCreator : className}
+            key={heading}
+            heading={heading}
+            metric={metric(data ?? postsData)}
+            variation={variation(data ?? postsData)}
+          >
+            {icon}
+          </Metrics>
+        )
+      )}
     </div>
   );
 };

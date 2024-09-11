@@ -10,16 +10,17 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import useDataStore, { Influencer } from "@/store";
+import useDataStore, { Influencer, Posts } from "@/store";
 import {
   filterDataByDateRange,
+  filterPostsDataByDateRange,
   generateShadesAndTints,
   parseDate,
 } from "../../utils/utils";
 import { useEffect, useState } from "react";
 
 export function Component() {
-  const { data } = useDataStore((state) => state.data);
+  const postsData = useDataStore((state) => state.postsData);
   const { user } = useDataStore((state) => state.session);
   const mode = useDataStore((store) => store.mode);
   const dateRange = useDataStore((store) => store.dateRange);
@@ -32,7 +33,7 @@ export function Component() {
   const subVariations = generateShadesAndTints(mainColor, 2);
 
   const getChartData = (
-    data: Influencer[]
+    data: Posts[]
   ): { month: string; instagram?: number; tiktok?: number }[] => {
     // Reorder weekdays array so "Domingo" is at index 0
     const weekdays = [
@@ -52,8 +53,8 @@ export function Component() {
       tiktok: 0,
     }));
 
-    filterDataByDateRange(data, +dateRange).forEach((item) => {
-      const postDate = parseDate(item["Data de Postagem"]); // Parse date using the custom function
+    filterPostsDataByDateRange(data, +dateRange).forEach((item) => {
+      const postDate = new Date(item.postDate); // Parse date using the custom function
       const weekdayIndex = postDate.getDay(); // Get weekday index (0 = Sunday, 1 = Monday, etc.)
 
       const weekday = weekdays[weekdayIndex]; // Directly map to the correct weekday name
@@ -64,10 +65,12 @@ export function Component() {
 
       if (chartDataItem) {
         if (mode === "tiktok" || mode === "all") {
-          chartDataItem.tiktok! += Number.parseFloat(item["Impressoes Tiktok"]);
+          chartDataItem.tiktok! +=
+            item.type === "TIKTOK" ? item.impressions : 0;
         }
         if (mode === "instagram" || mode === "all") {
-          chartDataItem.instagram! += Number.parseFloat(item["Impressoes"]);
+          chartDataItem.instagram! +=
+            item.type !== "TIKTOK" ? item.impressions : 0;
         }
       }
     });
@@ -76,10 +79,10 @@ export function Component() {
   };
 
   useEffect(() => {
-    const chartData = getChartData(data);
+    const chartData = getChartData(postsData);
 
     setChartDataState(chartData);
-  }, [data, mode, dateRange]);
+  }, [postsData, mode, dateRange]);
 
   const chartConfig = {
     instagram: {

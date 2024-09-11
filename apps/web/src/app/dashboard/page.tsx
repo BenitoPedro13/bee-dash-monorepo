@@ -51,47 +51,33 @@ const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
   const session = useDataStore((state) => state.session);
-  const fetchData = useDataStore((state) => state.fetchData);
-  const fetchAttachment = useDataStore((state) => state.fetchAttachment);
-  const { data, updatedAt } = useDataStore((state) => state.data);
-  const router = useRouter();
-
-  useEffect(() => {
-    if (!session.isAuthenticated) {
-      router.push("/");
-    }
-  }, [router, session.isAuthenticated]);
-
-  useEffect(() => {
-    const { "bee-dash-token": access_token } = parseCookies();
-    fetchData(access_token);
-    fetchAttachment(access_token);
-  }, [fetchData, fetchAttachment]);
+  const postsData = useDataStore((state) => state.postsData);
+  const { data } = useDataStore((state) => state.data);
 
   return (
     <>
-      <Header />
-      <main>
-        <SidenavDesktop />
-        <div
-          className="w-full h-full flex xl:flex-row flex-col justify-start items-start bg-white overflow-hidden p-0 xl:pl-[82px] content-start flex-nowrap gap-0 rounded-none relative"
-          style={
-            {
-              // backgroundImage: 'url("/honeycomb.svg")',
-              // backgroundPosition: "center center",
-              // backfaceOpaco
-            }
+      {/* <Header /> */}
+      {/* <main> */}
+      {/* <SidenavDesktop /> */}
+      <div
+        className="w-full h-full flex xl:flex-row flex-col justify-start items-start z-20 p-0 xl:pl-[82px] content-start flex-nowrap gap-0 rounded-none relative"
+        style={
+          {
+            // backgroundImage: 'url("/honeycomb.svg")',
+            // backgroundPosition: "center center",
+            // backfaceOpaco
           }
-        >
-          <div className="absolute z-0">
+        }
+      >
+        {/* <div className="absolute z-0">
             <DashboardBG />
-          </div>
-          <div className="box-border flex-shrink-0 w-full h-min flex flex-col justify-start items-center xl:pt-8 xl:pb-8 py-[15px] overflow-visible content-center flex-nowrap xl:gap-6 gap-[15px] rounded-none">
-            <div className="box-border flex-shrink-0 w-full xl:h-auto h-min flex flex-col justify-center items-start xl:px-8 px-[15px] overflow-visible relative content-start flex-nowrap gap-6 rounded-none">
-              <div className="flex justify-between items-center self-stretch">
-                <BreadcrumbComponent />
-                <div className="w-fit flex items-start gap-4">
-                  {/* <div className="w-fit flex flex-col items-start gap-[6px]">
+          </div> */}
+        <div className="box-border flex-shrink-0 w-full h-min flex flex-col justify-start items-center xl:pt-8 xl:pb-8 py-[15px] overflow-visible content-center flex-nowrap xl:gap-6 gap-[15px] rounded-none">
+          <div className="box-border flex-shrink-0 w-full xl:h-auto h-min flex flex-col justify-center items-start xl:px-8 px-[15px] overflow-visible relative content-start flex-nowrap gap-6 rounded-none">
+            <div className="flex justify-between items-center self-stretch">
+              <BreadcrumbComponent />
+              <div className="w-fit flex items-start gap-4">
+                {/* <div className="w-fit flex flex-col items-start gap-[6px]">
                     <div className="w-full min-w-[384px] flex items-center gap-2">
                       <div className="w-full flex flex-col items-start gap-[6px] flex-grow flex-shrink-0">
                         <div className="w-full flex py-2 pr-14 pl-3 items-center gap-1 self-stretch rounded-lg border border-[#E2E8F0]">
@@ -104,60 +90,64 @@ export default function Home() {
                       </div>
                     </div>
                   </div> */}
-                  {!session?.user?.urlProfilePicture ? (
-                    <div className="mask mask-squircle w-12 h-12 aspect-square block rounded-full border-black border-[1px] border-solid bg-[url('/bg-contact-cta.webp')] bg-cover bg-no-repeat bg-center relative">
-                      <img
-                        src="/juicy-artwork-limo.svg"
-                        alt="Default Bee Company Avatar"
-                        className="absolute right-[3px]"
-                      />
-                    </div>
-                  ) : (
+                {!session?.user?.urlProfilePicture ? (
+                  <div className="mask mask-squircle w-12 h-12 aspect-square block rounded-full border-black border-[1px] border-solid bg-[url('/bg-contact-cta.webp')] bg-cover bg-no-repeat bg-center relative">
                     <img
-                      src={`${baseApiUrl}${session.user.urlProfilePicture}`}
-                      width="40"
-                      height="40"
-                      alt={`${session.user.name} Logo`}
-                      className="border-black border-[1px] border-solid rounded-full"
+                      src="/juicy-artwork-limo.svg"
+                      alt="Default Bee Company Avatar"
+                      className="absolute right-[3px]"
                     />
-                  )}
-                </div>
+                  </div>
+                ) : (
+                  <img
+                    src={`${baseApiUrl}${session.user.urlProfilePicture}`}
+                    width="40"
+                    height="40"
+                    alt={`${session.user.name} Logo`}
+                    className="border-black border-[1px] border-solid rounded-full"
+                  />
+                )}
               </div>
-              <WelcomeTitle />
             </div>
+            <WelcomeTitle />
+          </div>
+          <div className="box-border flex-shrink-0 w-full h-min flex flex-col xl:justify-center justify-start items-start xl:px-[22px] px-[15px] overflow-visible relative content-start flex-nowrap xl:gap-[22px] gap-6 rounded-none">
             <FirstSection />
+          </div>
+          <div className="w-full flex-shrink-0 h-min flex flex-col justify-start items-start overflow-visible relative xl:px-[22px] p-0 content-start flex-nowrap gap-6 rounded-none">
             <SecondSection />
-            <div className="w-full flex-shrink-0 h-min flex justify-start items-start overflow-visible relative xl:px-[22px] px-[15px] content-start flex-nowrap xl:gap-6 gap-6 rounded-none">
-              <MetricsLineGraph data={data} />
+          </div>
+          <div className="w-full flex-shrink-0 h-min flex justify-start items-start overflow-visible relative xl:px-[22px] px-[15px] content-start flex-nowrap xl:gap-6 gap-6 rounded-none">
+            <MetricsLineGraph data={postsData} />
 
-              <MetricsDoughnutGraph
-                heading="Impacto Bruto"
-                metric={total(data, ["Interacoes", "Impressoes"])}
-              />
-              {/* <Component /> */}
-            </div>
+            <MetricsDoughnutGraph
+              heading="Impacto Bruto"
+              metric={total(data, ["Interacoes", "Impressoes"])}
+            />
+            {/* <Component /> */}
+          </div>
 
-            <div className="w-full flex-shrink-0 h-min flex flex-col lg:hidden justify-start items-center overflow-visible relative xl:px-[22px] px-[15px] content-start flex-nowrap xl:gap-6 gap-[15px] rounded-none sm:flex-row sm:justify-start sm:items-start">
-              <MetricsDoughnutGraph
-                mobile
-                heading="Impacto Bruto"
-                metric={total(data, ["Interacoes", "Impressoes"])}
-              />
-              <MetricsBarStackGraph mobile heading="Audiência Diária" />
-            </div>
+          <div className="w-full flex-shrink-0 h-min flex flex-col lg:hidden justify-start items-center overflow-visible relative xl:px-[22px] px-[15px] content-start flex-nowrap xl:gap-6 gap-[15px] rounded-none sm:flex-row sm:justify-start sm:items-start">
+            <MetricsDoughnutGraph
+              mobile
+              heading="Impacto Bruto"
+              metric={total(data, ["Interacoes", "Impressoes"])}
+            />
+            <MetricsBarStackGraph mobile heading="Audiência Diária" />
+          </div>
 
-            <div className="w-full flex-shrink-0 h-min flex flex-col justify-start items-start overflow-visible relative xl:px-[22px] px-[15px] content-start flex-nowrap gap-6 rounded-none">
-              <div className="box-border flex-shrink-0 w-full h-min flex justify-start items-start overflow-visible relative content-start flex-nowrap gap-6 rounded-none">
-                <CreatorsTable />
-                <MetricsBarStackGraph heading="Audiência Diária" />
-              </div>
+          <div className="w-full flex-shrink-0 h-min flex flex-col justify-start items-start overflow-visible relative xl:px-[22px] px-[15px] content-start flex-nowrap gap-6 rounded-none">
+            <div className="box-border flex-shrink-0 w-full h-min flex justify-start items-start overflow-visible relative content-start flex-nowrap gap-6 rounded-none">
+              <CreatorsTable />
+              <MetricsBarStackGraph heading="Audiência Diária" />
             </div>
-            <div className="w-full flex-shrink-0 h-min flex flex-col justify-start items-start overflow-visible relative xl:px-[22px] px-[15px] content-start flex-nowrap gap-6 rounded-none">
-              <div className="box-border flex-shrink-0 w-full h-min flex flex-col justify-start items-start overflow-visible relative content-start flex-nowrap gap-6 rounded-none">
-                <AttachmentsTable />
-              </div>
+          </div>
+          <div className="w-full flex-shrink-0 h-min flex flex-col justify-start items-start overflow-visible relative xl:px-[22px] px-[15px] content-start flex-nowrap gap-6 rounded-none">
+            <div className="box-border flex-shrink-0 w-full h-min flex flex-col justify-start items-start overflow-visible relative content-start flex-nowrap gap-6 rounded-none">
+              <AttachmentsTable />
             </div>
-            {/* <div className="xl:hidden box-border flex-shrink-0 xl:w-[379px] w-full flex-grow h-min flex flex-col justify-start items-center xl:pt-8 xl:pr-8 pb-10 px-[15px] bg-transparent overflow-visible content-center flex-nowrap xl:gap-[28px] gap-[15px] rounded-none z-10">
+          </div>
+          {/* <div className="xl:hidden box-border flex-shrink-0 xl:w-[379px] w-full flex-grow h-min flex flex-col justify-start items-center xl:pt-8 xl:pr-8 pb-10 px-[15px] bg-transparent overflow-visible content-center flex-nowrap xl:gap-[28px] gap-[15px] rounded-none z-10">
               <MetricsDoughnutGraph
                 heading="Impressoes"
                 metric={total(data, "Impressoes")}
@@ -178,9 +168,9 @@ export default function Home() {
               <FinancialMetrics />
               <ContactCTA />
             </div> */}
-            <Footer />
-          </div>
-          {/* <div className="hidden box-border flex-shrink-0 xl:w-[379px] w-auto flex-grow h-min xl:flex flex-col justify-start items-center pt-8 pr-8 pb-12 bg-transparent overflow-visible content-center flex-nowrap gap-[28px] rounded-none z-10">
+          {/* <Footer /> */}
+        </div>
+        {/* <div className="hidden box-border flex-shrink-0 xl:w-[379px] w-auto flex-grow h-min xl:flex flex-col justify-start items-center pt-8 pr-8 pb-12 bg-transparent overflow-visible content-center flex-nowrap gap-[28px] rounded-none z-10">
             <div className="flex-shrink-0 w-full h-fit mb-[48px] flex justify-end items-center overflow-visible relative p-0 content-center flex-nowrap gap-3 rounded-none">
               <div className="flex-shrink-0 w-min h-min flex justify-start items-start overflow-visible relative p-0 content-start flex-nowrap gap-3 rounded-none">
                 <div className="flex-shrink-0 w-[338px] h-min flex flex-col justify-start items-start overflow-visible relative p-0 content-start flex-nowrap gap-2 rounded-none">
@@ -237,8 +227,8 @@ export default function Home() {
             <FinancialMetrics />
             <ContactCTA />
           </div> */}
-        </div>
-      </main>
+      </div>
+      {/* </main> */}
     </>
   );
 }

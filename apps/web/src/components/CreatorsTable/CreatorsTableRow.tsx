@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import React from "react";
 import { Plus_Jakarta_Sans, Inter } from "next/font/google";
 import useDataStore, { Influencer, baseApiUrl } from "@/store";
@@ -5,6 +6,7 @@ import Image from "next/image";
 import juicyLimoArt from "@/../public/juicy-artwork-limo.svg";
 import { UserCircle, UserIcon } from "lucide-react";
 import { addAlphaToHex } from "../../../utils/utils";
+import Link from "next/link";
 
 const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 const inter = Inter({ subsets: ["latin"] });
@@ -17,40 +19,42 @@ const CreatorsTableRow = ({ data }: CreatorsTableRowProps) => {
   return (
     <tr>
       <td>
-        <div className="flex-shrink-0 flex justify-start items-center overflow-visible content-center flex-nowrap p-0 gap-[6px]">
-          <div
-            className="flex items-center justify-center w-[38px] h-[38px] rounded-full"
-            style={{
-              backgroundColor: addAlphaToHex("#FF8C00", 0.15),
-            }}
-          >
-            {!data["Url Foto Perfil"] ? (
-              <UserIcon color="#FF8C00" strokeWidth="1.66px" />
-            ) : (
-              <img
-                crossOrigin="anonymous"
-                src={`${data["Url Foto Perfil"]}`}
-                width="38"
-                height="38"
-                alt="Creator Avatar"
-                className="rounded-full w-[38px] h-[38px]"
-              />
-            )}
-          </div>
+        <Link href={`/dashboard/creator/${data.Username}`}>
+          <div className="flex-shrink-0 flex justify-start items-center overflow-visible content-center flex-nowrap p-0 gap-[6px]">
+            <div
+              className="flex items-center justify-center w-[38px] h-[38px] rounded-full"
+              style={{
+                backgroundColor: addAlphaToHex("#FF8C00", 0.15),
+              }}
+            >
+              {!data["Url Foto Perfil"] ? (
+                <UserIcon color="#FF8C00" strokeWidth="1.66px" />
+              ) : (
+                <img
+                  crossOrigin="anonymous"
+                  src={`${baseApiUrl}${data["Url Foto Perfil"]}`}
+                  width="38"
+                  height="38"
+                  alt="Creator Avatar"
+                  className="rounded-full w-[38px] h-[38px]"
+                />
+              )}
+            </div>
 
-          <div className="flex-shrink-0 w-min h-min flex flex-col justify-start items-start overflow-visible relative p-0 content-start flex-nowrap gap-0 rounded-none">
-            <h5
-              className={`flex-shrink-0 w-auto h-auto whitespace-nowrap relative font-medium ${inter.className} text-[#0f1728] text-sm`}
-            >
-              {data.Influencer}
-            </h5>
-            <p
-              className={`flex-shrink-0 w-auto h-auto whitespace-nowrap relative ${inter.className} text-[#475466] text-sm`}
-            >
-              @{data.Username}
-            </p>
+            <div className="flex-shrink-0 w-min h-min flex flex-col justify-start items-start overflow-visible relative p-0 content-start flex-nowrap gap-0 rounded-none">
+              <h5
+                className={`flex-shrink-0 w-auto h-auto whitespace-nowrap relative font-medium ${inter.className} text-[#0f1728] text-sm`}
+              >
+                {data.Influencer}
+              </h5>
+              <p
+                className={`flex-shrink-0 w-auto h-auto whitespace-nowrap relative ${inter.className} text-[#475466] text-sm`}
+              >
+                @{data.Username}
+              </p>
+            </div>
           </div>
-        </div>
+        </Link>
       </td>
       <td>
         <p

@@ -15,7 +15,7 @@ const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 type CostPerMetricProps = {
   heading: string[];
   sigla?: string[];
-  metric: string[];
+  metric?: string[];
   variation: Record<
     DashbordDateRange,
     { total: number | string; variation: number | null }

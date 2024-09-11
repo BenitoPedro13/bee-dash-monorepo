@@ -34,7 +34,7 @@ const SidenavDesktop = () => {
   };
 
   return (
-    <div className="hidden w-[82px] h-[100vh] xl:flex flex-row justify-start items-start bg-white overflow-hidden z-1 p-0 content-start flex-nowrap gap-0 fixed rounded-none border-[#47546740] border-solid border-r z-10 xl:flex-shrink-0">
+    <div className="hidden w-[82px] h-[100vh] xl:flex flex-row justify-start items-start bg-white overflow-hidden z-1 p-0 content-start flex-nowrap gap-0 fixed rounded-none border-[#47546740] border-solid border-r z-30 xl:flex-shrink-0">
       <div className="w-[81px] h-[100vh] flex flex-col justify-between items-start overflow-visible flex-grow flex-shrink-0 self-stretch relative p-0 gap-0 content-start flex-nowrap rounded-none">
         <nav className="box-border flex-shrink-0 w-full h-min flex flex-col justify-start items-start pt-8 overflow-visible relative content-center flex-nowrap gap-6 self-stretch rounded-none">
           <Link href="/">

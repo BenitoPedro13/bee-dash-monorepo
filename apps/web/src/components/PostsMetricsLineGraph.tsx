@@ -17,6 +17,7 @@ import {
 import BarGraph from "./BarGraph";
 import Badge from "./Badge";
 import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
+import PostsBarGraph from "./PostsBarGraph";
 
 const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
@@ -26,7 +27,7 @@ type MetricsGraphProps = {
 
 export type GraphTypes = "Impressoes" | "Interacoes";
 
-const MetricsGraph = ({ data }: MetricsGraphProps) => {
+const PostsMetricsGraph = ({ data }: MetricsGraphProps) => {
   const mode = useDataStore((store) => store.mode);
   const dateRange = useDataStore((store) => store.dateRange);
   const [heading, setHeading] = useState<string>("Impressões (Views)");
@@ -139,7 +140,7 @@ const MetricsGraph = ({ data }: MetricsGraphProps) => {
 
   return (
     <div
-      className="box-border lg:w-[calc(100%-384px)] w-full h-min flex flex-col justify-start items-start shadow-metrics   bg-white xl:overflow-hidden overflow-visible p-0 content-start flex-nowrap xl:gap-0 gap-5 rounded-xl border-[#D4D4D4] border"
+      className="box-border lg:w-[calc(100%)] w-full h-min flex flex-col justify-start items-start shadow-metrics   bg-white xl:overflow-hidden overflow-visible p-0 content-start flex-nowrap xl:gap-0 gap-5 rounded-xl border-[#D4D4D4] border"
       // initial={false}
       // whileHover={{ boxShadow: "2px 2px 0px 0px #898989" }}
       // animate={{ boxShadow: "2px 2px 2px 0px rgba(16, 24, 40, 0.06)" }}
@@ -183,10 +184,10 @@ const MetricsGraph = ({ data }: MetricsGraphProps) => {
           </div>
         </div>
 
-        <BarGraph typeOfGraph={typeOfGraph} />
+        <PostsBarGraph typeOfGraph={typeOfGraph} data={data} />
       </div>
     </div>
   );
 };
 
-export default MetricsGraph;
+export default PostsMetricsGraph;

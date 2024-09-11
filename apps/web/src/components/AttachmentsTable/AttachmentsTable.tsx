@@ -232,7 +232,7 @@ const AttachmentsTable = () => {
       </div>
       <div className="overflow-x-auto w-full no-scrollbar border-t border-gray">
         <table className="table">
-          <thead className="sticky top-0 z-10 bg-white">
+          <thead className="sticky top-0 z-20 bg-white">
             <tr className="border-box flex-shrink-0 w-full h-min bg-[#f8f9fb] overflow-visible relative content-center flex-nowrap gap-[5px] rounded-none border-b border-[#eaecf0]">
               <th
                 className={`cursor-pointer flex-shrink-0 w-[40%] h-auto whitespace-pre-wrap break-words relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
@@ -245,7 +245,7 @@ const AttachmentsTable = () => {
                   )
                 }
               >
-                <div className="flex justify-start items-center gap-6">
+                <div className="flex justify-start items-center gap-6 whitespace-nowrap">
                   Nome do Arquivo
                   <TableSortingIcon
                     sortColumn={sortColumn}
@@ -265,7 +265,7 @@ const AttachmentsTable = () => {
                   )
                 }
               >
-                <div className="flex justify-start items-center gap-6">
+                <div className="flex justify-start items-center gap-6 whitespace-nowrap">
                   Tamanho
                   <TableSortingIcon
                     sortColumn={sortColumn}
@@ -285,7 +285,7 @@ const AttachmentsTable = () => {
                   )
                 }
               >
-                <div className="flex justify-start items-center gap-6">
+                <div className="flex justify-start items-center gap-6 whitespace-nowrap">
                   Data de Envio
                   <TableSortingIcon
                     sortColumn={sortColumn}

@@ -1,7 +1,19 @@
-import { Attachment, Influencer } from "@/store";
+import {
+  Attachment,
+  Influencer,
+  Posts,
+  PostsPack,
+  PostsType,
+  SocialNetworksType,
+} from "@/store";
 import colorConvert from "color-convert";
 export type tablekeys = keyof Attachment | keyof Influencer;
 export type tablesortDirections = "asc" | "desc";
+
+export function parseDateToPtBr(dateString: string) {
+  const date = new Date(dateString);
+  return new Intl.DateTimeFormat("pt-BR").format(date);
+}
 
 export function parseUpdatedAt(updatedAt: string) {
   const date = new Date(updatedAt);
@@ -170,6 +182,26 @@ export const total = (
   return formattedCount;
 };
 
+export function countPostsByType(
+  items: Posts[],
+  valueArray: PostsType[],
+  formatAsNumber: boolean = false
+) {
+  const count = items.reduce((count, item) => {
+    if (valueArray.includes(item.type)) {
+      return count + 1;
+    }
+
+    return count;
+  }, 0);
+
+  if (formatAsNumber) {
+    return count;
+  }
+
+  return count.toLocaleString("PT-BR");
+}
+
 export const calculateVariation = (
   current: string,
   previous?: string
@@ -197,6 +229,27 @@ export const filterDataByDateRange = (
 
   return data.filter((influencer) => {
     const postDate = parseDate(influencer["Data de Postagem"]);
+    const diffTime = currentDate.getTime() - postDate.getTime();
+    const diffDays = diffTime / (1000 * 3600 * 24);
+
+    // console.log(diffDays <= days);
+
+    return diffDays <= days;
+  });
+};
+
+export const filterPostsDataByDateRange = (
+  data: Posts[],
+  days: number
+): Posts[] => {
+  const currentDate = new Date();
+
+  // console.log("filterDataByDateRange", days);
+
+  if (days === 0) return data;
+
+  return data.filter((post) => {
+    const postDate = new Date(post.postDate);
     const diffTime = currentDate.getTime() - postDate.getTime();
     const diffDays = diffTime / (1000 * 3600 * 24);
 
@@ -264,6 +317,113 @@ export const calculateVariations = (
         +Number.parseFloat(total30Days).toFixed(2)
       ),
       variation: calculateVariation(currentTotal, total30Days),
+    },
+  };
+};
+
+export const calculatePostsPropertiesVariationsBySocialNetworksType = (
+  items: Posts[],
+  valueArray: (keyof Posts)[],
+  socialNetworksTypes: SocialNetworksType[],
+  mediumInvestiment: boolean = false
+) => {
+  const currentTotal = countPostsPropertiesBySocialNetworksType(
+    items,
+    valueArray,
+    socialNetworksTypes,
+    mediumInvestiment
+  );
+
+  const last7DaysData = filterPostsDataByDateRange(items, 7);
+  const last14DaysData = filterPostsDataByDateRange(items, 14);
+  const last30DaysData = filterPostsDataByDateRange(items, 30);
+
+  const total7Days =
+    last7DaysData.length === 0
+      ? 0
+      : countPostsPropertiesBySocialNetworksType(
+          last7DaysData,
+          valueArray,
+          socialNetworksTypes,
+          mediumInvestiment
+        );
+  const total14Days =
+    last14DaysData.length === 0
+      ? 0
+      : countPostsPropertiesBySocialNetworksType(
+          last14DaysData,
+          valueArray,
+          socialNetworksTypes,
+          mediumInvestiment
+        );
+  const total30Days =
+    last30DaysData.length === 0
+      ? 0
+      : countPostsPropertiesBySocialNetworksType(
+          last30DaysData,
+          valueArray,
+          socialNetworksTypes,
+          mediumInvestiment
+        );
+
+  return {
+    0: {
+      total: new Intl.NumberFormat("pt-BR").format(currentTotal),
+      variation: calculateVariation(`${currentTotal}`),
+    },
+    7: {
+      total: new Intl.NumberFormat("pt-BR").format(total7Days),
+      variation: calculateVariation(`${currentTotal}`, `${total7Days}`),
+    },
+    14: {
+      total: new Intl.NumberFormat("pt-BR").format(total14Days),
+      variation: calculateVariation(`${currentTotal}`, `${total14Days}`),
+    },
+    30: {
+      total: new Intl.NumberFormat("pt-BR").format(total30Days),
+      variation: calculateVariation(`${currentTotal}`, `${total30Days}`),
+    },
+  };
+};
+export const calculatePostsCountVariations = (
+  items: Posts[],
+  valueArray: PostsType[]
+) => {
+  const currentTotal = countPostsByType(items, valueArray, true) as number;
+
+  const last7DaysData = filterPostsDataByDateRange(items, 7);
+  const last14DaysData = filterPostsDataByDateRange(items, 14);
+  const last30DaysData = filterPostsDataByDateRange(items, 30);
+
+  const total7Days =
+    last7DaysData.length === 0
+      ? 0
+      : (countPostsByType(last7DaysData, valueArray, true) as number);
+  const total14Days =
+    last14DaysData.length === 0
+      ? 0
+      : (countPostsByType(last14DaysData, valueArray, true) as number);
+  const total30Days =
+    last30DaysData.length === 0
+      ? 0
+      : (countPostsByType(last30DaysData, valueArray, true) as number);
+
+  return {
+    0: {
+      total: new Intl.NumberFormat("pt-BR").format(currentTotal),
+      variation: calculateVariation(`${currentTotal}`),
+    },
+    7: {
+      total: new Intl.NumberFormat("pt-BR").format(total7Days),
+      variation: calculateVariation(`${currentTotal}`, `${total7Days}`),
+    },
+    14: {
+      total: new Intl.NumberFormat("pt-BR").format(total14Days),
+      variation: calculateVariation(`${currentTotal}`, `${total14Days}`),
+    },
+    30: {
+      total: new Intl.NumberFormat("pt-BR").format(total30Days),
+      variation: calculateVariation(`${currentTotal}`, `${total30Days}`),
     },
   };
 };
@@ -497,6 +657,116 @@ export const calculateVariationsCPV = (
   };
 };
 
+export const calculatePostsVariationsCPV = (
+  data: Posts[],
+  keys: (keyof Posts)[],
+  socialNetworksTypes: SocialNetworksType[],
+  cpm?: boolean
+) => {
+  const currentTotalImpressoes = countPostsPropertiesBySocialNetworksType(
+    data,
+    keys,
+    socialNetworksTypes
+  );
+  const currentTotalInvestimento = countPostsPropertiesBySocialNetworksType(
+    data,
+    ["mediumPrice"],
+    socialNetworksTypes
+  );
+
+  const currentTotalCPV =
+    currentTotalImpressoes === 0
+      ? 0
+      : currentTotalInvestimento / currentTotalImpressoes;
+
+  const last7DaysData = filterPostsDataByDateRange(data, 7);
+  const last14DaysData = filterPostsDataByDateRange(data, 14);
+  const last30DaysData = filterPostsDataByDateRange(data, 30);
+
+  const total7DaysImpressions = countPostsPropertiesBySocialNetworksType(
+    last7DaysData,
+    keys,
+    socialNetworksTypes
+  );
+  const total7DaysInvestment = countPostsPropertiesBySocialNetworksType(
+    last7DaysData,
+    ["mediumPrice"],
+    socialNetworksTypes
+  );
+
+  const total14DaysImpressions = countPostsPropertiesBySocialNetworksType(
+    last14DaysData,
+    keys,
+    socialNetworksTypes
+  );
+  const total14DaysInvestment = countPostsPropertiesBySocialNetworksType(
+    last14DaysData,
+    ["mediumPrice"],
+    socialNetworksTypes
+  );
+
+  const total30DaysImpressions = countPostsPropertiesBySocialNetworksType(
+    last30DaysData,
+    keys,
+    socialNetworksTypes
+  );
+  const total30DaysInvestment = countPostsPropertiesBySocialNetworksType(
+    last30DaysData,
+    ["mediumPrice"],
+    socialNetworksTypes
+  );
+
+  const total7Days =
+    last7DaysData.length === 0
+      ? 0
+      : total7DaysImpressions === 0
+      ? 0
+      : total7DaysInvestment / total7DaysImpressions;
+  const total14Days =
+    last14DaysData.length === 0
+      ? 0
+      : total14DaysImpressions === 0
+      ? 0
+      : total14DaysInvestment / total14DaysImpressions;
+  const total30Days =
+    last30DaysData.length === 0
+      ? 0
+      : total30DaysImpressions === 0
+      ? 0
+      : total30DaysInvestment / total30DaysImpressions;
+
+  return {
+    0: {
+      total: new Intl.NumberFormat("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+      }).format(+(cpm ? currentTotalCPV * 1000 : currentTotalCPV).toFixed(2)),
+      variation: calculateVariation(`${currentTotalCPV}`),
+    },
+    7: {
+      total: new Intl.NumberFormat("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+      }).format(+(cpm ? total7Days * 1000 : total7Days).toFixed(2)),
+      variation: calculateVariation(`${currentTotalCPV}`, `${total7Days}`),
+    },
+    14: {
+      total: new Intl.NumberFormat("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+      }).format(+(cpm ? total14Days * 1000 : total14Days).toFixed(2)),
+      variation: calculateVariation(`${currentTotalCPV}`, `${total14Days}`),
+    },
+    30: {
+      total: new Intl.NumberFormat("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+      }).format(+(cpm ? total30Days * 1000 : total30Days).toFixed(2)),
+      variation: calculateVariation(`${currentTotalCPV}`, `${total30Days}`),
+    },
+  };
+};
+
 export const calculateVariationsEngajamento = (
   data: Influencer[],
   keysImpressions: keyof Influencer | (keyof Influencer)[],
@@ -537,6 +807,164 @@ export const calculateVariationsEngajamento = (
   const total30DaysImpressions = totalCount(last30DaysData, keysImpressions);
   const total30DaysInteractions = totalCount(last30DaysData, keysInteractions);
   const total30DaysInvestimento = totalCount(last30DaysData, "Investimento");
+
+  const total30DaysEngajamento =
+    total30DaysImpressions === 0
+      ? 0
+      : (total30DaysInteractions / total30DaysImpressions) * 100;
+
+  const totalDays = cpe
+    ? currentTotalInvestimento / currentTotalEngajamento
+    : currentTotalEngajamento;
+
+  const total7Days =
+    last7DaysData.length === 0
+      ? 0
+      : cpe
+      ? total7DaysInvestimento / total7DaysEngajamento
+      : total7DaysEngajamento;
+  const total14Days =
+    last14DaysData.length === 0
+      ? 0
+      : cpe
+      ? total14DaysInvestimento / total14DaysEngajamento
+      : total14DaysEngajamento;
+  const total30Days =
+    last30DaysData.length === 0
+      ? 0
+      : cpe
+      ? total30DaysInvestimento / total30DaysEngajamento
+      : total30DaysEngajamento;
+
+  return {
+    0: {
+      total: !cpe
+        ? `${new Intl.NumberFormat("pt-BR").format(+totalDays.toFixed(2))}%`
+        : new Intl.NumberFormat("pt-BR", {
+            style: "currency",
+            currency: "BRL",
+          }).format(+totalDays.toFixed(2)),
+      variation: calculateVariation(`${totalDays}`),
+    },
+    7: {
+      total: !cpe
+        ? `${new Intl.NumberFormat("pt-BR").format(+total7Days.toFixed(2))}%`
+        : new Intl.NumberFormat("pt-BR", {
+            style: "currency",
+            currency: "BRL",
+          }).format(+total7Days.toFixed(2)),
+      variation: calculateVariation(`${totalDays}`, `${total7Days}`),
+    },
+    14: {
+      total: !cpe
+        ? `${new Intl.NumberFormat("pt-BR").format(+total14Days.toFixed(2))}%`
+        : new Intl.NumberFormat("pt-BR", {
+            style: "currency",
+            currency: "BRL",
+          }).format(+total14Days.toFixed(2)),
+      variation: calculateVariation(`${totalDays}`, `${total14Days}`),
+    },
+    30: {
+      total: !cpe
+        ? `${new Intl.NumberFormat("pt-BR").format(+total30Days.toFixed(2))}%`
+        : new Intl.NumberFormat("pt-BR", {
+            style: "currency",
+            currency: "BRL",
+          }).format(+total30Days.toFixed(2)),
+      variation: calculateVariation(`${totalDays}`, `${total30Days}`),
+    },
+  };
+};
+
+export const calculatePostsVariationsEngajamento = (
+  data: Posts[],
+  keysImpressions: (keyof Posts)[],
+  keysInteractions: (keyof Posts)[],
+  socialNetworksTypes: SocialNetworksType[],
+  cpe?: boolean
+) => {
+  const currentTotalImpressions = countPostsPropertiesBySocialNetworksType(
+    data,
+    keysImpressions,
+    socialNetworksTypes
+  );
+  const currentTotalInteractions = countPostsPropertiesBySocialNetworksType(
+    data,
+    keysInteractions,
+    socialNetworksTypes
+  );
+  const currentTotalInvestimento = countPostsPropertiesBySocialNetworksType(
+    data,
+    ["mediumPrice"],
+    socialNetworksTypes
+  );
+
+  const currentTotalEngajamento =
+    currentTotalImpressions === 0
+      ? 0
+      : (currentTotalInteractions / currentTotalImpressions) * 100;
+
+  const last7DaysData = filterPostsDataByDateRange(data, 7);
+  const last14DaysData = filterPostsDataByDateRange(data, 14);
+  const last30DaysData = filterPostsDataByDateRange(data, 30);
+
+  const total7DaysImpressions = countPostsPropertiesBySocialNetworksType(
+    last7DaysData,
+    keysImpressions,
+    socialNetworksTypes
+  );
+  const total7DaysInteractions = countPostsPropertiesBySocialNetworksType(
+    last7DaysData,
+    keysInteractions,
+    socialNetworksTypes
+  );
+  const total7DaysInvestimento = countPostsPropertiesBySocialNetworksType(
+    last7DaysData,
+    ["mediumPrice"],
+    socialNetworksTypes
+  );
+
+  const total7DaysEngajamento =
+    total7DaysImpressions === 0
+      ? 0
+      : (total7DaysInteractions / total7DaysImpressions) * 100;
+
+  const total14DaysImpressions = countPostsPropertiesBySocialNetworksType(
+    last14DaysData,
+    keysImpressions,
+    socialNetworksTypes
+  );
+  const total14DaysInteractions = countPostsPropertiesBySocialNetworksType(
+    last14DaysData,
+    keysInteractions,
+    socialNetworksTypes
+  );
+  const total14DaysInvestimento = countPostsPropertiesBySocialNetworksType(
+    last14DaysData,
+    ["mediumPrice"],
+    socialNetworksTypes
+  );
+
+  const total14DaysEngajamento =
+    total14DaysImpressions === 0
+      ? 0
+      : (total14DaysInteractions / total14DaysImpressions) * 100;
+
+  const total30DaysImpressions = countPostsPropertiesBySocialNetworksType(
+    last30DaysData,
+    keysImpressions,
+    socialNetworksTypes
+  );
+  const total30DaysInteractions = countPostsPropertiesBySocialNetworksType(
+    last30DaysData,
+    keysInteractions,
+    socialNetworksTypes
+  );
+  const total30DaysInvestimento = countPostsPropertiesBySocialNetworksType(
+    last30DaysData,
+    ["mediumPrice"],
+    socialNetworksTypes
+  );
 
   const total30DaysEngajamento =
     total30DaysImpressions === 0
@@ -679,6 +1107,111 @@ export const calculateVariationsCTR = (
   };
 };
 
+export const calculatePostsVariationsCTR = (
+  data: Posts[],
+  keysImpressions: (keyof Posts)[],
+  keysCliques: (keyof Posts)[],
+  socialNetworksTypes: SocialNetworksType[]
+) => {
+  const currentTotalImpressions = countPostsPropertiesBySocialNetworksType(
+    data,
+    keysImpressions,
+    socialNetworksTypes
+  );
+  const currentTotalCliques = countPostsPropertiesBySocialNetworksType(
+    data,
+    keysCliques,
+    socialNetworksTypes
+  );
+
+  const currentTotalCTR =
+    (currentTotalCliques /
+      (currentTotalImpressions === 0 ? 1 : currentTotalImpressions)) *
+    100;
+
+  const last7DaysData = filterPostsDataByDateRange(data, 7);
+  const last14DaysData = filterPostsDataByDateRange(data, 14);
+  const last30DaysData = filterPostsDataByDateRange(data, 30);
+
+  const total7DaysImpressions = countPostsPropertiesBySocialNetworksType(
+    last7DaysData,
+    keysImpressions,
+    socialNetworksTypes
+  );
+  const total7DaysCliques = countPostsPropertiesBySocialNetworksType(
+    last7DaysData,
+    keysCliques,
+    socialNetworksTypes
+  );
+
+  const total7DaysCTR =
+    (total7DaysCliques /
+      (total7DaysImpressions === 0 ? 1 : total7DaysImpressions)) *
+    100;
+
+  const total14DaysImpressions = countPostsPropertiesBySocialNetworksType(
+    last14DaysData,
+    keysImpressions,
+    socialNetworksTypes
+  );
+  const total14DaysCliques = countPostsPropertiesBySocialNetworksType(
+    last14DaysData,
+    keysCliques,
+    socialNetworksTypes
+  );
+
+  const total14DaysCTR =
+    (total14DaysCliques /
+      (total14DaysImpressions === 0 ? 1 : total14DaysImpressions)) *
+    100;
+
+  const total30DaysImpressions = countPostsPropertiesBySocialNetworksType(
+    last30DaysData,
+    keysImpressions,
+    socialNetworksTypes
+  );
+  const total30DaysCliques = countPostsPropertiesBySocialNetworksType(
+    last30DaysData,
+    keysCliques,
+    socialNetworksTypes
+  );
+
+  const total30DaysCTR =
+    (total30DaysCliques /
+      (total30DaysImpressions === 0 ? 1 : total30DaysImpressions)) *
+    100;
+
+  const total7Days = last7DaysData.length === 0 ? 0 : total7DaysCTR;
+  const total14Days = last14DaysData.length === 0 ? 0 : total14DaysCTR;
+  const total30Days = last30DaysData.length === 0 ? 0 : total30DaysCTR;
+
+  return {
+    0: {
+      total: `${new Intl.NumberFormat("pt-BR").format(
+        +currentTotalCTR.toFixed(2)
+      )}%`,
+      variation: calculateVariation(`${currentTotalCTR}`),
+    },
+    7: {
+      total: `${new Intl.NumberFormat("pt-BR").format(
+        +total7Days.toFixed(2)
+      )}%`,
+      variation: calculateVariation(`${currentTotalCTR}`, `${total7Days}`),
+    },
+    14: {
+      total: `${new Intl.NumberFormat("pt-BR").format(
+        +total14Days.toFixed(2)
+      )}%`,
+      variation: calculateVariation(`${currentTotalCTR}`, `${total14Days}`),
+    },
+    30: {
+      total: `${new Intl.NumberFormat("pt-BR").format(
+        +total30Days.toFixed(2)
+      )}%`,
+      variation: calculateVariation(`${currentTotalCTR}`, `${total30Days}`),
+    },
+  };
+};
 export const totalInfluencers = (data: Influencer[]) => `${data.length}`;
 
 export const totalCount = (
@@ -709,6 +1242,43 @@ export const totalCount = (
   }
 
   return count;
+};
+
+export const countPostsPropertiesBySocialNetworksType = (
+  items: Posts[],
+  valueArray: (keyof Posts)[],
+  socialNetworksTypes: SocialNetworksType[],
+  mediumInvestiment: boolean = false
+) => {
+  const postsFilteredBySocialNetwork = items.filter((item) =>
+    socialNetworksTypes.includes(item.socialNetwork.type)
+  );
+
+  const count = postsFilteredBySocialNetwork.reduce((count, item) => {
+    for (const postsKey of valueArray) {
+      return count + (item[postsKey] as number);
+    }
+    return count;
+  }, 0);
+
+  if (!mediumInvestiment) {
+    return count;
+  }
+
+  const postsGroupedByCreator = postsFilteredBySocialNetwork.reduce(
+    (acc: Record<string, Posts[]>, post) => {
+      if (!acc[post.socialNetwork.creatorId]) {
+        acc[post.socialNetwork.creatorId] = [];
+      }
+      acc[post.socialNetwork.creatorId].push(post);
+      return acc;
+    },
+    {}
+  );
+
+  const creatorsCount = Object.keys(postsGroupedByCreator).length;
+
+  return count / creatorsCount;
 };
 
 export const totalPercentage = (
@@ -903,3 +1473,127 @@ export function addAlphaToHex(hex: string, alpha: number) {
   // Return the combined hex color with alpha
   return `#${hex}${alphaHex}`;
 }
+
+export const addCPToPostsTable = (creator: any) => {
+  const engajamento =
+    (Number.parseInt(creator["Interacoes"]) /
+      Number.parseInt(
+        creator["Impressoes"] === "0" ? "1" : creator["Impressoes"]
+      )) *
+    100;
+
+  const engajamentoTiktok =
+    (Number.parseInt(creator["Interacoes Tiktok"]) /
+      Number.parseInt(
+        creator["Impressoes Tiktok"] === "0"
+          ? "1"
+          : creator["Impressoes Tiktok"]
+      )) *
+    100;
+
+  const engajamentoMedium =
+    ((Number.parseInt(creator["Interacoes"]) +
+      Number.parseInt(creator["Interacoes Tiktok"])) /
+      (Number.parseInt(creator["Impressoes"]) +
+        Number.parseInt(creator["Impressoes Tiktok"]))) *
+    100;
+
+  const cpe = Number.parseInt(creator["Investimento"]) / engajamento;
+  const cpeTiktok =
+    Number.parseInt(creator["Investimento"]) /
+    (engajamentoTiktok === 0 ? 1 : engajamentoTiktok);
+
+  const cpeMedium =
+    Number.parseInt(creator["Investimento"]) / engajamentoMedium;
+
+  const cpc =
+    Number.parseInt(creator["Investimento"]) /
+    Number.parseInt(creator["Cliques"] === "0" ? "1" : creator["Cliques"]);
+
+  const cpcTiktok =
+    Number.parseInt(creator["Investimento"]) /
+    Number.parseInt(
+      creator["Cliques Tiktok"] === "0" ? "1" : creator["Cliques Tiktok"]
+    );
+
+  const cpcMedium =
+    Number.parseInt(creator["Investimento"]) /
+    (Number.parseInt(creator["Cliques Tiktok"]) +
+      Number.parseInt(creator["Cliques"]));
+
+  const ctr =
+    (Number.parseInt(creator["Cliques"]) /
+      Number.parseInt(
+        creator["Impressoes"] === "0" ? "1" : creator["Impressoes"]
+      )) *
+    100;
+
+  const ctrTiktok =
+    (Number.parseInt(creator["Cliques Tiktok"]) /
+      Number.parseInt(
+        creator["Impressoes Tiktok"] === "0"
+          ? "1"
+          : creator["Impressoes Tiktok"]
+      )) *
+    100;
+
+  const cpv =
+    Number.parseInt(creator["Investimento"]) /
+    Number.parseInt(
+      creator["Impressoes"] === "0" ? "1" : creator["Impressoes"]
+    );
+
+  const cpvTiktok =
+    Number.parseInt(creator["Investimento"]) /
+    Number.parseInt(
+      creator["Impressoes Tiktok"] === "0" ? "1" : creator["Impressoes Tiktok"]
+    );
+
+  const cpvMedium =
+    Number.parseInt(creator["Investimento"]) /
+    (Number.parseInt(creator["Impressoes Tiktok"]) +
+      Number.parseInt(creator["Impressoes"]));
+
+  creator["Engajamento"] =
+    (engajamento === +creator["Impressoes"] * 100 ? 0 : engajamento).toFixed(
+      2
+    ) + "%";
+  creator["CPE"] =
+    "R$" + (cpe === +creator["Investimento"] ? 0 : cpe).toFixed(2);
+
+  creator["Engajamento Tiktok"] =
+    (engajamentoTiktok === +creator["Impressoes Tiktok"] * 100
+      ? 0
+      : engajamentoTiktok
+    ).toFixed(2) + "%";
+
+  creator["Engajamento Media"] =
+    (engajamentoMedium === Infinity ? 0 : engajamentoMedium).toFixed(2) + "%";
+
+  creator["CPE Tiktok"] =
+    "R$" + (cpeTiktok === +creator["Investimento"] ? 0 : cpeTiktok).toFixed(2);
+
+  creator["CPE Media"] =
+    "R$" + (cpeMedium === Infinity ? 0 : cpeMedium).toFixed(2);
+
+  creator["CPC"] =
+    "R$" + (cpc === +creator["Investimento"] ? 0 : cpc).toFixed(2);
+  creator["CPC Tiktok"] =
+    "R$" + (cpcTiktok === +creator["Investimento"] ? 0 : cpcTiktok).toFixed(2);
+
+  creator["CTR"] =
+    (ctr === +creator["Cliques"] * 100 ? 0 : ctr).toFixed(2) + "%";
+  creator["CTR Tiktok"] =
+    (ctrTiktok === +creator["Cliques Tiktok"] * 100 ? 0 : ctrTiktok).toFixed(
+      2
+    ) + "%";
+
+  creator["CPC Media"] =
+    "R$" + (cpcMedium === Infinity ? 0 : cpcMedium).toFixed(2);
+
+  creator["CPV"] = "R$" + cpv.toFixed(2);
+  creator["CPV Tiktok"] =
+    "R$" + (cpvTiktok === +creator["Investimento"] ? 0 : cpvTiktok).toFixed(2);
+  creator["CPV Media"] =
+    "R$" + (cpvMedium === Infinity ? 0 : cpvMedium).toFixed(2);
+};

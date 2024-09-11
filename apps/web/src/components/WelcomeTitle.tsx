@@ -6,6 +6,7 @@ import { SelectComponent } from "./Select";
 const WelcomeTitle = () => {
   const session = useDataStore((state) => state.session);
   const setMode = useDataStore((state) => state.setMode);
+  const mode = useDataStore((state) => state.mode);
 
   const getGreeting = () => {
     const hours = new Date().getHours();
@@ -27,6 +28,7 @@ const WelcomeTitle = () => {
         <div className="flex items-center gap-4 bg-transparent">
           <Tabs
             defaultValue={DashboardMode.ALL}
+            value={mode}
             onValueChange={(value) => setMode(value as DashboardMode)}
             className="flex p-[5px] items-center rounded-lg border border-[#E2E8F0] h-[42px] bg-white"
           >

@@ -1,14 +1,19 @@
 import { create } from "zustand";
 import { setCookie } from "nookies";
+import { addCPToPostsTable } from "../utils/utils";
 
-export const baseApiUrl = "https://api.thatsbee.co";
-// export const baseApiUrl = "http://localhost:3000";
+// export const baseApiUrl = "https://api.thatsbee.co";
+export const baseApiUrl = "http://localhost:3000";
 
 export enum DashboardMode {
   ALL = "all",
   INSTAGRAM = "instagram",
   TIKTOK = "tiktok",
 }
+
+export type SocialNetworksType = "INSTAGRAM" | "TIKTOK";
+
+export type PostsType = "FEED" | "STORIES" | "REELS" | "TIKTOK";
 
 export enum DashbordDateRange {
   ZERO = "0",
@@ -69,21 +74,82 @@ export interface Attachment {
   updatedAt: string;
 }
 
+export interface SocialNetwork {
+  id: number;
+  type: SocialNetworksType;
+  followers: number;
+  username: string;
+  creatorId: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Creator {
+  id: number;
+  urlProfilePicture?: string;
+  name: string;
+  city?: string;
+  socialNetworks: SocialNetwork[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface PostsPack {
+  campaignId: number;
+  creator: Creator;
+  creatorId: number;
+  id: number;
+  price: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface User {
+  userId: number;
+  email: string;
+  name: string;
+  color: string;
+  urlProfilePicture?: string;
+  campaigns: Campaign[];
+}
+
+export interface Campaign {
+  id: number;
+  name: string;
+  byPosts: boolean;
+  urlTable?: string;
+  attachments: Attachment[];
+  postsPack: PostsPack[];
+  userId: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Posts {
+  id: number;
+  type: PostsType;
+  impressions: number;
+  interactions: number;
+  likes: number;
+  shares: number;
+  comments: number;
+  saves: number;
+  clicks: number;
+  stickerClicks: number;
+  linkClicks: number;
+  socialNetworkId: number;
+  socialNetwork: SocialNetwork;
+  postsPackId: number;
+  postsPack: PostsPack;
+  mediumPrice: number;
+  postDate: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface Session {
   isAuthenticated: boolean;
-  user: {
-    color?: string;
-    name?: string;
-    email?: string;
-    campaignName?: string;
-    userId?: number;
-    estimatedExecutedInvestment?: number;
-    totalInitialInvestment?: number;
-    urlProfilePicture?: string;
-    urlTable?: string;
-    createdAt: string;
-    updatedAt: string;
-  };
+  user: User;
 }
 
 export type LoginFormData = {
@@ -100,9 +166,10 @@ interface DataState {
   signIn: (loginFormData: LoginFormData) => Promise<boolean>;
   getUserByToken: (access_token: string) => Promise<boolean>;
   data: InfluencerData;
+  postsData: Posts[];
   attachments: Attachment[];
-  fetchData: (access_token: string) => Promise<void>;
-  fetchAttachment: (access_token: string) => Promise<void>;
+  fetchData: (access_token: string, campaignId: number) => Promise<void>;
+  fetchAttachment: (access_token: string, campaignId: number) => Promise<void>;
 }
 
 const useDataStore = create<DataState>((set) => ({
@@ -112,13 +179,14 @@ const useDataStore = create<DataState>((set) => ({
       color: "",
       name: "",
       email: "",
-      campaignName: "",
+      // campaignName: "",
       userId: NaN,
-      estimatedExecutedInvestment: 0,
-      totalInitialInvestment: 0,
-      createdAt: "",
-      updatedAt: "",
+      // estimatedExecutedInvestment: 0,
+      // totalInitialInvestment: 0,
+      // createdAt: "",
+      // updatedAt: "",
       urlProfilePicture: "",
+      campaigns: [],
     },
   },
   mode: DashboardMode.ALL,
@@ -195,10 +263,11 @@ const useDataStore = create<DataState>((set) => ({
     updatedAt: "",
     data: [],
   },
+  postsData: [],
   attachments: [],
-  fetchData: async (access_token: string) => {
+  fetchData: async (access_token: string, campaignId: number) => {
     try {
-      const response = await fetch(`${baseApiUrl}/csvs/data`, {
+      const response = await fetch(`${baseApiUrl}/csvs/data/${campaignId}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${access_token}`, // Set the token in the Authorization header
@@ -217,15 +286,16 @@ const useDataStore = create<DataState>((set) => ({
         });
       }
 
-      const data = await response.json();
-      set({ data });
+      const { posts, updatedAt, data } = await response.json();
+
+      set({ data: { updatedAt, data: data }, postsData: posts });
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   },
-  fetchAttachment: async (access_token: string) => {
+  fetchAttachment: async (access_token: string, campaignId: number) => {
     try {
-      const response = await fetch(`${baseApiUrl}/attachments`, {
+      const response = await fetch(`${baseApiUrl}/attachments/${campaignId}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${access_token}`, // Set the token in the Authorization header

@@ -12,7 +12,7 @@ type MetricsProps = {
   className: string;
   children?: React.ReactNode;
   heading: string;
-  metric: string;
+  metric: string | number;
   variation: Record<
     DashbordDateRange,
     { total: number | string; variation: number | null }

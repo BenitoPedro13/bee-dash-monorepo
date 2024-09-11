@@ -32,39 +32,39 @@ const MetricsBarStackGraph = ({
   const [metric, setMetric] = useState<string>(total(data, "Impressoes"));
   const [metricVariation, setMetricVariation] = useState<number | null>(null);
 
-  const graphTypes: Record<
-    DashboardMode,
-    Record<
-      "Impressoes",
-      Record<
-        DashbordDateRange,
-        {
-          total: string;
-          variation: number | null;
-        }
-      >
-    >
-  > = {
-    tiktok: {
-      Impressoes: calculateVariations(data, "Impressoes Tiktok"),
-    },
-    instagram: {
-      Impressoes: calculateVariations(data, "Impressoes"),
-    },
-    all: {
-      Impressoes: calculateVariations(data, [
-        "Impressoes",
-        "Impressoes Tiktok",
-      ]),
-    },
-  };
+  // const graphTypes: Record<
+  //   DashboardMode,
+  //   Record<
+  //     "Impressoes",
+  //     Record<
+  //       DashbordDateRange,
+  //       {
+  //         total: string;
+  //         variation: number | null;
+  //       }
+  //     >
+  //   >
+  // > = {
+  //   tiktok: {
+  //     Impressoes: calculateVariations(data, "Impressoes Tiktok"),
+  //   },
+  //   instagram: {
+  //     Impressoes: calculateVariations(data, "Impressoes"),
+  //   },
+  //   all: {
+  //     Impressoes: calculateVariations(data, [
+  //       "Impressoes",
+  //       "Impressoes Tiktok",
+  //     ]),
+  //   },
+  // };
 
-  useEffect(() => {
-    const { total, variation } = graphTypes[mode].Impressoes[dateRange];
+  // useEffect(() => {
+  //   const { total, variation } = graphTypes[mode].Impressoes[dateRange];
 
-    setMetric(total);
-    setMetricVariation(variation);
-  }, [data, mode, dateRange]);
+  //   setMetric(total);
+  //   setMetricVariation(variation);
+  // }, [data, mode, dateRange]);
 
   return (
     <div
