@@ -66,6 +66,16 @@ export class CampaignsService {
         where: {
           userId,
         },
+        include: {
+          postsPack: {
+            include: {
+              creator: {
+                include: { socialNetworks: true },
+              },
+            },
+          },
+          attachments: true,
+        },
       });
 
       return campaigns;

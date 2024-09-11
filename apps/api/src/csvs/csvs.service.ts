@@ -2,7 +2,6 @@ import csvParser from 'csv-parser';
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { createReadStream } from 'fs';
-import { Influencer } from './dto/create-csv.dto';
 
 import 'dotenv/config';
 import fs from 'fs';
@@ -13,7 +12,8 @@ import { Performance, Prisma } from '@prisma/client';
 import { DefaultArgs } from '@prisma/client/runtime/library';
 import { UpdateCsvDto } from './dto/update-csv.dto';
 import { getFilePath, getFilesFolderPath } from 'utils';
-import { CreatorService } from '../../externDB/services/CreatorService';
+
+// import { CreatorService } from '../../externDB/services/CreatorService';
 export type MulterFileDTO = {
   uniqueFilename: string;
   buffer: Buffer;
@@ -23,10 +23,7 @@ export type MulterFileDTO = {
 
 @Injectable()
 export class CsvsService {
-  constructor(
-    private readonly prisma: PrismaService,
-    private creatorService: CreatorService,
-  ) {}
+  constructor(private readonly prisma: PrismaService) {}
 
   async processCsv(
     file: MulterFileDTO,
@@ -79,7 +76,7 @@ export class CsvsService {
     });
   }
 
-  addCPToTable = (creator: Influencer) => {
+  addCPToTable = (creator: any) => {
     const engajamento =
       (Number.parseInt(creator['Interacoes']) /
         Number.parseInt(
@@ -216,13 +213,137 @@ export class CsvsService {
       'R$' + (cpvMedium === Infinity ? 0 : cpvMedium).toFixed(2);
   };
 
-  async getAllData(
-    userEmail: string,
-    campaignId: number,
-  ): Promise<{
-    updatedAt: Date;
-    data: Influencer[];
-  }> {
+  addCPToPostsTable = (creator: any) => {
+    const engajamento =
+      (Number.parseInt(creator['Interacoes']) /
+        Number.parseInt(
+          creator['Impressoes'] === '0' ? '1' : creator['Impressoes'],
+        )) *
+      100;
+
+    const engajamentoTiktok =
+      (Number.parseInt(creator['Interacoes Tiktok']) /
+        Number.parseInt(
+          creator['Impressoes Tiktok'] === '0'
+            ? '1'
+            : creator['Impressoes Tiktok'],
+        )) *
+      100;
+
+    const engajamentoMedium =
+      ((Number.parseInt(creator['Interacoes']) +
+        Number.parseInt(creator['Interacoes Tiktok'])) /
+        (Number.parseInt(creator['Impressoes']) +
+          Number.parseInt(creator['Impressoes Tiktok']))) *
+      100;
+
+    const cpe = creator['Investimento Instagram'] / engajamento;
+    const cpeTiktok =
+      creator['Investimento Tiktok'] /
+      (engajamentoTiktok === 0 ? 1 : engajamentoTiktok);
+
+    const cpeMedium =
+      Number.parseInt(creator['Investimento']) / engajamentoMedium;
+
+    const cpc =
+      creator['Investimento Instagram'] /
+      Number.parseInt(creator['Cliques'] === '0' ? '1' : creator['Cliques']);
+
+    const cpcTiktok =
+      creator['Investimento Tiktok'] /
+      Number.parseInt(
+        creator['Cliques Tiktok'] === '0' ? '1' : creator['Cliques Tiktok'],
+      );
+
+    const cpcMedium =
+      Number.parseInt(creator['Investimento']) /
+      (Number.parseInt(creator['Cliques Tiktok']) +
+        Number.parseInt(creator['Cliques']));
+
+    const ctr =
+      (Number.parseInt(creator['Cliques']) /
+        Number.parseInt(
+          creator['Impressoes'] === '0' ? '1' : creator['Impressoes'],
+        )) *
+      100;
+
+    const ctrTiktok =
+      (Number.parseInt(creator['Cliques Tiktok']) /
+        Number.parseInt(
+          creator['Impressoes Tiktok'] === '0'
+            ? '1'
+            : creator['Impressoes Tiktok'],
+        )) *
+      100;
+
+    const cpv =
+      creator['Investimento Instagram'] /
+      Number.parseInt(
+        creator['Impressoes'] === '0' ? '1' : creator['Impressoes'],
+      );
+
+    const cpvTiktok =
+      creator['Investimento Tiktok'] /
+      Number.parseInt(
+        creator['Impressoes Tiktok'] === '0'
+          ? '1'
+          : creator['Impressoes Tiktok'],
+      );
+
+    const cpvMedium =
+      Number.parseInt(creator['Investimento']) /
+      (Number.parseInt(creator['Impressoes Tiktok']) +
+        Number.parseInt(creator['Impressoes']));
+
+    creator['Engajamento'] =
+      (engajamento === +creator['Impressoes'] * 100 ? 0 : engajamento).toFixed(
+        2,
+      ) + '%';
+    creator['CPE'] =
+      'R$' + (cpe === creator['Investimento Instagram'] ? 0 : cpe).toFixed(2);
+
+    creator['Engajamento Tiktok'] =
+      (engajamentoTiktok === +creator['Impressoes Tiktok'] * 100
+        ? 0
+        : engajamentoTiktok
+      ).toFixed(2) + '%';
+
+    creator['Engajamento Media'] =
+      (engajamentoMedium === Infinity ? 0 : engajamentoMedium).toFixed(2) + '%';
+
+    creator['CPE Tiktok'] =
+      'R$' +
+      (cpeTiktok === creator['Investimento Tiktok'] ? 0 : cpeTiktok).toFixed(2);
+
+    creator['CPE Media'] =
+      'R$' + (cpeMedium === Infinity ? 0 : cpeMedium).toFixed(2);
+
+    creator['CPC'] =
+      'R$' + (cpc === creator['Investimento Instagram'] ? 0 : cpc).toFixed(2);
+    creator['CPC Tiktok'] =
+      'R$' +
+      (cpcTiktok === creator['Investimento Tiktok'] ? 0 : cpcTiktok).toFixed(2);
+
+    creator['CTR'] =
+      (ctr === +creator['Cliques'] * 100 ? 0 : ctr).toFixed(2) + '%';
+    creator['CTR Tiktok'] =
+      (ctrTiktok === +creator['Cliques Tiktok'] * 100 ? 0 : ctrTiktok).toFixed(
+        2,
+      ) + '%';
+
+    creator['CPC Media'] =
+      'R$' + (cpcMedium === Infinity ? 0 : cpcMedium).toFixed(2);
+
+    creator['CPV'] =
+      'R$' + (cpv === creator['Investimento Instagram'] ? 0 : cpv).toFixed(2);
+    creator['CPV Tiktok'] =
+      'R$' +
+      (cpvTiktok === creator['Investimento Tiktok'] ? 0 : cpvTiktok).toFixed(2);
+    creator['CPV Media'] =
+      'R$' + (cpvMedium === Infinity ? 0 : cpvMedium).toFixed(2);
+  };
+
+  async getAllData(userEmail: string, campaignId: number) {
     const user = await this.prisma.user.findUnique({
       where: { email: userEmail },
     });
@@ -246,7 +367,7 @@ export class CsvsService {
         const results: any[] = [];
         const stream = createReadStream(filePath);
 
-        const result = await new Promise<Influencer[]>((resolve, reject) => {
+        const result = await new Promise<any[]>((resolve, reject) => {
           stream
             .pipe(csvParser())
             .on('data', (data) => {
@@ -277,96 +398,159 @@ export class CsvsService {
       where: {
         postsPack: { campaignId },
       },
+      include: {
+        socialNetwork: true,
+        postsPack: {
+          include: {
+            creator: {
+              include: {
+                socialNetworks: true,
+              },
+            },
+          },
+        },
+      },
     });
 
-    const creatorsData = await this.processPostsData(posts);
+    // const creatorsData = await this.processPostsData(posts);
 
-    return {
-      updatedAt: mostRecentUpdatedPost.updatedAt,
-      data: creatorsData,
-    };
-  }
-
-  async processPostsData(posts: any[]): Promise<Influencer[]> {
     const groupedPosts = posts.reduce((acc, post) => {
-      if (!acc[post.creatorId]) {
-        acc[post.creatorId] = [];
+      if (!acc[post.socialNetwork.creatorId]) {
+        acc[post.socialNetwork.creatorId] = [];
       }
-      acc[post.creatorId].push(post);
+      acc[post.socialNetwork.creatorId].push(post);
       return acc;
     }, {});
 
-    const influencers: Influencer[] = [];
+    const influencers: any[] = [];
 
     for (const creatorId in groupedPosts) {
       const posts = groupedPosts[creatorId];
-      const influencerData = await this.getCreatorData(creatorId, posts);
-      influencers.push(influencerData);
+      // const influencerData = await this.getCreatorData(+creatorId, posts);
+
+      const groupedPostsPack = posts.reduce((acc, post) => {
+        if (!acc[post.postsPack.id]) {
+          acc[post.postsPack.id] = post.postsPack;
+        }
+        return acc;
+      }, {});
+
+      const groupedPostsByPostsPack = posts.reduce((acc, post) => {
+        if (!acc[post.postsPack.id]) {
+          acc[post.postsPack.id] = [];
+        }
+        acc[post.postsPack.id].push(post);
+        return acc;
+      }, {});
+
+      for (const postsPackId in groupedPostsPack) {
+        let mediumPrice = 0;
+
+        const postsPack = groupedPostsPack[postsPackId];
+        const posts = groupedPostsByPostsPack[postsPackId];
+
+        mediumPrice = postsPack.price / posts.length;
+
+        groupedPostsByPostsPack[postsPackId].forEach(
+          (item) => (item.mediumPrice = mediumPrice),
+        );
+      }
+
+      let price = 0;
+
+      for (const postsPackId in groupedPostsByPostsPack) {
+        const postsOfpostPack = groupedPostsByPostsPack[postsPackId];
+
+        price += postsOfpostPack.reduce((acc, post) => {
+          return acc + (post.mediumPrice ?? 0);
+        }, 0);
+      }
+
+      const { name, urlProfilePicture, city } = posts[0].postsPack.creator;
+
+      const instagram = posts[0].postsPack.creator.socialNetworks.find(
+        (item) => item.type === 'INSTAGRAM',
+      );
+
+      const tiktok = posts[0].postsPack.creator.socialNetworks.find(
+        (item) => item.type === 'TIKTOK',
+      );
+
+      const sum = (key, type = null) =>
+        posts
+          .filter((post) => (type ? post.type === type : true))
+          .reduce((acc, post) => acc + post[key], 0);
+      const count = (type) => posts.filter((post) => post.type === type).length;
+
+      const feedStoriesPosts = posts.filter(
+        (post) =>
+          post.type === 'FEED' ||
+          post.type === 'STORIES' ||
+          post.type === 'REELS',
+      );
+
+      const instagramInvestment =
+        feedStoriesPosts.length === 0
+          ? 0
+          : feedStoriesPosts.reduce((acc, item) => acc + item.mediumPrice, 0);
+
+      const tiktokInvestment = price - instagramInvestment;
+
+      const creator = {
+        id: +creatorId,
+        Influencer: name,
+        Username: instagram?.username ?? tiktok?.username,
+        Cidade: city ?? '-',
+        Investimento: price.toString(),
+        'Investimento Instagram': instagramInvestment,
+        'Investimento Tiktok': tiktokInvestment,
+        Posts: posts.length.toString(),
+        Stories: count('STORIES').toString(),
+        Feed: count('FEED').toString(),
+        Tiktok: count('TIKTOK').toString(),
+        Reels: count('REELS').toString(),
+        'Impacto Bruto': instagram?.followers?.toString() ?? '0',
+        Impressoes: feedStoriesPosts.length
+          ? `${
+              sum('impressions', 'REELS') +
+              sum('impressions', 'FEED') +
+              sum('impressions', 'STORIES')
+            }`
+          : '0',
+        Interacoes: feedStoriesPosts.length
+          ? `${
+              sum('interactions', 'REELS') +
+              sum('interactions', 'FEED') +
+              sum('interactions', 'STORIES')
+            }`
+          : '0',
+        Cliques: feedStoriesPosts.length
+          ? `${
+              sum('clicks', 'REELS') +
+              sum('clicks', 'FEED') +
+              sum('clicks', 'STORIES')
+            }`
+          : '0',
+        'Impacto Bruto Tiktok': tiktok?.followers?.toString() ?? '0',
+        'Impressoes Tiktok': count('TIKTOK')
+          ? `${sum('impressions', 'TIKTOK')}`
+          : '0',
+        'Interacoes Tiktok': count('TIKTOK')
+          ? `${sum('interactions', 'TIKTOK')}`
+          : '0',
+        'Cliques Tiktok': count('TIKTOK') ? `${sum('clicks', 'TIKTOK')}` : '0',
+        'Url Foto Perfil': urlProfilePicture,
+      };
+
+      this.addCPToPostsTable(creator);
+
+      influencers.push(creator);
     }
 
-    return influencers;
-  }
-
-  async getCreatorData(creatorId: string, posts: any[]): Promise<Influencer> {
-    const creatorInfo = await this.creatorService.getCreatorById(creatorId);
-
-    const { name, profile, city, image, creator_id } = creatorInfo[0];
-
-    const sum = (key, type = null) =>
-      posts
-        .filter((post) => (type ? post.type === type : true))
-        .reduce((acc, post) => acc + post[key], 0);
-    const count = (type) => posts.filter((post) => post.type === type).length;
-
-    const feedStoriesPosts = posts.filter(
-      (post) => post.type === 'FEED' || post.type === 'STORIES',
-    );
-
-    const engagementAvg = feedStoriesPosts.length
-      ? sum('engagement', 'FEED') +
-        sum('engagement', 'STORIES') / feedStoriesPosts.length
-      : 0;
-
     return {
-      id: creator_id,
-      Influencer: name,
-      Username: profile,
-      Cidade: city ?? '-',
-      Investimento: sum('price').toString(),
-      Posts: posts.length.toString(),
-      Stories: count('STORIES').toString(),
-      Feed: count('FEED').toString(),
-      Tiktok: count('TIKTOK').toString(),
-      Impressoes: feedStoriesPosts.length
-        ? sum('impressions', 'FEED') + sum('impressions', 'STORIES').toString()
-        : '0',
-      Interacoes: feedStoriesPosts.length
-        ? sum('interactions', 'FEED') +
-          sum('interactions', 'STORIES').toString()
-        : '0',
-      Cliques: feedStoriesPosts.length
-        ? sum('clicks', 'FEED') + sum('clicks', 'STORIES').toString()
-        : '0',
-      'Video Views': sum('isVideo') ? sum('videoViews').toString() : '0',
-      CPE: `R$${(sum('price') / (engagementAvg || 1)).toFixed(2)}`,
-      CTR: ((sum('clicks') / (sum('impressions') || 1)) * 100).toFixed(2) + '%',
-      CPC: `R$${(sum('price') / (sum('clicks') || 1)).toFixed(2)}`,
-      CPV: sum('isVideo')
-        ? `R$${(sum('price') / (sum('videoViews') || 1)).toFixed(2)}`
-        : 'R$0.00',
-      Engajamento: feedStoriesPosts.length
-        ? (
-            sum('engagement', 'FEED') +
-            sum('engagement', 'STORIES') / feedStoriesPosts.length
-          ).toFixed(2) + '%'
-        : '0%',
-      'Engajamento Tiktok': count('TIKTOK')
-        ? (sum('engagement', 'TIKTOK') / (count('TIKTOK') || 1)).toFixed(2) +
-          '%'
-        : '0%',
-      'Cliques Tiktok': sum('clicks', 'TIKTOK').toString(),
-      'Impressoes Tiktok': sum('impressions', 'TIKTOK').toString(),
-      'Url Foto Perfil': image,
+      updatedAt: mostRecentUpdatedPost.updatedAt,
+      data: influencers,
+      posts: posts,
     };
   }
 

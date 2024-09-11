@@ -6,16 +6,23 @@ import {
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { SignInDto } from './dto/sign-in.dto';
+import { CampaignsService } from 'src/campaigns/campaigns.service';
 
 @Injectable()
-@Dependencies(UsersService, JwtService)
+@Dependencies(UsersService, JwtService, CampaignsService)
 export class AuthService {
   usersService: UsersService;
+  campaignsService: CampaignsService;
   jwtService: JwtService;
 
-  constructor(usersService: UsersService, jwtService: JwtService) {
+  constructor(
+    usersService: UsersService,
+    jwtService: JwtService,
+    campaignsService: CampaignsService,
+  ) {
     this.usersService = usersService;
     this.jwtService = jwtService;
+    this.campaignsService = campaignsService;
   }
 
   async signIn(signInDto: SignInDto) {
@@ -23,6 +30,8 @@ export class AuthService {
     if (user.password !== signInDto.password) {
       throw new UnauthorizedException();
     }
+
+    const userCampaigns = await this.campaignsService.findAllByUserId(user.id);
 
     const payload = { email: user.email, sub: user.id };
 
@@ -38,9 +47,7 @@ export class AuthService {
           : user.urlProfilePicture,
         email: user.email,
         name: user.name,
-        // campaignName: user.campaignName,
-        // totalInitialInvestment: user.totalInitialInvestment,
-        // estimatedExecutedInvestment: user.estimatedExecutedInvestment,
+        campaigns: userCampaigns,
       },
     };
   }
@@ -57,6 +64,10 @@ export class AuthService {
         throw new UnauthorizedException();
       }
 
+      const userCampaigns = await this.campaignsService.findAllByUserId(
+        user.id,
+      );
+
       return {
         user: {
           userId: user.id,
@@ -67,7 +78,7 @@ export class AuthService {
           // urlTable: !user.urlTable ? '' : user.urlTable,
           email: user.email,
           name: user.name,
-          // campaignName: user.campaignName,
+          campaigns: userCampaigns,
           // totalInitialInvestment: user.totalInitialInvestment,
           // estimatedExecutedInvestment: user.estimatedExecutedInvestment,
         },

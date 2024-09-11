@@ -26,9 +26,10 @@ export class PostsService {
         ...rest
       } = createPostDto;
 
-      const finalClicks = linkClicks + stickerClicks;
+      const finalClicks = linkClicks;
 
-      const finalInteractions = likes + shares + comments + saves + finalClicks;
+      const finalInteractions =
+        likes + shares + comments + saves + linkClicks + stickerClicks;
 
       return this.prisma.posts.create({
         data: {

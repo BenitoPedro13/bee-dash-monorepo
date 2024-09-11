@@ -45,6 +45,7 @@ model Creator {
   id                Int              @id @default(autoincrement())
   urlProfilePicture String
   name              String
+  city              String?
   categories        Categories[]
   socialNetworks    SocialNetworks[]
   createdAt         DateTime         @default(now())

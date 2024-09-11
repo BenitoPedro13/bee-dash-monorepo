@@ -15,7 +15,6 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CsvsService, MulterFileDTO } from './csvs.service';
 import { AuthGuard } from '../auth/auth.guard';
-import { Influencer } from './dto/create-csv.dto';
 // import { CreateCsvDto } from './dto/create-csv.dto';
 // import { UpdateCsvDto } from './dto/update-csv.dto';
 import { sortFields, sortOrder } from 'types/queyParams';
@@ -38,13 +37,7 @@ export class CsvsController {
 
   @UseGuards(AuthGuard)
   @Get('data/:id')
-  async getAllData(
-    @Req() req: any,
-    @Param('id') id: string,
-  ): Promise<{
-    updatedAt: Date;
-    data: Influencer[];
-  }> {
+  async getAllData(@Req() req: any, @Param('id') id: string) {
     const userEmail = req.user.email;
 
     return this.csvsService.getAllData(userEmail, +id);
