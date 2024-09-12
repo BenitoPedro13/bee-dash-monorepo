@@ -17,7 +17,7 @@ type CreatorsTableRowProps = {
 
 const CreatorsTableRow = ({ data }: CreatorsTableRowProps) => {
   return (
-    <tr>
+    <tr className="!border-b-[#EAECF0]">
       <td>
         <Link href={`/dashboard/creator/${data.Username}`}>
           <div className="flex-shrink-0 flex justify-start items-center overflow-visible content-center flex-nowrap p-0 gap-[6px]">
@@ -48,7 +48,7 @@ const CreatorsTableRow = ({ data }: CreatorsTableRowProps) => {
                 {data.Influencer}
               </h5>
               <p
-                className={`flex-shrink-0 w-auto h-auto whitespace-nowrap relative ${inter.className} text-[#475466] text-sm`}
+                className={`flex-shrink-0 w-auto h-auto whitespace-nowrap relative  hover:underline ${inter.className} text-[#475466] text-sm`}
               >
                 @{data.Username}
               </p>

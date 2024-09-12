@@ -29,7 +29,7 @@ function formatFileSize(fileSize: number): string {
 
 const AttachmentsTableRow = ({ data }: AttachmentsTableRowProps) => {
   return (
-    <tr>
+    <tr className="!border-b-[#EAECF0]">
       <td>
         <div className="flex-shrink-0 flex justify-start items-center overflow-visible content-center flex-nowrap p-0 gap-[6px]">
           <div

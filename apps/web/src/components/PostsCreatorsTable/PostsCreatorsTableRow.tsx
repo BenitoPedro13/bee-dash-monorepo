@@ -17,7 +17,7 @@ type CreatorsTableRowProps = {
 
 const PostsCreatorsTableRow = ({ data }: CreatorsTableRowProps) => {
   return (
-    <tr>
+    <tr className="!border-b-[#EAECF0]">
       <td className="h-[65px]">
         <h5
           className={`flex-shrink-0 w-auto h-auto whitespace-nowrap relative font-medium ${inter.className} text-[#0f1728] text-sm`}
