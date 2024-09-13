@@ -89,9 +89,15 @@ export class AttachmentsController {
   }
 
   @UseGuards(AuthGuard)
+  @Get('by-campaign/:id')
+  async findOneByCampaign(@Param('id') id: string) {
+    return this.attachmentsService.findAll(+id);
+  }
+
+  @UseGuards(AuthGuard)
   @Get(':id')
   async findOne(@Param('id') id: string) {
-    return this.attachmentsService.findOne(+id);
+    return this.attachmentsService.findAll(+id);
   }
 
   @UseGuards(AuthGuard)
