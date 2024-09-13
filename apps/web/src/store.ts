@@ -3,7 +3,8 @@ import { setCookie } from "nookies";
 import { addCPToPostsTable } from "../utils/utils";
 
 // export const baseApiUrl = "https://api.thatsbee.co";
-export const baseApiUrl = "https://api1.thatsbee.co";
+// export const baseApiUrl = "https://api1.thatsbee.co";
+export const baseApiUrl = "http://localhost:3000";
 
 export enum DashboardMode {
   ALL = "all",
@@ -295,12 +296,15 @@ const useDataStore = create<DataState>((set) => ({
   },
   fetchAttachment: async (access_token: string, campaignId: number) => {
     try {
-      const response = await fetch(`${baseApiUrl}/attachments/${campaignId}`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${access_token}`, // Set the token in the Authorization header
-        },
-      }); // Replace with your API endpoint
+      const response = await fetch(
+        `${baseApiUrl}/attachments/by-campaign/${campaignId}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${access_token}`, // Set the token in the Authorization header
+          },
+        }
+      ); // Replace with your API endpoint
 
       if (!response.ok || response.status === 401) {
         return set((prevState) => {

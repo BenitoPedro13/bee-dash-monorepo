@@ -1278,7 +1278,9 @@ export const countPostsPropertiesBySocialNetworksType = (
 
   const creatorsCount = Object.keys(postsGroupedByCreator).length;
 
-  return count / creatorsCount;
+  const result = count / creatorsCount;
+
+  return Number.isNaN(result) ? 0 : result;
 };
 
 export const totalPercentage = (

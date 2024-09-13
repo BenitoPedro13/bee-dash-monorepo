@@ -164,7 +164,7 @@ export default function BarGraph({ typeOfGraph }: { typeOfGraph: GraphTypes }) {
 
   useEffect(() => {
     const chartData = getChartData(typeOfGraph, postsData);
-    console.log("chartData", chartData);
+
     setChartDataState(chartData);
   }, [postsData, mode, dateRange, typeOfGraph]);
 

@@ -170,7 +170,7 @@ export default function PostsBarGraph({
 
   useEffect(() => {
     const chartData = getChartData(typeOfGraph, data ?? postsData);
-    console.log("chartData", chartData);
+
     setChartDataState(chartData);
   }, [data, postsData, mode, dateRange, typeOfGraph]);
 

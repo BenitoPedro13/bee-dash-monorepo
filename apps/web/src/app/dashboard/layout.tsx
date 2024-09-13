@@ -34,7 +34,6 @@ export default function RootLayout({
   }, [fetchData, fetchAttachment, access_token, session.isAuthenticated]);
 
   useEffect(() => {
-    console.log(session, access_token);
     if (!session.isAuthenticated) {
       if (access_token) {
         (async () => {
