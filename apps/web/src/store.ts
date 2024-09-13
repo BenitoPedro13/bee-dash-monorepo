@@ -3,7 +3,7 @@ import { setCookie } from "nookies";
 import { addCPToPostsTable } from "../utils/utils";
 
 // export const baseApiUrl = "https://api.thatsbee.co";
-export const baseApiUrl = "http://localhost:3000";
+export const baseApiUrl = "http://34.236.89.67";
 
 export enum DashboardMode {
   ALL = "all",
