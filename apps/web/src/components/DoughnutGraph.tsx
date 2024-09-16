@@ -28,7 +28,10 @@ export default function DoughnutGraph() {
   >([]);
 
   const mainColor = !user?.color ? "#FF8C00" : user.color; // Assuming user.color is the main color in hex format
-  const subVariations = generateShadesAndTintsRandomly(mainColor, data.length);
+  const subVariations = generateShadesAndTintsRandomly(
+    mainColor,
+    postsData.length
+  );
 
   const chartConfig = {
     desktop: {
