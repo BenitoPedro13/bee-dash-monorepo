@@ -34,11 +34,12 @@ model User {
 }
 
 model Categories {
-  id        Int       @id @default(autoincrement())
+  id        Int        @id @default(autoincrement())
   category  String
   creators  Creator[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  campaigns Campaign[]
 }
 
 model Creator {
@@ -74,9 +75,11 @@ model Campaign {
   performances Performance[]
   user         User          @relation(fields: [userId], references: [id])
   userId       Int
+  categories   Categories[]
   postsPack    PostsPack[]
   byPosts      Boolean       @default(false)
   urlTable     String?       @map(name: "url_table")
+  imageUrl     String?
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
 }
