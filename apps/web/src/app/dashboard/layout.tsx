@@ -16,6 +16,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const { color } = useDataStore((store) => store.session.user);
   const session = useDataStore((state) => state.session);
   const fetchData = useDataStore((state) => state.fetchData);
   const fetchAttachment = useDataStore((state) => state.fetchAttachment);
@@ -56,7 +57,7 @@ export default function RootLayout({
             <SidenavDesktop />
             <div className="relative bg-white overflow-hidden">
               <div className="absolute z-10">
-                <DashboardBG />
+                <DashboardBG color={color}/>
               </div>
               {children}
 

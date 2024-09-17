@@ -24,7 +24,7 @@ interface BreadcrumbProps {
 
 const BreadcrumbComponent = ({ creator }: BreadcrumbProps) => {
   const session = useDataStore((state) => state.session);
-
+  
   return (
     <div className="flex w-fit h-auto flex-col justify-center items-start gap-3">
       {/* <div className="breadcrumbs xl:text-lg text-sm text-[#475466]">
@@ -78,8 +78,7 @@ const BreadcrumbComponent = ({ creator }: BreadcrumbProps) => {
           </BreadcrumbSeparator>
           <BreadcrumbItem>
             <Link
-              href="/"
-              //
+              href="/campaigns"
             >
               <div className="flex py-1 px-2 justify-center items-center">
                 <p className="text-black font-nexa text-sm font-medium">
