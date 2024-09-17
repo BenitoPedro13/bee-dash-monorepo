@@ -72,18 +72,53 @@ export class CampaignsService {
               creator: {
                 include: { socialNetworks: true },
               },
+              posts: true,
             },
           },
           attachments: true,
         },
       });
 
-      return campaigns;
+      const campaignsWithFollowers = campaigns.map((campaign) => {
+        const uniqueSocialNetworks = new Set<number>();
+        let totalFollowers = 0;
+
+        let totalInteractions = 0;
+        let totalImpressions = 0;
+
+        campaign.postsPack.forEach((postPack) => {
+          postPack.creator.socialNetworks.forEach((network) => {
+            if (!uniqueSocialNetworks.has(network.id)) {
+              totalFollowers += network.followers || 0;
+              uniqueSocialNetworks.add(network.id);
+            }
+          });
+
+          postPack.posts.forEach((post) => {
+            totalImpressions += post.impressions;
+            totalInteractions += post.interactions;
+          });
+        });
+
+        const mediumEngagement =
+          totalImpressions === 0
+            ? 0
+            : (totalInteractions / totalImpressions) * 100;
+
+        return {
+          ...campaign,
+          totalFollowers,
+          mediumEngagement: +mediumEngagement.toFixed(2),
+        };
+      });
+
+      return campaignsWithFollowers;
     } catch (error) {
       console.error('CampaignsService.findAll: Error', error);
       throw error;
     }
   }
+  // campaigns[0].postsPack[0].creator.socialNetworks[0].followers
 
   async findOne(campaignId: number) {
     try {
