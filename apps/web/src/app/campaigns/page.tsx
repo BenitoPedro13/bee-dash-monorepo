@@ -9,8 +9,9 @@ import CampaingCard from "@/components/CampaignCard";
 
 export default function Home() {
   const color = useDataStore((state) => state.session.user.color);
-  const campaigns = useDataStore((state) => state.session.user.campaigns);
+  // const campaigns = useDataStore((state) => state.session.user.campaigns);
   const session = useDataStore((state) => state.session);
+  const campaigns = session.user.campaigns;
 
   const hexColor =
     color === undefined ? "#FF8C00" : color.length !== 7 ? "#FF8C00" : color;
@@ -48,13 +49,17 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="w-full h-full xl:pl-[114px] relative z-20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6 gap-4 pb-6 xl:pr-8 p-0 px-[15px]">
+      <div className="w-full h-full xl:pl-[114px] relative z-20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pb-6 xl:pr-8 p-0 px-[15px]">
         {campaigns.map((item) => (
-          <CampaingCard key={item.id} campaign={item} />
+          <CampaingCard
+            key={item.id}
+            name={item.name}
+            posts={item.postsPack.length}
+          />
         ))}
       </div>
 
-      <div className="h-full w-full flex items-center justify-center xl:pl-[114px] relative z-20 gap-4 pb-6 xl:pr-8 p-0 px-[15px]">
+      <div className="h-full w-full flex items-center justify-center content-center xl:pl-[114px] relative z-20 gap-4 pb-6 xl:pr-8 p-0 px-[15px]">
         <div className="h-[400px] bg-white w-full rounded-xl border-[#D4D4D4] border flex flex-col items-center justify-center">
           <svg
             width="58"
@@ -70,7 +75,7 @@ export default function Home() {
             />
           </svg>
 
-          <p className="text-[#101828] font-nexa font-bold text-[32px]">
+          <p className="text-[#101828] font-nexa font-bold sm:text-xl lg:text-3xl">
             Criar nova campanha
           </p>
         </div>
