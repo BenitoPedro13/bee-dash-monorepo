@@ -10,10 +10,13 @@ import CampaingCard from "@/components/CampaignCard";
 export default function Home() {
   const color = useDataStore((state) => state.session.user.color);
   const session = useDataStore((state) => state.session);
+  const campaigns = session.user.campaigns
 
   const hexColor =
     color === undefined ? "#FF8C00" : color.length !== 7 ? "#FF8C00" : color;
 
+  console.log(campaigns)
+  
   return (
     <div>
       <div
@@ -51,19 +54,17 @@ export default function Home() {
       </div>
 
       <div className="w-full h-full xl:pl-[114px] relative z-20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pb-6 xl:pr-8 p-0 px-[15px]">
-          <CampaingCard/>
-          <CampaingCard/>
-          <CampaingCard/>
+        {campaigns.map((item) => <CampaingCard key={item.id} name={item.name} posts={item.postsPack.length}/>)}
       </div>
 
-      <div className="h-full w-full flex items-center justify-center xl:pl-[114px] relative z-20 gap-4 pb-6 xl:pr-8 p-0 px-[15px]">
+      <div className="h-full w-full flex items-center justify-center content-center xl:pl-[114px] relative z-20 gap-4 pb-6 xl:pr-8 p-0 px-[15px]">
           <div className="h-[400px] bg-white w-full rounded-xl border-[#D4D4D4] border flex flex-col items-center justify-center">
             <svg width="58" height="57" viewBox="0 0 58 57" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect x="0.5" width="57" height="57" rx="28.5" fill={hexColor}/>
             <path d="M41.75 29C41.75 29.2818 41.6381 29.552 41.4388 29.7513C41.2395 29.9506 40.9693 30.0625 40.6875 30.0625H30.0625V40.6875C30.0625 40.9693 29.9506 41.2395 29.7513 41.4388C29.552 41.6381 29.2818 41.75 29 41.75C28.7182 41.75 28.448 41.6381 28.2487 41.4388C28.0494 41.2395 27.9375 40.9693 27.9375 40.6875V30.0625H17.3125C17.0307 30.0625 16.7605 29.9506 16.5612 29.7513C16.3619 29.552 16.25 29.2818 16.25 29C16.25 28.7182 16.3619 28.448 16.5612 28.2487C16.7605 28.0494 17.0307 27.9375 17.3125 27.9375H27.9375V17.3125C27.9375 17.0307 28.0494 16.7605 28.2487 16.5612C28.448 16.3619 28.7182 16.25 29 16.25C29.2818 16.25 29.552 16.3619 29.7513 16.5612C29.9506 16.7605 30.0625 17.0307 30.0625 17.3125V27.9375H40.6875C40.9693 27.9375 41.2395 28.0494 41.4388 28.2487C41.6381 28.448 41.75 28.7182 41.75 29Z" fill="white"/>
             </svg>
 
-            <p className="text-[#101828] font-nexa font-bold text-[32px]">Criar nova campanha</p>
+            <p className="text-[#101828] font-nexa font-bold sm:text-xl lg:text-3xl">Criar nova campanha</p>
           </div>
       </div>
     </div>

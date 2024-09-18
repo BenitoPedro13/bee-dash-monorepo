@@ -1,10 +1,10 @@
 import React from "react";
 
-type TitleProps = {
+type titleProps = {
   title:string;
 }
 
-const TitleWithoutFilters = ({title} : TitleProps) => {
+const TitleWithoutFilters = ({title} : titleProps) => {
   return (
     <div className="flex flex-col items-start gap-3 self-stretch">
       <div className="flex justify-center items-start self-stretch gap-3 flex-col md:flex-row md:justify-between md:items-center md:gap-0">
