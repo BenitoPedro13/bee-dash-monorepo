@@ -14,8 +14,6 @@ export default function Home() {
 
   const hexColor =
     color === undefined ? "#FF8C00" : color.length !== 7 ? "#FF8C00" : color;
-
-  console.log(campaigns)
   
   return (
     <div>
