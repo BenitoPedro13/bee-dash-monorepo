@@ -14,7 +14,7 @@ const SignIn = () => {
   const onSubmit = async (data: LoginFormData) => {
     const isAuthenticated = await signIn(data); // Handle form submission data
 
-    isAuthenticated ? router.push("/dashboard") : null;
+    isAuthenticated ? router.push("/campaigns") : null;
   };
 
   useEffect(() => {
@@ -24,7 +24,7 @@ const SignIn = () => {
       (async () => {
         return await getUserByToken(access_token);
       })().then((isAuthenticated) =>
-        isAuthenticated ? router.push("/dashboard") : null
+        isAuthenticated ? router.push("/campaigns") : null
       );
     }
   }, [getUserByToken, router]);

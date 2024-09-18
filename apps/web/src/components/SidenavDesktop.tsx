@@ -23,7 +23,7 @@ const SidenavDesktop = () => {
   // TODO: implement state to verify if url path is /dashboard
   const isDashboard = windowIsUndefined
     ? false
-    : window.location.pathname === "/dashboard";
+    : window.location.pathname === "/campaigns";
 
   const handleLogout = () => {
     // Remove the authentication token or relevant cookie here
@@ -51,7 +51,7 @@ const SidenavDesktop = () => {
             <button className="btn btn-ghost cursor-not-allowed box-border flex-shrink-0 w-12 h-12 flex flex-row justify-start items-start p-3 bg-transparent overflow-hidden relative content-start flex-nowrap gap-2 rounded-md opacity-30 hover:opacity-80 ">
               <Image src={house} width={24} height={24} alt="Home" />
             </button>
-            <Link href="/dashboard">
+            <Link href="/campaigns">
               <button
                 className={`btn btn-ghost box-border flex-shrink-0 w-12 h-12 flex flex-row justify-start items-start p-3 bg-transparent overflow-hidden relative content-start flex-nowrap gap-2 rounded-md`}
                 style={{

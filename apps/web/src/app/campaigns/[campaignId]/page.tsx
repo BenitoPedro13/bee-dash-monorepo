@@ -28,7 +28,7 @@ import {
   totalCount,
   totalCPE,
   totalPercentage,
-} from "../../../utils/utils";
+} from "../../../../utils/utils";
 import { useRouter } from "next/navigation";
 import BreadcrumbComponent from "@/components/Breadcrumb";
 import WelcomeTitle from "@/components/WelcomeTitle";
@@ -75,7 +75,7 @@ export default function Home() {
         <div className="box-border flex-shrink-0 w-full h-min flex flex-col justify-start items-center xl:pt-8 xl:pb-8 py-[15px] overflow-visible content-center flex-nowrap xl:gap-6 gap-[15px] rounded-none">
           <div className="box-border flex-shrink-0 w-full xl:h-auto h-min flex flex-col justify-center items-start xl:px-8 px-[15px] overflow-visible relative content-start flex-nowrap gap-6 rounded-none">
             <div className="flex justify-between items-center self-stretch">
-              <BreadcrumbComponent />
+              <BreadcrumbComponent route="dashboard" />
               <div className="w-fit flex items-start gap-4">
                 {/* <div className="w-fit flex flex-col items-start gap-[6px]">
                     <div className="w-full min-w-[384px] flex items-center gap-2">

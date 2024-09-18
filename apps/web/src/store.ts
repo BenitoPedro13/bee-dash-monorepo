@@ -3,8 +3,8 @@ import { setCookie } from "nookies";
 import { addCPToPostsTable } from "../utils/utils";
 
 // export const baseApiUrl = "https://api.thatsbee.co";
-export const baseApiUrl = "https://api1.thatsbee.co";
-// export const baseApiUrl = "http://localhost:3000";
+// export const baseApiUrl = "https://api1.thatsbee.co";
+export const baseApiUrl = "http://localhost:3000";
 
 export enum DashboardMode {
   ALL = "all",
@@ -119,7 +119,9 @@ export interface Campaign {
   name: string;
   byPosts: boolean;
   urlTable?: string;
+  imageUrl?: string;
   attachments: Attachment[];
+  categories?: { id: string; name: string }[];
   postsPack: PostsPack[];
   userId: number;
   createdAt: string;

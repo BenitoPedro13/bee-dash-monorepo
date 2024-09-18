@@ -1,3 +1,4 @@
+"use client";
 /* eslint-disable @next/next/no-img-element */
 import React from "react";
 import { Plus_Jakarta_Sans, Inter } from "next/font/google";
@@ -7,6 +8,7 @@ import juicyLimoArt from "@/../public/juicy-artwork-limo.svg";
 import { UserCircle, UserIcon } from "lucide-react";
 import { addAlphaToHex } from "../../../utils/utils";
 import Link from "next/link";
+import { useParams } from "next/navigation";
 
 const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 const inter = Inter({ subsets: ["latin"] });
@@ -16,10 +18,11 @@ type CreatorsTableRowProps = {
 };
 
 const CreatorsTableRow = ({ data }: CreatorsTableRowProps) => {
+  const { campaignId } = useParams();
   return (
     <tr className="!border-b-[#EAECF0]">
       <td>
-        <Link href={`/dashboard/creator/${data.Username}`}>
+        <Link href={`/campaigns/${campaignId}/creators/${data.Username}`}>
           <div className="flex-shrink-0 flex justify-start items-center overflow-visible content-center flex-nowrap p-0 gap-[6px]">
             <div
               className="flex items-center justify-center w-[38px] h-[38px] rounded-full"

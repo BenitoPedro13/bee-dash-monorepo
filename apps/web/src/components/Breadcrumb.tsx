@@ -1,114 +1,98 @@
 import Link from "next/link";
 import React from "react";
-import { Inter } from "next/font/google";
 import useDataStore from "@/store";
-
 import {
   Breadcrumb,
   BreadcrumbItem,
-  BreadcrumbLink,
   BreadcrumbList,
-  BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-
 import house from "@/../public/house.svg";
 import chevronright from "@/../public/chevron-right.svg";
 import Image from "next/image";
-
-const inter = Inter({ subsets: ["latin"] });
+import { usePathname } from "next/navigation";
 
 interface BreadcrumbProps {
+  route: string;
   creator?: string;
+  campaignId?: string;
+  creatorSlug?: string;
 }
 
-const BreadcrumbComponent = ({ creator }: BreadcrumbProps) => {
+const routeDisplayNames: { [key: string]: string } = {
+  home: "Início",
+  campaigns: "Campanhas",
+  dashboard: "Dashboard da Campanha",
+  creators: "Creators",
+};
+
+const BreadcrumbComponent = ({
+  route,
+  creator,
+  campaignId,
+  creatorSlug,
+}: BreadcrumbProps) => {
   const session = useDataStore((state) => state.session);
-  
+  const pathSegments = route.split("/").filter(Boolean); // Split route and remove empty segments
+
   return (
     <div className="flex w-fit h-auto flex-col justify-center items-start gap-3">
-      {/* <div className="breadcrumbs xl:text-lg text-sm text-[#475466]">
-        <ul>
-          <li>
-            <Link href={"/"}>
-              <svg
-                width="15"
-                height="16"
-                viewBox="-1 -1 18 19"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M4.66667 13.1667H11.3333M7.18141 1.30333L1.52949 5.69927C1.15168 5.99312 0.962781 6.14005 0.826689 6.32405C0.706138 6.48704 0.616335 6.67065 0.561689 6.86588C0.5 7.08627 0.5 7.32558 0.5 7.80421V13.8333C0.5 14.7667 0.5 15.2335 0.681656 15.59C0.841445 15.9036 1.09641 16.1585 1.41002 16.3183C1.76654 16.5 2.23325 16.5 3.16667 16.5H12.8333C13.7668 16.5 14.2335 16.5 14.59 16.3183C14.9036 16.1585 15.1586 15.9036 15.3183 15.59C15.5 15.2335 15.5 14.7667 15.5 13.8333V7.80421C15.5 7.32558 15.5 7.08627 15.4383 6.86588C15.3837 6.67065 15.2939 6.48704 15.1733 6.32405C15.0372 6.14005 14.8483 5.99312 14.4705 5.69927L8.81859 1.30333C8.52582 1.07562 8.37943 0.961766 8.21779 0.918001C8.07516 0.879384 7.92484 0.879384 7.78221 0.918001C7.62057 0.961766 7.47418 1.07562 7.18141 1.30333Z"
-                  stroke="#667085"
-                  strokeWidth="1.66667"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                ></path>
-              </svg>
-            </Link>
-          </li>
-          <li>
-            <Link href={"/"}>
-              <p
-                className={`flex-shrink-0 w-auto h-auto whitespace-pre relative font-medium ${inter.className} xl:text-lg text-sm xl:leading-5]`}
-              >
-                Campanha
-              </p>
-            </Link>
-          </li>
-          <li>
-            <p
-              className={`flex-shrink-0 w-auto h-auto whitespace-pre relative font-medium ${inter.className} xl:text-lg text-sm xl:leading-5]]`}
-            >
-              {session.user.campaignName}
-            </p>
-          </li>
-        </ul>
-      </div> */}
       <Breadcrumb>
         <BreadcrumbList className="flex items-center">
+          {/* Home icon */}
           <BreadcrumbItem className="flex items-center gap-2">
-            <Link href="/">
+            <Link href="/campaigns">
               <Image src={house} alt="Home Icon" />
             </Link>
           </BreadcrumbItem>
-          <BreadcrumbSeparator>
-            <Image src={chevronright} alt="Home Icon" />
-          </BreadcrumbSeparator>
-          <BreadcrumbItem>
-            <Link
-              href="/campaigns"
-            >
-              <div className="flex py-1 px-2 justify-center items-center">
-                <p className="text-black font-nexa text-sm font-medium">
-                  Campanhas
-                </p>
-              </div>
-            </Link>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator>
-            <Image src={chevronright} alt="Home Icon" />
-          </BreadcrumbSeparator>
-          <BreadcrumbItem>
-            <Link href="/dashboard">
-              <p className="text-black font-nexa text-sm font-medium">
-                {session.user?.campaigns[0]?.name}
-              </p>
-            </Link>
-          </BreadcrumbItem>
 
-          {creator && (
+          {/* Map through the path segments to create breadcrumb items */}
+          {pathSegments.map((segment, index) => {
+            // Handle dynamic segments like campaignId and creatorSlug
+            let displayName = routeDisplayNames[segment];
+
+            // If it's a dynamic segment, replace with appropriate values
+            if (segment === campaignId) {
+              displayName =
+                session.user?.campaigns.find(
+                  (campaign) => campaign.id === +campaignId
+                )?.name || `Campanha ${campaignId}`;
+            } else if (segment === creatorSlug) {
+              displayName = creator || `Criador ${creatorSlug}`;
+            }
+
+            return (
+              <React.Fragment key={segment}>
+                <BreadcrumbSeparator>
+                  <Image src={chevronright} alt="Chevron Right Icon" />
+                </BreadcrumbSeparator>
+                <BreadcrumbItem>
+                  <Link
+                    href={
+                      segment === "creators"
+                        ? "/campaigns"
+                        : `/${pathSegments.slice(0, index + 1).join("/")}`
+                    }
+                  >
+                    <p className="text-black font-nexa text-sm font-medium">
+                      {displayName || segment}
+                    </p>
+                  </Link>
+                </BreadcrumbItem>
+              </React.Fragment>
+            );
+          })}
+
+          {/* Optional creator */}
+          {creator && creatorSlug && !pathSegments.includes(creatorSlug) && (
             <>
               <BreadcrumbSeparator>
-                <Image src={chevronright} alt="Home Icon" />
+                <Image src={chevronright} alt="Chevron Right Icon" />
               </BreadcrumbSeparator>
               <BreadcrumbItem>
-                <BreadcrumbPage>
-                  <p className="text-black font-nexa text-sm font-medium">
-                    {creator}
-                  </p>
-                </BreadcrumbPage>
+                <p className="text-black font-nexa text-sm font-medium">
+                  {creator}
+                </p>
               </BreadcrumbItem>
             </>
           )}

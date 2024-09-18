@@ -5,7 +5,7 @@ import Header from "@/components/Header";
 import SidenavDesktop from "@/components/SidenavDesktop";
 import useDataStore from "@/store";
 import { Inter } from "next/font/google";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { parseCookies } from "nookies";
 import { useEffect } from "react";
 
@@ -16,7 +16,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-
+  const { campaignId } = useParams();
   const { color } = useDataStore((store) => store.session.user);
   const session = useDataStore((state) => state.session);
   const fetchData = useDataStore((state) => state.fetchData);
@@ -27,13 +27,17 @@ export default function RootLayout({
   const { "bee-dash-token": access_token } = parseCookies();
 
   useEffect(() => {
-    const campaignId = session.user.campaigns[0]?.id;
-
     if (campaignId) {
-      fetchData(access_token, campaignId);
-      fetchAttachment(access_token, campaignId);
+      fetchData(access_token, +campaignId);
+      fetchAttachment(access_token, +campaignId);
     }
-  }, [fetchData, fetchAttachment, access_token, session.isAuthenticated]);
+  }, [
+    fetchData,
+    fetchAttachment,
+    access_token,
+    session.isAuthenticated,
+    campaignId,
+  ]);
 
   useEffect(() => {
     if (!session.isAuthenticated) {
@@ -58,7 +62,7 @@ export default function RootLayout({
             <SidenavDesktop />
             <div className="relative bg-white overflow-hidden min-h-screen">
               <div className="absolute z-10">
-                <DashboardBG color={color}/>
+                <DashboardBG color={color} />
               </div>
               {children}
 
