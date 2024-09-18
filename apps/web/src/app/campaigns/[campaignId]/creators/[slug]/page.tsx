@@ -118,7 +118,11 @@ export default function Home() {
             <div className="flex justify-between items-center self-stretch">
               <BreadcrumbComponent
                 route={`/campaigns/${campaignId}/creators/${slug}`}
-                creator={slug}
+                creator={
+                  creatorData[0] && creatorData[0].Influencer
+                    ? creatorData[0].Influencer
+                    : slug
+                }
               />
               <div className="w-fit flex items-start gap-4">
                 {/* <div className="w-fit flex flex-col items-start gap-[6px]">

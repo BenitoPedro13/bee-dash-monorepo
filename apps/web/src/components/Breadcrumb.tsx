@@ -10,7 +10,7 @@ import {
 import house from "@/../public/house.svg";
 import chevronright from "@/../public/chevron-right.svg";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 
 interface BreadcrumbProps {
   route: string;
@@ -22,19 +22,13 @@ interface BreadcrumbProps {
 const routeDisplayNames: { [key: string]: string } = {
   home: "Início",
   campaigns: "Campanhas",
-  dashboard: "Dashboard da Campanha",
   creators: "Creators",
 };
 
-const BreadcrumbComponent = ({
-  route,
-  creator,
-  campaignId,
-  creatorSlug,
-}: BreadcrumbProps) => {
+const BreadcrumbComponent = ({ route, creator }: BreadcrumbProps) => {
   const session = useDataStore((state) => state.session);
   const pathSegments = route.split("/").filter(Boolean); // Split route and remove empty segments
-
+  const { campaignId, slug } = useParams();
   return (
     <div className="flex w-fit h-auto flex-col justify-center items-start gap-3">
       <Breadcrumb>
@@ -52,13 +46,13 @@ const BreadcrumbComponent = ({
             let displayName = routeDisplayNames[segment];
 
             // If it's a dynamic segment, replace with appropriate values
-            if (segment === campaignId) {
+            if (index === 1 && segment === campaignId) {
               displayName =
                 session.user?.campaigns.find(
                   (campaign) => campaign.id === +campaignId
                 )?.name || `Campanha ${campaignId}`;
-            } else if (segment === creatorSlug) {
-              displayName = creator || `Criador ${creatorSlug}`;
+            } else if (segment === slug) {
+              displayName = creator || `${slug}`;
             }
 
             return (
@@ -84,7 +78,7 @@ const BreadcrumbComponent = ({
           })}
 
           {/* Optional creator */}
-          {creator && creatorSlug && !pathSegments.includes(creatorSlug) && (
+          {creator && slug && !pathSegments.includes(slug) && (
             <>
               <BreadcrumbSeparator>
                 <Image src={chevronright} alt="Chevron Right Icon" />

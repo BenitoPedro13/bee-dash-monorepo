@@ -244,7 +244,7 @@ const Footer = (props: Props) => {
     //     </div>
     //   </div>
     // </div>
-    <div className="flex w-full h-min pb-4 xl:p-[22px] xl:pl-[104px] xl:pt-0 xl:pb-5 px-[15px] py-0 flex-col items-start z-20 relative">
+    <div className="flex w-full h-min pb-4 xl:p-[22px] xl:pl-[104px] xl:pt-0 xl:pb-8 px-[15px] py-0 flex-col items-start z-20 relative">
       <footer className="flex w-full pt-16 pb-12 flex-col items-center gap-16 self-stretch rounded-xl bg-white">
         <div className="flex px-8 flex-col items-start gap-8 self-stretch">
           <div className="flex pt-8 justify-between items-center self-stretch border-t-[1px] border-t-[#EAECF0] max-[670px]:flex-col max-[670px]:gap-4">

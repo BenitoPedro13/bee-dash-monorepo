@@ -100,6 +100,7 @@ export interface PostsPack {
   creator: Creator;
   creatorId: number;
   id: number;
+  posts: Posts[];
   price: number;
   createdAt: string;
   updatedAt: string;
@@ -123,6 +124,8 @@ export interface Campaign {
   attachments: Attachment[];
   categories?: { id: string; name: string }[];
   postsPack: PostsPack[];
+  totalFollowers: number;
+  mediumEngagement: number;
   userId: number;
   createdAt: string;
   updatedAt: string;
