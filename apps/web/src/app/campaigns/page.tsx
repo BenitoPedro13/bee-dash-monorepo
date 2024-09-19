@@ -16,6 +16,11 @@ export default function Home() {
   const hexColor =
     color === undefined ? "#FF8C00" : color.length !== 7 ? "#FF8C00" : color;
 
+  const openInNewTab = (url: string) => {
+    const newWindow = window.open(url, "_blank", "noopener,noreferrer");
+    if (newWindow) newWindow.opener = null;
+  };
+
   return (
     <div>
       <div className="w-full h-full flex xl:flex-row flex-col justify-start items-start z-20 p-0 xl:pl-[82px] content-start flex-nowrap gap-0 rounded-none relative">
@@ -69,7 +74,14 @@ export default function Home() {
         })}
       </div>
 
-      <div className="h-full w-full flex items-center justify-center content-center xl:pl-[114px] relative z-20 gap-4 pb-6 xl:pr-8 p-0 px-[15px]">
+      <div
+        onClick={() =>
+          openInNewTab(
+            "https://api.whatsapp.com/send?phone=5511985477521&text=Oi%20pessoal!%20gostaria%20de%20realizar%20outra%20campanha"
+          )
+        }
+        className="h-full w-full flex items-center justify-center content-center xl:pl-[114px] relative z-20 gap-4 pb-6 xl:pr-8 p-0 px-[15px] cursor-pointer"
+      >
         <div className="h-[400px] bg-white w-full rounded-xl border-[#D4D4D4] border flex flex-col items-center justify-center">
           <svg
             width="58"

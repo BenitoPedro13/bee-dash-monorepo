@@ -25,7 +25,7 @@ export default function CampaingCard({ name, posts, campaign }: cardProps) {
           alt={campaign.name}
           src={
             campaign.imageUrl
-              ? `${baseApiUrl}/public/${campaign.imageUrl ?? ""}`
+              ? `${baseApiUrl}${campaign.imageUrl ?? ""}`
               : defaultCampaignImage
           }
           width={0}
