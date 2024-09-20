@@ -85,17 +85,74 @@ export class UsersService {
       }
     });
 
-    await this.prisma.creator.update({
+    // console.log(multerFile, `/public/${multerFile.uniqueFilename}`);
+
+    const a = await this.prisma.creator.update({
       data: {
         urlProfilePicture: `/public/${multerFile.uniqueFilename}`,
       },
       where: { id: creatorId },
     });
 
+    console.log(a);
+
     await this.prisma.attachments.deleteMany({
       where: {
         uniqueFilename: {
           contains: `-creatorImage-${creatorId}`,
+        },
+      },
+    });
+
+    return await this.prisma.attachments.create({
+      data: {
+        uniqueFilename: multerFile.uniqueFilename,
+        originalFilename: file.originalname,
+        fileSize: file.buffer.length,
+      },
+    });
+  }
+
+  async processCampaignImage(
+    file: MulterFileDTO,
+    campaignId: number,
+  ): Promise<Attachments> {
+    const multerFile = {
+      uniqueFilename: `${Date.now()}-campaignImage-${campaignId}-${
+        file?.originalname ?? ''
+      }`,
+      buffer: file.buffer,
+      originalname: file.originalname,
+    };
+
+    // Ensure the /files directory exists
+    const directoryPath = path.join(__dirname, '..', '..', '..', 'files');
+    fs.mkdirSync(directoryPath, { recursive: true });
+
+    // Write the file to the /files folder
+    const filePath = path.join(directoryPath, multerFile.uniqueFilename);
+
+    fs.writeFile(filePath, multerFile.buffer, (error) => {
+      if (error) {
+        console.error('Error writing file:', error);
+      }
+    });
+
+    // console.log(multerFile, `/public/${multerFile.uniqueFilename}`);
+
+    const a = await this.prisma.campaign.update({
+      data: {
+        imageUrl: `/public/${multerFile.uniqueFilename}`,
+      },
+      where: { id: campaignId },
+    });
+
+    console.log(a);
+
+    await this.prisma.attachments.deleteMany({
+      where: {
+        uniqueFilename: {
+          contains: `-campaignImage-${campaignId}`,
         },
       },
     });
