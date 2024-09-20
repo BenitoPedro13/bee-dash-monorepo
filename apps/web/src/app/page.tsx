@@ -38,7 +38,7 @@ const SignIn = () => {
   }, [getUserByToken, router]);
 
   return (
-    <div className="h-[100vh] w-full flex justify-center items-center bg-white relative scale-[1.5]">
+    <div className="h-[100vh] w-full flex justify-center items-center bg-white relative scale-[1.5] overflow-hidden">
       <LoginBG />
       <div className="flex justify-center self-center  z-10 scale-[.65]">
         <div className="p-12 mx-auto rounded-2xl flex flex-col items-center">
@@ -162,7 +162,7 @@ const SignIn = () => {
               </defs>
             </svg>
 
-            <h3 className="font-medium text-2xl text-[#0E121B] pb-1 pt-2">
+            <h3 className="font-medium text-2xl text-[#0E121B] pb-1 pt-2 text-center">
               Bem-vindo ao Bee Dashboard
             </h3>
             <p className="text-gray-500 text-center text-base font-normal">
