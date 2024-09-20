@@ -10,7 +10,7 @@ export default function UserCreate() {
     {
       resource: "users",
       optionLabel: "email",
-      // optionLabel: "name",
+      searchField: "email",
       optionValue: "id",
     }
   );
@@ -75,6 +75,20 @@ export default function UserCreate() {
           ]}
         >
           <Select {...usersSelectProps} />
+        </Form.Item>
+
+        <Form.Item
+          label={"Campaign Image URL"}
+          name={["imageUrl"]}
+          rules={[
+            {
+              required: false,
+              type: "url",
+              message: "Please enter a valid URL",
+            },
+          ]}
+        >
+          <Input defaultValue="" disabled />
         </Form.Item>
       </Form>
     </Create>

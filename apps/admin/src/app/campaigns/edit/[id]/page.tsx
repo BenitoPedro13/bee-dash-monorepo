@@ -206,14 +206,20 @@ export default function UsersEdit() {
     }
   };
 
-  const handleUploadCreatorImage = async ({ file }: { file: RcFile }) => {
+  const handleUploadCampaignImage = async ({
+    file,
+    campaignId,
+  }: {
+    file: RcFile;
+    campaignId: number;
+  }) => {
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("user_email", data?.data.email);
+    formData.append("campaignId", `${campaignId}`);
 
     try {
       const response = await axios.post(
-        `${baseApiUrl}/users/upload-creator-image`,
+        `${baseApiUrl}/users/upload-campaign-image`,
         formData,
         {
           headers: {
@@ -337,6 +343,36 @@ export default function UsersEdit() {
           ]}
         >
           <Input />
+        </Form.Item>
+
+        <Form.Item label="Campaign Image" name="imageUrl">
+          <div
+            style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
+          >
+            {data?.data.imageUrl ? (
+              <img
+                src={baseApiUrl + data?.data.imageUrl}
+                alt={data?.data.name}
+                style={{ maxWidth: "250px", borderRadius: 30 }}
+              />
+            ) : (
+              "Nenhuma Foto de Perfil existente para esse usuario"
+            )}
+            <Upload
+              beforeUpload={async (file) =>
+                await handleUploadCampaignImage({
+                  file,
+                  campaignId: +params.id,
+                })
+              }
+            >
+              <Button icon={<UploadOutlined />}>
+                {data?.data.imageUrl
+                  ? "Clique para substituir a Imagem"
+                  : "Cique para fazer o upload da Imagem"}
+              </Button>
+            </Upload>
+          </div>
         </Form.Item>
 
         <Form.Item
