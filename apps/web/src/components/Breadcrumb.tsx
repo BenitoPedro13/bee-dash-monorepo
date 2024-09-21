@@ -29,6 +29,7 @@ const BreadcrumbComponent = ({ route, creator }: BreadcrumbProps) => {
   const session = useDataStore((state) => state.session);
   const pathSegments = route.split("/").filter(Boolean); // Split route and remove empty segments
   const { campaignId, slug } = useParams();
+
   return (
     <div className="flex w-fit h-auto flex-col justify-center items-start gap-3">
       <Breadcrumb>

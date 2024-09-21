@@ -1,6 +1,6 @@
 const LoginBG = () => {
   return (
-    <>
+    <div className="h-screen w-screen min-w-[1415px] flex items-center justify-center relative">
       {" "}
       {/* outer circle */}
       <svg
@@ -13,7 +13,9 @@ const LoginBG = () => {
         style={{
           position: "absolute",
           opacity: "88%",
-
+          minWidth: "1415px",
+          width: "100vw",
+          height: "auto",
           animationDelay: "0s",
         }}
       >
@@ -251,7 +253,9 @@ const LoginBG = () => {
         style={{
           position: "absolute",
           opacity: "66%",
-
+          minWidth: "1415px",
+          width: "100vw",
+          height: "auto",
           animationDelay: "0.25s",
         }}
       >
@@ -489,7 +493,9 @@ const LoginBG = () => {
         style={{
           position: "absolute",
           opacity: "44%",
-
+          minWidth: "1415px",
+          width: "100vw",
+          height: "auto",
           animationDelay: "0.5s",
         }}
       >
@@ -720,7 +726,9 @@ const LoginBG = () => {
         style={{
           position: "absolute",
           opacity: "22%",
-
+          minWidth: "1415px",
+          width: "100vw",
+          height: "auto",
           animationDelay: "0.75s",
         }}
       >
@@ -940,7 +948,7 @@ const LoginBG = () => {
           />
         </g>
       </svg>
-    </>
+    </div>
   );
 };
 export default LoginBG;

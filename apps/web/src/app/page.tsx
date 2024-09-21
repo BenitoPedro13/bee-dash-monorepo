@@ -38,9 +38,9 @@ const SignIn = () => {
   }, [getUserByToken, router]);
 
   return (
-    <div className="h-[100vh] w-full flex justify-center items-center bg-white relative scale-[1.5] overflow-hidden">
+    <div className="h-[100vh] w-full flex justify-center items-center bg-white relative overflow-hidden">
       <LoginBG />
-      <div className="flex justify-center self-center  z-10 scale-[.65]">
+      <div className="flex justify-center self-center  z-10 absolute">
         <div className="p-12 mx-auto rounded-2xl flex flex-col items-center">
           <div className="mb-4 flex flex-col justify-center items-center">
             <svg
