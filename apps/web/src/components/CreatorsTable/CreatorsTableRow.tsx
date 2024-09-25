@@ -22,7 +22,7 @@ const CreatorsTableRow = ({ data }: CreatorsTableRowProps) => {
   return (
     <tr className="!border-b-[#EAECF0]">
       <td>
-        <Link href={`/campaigns/${campaignId}/creators/${data.Username}`}>
+        <Link href={`/campaigns/${campaignId}/creators/${data.id}`}>
           <div className="flex-shrink-0 flex justify-start items-center overflow-visible content-center flex-nowrap p-0 gap-[6px]">
             <div
               className="flex items-center justify-center w-[38px] h-[38px] rounded-full"

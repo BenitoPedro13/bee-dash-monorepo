@@ -28,7 +28,7 @@ const routeDisplayNames: { [key: string]: string } = {
 const BreadcrumbComponent = ({ route, creator }: BreadcrumbProps) => {
   const session = useDataStore((state) => state.session);
   const pathSegments = route.split("/").filter(Boolean); // Split route and remove empty segments
-  const { campaignId, slug } = useParams();
+  const { campaignId, creatorId } = useParams();
 
   return (
     <div className="flex w-fit h-auto flex-col justify-center items-start gap-3">
@@ -52,8 +52,8 @@ const BreadcrumbComponent = ({ route, creator }: BreadcrumbProps) => {
                 session.user?.campaigns.find(
                   (campaign) => campaign.id === +campaignId
                 )?.name || `Campanha ${campaignId}`;
-            } else if (segment === slug) {
-              displayName = creator || `${slug}`;
+            } else if (segment === creatorId) {
+              displayName = creator || `${creatorId}`;
             }
 
             return (
@@ -65,7 +65,7 @@ const BreadcrumbComponent = ({ route, creator }: BreadcrumbProps) => {
                   <Link
                     href={
                       segment === "creators"
-                        ? "/campaigns"
+                        ? "/creators"
                         : `/${pathSegments.slice(0, index + 1).join("/")}`
                     }
                   >
@@ -79,7 +79,7 @@ const BreadcrumbComponent = ({ route, creator }: BreadcrumbProps) => {
           })}
 
           {/* Optional creator */}
-          {creator && slug && !pathSegments.includes(slug) && (
+          {creator && creatorId && !pathSegments.includes(creatorId) && (
             <>
               <BreadcrumbSeparator>
                 <Image src={chevronright} alt="Chevron Right Icon" />

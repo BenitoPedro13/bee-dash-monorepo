@@ -52,10 +52,10 @@ export default function PostsBarGraph({
     | { post: string; Interacoes: number; fill: string }[]
   >([]);
 
-  const mainColor = !user?.color ? "#FF8C00" : user.color; // Assuming user.color is the main color in hex format
+  const mainColor = user?.color ? user.color : "#FF8C00";
   const subVariations = generateShadesAndTintsRandomly(
     mainColor,
-    postsData.length
+    data.length ? data.length : postsData.length
   );
 
   const chartConfig = {

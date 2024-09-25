@@ -6,12 +6,12 @@ import useDataStore, { baseApiUrl, PostsPack } from "@/store";
 import BreadcrumbComponent from "@/components/Breadcrumb";
 import TitleWithoutFilters from "@/components/TitleWithoutFilters";
 import CampaingCard from "@/components/CampaignCard";
+import CreatorCard from "@/components/CreatorsCard";
 
 export default function Home() {
   const color = useDataStore((state) => state.session.user.color);
-  // const campaigns = useDataStore((state) => state.session.user.campaigns);
   const session = useDataStore((state) => state.session);
-  const campaigns = session.user.campaigns;
+  const creators = session.user.creators;
 
   const hexColor =
     color === undefined ? "#FF8C00" : color.length !== 7 ? "#FF8C00" : color;
@@ -20,6 +20,8 @@ export default function Home() {
     const newWindow = window.open(url, "_blank", "noopener,noreferrer");
     if (newWindow) newWindow.opener = null;
   };
+
+  const creatorsIds = Object.keys(creators);
 
   return (
     <div>
@@ -54,25 +56,28 @@ export default function Home() {
         </div>
       </div>
 
-      {/* <div className="w-full h-full xl:pl-[114px] relative z-20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pb-6 xl:pr-8 p-0 px-[15px]">
-        {campaigns.map((item) => {
-          const postsQuantity = item.postsPack.reduce(
-            (acc: number, postPack: PostsPack) => {
-              return acc + postPack.posts.length;
-            },
-            0
-          );
+      <div className="w-full h-full xl:pl-[114px] relative z-20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pb-6 xl:pr-8 p-0 px-[15px]">
+        {creatorsIds.map((id: string) => {
+          const posts = creators[id].posts;
+          const mediumEngagement = creators[id].mediumEngagement;
+
+          const postsQuantity = posts.length;
+          const name =
+            posts[0].socialNetwork.creator?.name ??
+            posts[0].socialNetwork.username;
+          const creator = posts[0].socialNetwork.creator!;
 
           return (
-            <CampaingCard
-              key={item.id}
-              campaign={item}
-              name={item.name}
+            <CreatorCard
+              key={id}
+              creator={creator}
+              name={name}
               posts={postsQuantity}
+              mediumEngagement={mediumEngagement}
             />
           );
         })}
-      </div> */}
+      </div>
     </div>
   );
 }

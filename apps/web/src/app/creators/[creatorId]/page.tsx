@@ -1,143 +1,66 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-
-import metricsIcon from "@/../public/metricsIcon.png";
-import buserLogo from "@/../public/buser-logo.webp";
-import Link from "next/link";
-import Image from "next/image";
-import { parseCookies } from "nookies";
-
-import Metrics from "@/components/Metrics";
-
-import { Inter } from "next/font/google";
-import CostPerMetric from "@/components/CostPerMetric";
-import MetricsLineGraph from "@/components/MetricsLineGraph";
-import SidenavDesktop from "@/components/SidenavDesktop";
-import MetricsDoughnutGraph from "@/components/MetricsDoughnutGraph";
-import CreatorsTable from "@/components/CreatorsTable/CreatorsTable";
 import useDataStore, {
+  Creator,
   DashboardMode,
   Influencer,
   Posts,
   baseApiUrl,
 } from "@/store";
 import { useEffect, useState } from "react";
-import Footer from "@/components/Footer";
-import FinancialMetrics from "@/components/FinancialMetrics/FinancialMetrics";
-import ContactCTA from "@/components/CTA/ContactCTA";
-import AttachmentsTable from "@/components/AttachmentsTable/AttachmentsTable";
-import {
-  costPerMetric,
-  parseUpdatedAt,
-  total,
-  totalCount,
-  totalCPE,
-  totalPercentage,
-} from "../../../../../../utils/utils";
+
 import { useParams, useRouter } from "next/navigation";
 import BreadcrumbComponent from "@/components/Breadcrumb";
-import WelcomeTitle from "@/components/WelcomeTitle";
-import TotalCreatorsIcon from "@/components/MetricsIcons/TotalCreatorsIcon";
-import TotalPostsIcon from "@/components/MetricsIcons/TotalPostsIcon";
-import TotalFeedIcon from "@/components/MetricsIcons/TotalFeedIcon";
-import TotalStoriesIcon from "@/components/MetricsIcons/TotalStoriesIcon";
-import Header from "@/components/Header";
-import { SearchIcon } from "lucide-react";
-import { Input } from "@/components/ui/input";
 import FirstSection from "@/components/FirstSection";
 import SecondSection from "@/components/SecondSection";
-import { Component } from "@/components/PieChartDonut";
-import MetricsBarStackGraph from "@/components/MetricsBarStackGraph";
-import DashboardBG from "@/components/DashboardBG";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SelectComponent } from "@/components/Select";
 import PostsMetricsGraph from "@/components/PostsMetricsLineGraph";
 import PostsCreatorsTable from "@/components/PostsCreatorsTable/PostsCreatorsTable";
-// import { Plus_Jakarta_Sans } from 'next/font/google'
-
-const inter = Inter({ subsets: ["latin"] });
-// const jakarta = Plus_Jakarta_Sans({ subsets: ['latin'] })
 
 export default function Home() {
-  const { slug, campaignId } = useParams();
+  const { creatorId } = useParams();
   const router = useRouter();
-
-  const [creatorData, setCreatorData] = useState<Influencer[]>([]);
   const [creatorPostsData, setCreatorPostsData] = useState<Posts[]>([]);
+  const [creatorData, setCreatorData] = useState<Creator>();
 
   const session = useDataStore((state) => state.session);
+  const creatorPosts = session.user.creators[creatorId].posts;
   const setMode = useDataStore((state) => state.setMode);
   const mode = useDataStore((state) => state.mode);
-  const postsData = useDataStore((state) => state.postsData);
-  const { data } = useDataStore((state) => state.data);
 
   useEffect(() => {
-    const creatorExistsInData = data.find((item) => item.Username === slug);
-    const creatorExistsInCreatorPostsData = postsData
-      ? postsData.filter((item) => {
-          const instagram = item.postsPack.creator.socialNetworks.find(
-            (item) => item.type === "INSTAGRAM"
-          );
-
-          return instagram?.username === slug ? true : false;
-        })
+    const creatorExistsInData = Object.keys(session.user.creators).find(
+      (item) => item === creatorId
+    );
+    const creatorExistsInCreatorPostsData = creatorPosts
+      ? creatorPosts.filter((item) => item.postsPack.creatorId === +creatorId)
       : undefined;
 
     if (
       creatorExistsInData !== undefined &&
       creatorExistsInCreatorPostsData !== undefined
     ) {
-      setCreatorData([creatorExistsInData]);
+      const creator = creatorExistsInCreatorPostsData[0].socialNetwork.creator;
+      setCreatorData(creator);
       setCreatorPostsData(creatorExistsInCreatorPostsData);
-    } else if (data.length > 0) {
+    } else if (creatorPosts?.length > 0) {
       return router.back();
     }
-  }, [slug, data, postsData]);
+  }, [creatorId, creatorPosts, session.user.creators]);
 
   return (
     <>
-      {/* <Header /> */}
-      {/* <main> */}
-      {/* <SidenavDesktop /> */}
-      <div
-        className="w-full h-full flex xl:flex-row flex-col justify-start items-start z-20 p-0 xl:pl-[82px] content-start flex-nowrap gap-0 rounded-none relative"
-        style={
-          {
-            // backgroundImage: 'url("/honeycomb.svg")',
-            // backgroundPosition: "center center",
-            // backfaceOpaco
-          }
-        }
-      >
-        {/* <div className="absolute z-0">
-            <DashboardBG />
-          </div> */}
+      <div className="w-full h-full flex xl:flex-row flex-col justify-start items-start z-20 p-0 xl:pl-[82px] content-start flex-nowrap gap-0 rounded-none relative">
         <div className="box-border flex-shrink-0 w-full h-min flex flex-col justify-start items-center xl:pt-8 xl:pb-8 py-[15px] overflow-visible content-center flex-nowrap xl:gap-6 gap-[15px] rounded-none">
           <div className="box-border flex-shrink-0 w-full xl:h-auto h-min flex flex-col justify-center items-start xl:px-8 px-[15px] overflow-visible relative content-start flex-nowrap gap-6 rounded-none">
             <div className="flex justify-between items-center self-stretch">
               <BreadcrumbComponent
-                route={`/campaigns/${campaignId}/creators/${slug}`}
-                creator={
-                  creatorData[0] && creatorData[0].Influencer
-                    ? creatorData[0].Influencer
-                    : slug
-                }
+                route={`/creators/${creatorId}`}
+                creator={creatorData ? creatorData?.name : ""}
               />
               <div className="w-fit flex items-start gap-4">
-                {/* <div className="w-fit flex flex-col items-start gap-[6px]">
-                    <div className="w-full min-w-[384px] flex items-center gap-2">
-                      <div className="w-full flex flex-col items-start gap-[6px] flex-grow flex-shrink-0">
-                        <div className="w-full flex py-2 pr-14 pl-3 items-center gap-1 self-stretch rounded-lg border border-[#E2E8F0]">
-                          <SearchIcon className="w-5 h-5 text-[#64748B]" />
-                          <input
-                            placeholder="Procure por creators..."
-                            className="w-full outline-none text-sm leading-6 font-nexa bg-white"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div> */}
                 {!session?.user?.urlProfilePicture ? (
                   <div className="mask mask-squircle w-12 h-12 aspect-square block rounded-full border-black border-[1px] border-solid bg-[url('/bg-contact-cta.webp')] bg-cover bg-no-repeat bg-center relative">
                     <img
@@ -157,23 +80,22 @@ export default function Home() {
                 )}
               </div>
             </div>
-            {/* <WelcomeTitle /> */}
           </div>
           <div className="flex flex-col w-full items-center  xl:px-[22px] px-[15px] content gap-6 lg:flex-row">
-            {creatorData[0] && creatorData[0]["Url Foto Perfil"] ? (
+            {creatorData && creatorData.urlProfilePicture ? (
               <img
-                src={baseApiUrl + creatorData[0]["Url Foto Perfil"]}
-                alt={creatorData[0].Influencer}
+                src={baseApiUrl + creatorData.urlProfilePicture}
+                alt={creatorData.name}
                 className="rounded-2xl  w-[384px] h-[384px]"
               />
             ) : (
               <Skeleton className="!w-[384px] bg-slate-300 rounded-2xl h-[384px] block" />
             )}
             <div className="lg:w-[calc(100%-384px)] w-full h-[384px] max-[660px]:h-auto gap-4 flex flex-col items-start justify-between">
-              {creatorData[0] && creatorData[0].Influencer ? (
+              {creatorData && creatorData.name ? (
                 <>
                   <h1 className="flex-shrink-0 w-full h-auto whitespace-pre-wrap break-words relative font-Balgin-Display text-[#000] text-[36px] font-nexa font-bold leading-[56px]">
-                    {creatorData[0].Influencer}
+                    {creatorData.name}
                   </h1>
                   <div className="w-full justify-between flex items-center gap-4 bg-transparent">
                     <Tabs
@@ -333,11 +255,10 @@ export default function Home() {
                   </div>
                 </>
               )}
-              {/* <div className="w-full h-min max-[660px]:flex max-[660px]:flex-col-reverse min-[660px]:grid grid-cols-metric auto-rows-fr grid-rows-1 p-0 overflow-visible relative content-center flex-nowrap xl:gap-5 gap-[10px] rounded-none"> */}
+
               <div className="box-border w-full h-min flex flex-col xl:justify-center justify-start items-start overflow-visible relative content-start flex-nowrap xl:gap-[22px] gap-6 rounded-none">
                 <FirstSection creator data={creatorPostsData} />
               </div>
-              {/* </div> */}
             </div>
           </div>
           <div className="w-full flex-shrink-0 h-min flex flex-col justify-start items-start overflow-visible relative xl:px-[22px] p-0 content-start flex-nowrap gap-6 rounded-none">
@@ -345,22 +266,7 @@ export default function Home() {
           </div>
           <div className="w-full flex-shrink-0 h-min flex justify-start items-start overflow-visible relative xl:px-[22px] px-[15px] content-start flex-nowrap xl:gap-6 gap-6 rounded-none">
             <PostsMetricsGraph data={creatorPostsData} />
-
-            {/* <MetricsDoughnutGraph
-              heading="Impacto Bruto"
-              metric={total(data, ["Interacoes", "Impressoes"])}
-            /> */}
-            {/* <Component /> */}
           </div>
-          {/* 
-          <div className="w-full flex-shrink-0 h-min flex flex-col lg:hidden justify-start items-center overflow-visible relative xl:px-[22px] px-[15px] content-start flex-nowrap xl:gap-6 gap-[15px] rounded-none sm:flex-row sm:justify-start sm:items-start">
-            <MetricsDoughnutGraph
-              mobile
-              heading="Impacto Bruto"
-              metric={total(data, ["Interacoes", "Impressoes"])}
-            />
-            <MetricsBarStackGraph mobile heading="Audiência Diária" />
-          </div> */}
 
           <div className="w-full flex-shrink-0 h-min flex flex-col justify-start items-start overflow-visible relative xl:px-[22px] px-[15px] content-start flex-nowrap gap-6 rounded-none">
             <div className="box-border flex-shrink-0 w-full h-min flex justify-start items-start overflow-visible relative content-start flex-nowrap gap-6 rounded-none">
@@ -370,96 +276,10 @@ export default function Home() {
                   return item;
                 })}
               />
-              {/* <MetricsBarStackGraph heading="Audiência Diária" /> */}
             </div>
           </div>
-          {/* <div className="w-full flex-shrink-0 h-min flex flex-col justify-start items-start overflow-visible relative xl:px-[22px] px-[15px] content-start flex-nowrap gap-6 rounded-none">
-            <div className="box-border flex-shrink-0 w-full h-min flex flex-col justify-start items-start overflow-visible relative content-start flex-nowrap gap-6 rounded-none">
-              <AttachmentsTable />
-            </div>
-          </div> */}
-          {/* <div className="xl:hidden box-border flex-shrink-0 xl:w-[379px] w-full flex-grow h-min flex flex-col justify-start items-center xl:pt-8 xl:pr-8 pb-10 px-[15px] bg-transparent overflow-visible content-center flex-nowrap xl:gap-[28px] gap-[15px] rounded-none z-10">
-              <MetricsDoughnutGraph
-                heading="Impressoes"
-                metric={total(data, "Impressoes")}
-              />
-              <Metrics
-                heading="Investimento Total Inicial"
-                metric={(
-                  session.user.totalInitialInvestment ?? 0
-                )?.toLocaleString("pt-BR", {
-                  currency: "BRL",
-                  style: "currency",
-                })}
-              />
-              <Metrics
-                heading="Investimento Executado Estimado"
-                metric={total(data, "Investimento", true)}
-              />
-              <FinancialMetrics />
-              <ContactCTA />
-            </div> */}
-          {/* <Footer /> */}
         </div>
-        {/* <div className="hidden box-border flex-shrink-0 xl:w-[379px] w-auto flex-grow h-min xl:flex flex-col justify-start items-center pt-8 pr-8 pb-12 bg-transparent overflow-visible content-center flex-nowrap gap-[28px] rounded-none z-10">
-            <div className="flex-shrink-0 w-full h-fit mb-[48px] flex justify-end items-center overflow-visible relative p-0 content-center flex-nowrap gap-3 rounded-none">
-              <div className="flex-shrink-0 w-min h-min flex justify-start items-start overflow-visible relative p-0 content-start flex-nowrap gap-3 rounded-none">
-                <div className="flex-shrink-0 w-[338px] h-min flex flex-col justify-start items-start overflow-visible relative p-0 content-start flex-nowrap gap-2 rounded-none">
-                  <div className="flex-shrink-0 w-full h-min flex flex-col justify-start items-start overflow-visible relative p-0 content-start flex-nowrap gap-[6px] rounded-none">
-                    <div className="box-border flex-shrink-0 w-full h-min flex justify-start items-center py-[10px] px-[14px] shadow-cost-per-metrics bg-white overflow-hidden relative content-center flex-nowrap gap-2 rounded-lg border border-black">
-                      <div className="flex-shrink-0 flex-grow w-auto h-min flex justify-start items-center overflow-visible releative p-0 content-center flex-nowrap gap-2 rounded-none">
-                        <div className="flex-shrink-0 w-5 h-5 block overflow-hidden relative aspect-square rounded-none"></div>
-                        <p
-                          className={`flex-shrink-0 w-auto h-auto whitespace-pre relative ${inter.className} text-[#101828] text-base text-center`}
-                        >
-                          Atualizado em {parseUpdatedAt(updatedAt)}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              {!session?.user?.urlProfilePicture ? (
-                <div className="mask mask-squircle w-12 h-12 aspect-square block rounded-full border-black border-[1px] border-solid bg-[url('/bg-contact-cta.webp')] bg-cover bg-no-repeat bg-center relative">
-                  <img
-                    src="/juicy-artwork-limo.svg"
-                    alt="Default Bee Company Avatar"
-                    className="absolute right-[3px]"
-                  />
-                </div>
-              ) : (
-                <img
-                  src={`${baseApiUrl}${session.user.urlProfilePicture}`}
-                  width="57"
-                  height="57"
-                  alt={`${session.user.name} Logo`}
-                  className="border-black border-[1px] border-solid rounded-full"
-                />
-              )}
-            </div>
-            
-            <Metrics
-              heading="Investimento Total Inicial"
-              metric={(
-                session.user.totalInitialInvestment ?? 0
-              )?.toLocaleString("pt-BR", {
-                currency: "BRL",
-                style: "currency",
-              })}
-            />
-            <Metrics
-              heading="Investimento Executado Estimado"
-              metric={total(data, "Investimento", true)}
-            />
-            <MetricsDoughnutGraph
-              heading="Impressoes"
-              metric={total(data, "Impressoes")}
-            />
-            <FinancialMetrics />
-            <ContactCTA />
-          </div> */}
       </div>
-      {/* </main> */}
     </>
   );
 }

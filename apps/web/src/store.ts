@@ -3,8 +3,8 @@ import { setCookie } from "nookies";
 import { addCPToPostsTable } from "../utils/utils";
 
 // export const baseApiUrl = "https://api.thatsbee.co";
-export const baseApiUrl = "https://api1.thatsbee.co";
-// export const baseApiUrl = "http://localhost:3000";
+// export const baseApiUrl = "https://api1.thatsbee.co";
+export const baseApiUrl = "http://localhost:3000";
 
 export enum DashboardMode {
   ALL = "all",
@@ -81,6 +81,7 @@ export interface SocialNetwork {
   followers: number;
   username: string;
   creatorId: number;
+  creator?: Creator;
   createdAt: string;
   updatedAt: string;
 }
@@ -91,6 +92,7 @@ export interface Creator {
   name: string;
   city?: string;
   socialNetworks: SocialNetwork[];
+  categories?: { id: string; name: string }[];
   createdAt: string;
   updatedAt: string;
 }
@@ -113,6 +115,7 @@ export interface User {
   color: string;
   urlProfilePicture?: string;
   campaigns: Campaign[];
+  creators: Record<string, { posts: Posts[]; mediumEngagement: number }>;
 }
 
 export interface Campaign {
@@ -193,6 +196,7 @@ const useDataStore = create<DataState>((set) => ({
       // updatedAt: "",
       urlProfilePicture: "",
       campaigns: [],
+      creators: {},
     },
   },
   mode: DashboardMode.ALL,

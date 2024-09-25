@@ -3,7 +3,8 @@ import React from "react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DatePickerWithRange } from "./RangedDatePicker";
 import { SelectComponent } from "./Select";
-const WelcomeTitle = () => {
+
+const WelcomeTitle = ({ showFilters = true }: { showFilters?: boolean }) => {
   const session = useDataStore((state) => state.session);
   const setMode = useDataStore((state) => state.setMode);
   const mode = useDataStore((state) => state.mode);
@@ -25,7 +26,12 @@ const WelcomeTitle = () => {
           </h1>
         </div>
 
-        <div className="flex items-center gap-4 bg-transparent">
+        <div
+          className="flex items-center gap-4 bg-transparent"
+          style={{
+            display: showFilters ? "flex" : "none",
+          }}
+        >
           <Tabs
             defaultValue={DashboardMode.ALL}
             value={mode}
