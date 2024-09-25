@@ -36,7 +36,7 @@ const BreadcrumbComponent = ({ route, creator }: BreadcrumbProps) => {
         <BreadcrumbList className="flex items-center">
           {/* Home icon */}
           <BreadcrumbItem className="flex items-center gap-2">
-            <Link href="/campaigns">
+            <Link href="/home">
               <Image src={house} alt="Home Icon" />
             </Link>
           </BreadcrumbItem>
