@@ -3,7 +3,7 @@ import { CreateCreatorDto } from './dto/create-creator.dto';
 import { UpdateCreatorDto } from './dto/update-creator.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { sortFields, sortOrder } from 'types/queyParams';
-import { Creator } from '@prisma/client';
+import { Creator, Posts } from '@prisma/client';
 
 @Injectable()
 export class CreatorsService {
@@ -66,7 +66,7 @@ export class CreatorsService {
     try {
       const creators = await this.prismaService.postsPack.findMany({
         where: {
-          id: campaignId,
+          campaignId: campaignId,
         },
         select: {
           posts: {
@@ -78,6 +78,100 @@ export class CreatorsService {
       return creators;
     } catch (error) {
       console.error('CreatorsService.findAllByCampaignId: Error', error);
+      throw error;
+    }
+  }
+
+  async findAllByUserId(userId: number) {
+    try {
+      const posts = await this.prismaService.posts.findMany({
+        where: {
+          postsPack: { campaign: { userId } },
+        },
+        include: {
+          socialNetwork: {
+            include: {
+              creator: {
+                include: { categories: true, socialNetworks: true },
+              },
+            },
+          },
+          postsPack: true,
+        },
+      });
+
+      const groupedPosts = posts.reduce((acc, post) => {
+        if (!acc[post.socialNetwork.creatorId]) {
+          acc[post.socialNetwork.creatorId] = [];
+        }
+        acc[post.socialNetwork.creatorId].push(post);
+        return acc;
+      }, {});
+
+      const influencers: Record<
+        string,
+        { posts: Posts[]; mediumEngagement: number }
+      > = {};
+      for (const creatorId in groupedPosts) {
+        const posts = groupedPosts[creatorId];
+
+        const groupedPostsPack = posts.reduce((acc, post) => {
+          if (!acc[post.postsPack.id]) {
+            acc[post.postsPack.id] = post.postsPack;
+          }
+          return acc;
+        }, {});
+
+        const groupedPostsByPostsPack = posts.reduce((acc, post) => {
+          if (!acc[post.postsPack.id]) {
+            acc[post.postsPack.id] = [];
+          }
+          acc[post.postsPack.id].push(post);
+          return acc;
+        }, {});
+
+        for (const postsPackId in groupedPostsPack) {
+          let mediumPrice = 0;
+
+          const postsPack = groupedPostsPack[postsPackId];
+          const posts = groupedPostsByPostsPack[postsPackId];
+
+          mediumPrice = postsPack.price / posts.length;
+
+          groupedPostsByPostsPack[postsPackId].forEach((item) => {
+            item.mediumPrice = mediumPrice;
+
+            if (!influencers[item.socialNetwork.creatorId]) {
+              influencers[item.socialNetwork.creatorId] = {
+                posts: [],
+                mediumEngagement: 0,
+              };
+            }
+            influencers[item.socialNetwork.creatorId].posts.push(item);
+          });
+        }
+      }
+
+      for (const creatorId in influencers) {
+        let totalInteractions = 0;
+        let totalImpressions = 0;
+
+        influencers[creatorId].posts.forEach((item) => {
+          totalImpressions += item.impressions;
+          totalInteractions += item.interactions;
+        });
+
+        const mediumEngagement =
+          totalImpressions === 0
+            ? 0
+            : (totalInteractions / totalImpressions) * 100;
+
+        influencers[creatorId].mediumEngagement = +mediumEngagement.toFixed(2);
+      }
+
+      return influencers;
+    } catch (error) {
+      console.error('CampaignsService.findAllByUserId: Error', error);
       throw error;
     }
   }

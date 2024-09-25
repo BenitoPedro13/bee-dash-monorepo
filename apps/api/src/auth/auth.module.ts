@@ -6,6 +6,7 @@ import { AuthController } from './auth.controller';
 import { UsersModule } from '../users/users.module';
 import { UsersService } from 'src/users/users.service';
 import { CampaignsService } from 'src/campaigns/campaigns.service';
+import { CreatorsService } from 'src/creators/creators.service';
 
 @Module({
   imports: [
@@ -18,7 +19,13 @@ import { CampaignsService } from 'src/campaigns/campaigns.service';
       },
     }),
   ],
-  providers: [AuthService, JwtService, UsersService, CampaignsService],
+  providers: [
+    AuthService,
+    JwtService,
+    UsersService,
+    CampaignsService,
+    CreatorsService,
+  ],
   controllers: [AuthController],
   exports: [AuthService],
 })
