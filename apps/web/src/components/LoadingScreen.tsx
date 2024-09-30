@@ -1,7 +1,18 @@
 import LoginBG from "@/components/LoginBG";
 import { Progress } from "@/components/ui/progress";
+import { useEffect, useState } from "react";
 
 export default function LoadingScreen() {
+  const [value, setValue] = useState(10);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setValue((prevValue) => (prevValue < 90 ? prevValue + 1 : prevValue));
+    }, 10);
+
+    return () => clearInterval(interval); // Cleanup on unmount
+  }, []);
+
   return (
     <div className="h-screen w-screen flex justify-center items-center bg-white relative overflow-hidden">
       <LoginBG />
@@ -127,7 +138,7 @@ export default function LoadingScreen() {
               </defs>
             </svg>
 
-            <Progress value={33} className="w-[100%]" />
+            <Progress value={value} className="w-[100%]" />
 
             <p className="text-[#667085] font-nexa text-sm max-[670px]:text-center">
               © {new Date().getFullYear()} That{"'"}s Bee Company.{" "}
