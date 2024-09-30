@@ -14,7 +14,7 @@ export default function ModalContent() {
       ? "bg-[#FF8C00]"
       : color;
 
-  const date = new Date()
+  const date = new Date();
 
   return (
     <>
@@ -658,7 +658,10 @@ export default function ModalContent() {
         </svg>
 
         <p className="font-nexa text-base text-[#667085]">
-          <span className="font-bold">© {date.getFullYear()} That's Bee Company.</span> All Rights Reserved.
+          <span className="font-bold">
+            © {date.getFullYear()} That&apos;s Bee Company.
+          </span>{" "}
+          All Rights Reserved.
         </p>
       </div>
     </>
