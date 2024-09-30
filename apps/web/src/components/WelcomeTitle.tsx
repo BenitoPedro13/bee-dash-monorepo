@@ -1,13 +1,21 @@
 import useDataStore, { DashboardMode } from "@/store";
 import React from "react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button"
 import { DatePickerWithRange } from "./RangedDatePicker";
 import { SelectComponent } from "./Select";
+import { ModalRelatorio } from "./ModalRelatorio";
 
 const WelcomeTitle = ({ showFilters = true }: { showFilters?: boolean }) => {
   const session = useDataStore((state) => state.session);
   const setMode = useDataStore((state) => state.setMode);
   const mode = useDataStore((state) => state.mode);
+  const color = useDataStore((state) => state.session.user.color);
+
+  console.log(color)
+
+  const hexColor =
+    color === undefined ? "bg-[#FF8C00]" : color.length !== 7 ? "bg-[#FF8C00]" : `bg-[#${color}]`;
 
   const getGreeting = () => {
     const hours = new Date().getHours();
@@ -102,7 +110,10 @@ const WelcomeTitle = ({ showFilters = true }: { showFilters?: boolean }) => {
               </TabsTrigger>
             </TabsList>
           </Tabs>
+
           <SelectComponent />
+          
+          <ModalRelatorio/>
         </div>
       </div>
     </div>
