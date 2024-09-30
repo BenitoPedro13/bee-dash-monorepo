@@ -28,7 +28,7 @@ export default function Home() {
   const session = useDataStore((state) => state.session);
 
   const creatorExists = Object.keys(session.user.creators).find((value) => {
-    value === creatorId;
+    return value === creatorId;
   });
 
   const creatorPosts = creatorExists
