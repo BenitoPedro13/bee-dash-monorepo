@@ -16,13 +16,19 @@ const SignIn = () => {
   const [show, setShow] = useState(false);
   const { register, handleSubmit } = useForm<LoginFormData>();
   const signIn = useDataStore((state) => state.signIn);
-  const getUserByToken = useDataStore((state) => state.getUserByToken);
+  const setLoading = useDataStore((state) => state.setLoading);
   const router = useRouter();
 
   const onSubmit = async (data: LoginFormData) => {
-    const isAuthenticated = await signIn(data); // Handle form submission data
+    try {
+      setLoading(true)
 
-    isAuthenticated ? router.push("/campaigns") : null;
+      const isAuthenticated = await signIn(data); // Handle form submission data
+
+      isAuthenticated ? router.push("/campaigns") : null;
+    } catch (error) {
+      console.log(error)
+    }   
   };
 
   // useEffect(() => {

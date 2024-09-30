@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 
 import localFont from "next/font/local";
 import Wrapper from "./wrapper";
+import { Suspense } from "react";
 
 const nexa = localFont({
   src: [

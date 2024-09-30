@@ -6,11 +6,14 @@ import useDataStore, { baseApiUrl, PostsPack } from "@/store";
 import BreadcrumbComponent from "@/components/Breadcrumb";
 import TitleWithoutFilters from "@/components/TitleWithoutFilters";
 import CampaingCard from "@/components/CampaignCard";
+import { useEffect } from "react";
 
 export default function Home() {
   const color = useDataStore((state) => state.session.user.color);
   // const campaigns = useDataStore((state) => state.session.user.campaigns);
   const session = useDataStore((state) => state.session);
+  const setLoading = useDataStore((state) => state.setLoading);
+  const loading = useDataStore((state) => state.loading);
   const campaigns = session.user.campaigns;
 
   const hexColor =
