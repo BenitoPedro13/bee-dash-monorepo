@@ -11,9 +11,12 @@ import { Eye } from "lucide-react";
 import { EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import LoginBG from "@/components/LoginBG";
+import { Loader2 } from "lucide-react";
+import CredentialsError from "@/components/CredentialsError";
 
 const SignIn = () => {
   const [show, setShow] = useState(false);
+  const [click, setClick] = useState(false);
   const { register, handleSubmit } = useForm<LoginFormData>();
   const signIn = useDataStore((state) => state.signIn);
   const setLoading = useDataStore((state) => state.setLoading);
@@ -21,14 +24,18 @@ const SignIn = () => {
 
   const onSubmit = async (data: LoginFormData) => {
     try {
-      setLoading(true)
+      setClick(true);
 
       const isAuthenticated = await signIn(data); // Handle form submission data
 
-      isAuthenticated ? router.push("/campaigns") : null;
+      if (!isAuthenticated) {
+        return setClick(false);
+      }
+
+      router.push("/campaigns");
     } catch (error) {
-      console.log(error)
-    }   
+      console.log(error);
+    }
   };
 
   // useEffect(() => {
@@ -48,7 +55,7 @@ const SignIn = () => {
       <LoginBG />
       <div className="flex justify-center self-center  z-10 absolute">
         <div className="p-12 mx-auto rounded-2xl flex flex-col items-center">
-          <div className="mb-4 flex flex-col justify-center items-center">
+          <div className="mb-4 flex flex-col justify-center items-center gap-1">
             <svg
               width="168"
               height="168"
@@ -168,24 +175,21 @@ const SignIn = () => {
               </defs>
             </svg>
 
-            <h3 className="font-medium text-2xl text-[#0E121B] pb-1 pt-2 text-center">
+            <h3 className="font-medium text-2xl text-[#0E121B] pt-2 text-center">
               Bem-vindo ao Bee Dashboard
             </h3>
             <p className="text-gray-500 text-center text-base font-normal">
               Coloque o seu email e senha para entrar
             </p>
           </div>
+
+          <CredentialsError/>
+
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 w-full">
             <div className="mb-4 flex flex-col gap-1">
               <label className="text-sm font-medium text-[#0E121B] tracking-wide">
                 Endereço de Email <span className="text-red-900">*</span>
               </label>
-              {/*<input
-                className="w-full text-base px-4 py-2 border  border-gray-300 rounded-lg focus:outline-none bg-white"
-                type="text"
-                placeholder="mail@gmail.com"
-                {...register("email")} // Register email input
-              />*/}
 
               <div className="relative">
                 <Mail
@@ -238,15 +242,16 @@ const SignIn = () => {
             </div>
 
             <div>
-              {/*<button
-                type="submit"
-                className="w-full flex justify-center bg-green-400 hover:bg-green-500 text-gray-100 p-3 rounded-full tracking-wide font-semibold shadow-lg cursor-pointer transition ease-in duration-500"
-              >
-                Sign in
-              </button>*/}
-              <Button className="w-full bg-[#0E121B]" type="submit">
-                Entrar
-              </Button>
+              {click ? (
+                <Button className="w-full bg-[#0E121B]" disabled>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Aguarde...
+                </Button>
+              ) : (
+                <Button className="w-full bg-[#0E121B]" type="submit">
+                  Entrar
+                </Button>
+              )}
             </div>
 
             <div className="flex items-center justify-center">

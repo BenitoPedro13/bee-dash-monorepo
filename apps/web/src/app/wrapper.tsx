@@ -8,6 +8,7 @@ import { Inter } from "next/font/google";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { parseCookies } from "nookies";
 import { useEffect } from "react";
+import Loading from "./campaigns/loading";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -75,6 +76,9 @@ export default function Wrapper({ children }: { children: React.ReactNode }) {
     }
   }, [access_token, getUserByToken, router, session.isAuthenticated, path]);
 
+  if (loading) {
+    <Loading/>
+  }
   // if (loading) {
   //   return (
   //     <div className="w-screen h-screen flex justify-center items-center bg-white">
