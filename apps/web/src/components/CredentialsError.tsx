@@ -1,10 +1,23 @@
-import { TriangleAlert } from 'lucide-react';
+import { TriangleAlert } from "lucide-react";
 
-export default function CredentialsError() {
-  return(
-    <div className="rounded-md w-full border border-red-800 flex flex-col justify-center items-center mb-4 py-2">
+interface CredentialsErrorProps {
+  show: boolean;
+}
+
+export default function CredentialsError({ show }: CredentialsErrorProps) {
+  return (
+    <div
+      className={
+        "rounded-md w-full border border-red-800 flex flex-col justify-center items-center mb-4 py-2 " +
+        show
+          ? "hidden"
+          : "flex"
+      }
+    >
       <TriangleAlert />
-      <p className="font-semibold text-black">Credenciais incorretas, tente novamente</p>
+      <p className="font-semibold text-black">
+        Credenciais incorretas, tente novamente
+      </p>
     </div>
-  )
+  );
 }

@@ -1,7 +1,7 @@
 import LoginBG from "@/components/LoginBG";
-import { Progress } from "@/components/ui/progress"
+import { Progress } from "@/components/ui/progress";
 
-export default function Loading() {
+export default function LoadingScreen() {
   return (
     <div className="h-screen w-screen flex justify-center items-center bg-white relative overflow-hidden">
       <LoginBG />
