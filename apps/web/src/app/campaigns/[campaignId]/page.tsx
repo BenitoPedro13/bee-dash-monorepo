@@ -63,7 +63,7 @@ export default function Home() {
   });
 
   if (!campaignExists) {
-    router.push("/campaigns");
+    router.push("/home");
   }
 
   return (

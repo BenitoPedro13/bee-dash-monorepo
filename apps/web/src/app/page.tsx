@@ -19,7 +19,6 @@ const SignIn = () => {
   const [click, setClick] = useState(false);
   const { register, handleSubmit } = useForm<LoginFormData>();
   const signIn = useDataStore((state) => state.signIn);
-  const setLoading = useDataStore((state) => state.setLoading);
   const router = useRouter();
 
   const onSubmit = async (data: LoginFormData) => {
@@ -32,7 +31,7 @@ const SignIn = () => {
         return setClick(false);
       }
 
-      router.push("/campaigns");
+      router.push("/home");
     } catch (error) {
       console.log(error);
     }

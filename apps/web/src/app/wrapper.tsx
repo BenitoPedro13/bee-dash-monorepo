@@ -65,7 +65,7 @@ export default function Wrapper({ children }: { children: React.ReactNode }) {
           }
         })().then((isAuthenticated) => {
           if (path === "/") {
-            return isAuthenticated ? router.push("/campaigns") : null;
+            return isAuthenticated ? router.push("/home") : null;
           }
           isAuthenticated ? null : router.push("/");
         });
