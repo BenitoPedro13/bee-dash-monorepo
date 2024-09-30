@@ -44,7 +44,7 @@ import SecondSection from "@/components/SecondSection";
 import { Component } from "@/components/PieChartDonut";
 import MetricsBarStackGraph from "@/components/MetricsBarStackGraph";
 import DashboardBG from "@/components/DashboardBG";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
 // import { Plus_Jakarta_Sans } from 'next/font/google'
 
@@ -59,11 +59,11 @@ export default function Home() {
   const { campaignId } = useParams(); // Extract dynamic route parameters
 
   const campaignExists = session.user.campaigns.find((item) => {
-    item.id === +campaignId;
+    return item.id === +campaignId;
   });
 
   if (!campaignExists) {
-    router.back();
+    router.push("/campaigns");
   }
 
   return (
