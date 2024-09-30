@@ -12,7 +12,7 @@ const LoginBG = () => {
         className="animate-rotate-sequence"
         style={{
           position: "absolute",
-          opacity: "88%",
+          opacity: "10%",
           minWidth: "1415px",
           width: "100vw",
           height: "auto",
@@ -252,7 +252,7 @@ const LoginBG = () => {
         className="animate-rotate-sequence delay-rotate-sequence"
         style={{
           position: "absolute",
-          opacity: "66%",
+          opacity: "10%",
           minWidth: "1415px",
           width: "100vw",
           height: "auto",
@@ -492,7 +492,7 @@ const LoginBG = () => {
         className="animate-rotate-sequence delay-rotate-sequence"
         style={{
           position: "absolute",
-          opacity: "44%",
+          opacity: "10%",
           minWidth: "1415px",
           width: "100vw",
           height: "auto",
@@ -725,7 +725,7 @@ const LoginBG = () => {
         className="animate-rotate-sequence delay-rotate-sequence"
         style={{
           position: "absolute",
-          opacity: "22%",
+          opacity: "10%",
           minWidth: "1415px",
           width: "100vw",
           height: "auto",
