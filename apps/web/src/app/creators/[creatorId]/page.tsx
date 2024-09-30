@@ -26,11 +26,22 @@ export default function Home() {
   const [creatorData, setCreatorData] = useState<Creator>();
 
   const session = useDataStore((state) => state.session);
-  const creatorPosts = session.user.creators[creatorId].posts;
+
+  const creatorExists = Object.keys(session.user.creators).find((value) => {
+    value === creatorId;
+  });
+
+  const creatorPosts = creatorExists
+    ? session.user.creators[creatorId].posts
+    : null;
   const setMode = useDataStore((state) => state.setMode);
   const mode = useDataStore((state) => state.mode);
 
   useEffect(() => {
+    if (!creatorPosts) {
+      return router.back();
+    }
+
     const creatorExistsInData = Object.keys(session.user.creators).find(
       (item) => item === creatorId
     );

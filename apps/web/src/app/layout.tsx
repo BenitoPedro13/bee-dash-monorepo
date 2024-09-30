@@ -1,9 +1,8 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import { Plus_Jakarta_Sans } from "next/font/google";
 
 import localFont from "next/font/local";
+import Wrapper from "./wrapper";
 
 const nexa = localFont({
   src: [
@@ -29,9 +28,6 @@ const nexaBold = localFont({
   variable: "--font-nexa-bold",
 });
 
-const inter = Inter({ subsets: ["latin"] });
-const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
-
 export const metadata: Metadata = {
   title: "Bee Company Dash",
   description:
@@ -45,7 +41,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={`${nexa.variable} ${nexaBold.variable}`}>
+        <Wrapper>{children}</Wrapper>
+      </body>
     </html>
   );
 }

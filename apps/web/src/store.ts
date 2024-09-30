@@ -167,6 +167,8 @@ export type LoginFormData = {
 };
 
 interface DataState {
+  loading: boolean;
+  setLoading: (loading: boolean) => void;
   session: Session;
   mode: DashboardMode;
   dateRange: DashbordDateRange;
@@ -182,6 +184,8 @@ interface DataState {
 }
 
 const useDataStore = create<DataState>((set) => ({
+  loading: true,
+  setLoading: (loading: boolean) => set({ loading }),
   session: {
     isAuthenticated: false,
     user: {
@@ -231,10 +235,6 @@ const useDataStore = create<DataState>((set) => ({
       });
 
       return true;
-      // const router = useRouter();
-      // if (router) {
-      //   router.push('/dashboard');
-      // }
     } catch (error) {
       console.log("sign error: ", error);
       return false;
@@ -298,7 +298,10 @@ const useDataStore = create<DataState>((set) => ({
 
       const { posts, updatedAt, data } = await response.json();
 
-      set({ data: { updatedAt, data: data }, postsData: posts });
+      set({
+        data: { updatedAt, data: data },
+        postsData: posts,
+      });
     } catch (error) {
       console.error("Error fetching data:", error);
     }

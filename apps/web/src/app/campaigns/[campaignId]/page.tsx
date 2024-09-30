@@ -55,8 +55,17 @@ export default function Home() {
   const session = useDataStore((state) => state.session);
   const postsData = useDataStore((state) => state.postsData);
   const { data } = useDataStore((state) => state.data);
-
+  const router = useRouter();
   const { campaignId } = useParams(); // Extract dynamic route parameters
+
+  const campaignExists = session.user.campaigns.find((item) => {
+    item.id === +campaignId;
+  });
+
+  if (!campaignExists) {
+    router.back();
+  }
+
   return (
     <>
       {/* <Header /> */}

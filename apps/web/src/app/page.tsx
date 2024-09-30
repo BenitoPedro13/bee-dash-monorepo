@@ -25,17 +25,17 @@ const SignIn = () => {
     isAuthenticated ? router.push("/campaigns") : null;
   };
 
-  useEffect(() => {
-    const { "bee-dash-token": access_token } = parseCookies();
+  // useEffect(() => {
+  //   const { "bee-dash-token": access_token } = parseCookies();
 
-    if (access_token) {
-      (async () => {
-        return await getUserByToken(access_token);
-      })().then((isAuthenticated) =>
-        isAuthenticated ? router.push("/campaigns") : null
-      );
-    }
-  }, [getUserByToken, router]);
+  //   if (access_token) {
+  //     (async () => {
+  //       return await getUserByToken(access_token);
+  //     })().then((isAuthenticated) =>
+  //       isAuthenticated ? router.push("/campaigns") : null
+  //     );
+  //   }
+  // }, [getUserByToken, router]);
 
   return (
     <div className="h-[100vh] w-full flex justify-center items-center bg-white relative overflow-hidden">
