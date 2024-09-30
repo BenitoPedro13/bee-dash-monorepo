@@ -171,7 +171,7 @@ const SignIn = () => {
             </p>
           </div>
 
-          <CredentialsError show={!click} />
+          {/* <CredentialsError show={!click} /> */}
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 w-full">
             <div className="mb-4 flex flex-col gap-1">
