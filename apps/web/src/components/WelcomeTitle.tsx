@@ -115,7 +115,7 @@ const WelcomeTitle = ({ showFilters = true }: { showFilters?: boolean }) => {
 
           <SelectComponent />
 
-          <ModalRelatorio />
+          {/* <ModalRelatorio /> */}
         </div>
       </div>
     </div>
