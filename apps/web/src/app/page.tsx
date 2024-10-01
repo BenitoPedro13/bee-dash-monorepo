@@ -12,11 +12,12 @@ import { EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import LoginBG from "@/components/LoginBG";
 import { Loader2 } from "lucide-react";
-import CredentialsError from "@/components/CredentialsError";
+import { CircleAlert } from 'lucide-react';
 
 const SignIn = () => {
   const [show, setShow] = useState(false);
   const [click, setClick] = useState(false);
+  const [error, setError] = useState(false);
   const { register, handleSubmit } = useForm<LoginFormData>();
   const signIn = useDataStore((state) => state.signIn);
   const router = useRouter();
@@ -28,9 +29,12 @@ const SignIn = () => {
       const isAuthenticated = await signIn(data); // Handle form submission data
 
       if (!isAuthenticated) {
-        return setClick(false);
+        setError(true);
+        setClick(false);
+        return;
       }
 
+      setError(false)
       router.push("/home");
     } catch (error) {
       console.log(error);
@@ -170,8 +174,6 @@ const SignIn = () => {
             </p>
           </div>
 
-          {/* <CredentialsError show={!click} /> */}
-
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 w-full">
             <div className="mb-4 flex flex-col gap-1">
               <label className="text-sm font-medium text-[#0E121B] tracking-wide">
@@ -189,19 +191,23 @@ const SignIn = () => {
                   placeholder="hello@thatsbee.com"
                   {...register("email")}
                   className="pl-8 pr-3"
+                  style={error ? {borderWidth: "1px", borderColor: "#FF0000"} : {borderWidth: "1px", borderColor: "#e2e8f0"}}
                 />
               </div>
+
+              {
+                error &&
+                <div className="flex items-center gap-1">
+                  <CircleAlert width="15px" color="#FF0000"/>
+                  <p className="text-sm text-[#FF0000]">Email incorreto, tente novamente.</p>
+                </div>
+              }
+               
             </div>
             <div className="flex flex-col gap-1 mb-6">
               <label className="text-sm font-medium text-[#0E121B] tracking-wide">
                 Senha <span className="text-red-900">*</span>
               </label>
-              {/*<input
-                className="w-full text-base px-4 py-2 border  border-gray-300 rounded-lg focus:outline-none bg-white"
-                type="password"
-                placeholder="Enter your password"
-                {...register("password")} // Register password input
-              />*/}
               <div className="relative">
                 <LockKeyhole
                   width="15px"
@@ -213,6 +219,7 @@ const SignIn = () => {
                   placeholder="Digite a sua senha"
                   {...register("password")}
                   className="pl-8 pr-8"
+                  style={error ? {borderWidth: "1px", borderColor: "#FF0000"} : {borderWidth: "1px", borderColor: "#e2e8f0"}}
                 />
 
                 <div
@@ -226,6 +233,15 @@ const SignIn = () => {
                   )}
                 </div>
               </div>
+              
+              {
+                error &&
+                <div className="flex items-center gap-1">
+                  <CircleAlert width="15px" color="#FF0000"/>
+                  <p className="text-sm text-[#FF0000]">Senha incorreta, tente novamente.</p>
+                </div>
+              }
+                          
             </div>
 
             <div>
