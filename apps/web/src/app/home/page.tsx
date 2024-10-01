@@ -1,54 +1,18 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import metricsIcon from "@/../public/metricsIcon.png";
-import buserLogo from "@/../public/buser-logo.webp";
-import Link from "next/link";
-import Image from "next/image";
-import { parseCookies } from "nookies";
-
-import Metrics from "@/components/Metrics";
-
 import { Inter } from "next/font/google";
-import CostPerMetric from "@/components/CostPerMetric";
-import MetricsLineGraph from "@/components/MetricsLineGraph";
-import SidenavDesktop from "@/components/SidenavDesktop";
-import MetricsDoughnutGraph from "@/components/MetricsDoughnutGraph";
-import CreatorsTable from "@/components/CreatorsTable/CreatorsTable";
+
 import useDataStore, { Influencer, PostsPack, baseApiUrl } from "@/store";
-import { useEffect } from "react";
-import Footer from "@/components/Footer";
-import FinancialMetrics from "@/components/FinancialMetrics/FinancialMetrics";
-import ContactCTA from "@/components/CTA/ContactCTA";
-import AttachmentsTable from "@/components/AttachmentsTable/AttachmentsTable";
-import {
-  costPerMetric,
-  parseUpdatedAt,
-  total,
-  totalCount,
-  totalCPE,
-  totalPercentage,
-} from "../../../utils/utils";
-// import { useRouter } from "next/navigation";
+
 import BreadcrumbComponent from "@/components/Breadcrumb";
 import WelcomeTitle from "@/components/WelcomeTitle";
-import TotalCreatorsIcon from "@/components/MetricsIcons/TotalCreatorsIcon";
-import TotalPostsIcon from "@/components/MetricsIcons/TotalPostsIcon";
-import TotalFeedIcon from "@/components/MetricsIcons/TotalFeedIcon";
-import TotalStoriesIcon from "@/components/MetricsIcons/TotalStoriesIcon";
-import Header from "@/components/Header";
-import { SearchIcon } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import FirstSection from "@/components/FirstSection";
-import SecondSection from "@/components/SecondSection";
-import { Component } from "@/components/PieChartDonut";
-import MetricsBarStackGraph from "@/components/MetricsBarStackGraph";
-import DashboardBG from "@/components/DashboardBG";
-import { useRouter } from "next/router";
-import { useParams } from "next/navigation";
 import TitleWithoutFilters from "@/components/TitleWithoutFilters";
 import CampaingCard from "@/components/CampaignCard";
 import CreatorCard from "@/components/CreatorsCard";
+import FirstSectionHome from "@/components/FirstSectionHome";
+import SecondSectionHome from "@/components/SecondSectionHome";
+import React from "react";
 // import { Plus_Jakarta_Sans } from 'next/font/google'
 
 const inter = Inter({ subsets: ["latin"] });
@@ -60,6 +24,7 @@ export default function Home() {
   const creators = session.user.creators;
   const postsData = useDataStore((state) => state.postsData);
   const { data } = useDataStore((state) => state.data);
+
   return (
     <>
       <div className="w-full h-full flex xl:flex-row flex-col justify-start items-start z-20 p-0 xl:pl-[82px] content-start flex-nowrap gap-0 rounded-none relative">
@@ -87,28 +52,19 @@ export default function Home() {
                 )}
               </div>
             </div>
-            {/* <WelcomeTitle showFilters={false} /> */}
+            <WelcomeTitle showFilters={false} />
           </div>
-          {/* <div className="box-border flex-shrink-0 w-full h-min flex flex-col xl:justify-center justify-start items-start xl:px-[22px] px-[15px] overflow-visible relative content-start flex-nowrap xl:gap-[22px] gap-6 rounded-none">
-            <FirstSection />
+          <div className="box-border flex-shrink-0 w-full h-min flex flex-col xl:justify-center justify-start items-start xl:px-8 px-[15px] overflow-visible relative content-start flex-nowrap xl:gap-[22px] gap-6 rounded-none">
+            <FirstSectionHome />
           </div>
-          <div className="w-full flex-shrink-0 h-min flex flex-col justify-start items-start overflow-visible relative xl:px-[22px] p-0 content-start flex-nowrap gap-6 rounded-none">
-            <SecondSection />
-          </div> */}
-          {/*<div className="w-full flex-shrink-0 h-min flex justify-start items-start overflow-visible relative xl:px-[22px] px-[15px] content-start flex-nowrap xl:gap-6 gap-6 rounded-none">
-             <MetricsLineGraph data={postsData} />
+          <div className="w-full flex-shrink-0 h-min flex flex-col justify-start items-start overflow-visible relative xl:px-8 p-0 content-start flex-nowrap gap-6 rounded-none pb-4">
+            <SecondSectionHome />
+          </div>
 
-            <MetricsDoughnutGraph
-              heading="Impacto Bruto"
-              metric={total(data, ["Interacoes", "Impressoes"])}
-            /> 
-          </div>*/}
-
-          {/* <div className="w-full flex-shrink-0 h-min flex flex-col justify-start items-center overflow-visible relative xl:px-[22px] px-[15px] content-start flex-nowrap xl:gap-6 gap-[15px] rounded-none"> */}
           <div className="w-full xl:px-8 px-[15px]">
             <TitleWithoutFilters title="Top 3 Campanhas" />
           </div>
-          <div className="w-full h-full xl:px-8 px-[15px] relative z-20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pb-6 xl:pr-8 p-0">
+          <div className="w-full h-full xl:px-8 px-[15px] relative z-20 grid grid-cols-1 sm:grid-cols-2 pb-4 lg:grid-cols-3 gap-4 xl:pr-8 p-0">
             {campaigns
               .sort((a, b) => {
                 return b.mediumEngagement - a.mediumEngagement;
@@ -136,7 +92,7 @@ export default function Home() {
           <div className="w-full xl:px-8 px-[15px]">
             <TitleWithoutFilters title="Top 3 Creators" />
           </div>
-          <div className="w-full h-full xl:px-8 px-[15px] relative z-20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pb-6 xl:pr-8 p-0">
+          <div className="w-full h-full xl:px-8 px-[15px] relative z-20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 xl:pr-8 p-0">
             {Object.entries(creators)
               .sort(([, creatorA], [, creatorB]) => {
                 return creatorB.mediumEngagement - creatorA.mediumEngagement;
