@@ -11,6 +11,7 @@ import house from "@/../public/house.svg";
 import chevronright from "@/../public/chevron-right.svg";
 import Image from "next/image";
 import { useParams, usePathname } from "next/navigation";
+import { getParam } from "@/lib/utils";
 
 interface BreadcrumbProps {
   route: string;
@@ -28,7 +29,10 @@ const routeDisplayNames: { [key: string]: string } = {
 const BreadcrumbComponent = ({ route, creator }: BreadcrumbProps) => {
   const session = useDataStore((state) => state.session);
   const pathSegments = route.split("/").filter(Boolean); // Split route and remove empty segments
-  const { campaignId, creatorId } = useParams();
+  const params = useParams();
+
+  const creatorId = getParam(params.creatorId);
+  const campaignId = getParam(params.campaignId);
 
   return (
     <div className="flex w-fit h-auto flex-col justify-center items-start gap-3">

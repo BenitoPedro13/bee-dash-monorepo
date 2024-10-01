@@ -1,54 +1,17 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import metricsIcon from "@/../public/metricsIcon.png";
-import buserLogo from "@/../public/buser-logo.webp";
-import Link from "next/link";
-import Image from "next/image";
-import { parseCookies } from "nookies";
-
-import Metrics from "@/components/Metrics";
-
 import { Inter } from "next/font/google";
-import CostPerMetric from "@/components/CostPerMetric";
-import MetricsLineGraph from "@/components/MetricsLineGraph";
-import SidenavDesktop from "@/components/SidenavDesktop";
-import MetricsDoughnutGraph from "@/components/MetricsDoughnutGraph";
-import CreatorsTable from "@/components/CreatorsTable/CreatorsTable";
+
 import useDataStore, { Influencer, PostsPack, baseApiUrl } from "@/store";
-import { useEffect } from "react";
-import Footer from "@/components/Footer";
-import FinancialMetrics from "@/components/FinancialMetrics/FinancialMetrics";
-import ContactCTA from "@/components/CTA/ContactCTA";
-import AttachmentsTable from "@/components/AttachmentsTable/AttachmentsTable";
-import {
-  costPerMetric,
-  parseUpdatedAt,
-  total,
-  totalCount,
-  totalCPE,
-  totalPercentage,
-} from "../../../utils/utils";
+
 // import { useRouter } from "next/navigation";
 import BreadcrumbComponent from "@/components/Breadcrumb";
-import WelcomeTitle from "@/components/WelcomeTitle";
-import TotalCreatorsIcon from "@/components/MetricsIcons/TotalCreatorsIcon";
-import TotalPostsIcon from "@/components/MetricsIcons/TotalPostsIcon";
-import TotalFeedIcon from "@/components/MetricsIcons/TotalFeedIcon";
-import TotalStoriesIcon from "@/components/MetricsIcons/TotalStoriesIcon";
-import Header from "@/components/Header";
-import { SearchIcon } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import FirstSection from "@/components/FirstSection";
-import SecondSection from "@/components/SecondSection";
-import { Component } from "@/components/PieChartDonut";
-import MetricsBarStackGraph from "@/components/MetricsBarStackGraph";
-import DashboardBG from "@/components/DashboardBG";
-import { useRouter } from "next/router";
-import { useParams } from "next/navigation";
+
 import TitleWithoutFilters from "@/components/TitleWithoutFilters";
 import CampaingCard from "@/components/CampaignCard";
 import CreatorCard from "@/components/CreatorsCard";
+import React from "react";
 // import { Plus_Jakarta_Sans } from 'next/font/google'
 
 const inter = Inter({ subsets: ["latin"] });

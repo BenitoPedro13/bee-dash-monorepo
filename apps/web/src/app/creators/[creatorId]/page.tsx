@@ -18,9 +18,13 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SelectComponent } from "@/components/Select";
 import PostsMetricsGraph from "@/components/PostsMetricsLineGraph";
 import PostsCreatorsTable from "@/components/PostsCreatorsTable/PostsCreatorsTable";
+import { getParam } from "@/lib/utils";
+import React from "react";
 
 export default function Home() {
-  const { creatorId } = useParams();
+  const params = useParams(); // Extract dynamic route parameters
+
+  const creatorId = getParam(params.creatorId);
   const router = useRouter();
   const [creatorPostsData, setCreatorPostsData] = useState<Posts[]>([]);
   const [creatorData, setCreatorData] = useState<Creator>();

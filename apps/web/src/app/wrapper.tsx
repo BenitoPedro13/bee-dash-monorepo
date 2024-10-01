@@ -9,12 +9,16 @@ import { useParams, usePathname, useRouter } from "next/navigation";
 import { parseCookies } from "nookies";
 import { useEffect } from "react";
 import LoadingScreen from "../components/LoadingScreen";
+import { getParam } from "@/lib/utils";
+import React from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Wrapper({ children }: { children: React.ReactNode }) {
   const path = usePathname();
-  const { campaignId } = useParams();
+  const params = useParams(); // Extract dynamic route parameters
+
+  const campaignId = getParam(params.campaignId);
   const loading = useDataStore((store) => store.loading);
   const { color } = useDataStore((store) => store.session.user);
   const session = useDataStore((state) => state.session);

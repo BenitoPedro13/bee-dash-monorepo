@@ -9,6 +9,7 @@ import { UserCircle, UserIcon } from "lucide-react";
 import { addAlphaToHex } from "../../../utils/utils";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { getParam } from "@/lib/utils";
 
 const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 const inter = Inter({ subsets: ["latin"] });
@@ -18,7 +19,9 @@ type CreatorsTableRowProps = {
 };
 
 const CreatorsTableRow = ({ data }: CreatorsTableRowProps) => {
-  const { campaignId } = useParams();
+  const params = useParams(); // Extract dynamic route parameters
+
+  const campaignId = getParam(params.campaignId);
   return (
     <tr className="!border-b-[#EAECF0]">
       <td>

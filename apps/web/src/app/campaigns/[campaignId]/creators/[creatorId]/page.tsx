@@ -18,9 +18,11 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SelectComponent } from "@/components/Select";
 import PostsMetricsGraph from "@/components/PostsMetricsLineGraph";
 import PostsCreatorsTable from "@/components/PostsCreatorsTable/PostsCreatorsTable";
+import { getParam } from "@/lib/utils";
+import React from "react";
 
 export default function Home() {
-  const { creatorId, campaignId } = useParams();
+  const params = useParams();
   const router = useRouter();
 
   const [creatorData, setCreatorData] = useState<Influencer[]>([]);
@@ -31,6 +33,9 @@ export default function Home() {
   const mode = useDataStore((state) => state.mode);
   const postsData = useDataStore((state) => state.postsData);
   const { data } = useDataStore((state) => state.data);
+
+  const creatorId = getParam(params.creatorId);
+  const campaignId = getParam(params.campaignId);
 
   useEffect(() => {
     const creatorExistsInData = data.find((item) => item.id === +creatorId);
