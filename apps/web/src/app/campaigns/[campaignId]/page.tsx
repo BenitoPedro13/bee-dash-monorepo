@@ -46,6 +46,8 @@ import MetricsBarStackGraph from "@/components/MetricsBarStackGraph";
 import DashboardBG from "@/components/DashboardBG";
 import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
+import { getParam } from "@/lib/utils";
+import React from "react";
 // import { Plus_Jakarta_Sans } from 'next/font/google'
 
 const inter = Inter({ subsets: ["latin"] });
@@ -56,7 +58,9 @@ export default function Home() {
   const postsData = useDataStore((state) => state.postsData);
   const { data } = useDataStore((state) => state.data);
   const router = useRouter();
-  const { campaignId } = useParams(); // Extract dynamic route parameters
+  const params = useParams(); // Extract dynamic route parameters
+
+  const campaignId = getParam(params.campaignId);
 
   const campaignExists = session.user.campaigns.find((item) => {
     return item.id === +campaignId;

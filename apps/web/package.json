@@ -56,7 +56,7 @@
     "framer-motion": "^10.12.20",
     "input-otp": "^1.2.4",
     "lucide-react": "^0.414.0",
-    "next": "13.4.9",
+    "next": "14.2.13",
     "next-auth": "^4.22.3",
     "next-themes": "^0.3.0",
     "nookies": "^2.5.2",
