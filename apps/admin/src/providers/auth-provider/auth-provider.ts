@@ -1,46 +1,57 @@
 "use client";
+import dotEnv from "dotenv";
 
+dotEnv.config();
 import type { AuthProvider } from "@refinedev/core";
 import Cookies from "js-cookie";
 
-const mockUsers = [
-  {
-    name: "John Doe",
-    email: "johndoe@mail.com",
-    roles: ["admin"],
-    avatar: "https://i.pravatar.cc/150?img=1",
-  },
-  {
-    name: "Jane Doe",
-    email: "janedoe@mail.com",
-    roles: ["editor"],
-    avatar: "https://i.pravatar.cc/150?img=1",
-  },
-];
-
 export const authProvider: AuthProvider = {
   login: async ({ email, username, password, remember }) => {
-    // Suppose we actually send a request to the back end here.
-    const user = mockUsers[0];
+    try {
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
 
-    if (user) {
+      const result = await response.json();
+
+      const user = result?.user; // assuming result contains user info
+
+      if (!response.ok || !result || !user) {
+        return {
+          success: false,
+          error: {
+            name: "LoginError",
+            message: result.message || "Invalid username or password",
+          },
+        };
+      }
+
       Cookies.set("auth", JSON.stringify(user), {
-        expires: 30, // 30 days
+        expires: remember ? 1 : undefined, // 30 days if 'remember' is true
         path: "/",
       });
+
       return {
         success: true,
         redirectTo: "/",
       };
+    } catch (error) {
+      console.error("Login failed:", error);
+      return {
+        success: false,
+        error: {
+          name: "LoginError",
+          message: "An unexpected error occurred",
+        },
+      };
     }
-
-    return {
-      success: false,
-      error: {
-        name: "LoginError",
-        message: "Invalid username or password",
-      },
-    };
   },
   logout: async () => {
     Cookies.remove("auth", { path: "/" });
