@@ -582,7 +582,10 @@ export default function UsersEdit() {
         <Button type="primary" style={{ marginRight: "8px" }}>
           Search
         </Button>
-        <Button onClick={() => createModalShow()} type="primary">
+        <Button
+          //  onClick={() => createModalShow()}
+          type="primary"
+        >
           Criar Novo
         </Button>
         <List>
