@@ -43,15 +43,17 @@
 }
 
 input:-webkit-autofill,
-    input:-webkit-autofill{
-      -webkit-box-shadow: 0 0 0px 1000px #FFFFFF inset !important;
-      -webkit-text-fill-color: #0E121B;
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
+  -webkit-text-fill-color: #0e121b;
 }
 
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
+  --user-color: rgb(255, 140, 0);
+  --user-color-low-opacity: rgb(255, 140, 0, 0.05);
 }
 
 @media (prefers-color-scheme: dark) {

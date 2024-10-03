@@ -4,15 +4,13 @@ import useDataStore, { DashboardMode } from "@/store";
 import fotoPerfil from "../../public/foto-perfil.png";
 import Image from "next/image";
 
-export default function ModalContent() {
-  const color = useDataStore((state) => state.session.user.color);
+interface ModalContentProps {
+  hexColor: string;
+}
 
-  const hexColor =
-    color === undefined
-      ? "bg-[#FF8C00]"
-      : color.length !== 7
-      ? "bg-[#FF8C00]"
-      : color;
+export default function ModalContent({ hexColor }: ModalContentProps) {
+  const color = useDataStore((state) => state.session.user.color);
+  const campaigns = useDataStore((state) => state.session.user.campaigns);
 
   const date = new Date();
 

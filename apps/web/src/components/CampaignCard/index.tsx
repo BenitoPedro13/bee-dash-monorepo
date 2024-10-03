@@ -34,6 +34,7 @@ export default function CampaingCard({ name, posts, campaign }: cardProps) {
           style={{
             width: "100%",
             height: "auto",
+            minHeight: "213px",
             maxHeight: "213px",
             objectFit: "cover",
           }}

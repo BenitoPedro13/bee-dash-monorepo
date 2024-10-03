@@ -40,6 +40,7 @@ export default function CreatorCard({
           style={{
             width: "100%",
             height: "auto",
+            minHeight: "213px",
             maxHeight: "213px",
             objectFit: "cover",
           }}

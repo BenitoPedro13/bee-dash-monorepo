@@ -11,6 +11,8 @@ import { useEffect } from "react";
 import LoadingScreen from "../components/LoadingScreen";
 import { getParam } from "@/lib/utils";
 import React from "react";
+import { hexToRgba } from "../../utils/utils";
+import Background from "@/components/Background";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -29,6 +31,14 @@ export default function Wrapper({ children }: { children: React.ReactNode }) {
 
   const router = useRouter();
   const { "bee-dash-token": access_token } = parseCookies();
+
+  useEffect(() => {
+    const root = document.querySelector(":root") as HTMLElement;
+
+    if (!root) return;
+
+    root.style.setProperty("--user-color", color);
+  }, [color]);
 
   useEffect(() => {
     const fetch = async () => {
@@ -83,7 +93,6 @@ export default function Wrapper({ children }: { children: React.ReactNode }) {
   if (loading) {
     return <LoadingScreen />;
   }
-
   if (path !== "/")
     return (
       <>
@@ -91,9 +100,8 @@ export default function Wrapper({ children }: { children: React.ReactNode }) {
         <main>
           <SidenavDesktop />
           <div className="relative bg-white overflow-hidden min-h-screen">
-            <div className="absolute z-10">
-              <DashboardBG color={color} />
-            </div>
+            <Background color={color} />
+
             {children}
 
             <Footer />
