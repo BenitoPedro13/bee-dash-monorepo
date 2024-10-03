@@ -1,7 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import createPool from "../../../../database";
-
-const pool = createPool();
 
 export async function POST(req: NextRequest) {
   try {
