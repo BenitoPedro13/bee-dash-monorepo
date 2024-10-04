@@ -25,6 +25,8 @@ import {
   Select,
   DatePicker,
 } from "antd";
+
+const { TextArea } = Input;
 import { UploadOutlined } from "@ant-design/icons";
 import { useParams } from "next/navigation";
 import axios from "axios";
@@ -412,6 +414,47 @@ export default function UsersEdit() {
         >
           <Select {...usersSelectProps} />
         </Form.Item>
+
+        <Form.Item
+          label={"O que rolou em geral? (Feedback)"}
+          name={["campaignOverview"]}
+          rules={[
+            {
+              required: false,
+              message: "Insira o texto a ser mostrado no relatório da campanha",
+            },
+          ]}
+        >
+          <TextArea
+            placeholder="Durante o período da campanha, foram realizados 46 posts, que alcançaram um impacto bruto de 34.459 visualizações. Esses números mostram o poder de distribuição do conteúdo e a eficácia em atrair a atenção do público. Além disso, a campanha teve uma taxa de cliques de 4,5%, o que indica que o conteúdo gerado conseguiu engajar bem a audiência, levando-os a interagir com os links e chamadas para ação. O total de interações chegou a 540, o que inclui curtidas, compartilhamentos, comentários e outras formas de engajamento direto com as postagens."
+            allowClear
+            rows={5}
+
+            // onChange={onChange}
+          />
+        </Form.Item>
+
+        <Form.Item
+          label={"Análise Final (Feedback)"}
+          name={["finalAnalysis"]}
+          rules={[
+            {
+              required: false,
+              message: "Insira o texto a ser mostrado no relatório da campanha",
+            },
+          ]}
+        >
+          <TextArea
+            placeholder="A campanha de social media da Movida não apenas alcançou um público relevante, como também obteve uma excelente performance em termos de engajamento e interação com os usuários.
+
+A taxa de cliques de 4,5% é um indicativo claro de que o conteúdo foi atrativo e despertou o interesse dos seguidores, incentivando a participação e o envolvimento com a marca.
+
+Recomendamos manter a estratégia de trabalhar com influenciadores relevantes, como Alanzoka, e continuar explorando conteúdos que aumentem o engajamento da comunidade. A campanha demonstrou que a combinação de conteúdo relevante e parcerias estratégicas pode ser uma fórmula eficaz para aumentar o alcance e a presença da Movida no cenário digital."
+            allowClear
+            rows={5}
+            // onChange={onChange}
+          />
+        </Form.Item>
       </Form>
 
       {/* <Form.Item label="Foto de Perfil">
@@ -573,7 +616,7 @@ export default function UsersEdit() {
           </Table>
         </List>
       </Form.Item>
-
+      {/* 
       <Form.Item label="Posts">
         <Input
           placeholder="Filter Posts By Creator Name"
@@ -1043,7 +1086,7 @@ export default function UsersEdit() {
             </Table>
           </List>
         </p>
-      </Modal>
+      </Modal> */}
     </Edit>
   );
 }
