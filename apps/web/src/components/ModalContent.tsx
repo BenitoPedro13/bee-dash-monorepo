@@ -1,23 +1,61 @@
 import * as React from "react";
-import useDataStore, { DashboardMode } from "@/store";
+import useDataStore, { baseApiUrl, DashboardMode, PostsPack } from "@/store";
 
 import fotoPerfil from "../../public/foto-perfil.png";
 import Image from "next/image";
+import { useParams, usePathname } from "next/navigation";
+import { getParam } from "@/lib/utils";
+import { calculatePostsPropertiesVariationsBySocialNetworksType } from "../../utils/utils";
 
 interface ModalContentProps {
   hexColor: string;
+  close: () => void;
 }
 
-export default function ModalContent({ hexColor }: ModalContentProps) {
-  const color = useDataStore((state) => state.session.user.color);
+export default function ModalContent({ hexColor, close }: ModalContentProps) {
+  const params = useParams(); // Extract dynamic route parameters
+  const campaignId = getParam(params.campaignId);
+
   const campaigns = useDataStore((state) => state.session.user.campaigns);
+  const { data } = useDataStore((state) => state.data);
+  const postsData = useDataStore((state) => state.postsData);
+
+  const currentCampaign = campaigns.find((item) => item.id === +campaignId);
+
+  if (!currentCampaign) {
+    close();
+    return null;
+  }
+
+  const campaignPostsQuantity = postsData.length;
+  const { variation: clicksVariationValue, total: campaignTotalClicks } =
+    calculatePostsPropertiesVariationsBySocialNetworksType(
+      postsData,
+      ["clicks"],
+      ["INSTAGRAM", "TIKTOK"]
+    )[0];
+
+  const {
+    variation: interactionsVariationValue,
+    total: campaignTotalInteractions,
+  } = calculatePostsPropertiesVariationsBySocialNetworksType(
+    postsData,
+    ["interactions"],
+    ["INSTAGRAM", "TIKTOK"]
+  )[0];
+
+  const bestPerformantCreator = data.sort(
+    (creatorA, creatorB) =>
+      Number.parseFloat(creatorB.Engajamento.replace("%", "")) -
+      Number.parseFloat(creatorA.Engajamento.replace("%", ""))
+  )[0];
 
   const date = new Date();
 
   return (
     <>
       <div
-        className="w-full rounded-t-xl py-7 flex justify-center items-center"
+        className="w-full rounded-t-xl py-7 flex justify-center items-center "
         style={{ backgroundColor: hexColor }}
       >
         <svg
@@ -127,7 +165,9 @@ export default function ModalContent({ hexColor }: ModalContentProps) {
               />
             </svg>
 
-            <p className="font-nexa font-bold text-black text-4xl">46</p>
+            <p className="font-nexa font-bold text-black text-4xl">
+              {new Intl.NumberFormat("pt-BR").format(campaignPostsQuantity)}
+            </p>
 
             <p className="font-nexa text-black text-lg">Posts</p>
           </div>
@@ -151,7 +191,11 @@ export default function ModalContent({ hexColor }: ModalContentProps) {
               />
             </svg>
 
-            <p className="font-nexa font-bold text-black text-4xl">34.459</p>
+            <p className="font-nexa font-bold text-black text-4xl">
+              {new Intl.NumberFormat("pt-BR").format(
+                currentCampaign.totalFollowers
+              )}
+            </p>
 
             <p className="font-nexa text-black text-lg">Impacto Bruto</p>
           </div>
@@ -175,7 +219,9 @@ export default function ModalContent({ hexColor }: ModalContentProps) {
               />
             </svg>
 
-            <p className="font-nexa font-bold text-black text-4xl">4,5%</p>
+            <p className="font-nexa font-bold text-black text-4xl">
+              {campaignTotalClicks}
+            </p>
 
             <p className="font-nexa text-black text-lg">Clicks</p>
           </div>
@@ -199,23 +245,19 @@ export default function ModalContent({ hexColor }: ModalContentProps) {
               />
             </svg>
 
-            <p className="font-nexa font-bold text-black text-4xl">540</p>
+            <p className="font-nexa font-bold text-black text-4xl">
+              {campaignTotalInteractions}
+            </p>
 
             <p className="font-nexa text-black text-lg">Interações</p>
           </div>
         </div>
 
-        <p className="w-full font-nexa text-lg px-8 text-black text-justify">
-          Durante o período da campanha, foram realizados 46 posts, que
-          alcançaram um impacto bruto de 34.459 visualizações. Esses números
-          mostram o poder de distribuição do conteúdo e a eficácia em atrair a
-          atenção do público. Além disso, a campanha teve uma taxa de cliques de
-          4,5%, o que indica que o conteúdo gerado conseguiu engajar bem a
-          audiência, levando-os a interagir com os links e chamadas para ação. O
-          total de interações chegou a 540, o que inclui curtidas,
-          compartilhamentos, comentários e outras formas de engajamento direto
-          com as postagens.
-        </p>
+        {currentCampaign.campaignOverview && (
+          <p className="w-full font-nexa text-lg px-8 text-black text-justify">
+            {currentCampaign.campaignOverview}
+          </p>
+        )}
       </div>
 
       <div
@@ -255,9 +297,11 @@ export default function ModalContent({ hexColor }: ModalContentProps) {
           </svg>
 
           <Image
-            src={fotoPerfil}
+            src={baseApiUrl + bestPerformantCreator["Url Foto Perfil"]}
+            width={258}
+            height={172}
             alt="Foto Creator"
-            className="w-3/4 rounded-xl object-cover"
+            className="rounded-xl object-cover"
           />
 
           <svg
@@ -290,9 +334,11 @@ export default function ModalContent({ hexColor }: ModalContentProps) {
 
         <div>
           <p className="font-nexa text-4xl text-white font-bold text-center mb-[2px]">
-            Alanzoka
+            {bestPerformantCreator.Influencer}
           </p>
-          <p className="font-nexa text-3xl text-white text-center">@Alanzoka</p>
+          <p className="font-nexa text-3xl text-white text-center">
+            @{bestPerformantCreator.Username}
+          </p>
         </div>
 
         <div className="w-full flex flex-wrap justify-between items-center px-10">
@@ -391,9 +437,13 @@ export default function ModalContent({ hexColor }: ModalContentProps) {
               />
             </svg>
 
-            <p className="text-white text-2xl font-nexa font-bold">46</p>
+            <p className="text-white text-2xl font-nexa font-bold">
+              {new Intl.NumberFormat("pt-BR").format(
+                +bestPerformantCreator.Posts
+              )}
+            </p>
 
-            <p className="text-white text-lg font-nexa font-light">Users</p>
+            <p className="text-white text-lg font-nexa font-light">Posts</p>
           </div>
 
           <div className="flex flex-col gap-1 justify-center items-center">
@@ -415,9 +465,16 @@ export default function ModalContent({ hexColor }: ModalContentProps) {
               />
             </svg>
 
-            <p className="text-white text-2xl font-nexa font-bold">34.359</p>
+            <p className="text-white text-2xl font-nexa font-bold">
+              {new Intl.NumberFormat("pt-BR").format(
+                +bestPerformantCreator["Impacto Bruto"] +
+                  +bestPerformantCreator["Impacto Bruto Tiktok"]
+              )}
+            </p>
 
-            <p className="text-white text-lg font-nexa font-light">Impact</p>
+            <p className="text-white text-lg font-nexa font-light">
+              Impacto Bruto
+            </p>
           </div>
 
           <div className="flex flex-col gap-1 justify-center items-center">
@@ -439,7 +496,13 @@ export default function ModalContent({ hexColor }: ModalContentProps) {
               />
             </svg>
 
-            <p className="text-white text-2xl font-nexa font-bold">4,5%</p>
+            <p className="text-white text-2xl font-nexa font-bold">
+              {" "}
+              {new Intl.NumberFormat("pt-BR").format(
+                +bestPerformantCreator["Cliques"] +
+                  +bestPerformantCreator["Cliques Tiktok"]
+              )}
+            </p>
 
             <p className="text-white text-lg font-nexa font-light">Clicks</p>
           </div>
@@ -463,7 +526,12 @@ export default function ModalContent({ hexColor }: ModalContentProps) {
               />
             </svg>
 
-            <p className="text-white text-2xl font-nexa font-bold">540</p>
+            <p className="text-white text-2xl font-nexa font-bold">
+              {new Intl.NumberFormat("pt-BR").format(
+                +bestPerformantCreator["Interacoes"] +
+                  +bestPerformantCreator["Interacoes Tiktok"]
+              )}
+            </p>
 
             <p className="text-white text-lg font-nexa font-light">
               Interações
@@ -548,86 +616,73 @@ export default function ModalContent({ hexColor }: ModalContentProps) {
         </div>
       </div>
 
-      <div className="w-full flex justify-center items-center flex-col gap-5 bg-white py-7">
-        <div className="w-full flex justify-center items-center gap-5">
-          <svg
-            width="49"
-            height="49"
-            viewBox="0 0 49 49"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <g clip-path="url(#clip0_5068_6897)">
-              <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
-                d="M22.9654 9.44145C24.0348 10.9909 25.329 12.5762 26.876 13.6516C28.7135 14.9288 30.69 15.1188 32.7021 15.063C35.287 14.9908 37.9372 14.5286 40.559 14.5785C41.5324 14.5962 42.0081 15.0048 42.2172 15.1788C42.7455 15.6187 42.9948 16.1396 43.0946 16.6657C43.2141 17.289 43.2078 18.1908 42.3309 19.0177C42.2054 19.1358 42.0093 19.298 41.7216 19.449C41.5106 19.5593 40.8173 19.7799 40.5421 19.9106C39.865 20.2345 39.182 20.5368 38.4932 20.8332C36.2009 21.8199 34.2284 22.5626 32.331 24.2476C29.755 26.5343 28.3345 28.5146 28.0706 30.7548C27.8153 32.9209 28.589 35.2217 30.0015 38.0478C30.1467 38.3139 30.2812 38.5796 30.4041 38.8453C30.9877 40.1018 30.46 41.5939 29.216 42.2047C27.9731 42.8153 26.4697 42.3201 25.8312 41.091C25.6981 40.8344 25.569 40.5809 25.4456 40.3291C23.3627 36.5567 18.5396 32.8358 14.6854 30.9552C13.4971 30.3756 10.4739 29.871 8.41966 29.0802C6.90417 28.4966 5.79028 27.6828 5.26147 26.8907C4.90617 26.3602 4.80476 25.8598 4.79623 25.4263C4.78366 24.7965 4.97231 24.2205 5.38053 23.7081C5.60427 23.4286 5.92647 23.1386 6.3787 22.9203C6.59648 22.8156 7.17795 22.6545 7.44206 22.5848C8.25093 22.0948 9.02385 21.5532 9.84798 21.0886C11.8144 19.9803 12.8662 18.5578 14.2937 16.8204C15.6298 15.1951 16.3282 13.6469 16.6583 11.5631C16.6524 11.305 16.6073 9.22259 16.697 8.45886C16.8296 7.34284 17.3752 6.68167 17.6918 6.41007C18.2287 5.9486 18.759 5.77382 19.2238 5.7126C19.9098 5.62269 20.5566 5.76806 21.1558 6.17309C21.5279 6.42371 21.9354 6.83789 22.2454 7.45546C22.4861 7.93228 22.9061 9.25578 22.9654 9.44145ZM29.4791 19.9837C29.3016 20.1284 29.1246 20.2792 28.9473 20.4365C25.1744 23.7857 23.3954 26.8771 23.0095 30.1587L22.9978 30.2685C20.9934 28.6794 18.8662 27.3247 16.9203 26.3751C16.1191 25.9841 14.5689 25.5976 12.9681 25.1602C15.1587 23.7861 16.5243 22.1328 18.2314 20.0568C19.5338 18.4711 20.4228 16.9371 21.0132 15.1867C21.9138 16.181 22.9015 17.095 23.9675 17.836C25.7426 19.0698 27.5866 19.7058 29.4791 19.9837Z"
-                fill={hexColor}
-              />
-            </g>
-            <defs>
-              <clipPath id="clip0_5068_6897">
-                <rect
-                  width="39"
-                  height="40"
-                  fill="white"
-                  transform="translate(38.6371) rotate(75)"
+      {currentCampaign.finalAnalysis && (
+        <div className="w-full flex justify-center items-center flex-col gap-5 bg-white py-7">
+          <div className="w-full flex justify-center items-center gap-5">
+            <svg
+              width="49"
+              height="49"
+              viewBox="0 0 49 49"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <g clip-path="url(#clip0_5068_6897)">
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M22.9654 9.44145C24.0348 10.9909 25.329 12.5762 26.876 13.6516C28.7135 14.9288 30.69 15.1188 32.7021 15.063C35.287 14.9908 37.9372 14.5286 40.559 14.5785C41.5324 14.5962 42.0081 15.0048 42.2172 15.1788C42.7455 15.6187 42.9948 16.1396 43.0946 16.6657C43.2141 17.289 43.2078 18.1908 42.3309 19.0177C42.2054 19.1358 42.0093 19.298 41.7216 19.449C41.5106 19.5593 40.8173 19.7799 40.5421 19.9106C39.865 20.2345 39.182 20.5368 38.4932 20.8332C36.2009 21.8199 34.2284 22.5626 32.331 24.2476C29.755 26.5343 28.3345 28.5146 28.0706 30.7548C27.8153 32.9209 28.589 35.2217 30.0015 38.0478C30.1467 38.3139 30.2812 38.5796 30.4041 38.8453C30.9877 40.1018 30.46 41.5939 29.216 42.2047C27.9731 42.8153 26.4697 42.3201 25.8312 41.091C25.6981 40.8344 25.569 40.5809 25.4456 40.3291C23.3627 36.5567 18.5396 32.8358 14.6854 30.9552C13.4971 30.3756 10.4739 29.871 8.41966 29.0802C6.90417 28.4966 5.79028 27.6828 5.26147 26.8907C4.90617 26.3602 4.80476 25.8598 4.79623 25.4263C4.78366 24.7965 4.97231 24.2205 5.38053 23.7081C5.60427 23.4286 5.92647 23.1386 6.3787 22.9203C6.59648 22.8156 7.17795 22.6545 7.44206 22.5848C8.25093 22.0948 9.02385 21.5532 9.84798 21.0886C11.8144 19.9803 12.8662 18.5578 14.2937 16.8204C15.6298 15.1951 16.3282 13.6469 16.6583 11.5631C16.6524 11.305 16.6073 9.22259 16.697 8.45886C16.8296 7.34284 17.3752 6.68167 17.6918 6.41007C18.2287 5.9486 18.759 5.77382 19.2238 5.7126C19.9098 5.62269 20.5566 5.76806 21.1558 6.17309C21.5279 6.42371 21.9354 6.83789 22.2454 7.45546C22.4861 7.93228 22.9061 9.25578 22.9654 9.44145ZM29.4791 19.9837C29.3016 20.1284 29.1246 20.2792 28.9473 20.4365C25.1744 23.7857 23.3954 26.8771 23.0095 30.1587L22.9978 30.2685C20.9934 28.6794 18.8662 27.3247 16.9203 26.3751C16.1191 25.9841 14.5689 25.5976 12.9681 25.1602C15.1587 23.7861 16.5243 22.1328 18.2314 20.0568C19.5338 18.4711 20.4228 16.9371 21.0132 15.1867C21.9138 16.181 22.9015 17.095 23.9675 17.836C25.7426 19.0698 27.5866 19.7058 29.4791 19.9837Z"
+                  fill={hexColor}
                 />
-              </clipPath>
-            </defs>
-          </svg>
+              </g>
+              <defs>
+                <clipPath id="clip0_5068_6897">
+                  <rect
+                    width="39"
+                    height="40"
+                    fill="white"
+                    transform="translate(38.6371) rotate(75)"
+                  />
+                </clipPath>
+              </defs>
+            </svg>
 
-          <p className="text-black font-nexa font-bold text-4xl">
-            Análise Final
+            <p className="text-black font-nexa font-bold text-4xl">
+              Análise Final
+            </p>
+
+            <svg
+              width="49"
+              height="49"
+              viewBox="0 0 49 49"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <g clip-path="url(#clip0_5068_6900)">
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M25.7657 9.44145C24.6963 10.9909 23.402 12.5762 21.8551 13.6516C20.0176 14.9288 18.041 15.1188 16.029 15.063C13.4441 14.9908 10.7939 14.5286 8.17209 14.5785C7.19867 14.5962 6.72302 15.0048 6.5139 15.1788C5.98558 15.6187 5.73629 16.1396 5.63646 16.6657C5.51694 17.289 5.52326 18.1908 6.40013 19.0177C6.52572 19.1358 6.72179 19.298 7.0095 19.449C7.22051 19.5593 7.91374 19.7799 8.18894 19.9106C8.86611 20.2345 9.5491 20.5368 10.2379 20.8332C12.5302 21.8199 14.5027 22.5626 16.4001 24.2476C18.9761 26.5343 20.3965 28.5146 20.6605 30.7548C20.9158 32.9209 20.1421 35.2217 18.7296 38.0478C18.5844 38.3139 18.4499 38.5796 18.327 38.8453C17.7434 40.1018 18.2711 41.5939 19.515 42.2047C20.758 42.8153 22.2613 42.3201 22.8999 41.091C23.033 40.8344 23.1621 40.5809 23.2855 40.3291C25.3684 36.5567 30.1915 32.8358 34.0456 30.9552C35.234 30.3756 38.2572 29.871 40.3114 29.0802C41.8269 28.4966 42.9408 27.6828 43.4696 26.8907C43.8249 26.3602 43.9263 25.8598 43.9348 25.4263C43.9474 24.7965 43.7588 24.2205 43.3506 23.7081C43.1268 23.4286 42.8046 23.1386 42.3524 22.9203C42.1346 22.8156 41.5531 22.6545 41.289 22.5848C40.4801 22.0948 39.7072 21.5532 38.8831 21.0886C36.9167 19.9803 35.8649 18.5578 34.4374 16.8204C33.1013 15.1951 32.4029 13.6469 32.0728 11.5631C32.0786 11.305 32.1238 9.22259 32.034 8.45886C31.9015 7.34284 31.3558 6.68167 31.0393 6.41007C30.5024 5.9486 29.972 5.77382 29.5073 5.7126C28.8212 5.62269 28.1745 5.76806 27.5753 6.17309C27.2032 6.42371 26.7957 6.83789 26.4857 7.45546C26.245 7.93228 25.825 9.25578 25.7657 9.44145ZM19.2519 19.9837C19.4295 20.1284 19.6065 20.2792 19.7838 20.4365C23.5566 23.7857 25.3357 26.8771 25.7215 30.1587L25.7333 30.2685C27.7376 28.6794 29.8649 27.3247 31.8108 26.3751C32.612 25.9841 34.1622 25.5976 35.763 25.1602C33.5724 23.7861 32.2068 22.1328 30.4997 20.0568C29.1972 18.4711 28.3083 16.9371 27.7179 15.1867C26.8173 16.181 25.8296 17.095 24.7636 17.836C22.9885 19.0698 21.1445 19.7058 19.2519 19.9837Z"
+                  fill={hexColor}
+                />
+              </g>
+              <defs>
+                <clipPath id="clip0_5068_6900">
+                  <rect
+                    width="39"
+                    height="40"
+                    fill="white"
+                    transform="matrix(-0.258819 0.965926 0.965926 0.258819 10.094 0)"
+                  />
+                </clipPath>
+              </defs>
+            </svg>
+          </div>
+
+          <p className="w-full font-nexa text-lg px-8 pb-8 text-black text-justify">
+            {currentCampaign.finalAnalysis}
           </p>
-
-          <svg
-            width="49"
-            height="49"
-            viewBox="0 0 49 49"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <g clip-path="url(#clip0_5068_6900)">
-              <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
-                d="M25.7657 9.44145C24.6963 10.9909 23.402 12.5762 21.8551 13.6516C20.0176 14.9288 18.041 15.1188 16.029 15.063C13.4441 14.9908 10.7939 14.5286 8.17209 14.5785C7.19867 14.5962 6.72302 15.0048 6.5139 15.1788C5.98558 15.6187 5.73629 16.1396 5.63646 16.6657C5.51694 17.289 5.52326 18.1908 6.40013 19.0177C6.52572 19.1358 6.72179 19.298 7.0095 19.449C7.22051 19.5593 7.91374 19.7799 8.18894 19.9106C8.86611 20.2345 9.5491 20.5368 10.2379 20.8332C12.5302 21.8199 14.5027 22.5626 16.4001 24.2476C18.9761 26.5343 20.3965 28.5146 20.6605 30.7548C20.9158 32.9209 20.1421 35.2217 18.7296 38.0478C18.5844 38.3139 18.4499 38.5796 18.327 38.8453C17.7434 40.1018 18.2711 41.5939 19.515 42.2047C20.758 42.8153 22.2613 42.3201 22.8999 41.091C23.033 40.8344 23.1621 40.5809 23.2855 40.3291C25.3684 36.5567 30.1915 32.8358 34.0456 30.9552C35.234 30.3756 38.2572 29.871 40.3114 29.0802C41.8269 28.4966 42.9408 27.6828 43.4696 26.8907C43.8249 26.3602 43.9263 25.8598 43.9348 25.4263C43.9474 24.7965 43.7588 24.2205 43.3506 23.7081C43.1268 23.4286 42.8046 23.1386 42.3524 22.9203C42.1346 22.8156 41.5531 22.6545 41.289 22.5848C40.4801 22.0948 39.7072 21.5532 38.8831 21.0886C36.9167 19.9803 35.8649 18.5578 34.4374 16.8204C33.1013 15.1951 32.4029 13.6469 32.0728 11.5631C32.0786 11.305 32.1238 9.22259 32.034 8.45886C31.9015 7.34284 31.3558 6.68167 31.0393 6.41007C30.5024 5.9486 29.972 5.77382 29.5073 5.7126C28.8212 5.62269 28.1745 5.76806 27.5753 6.17309C27.2032 6.42371 26.7957 6.83789 26.4857 7.45546C26.245 7.93228 25.825 9.25578 25.7657 9.44145ZM19.2519 19.9837C19.4295 20.1284 19.6065 20.2792 19.7838 20.4365C23.5566 23.7857 25.3357 26.8771 25.7215 30.1587L25.7333 30.2685C27.7376 28.6794 29.8649 27.3247 31.8108 26.3751C32.612 25.9841 34.1622 25.5976 35.763 25.1602C33.5724 23.7861 32.2068 22.1328 30.4997 20.0568C29.1972 18.4711 28.3083 16.9371 27.7179 15.1867C26.8173 16.181 25.8296 17.095 24.7636 17.836C22.9885 19.0698 21.1445 19.7058 19.2519 19.9837Z"
-                fill={hexColor}
-              />
-            </g>
-            <defs>
-              <clipPath id="clip0_5068_6900">
-                <rect
-                  width="39"
-                  height="40"
-                  fill="white"
-                  transform="matrix(-0.258819 0.965926 0.965926 0.258819 10.094 0)"
-                />
-              </clipPath>
-            </defs>
-          </svg>
         </div>
-
-        <p className="w-full font-nexa text-lg px-8 pb-8 text-black text-justify">
-          A campanha de social media da Movida não apenas alcançou um público
-          relevante, como também obteve uma excelente performance em termos de
-          engajamento e interação com os usuários.
-          <br />
-          <br />
-          A taxa de cliques de 4,5% é um indicativo claro de que o conteúdo foi
-          atrativo e despertou o interesse dos seguidores, incentivando a
-          participação e o envolvimento com a marca.
-          <br />
-          <br />
-          Recomendamos manter a estratégia de trabalhar com influenciadores
-          relevantes, como Alanzoka, e continuar explorando conteúdos que
-          aumentem o engajamento da comunidade. A campanha demonstrou que a
-          combinação de conteúdo relevante e parcerias estratégicas pode ser uma
-          fórmula eficaz para aumentar o alcance e a presença da Movida no
-          cenário digital.
-        </p>
-      </div>
+      )}
 
       <div className="w-full flex flex-wrap gap-2 sm:gap-0 justify-between items-center px-8 pb-12 bg-white">
         <svg

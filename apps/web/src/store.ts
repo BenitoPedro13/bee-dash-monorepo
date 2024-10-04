@@ -127,6 +127,8 @@ export interface Campaign {
   attachments: Attachment[];
   categories?: { id: string; name: string }[];
   postsPack: PostsPack[];
+  campaignOverview?: string;
+  finalAnalysis?: string;
   totalFollowers: number;
   mediumEngagement: number;
   userId: number;

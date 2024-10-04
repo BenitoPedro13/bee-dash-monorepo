@@ -90,8 +90,6 @@ const Background = ({ color }: { color: string }) => {
     const canvas = canvasRef.current;
     const parentElement = parentRef.current;
 
-    console.log(canvas, parentElement);
-
     if (canvas && parentElement) {
       const observer = new ResizeObserver(() => {
         resizeCanvas();

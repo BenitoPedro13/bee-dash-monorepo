@@ -12,13 +12,6 @@ const WelcomeTitle = ({ showFilters = true }: { showFilters?: boolean }) => {
   const mode = useDataStore((state) => state.mode);
   const color = useDataStore((state) => state.session.user.color);
 
-  const hexColor =
-    color === undefined
-      ? "bg-[#FF8C00]"
-      : color.length !== 7
-      ? "bg-[#FF8C00]"
-      : `bg-[#${color}]`;
-
   const getGreeting = () => {
     const hours = new Date().getHours();
     if (hours > 0 && hours < 6) return "Boa madrugada";
@@ -37,7 +30,7 @@ const WelcomeTitle = ({ showFilters = true }: { showFilters?: boolean }) => {
         </div>
 
         <div
-          className="flex items-center gap-4 bg-transparent"
+          className="flex items-center gap-4 bg-transparent flex-wrap min-[768px]:justify-end"
           style={{
             display: showFilters ? "flex" : "none",
           }}
@@ -115,7 +108,7 @@ const WelcomeTitle = ({ showFilters = true }: { showFilters?: boolean }) => {
 
           <SelectComponent />
 
-          {/* <ModalRelatorio /> */}
+          <ModalRelatorio />
         </div>
       </div>
     </div>

@@ -16,6 +16,10 @@ export function ModalRelatorio() {
   const hexColor =
     color === undefined ? "#FF8C00" : color.length !== 7 ? "#FF8C00" : color;
 
+  const closeModal = () => {
+    setOpen(() => false);
+  };
+
   if (isDesktop) {
     return (
       <Dialog open={open} onOpenChange={setOpen}>
@@ -24,7 +28,7 @@ export function ModalRelatorio() {
         </DialogTrigger>
 
         <DialogContent className="sm:max-w-[794px] h-[90%]">
-          <ModalContent hexColor={hexColor} />
+          <ModalContent hexColor={hexColor} close={closeModal} />
         </DialogContent>
       </Dialog>
     );
@@ -36,7 +40,7 @@ export function ModalRelatorio() {
         <Button variant="custom">Ver Relatório</Button>
       </DrawerTrigger>
       <DrawerContent>
-        <ModalContent hexColor={hexColor} />
+        <ModalContent hexColor={hexColor} close={closeModal} />
       </DrawerContent>
     </Drawer>
   );
