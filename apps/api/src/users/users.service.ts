@@ -124,7 +124,7 @@ export class UsersService {
       buffer: file.buffer,
       originalname: file.originalname,
     };
-
+    console.log(multerFile);
     // Ensure the /files directory exists
     const directoryPath = path.join(__dirname, '..', '..', '..', 'files');
     fs.mkdirSync(directoryPath, { recursive: true });
