@@ -9,9 +9,21 @@ import { DefaultArgs } from '@prisma/client/runtime/library';
 import { MulterFileDTO } from 'src/csvs/csvs.service';
 import path from 'path';
 import fs from 'fs';
+import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
+
 @Injectable()
 export class UsersService {
-  constructor(private readonly prisma: PrismaService) {}
+  private s3Client: S3Client;
+
+  constructor(private readonly prisma: PrismaService) {
+    this.s3Client = new S3Client({
+      region: process.env.AWS_REGION, // e.g., 'us-east-1'
+      credentials: {
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+      },
+    });
+  }
 
   async create(createUserDto: CreateUserDto): Promise<User | null> {
     return this.prisma.user.create({
@@ -19,35 +31,37 @@ export class UsersService {
     });
   }
 
-  async processProfileImage(
-    file: MulterFileDTO,
-    userEmail: string,
-    // campaignId: number,
-  ) {
+  private async uploadToS3(
+    fileBuffer: Buffer,
+    fileName: string,
+    bucketName: string,
+  ): Promise<string> {
+    const command = new PutObjectCommand({
+      Bucket: bucketName,
+      Key: fileName, // S3 object key (file name)
+      Body: fileBuffer, // File content
+      ContentType: 'image/jpeg', // Adjust based on file type
+    });
+
+    const response = await this.s3Client.send(command);
+    if (response.$metadata.httpStatusCode === 200) {
+      return `https://${bucketName}.s3.${process.env.AWS_REGION}.amazonaws.com/${fileName}`;
+    } else {
+      throw new Error('Failed to upload file to S3');
+    }
+  }
+
+  async processProfileImage(file: MulterFileDTO, userEmail: string) {
     const nameToSaveOnDB = `${Date.now()}-${userEmail}-${
       file?.originalname ?? ''
     }`;
-    console.log('processProfileImage', file);
 
-    const multerFile = {
-      uniqueFilename: nameToSaveOnDB,
-      buffer: file.buffer,
-      originalname: file.originalname,
-      userEmail: userEmail,
-    };
-
-    // Ensure the /files directory exists
-    const directoryPath = path.join(__dirname, '..', '..', '..', 'files');
-    fs.mkdirSync(directoryPath, { recursive: true });
-
-    // Write the file to the /files folder
-    const filePath = path.join(directoryPath, nameToSaveOnDB);
-
-    fs.writeFile(filePath, multerFile.buffer, (error) => {
-      if (error) {
-        console.error('Error writing file:', error);
-      }
-    });
+    // Upload to S3 instead of saving locally
+    const fileUrl = await this.uploadToS3(
+      file.buffer,
+      nameToSaveOnDB,
+      process.env.AWS_BUCKET_NAME, // S3 bucket name from env
+    );
 
     await this.prisma.attachments.deleteMany({
       where: {
@@ -59,7 +73,7 @@ export class UsersService {
 
     return await this.prisma.user.update({
       data: {
-        urlProfilePicture: `/public/${nameToSaveOnDB}`,
+        urlProfilePicture: fileUrl, // Save S3 URL in DB
       },
       where: { email: userEmail },
     });
@@ -73,35 +87,19 @@ export class UsersService {
       file?.originalname ?? ''
     }`;
 
-    const multerFile = {
-      uniqueFilename: nameToSaveOnDB,
-      buffer: file.buffer,
-      originalname: file.originalname,
-    };
+    // Upload to S3
+    const fileUrl = await this.uploadToS3(
+      file.buffer,
+      nameToSaveOnDB,
+      process.env.AWS_BUCKET_NAME,
+    );
 
-    // Ensure the /files directory exists
-    const directoryPath = path.join(__dirname, '..', '..', '..', 'files');
-    fs.mkdirSync(directoryPath, { recursive: true });
-
-    // Write the file to the /files folder
-    const filePath = path.join(directoryPath, nameToSaveOnDB);
-
-    fs.writeFile(filePath, multerFile.buffer, (error) => {
-      if (error) {
-        console.error('Error writing file:', error);
-      }
-    });
-
-    // console.log(multerFile, `/public/${multerFile.uniqueFilename}`);
-
-    const a = await this.prisma.creator.update({
+    await this.prisma.creator.update({
       data: {
-        urlProfilePicture: `/public/${nameToSaveOnDB}`,
+        urlProfilePicture: fileUrl, // Save S3 URL in DB
       },
       where: { id: creatorId },
     });
-
-    console.log(a);
 
     await this.prisma.attachments.deleteMany({
       where: {
@@ -127,37 +125,22 @@ export class UsersService {
     const nameToSaveOnDB = `${Date.now()}-campaignImage-${campaignId}-${
       file?.originalname ?? ''
     }`;
-    console.log('processCampaignImage', file);
 
-    const multerFile = {
-      uniqueFilename: nameToSaveOnDB,
-      buffer: file.buffer,
-      originalname: file.originalname,
-    };
-    console.log(multerFile);
-    // Ensure the /files directory exists
-    const directoryPath = path.join(__dirname, '..', '..', '..', 'files');
-    fs.mkdirSync(directoryPath, { recursive: true });
+    // Upload to S3
+    const fileUrl = await this.uploadToS3(
+      file.buffer,
+      nameToSaveOnDB,
+      process.env.AWS_BUCKET_NAME,
+    );
 
-    // Write the file to the /files folder
-    const filePath = path.join(directoryPath, nameToSaveOnDB);
+    console.log('fileUrl', fileUrl);
 
-    fs.writeFile(filePath, multerFile.buffer, (error) => {
-      if (error) {
-        console.error('Error writing file:', error);
-      }
-    });
-
-    // console.log(multerFile, `/public/${multerFile.uniqueFilename}`);
-
-    const a = await this.prisma.campaign.update({
+    await this.prisma.campaign.update({
       data: {
-        imageUrl: `/public/${nameToSaveOnDB}`,
+        imageUrl: fileUrl, // Save S3 URL in DB
       },
       where: { id: campaignId },
     });
-
-    console.log(a);
 
     await this.prisma.attachments.deleteMany({
       where: {
