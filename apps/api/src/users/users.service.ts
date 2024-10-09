@@ -24,6 +24,8 @@ export class UsersService {
     userEmail: string,
     // campaignId: number,
   ): Promise<void> {
+    console.log('processProfileImage', file);
+
     const multerFile = {
       uniqueFilename: `${Date.now()}-${userEmail}-${file?.originalname ?? ''}`,
       buffer: file.buffer,
@@ -64,6 +66,8 @@ export class UsersService {
     file: MulterFileDTO,
     creatorId: number,
   ): Promise<Attachments> {
+    console.log('processCreatorImage', file);
+
     const multerFile = {
       uniqueFilename: `${Date.now()}-creatorImage-${creatorId}-${
         file?.originalname ?? ''
@@ -117,6 +121,8 @@ export class UsersService {
     file: MulterFileDTO,
     campaignId: number,
   ): Promise<Attachments> {
+    console.log('processCampaignImage', file);
+
     const multerFile = {
       uniqueFilename: `${Date.now()}-campaignImage-${campaignId}-${
         file?.originalname ?? ''
