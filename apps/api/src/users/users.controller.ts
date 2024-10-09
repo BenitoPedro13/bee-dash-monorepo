@@ -32,8 +32,8 @@ export class UsersController {
   async uploadProfileImage(
     @Body() body: { user_email: string },
     @UploadedFile() file: MulterFileDTO,
-  ): Promise<void> {
-    await this.usersService.processProfileImage(file, body.user_email);
+  ) {
+    return await this.usersService.processProfileImage(file, body.user_email);
   }
 
   @Post('upload-campaign-image')
@@ -41,8 +41,8 @@ export class UsersController {
   async uploadCampaignImage(
     @Body() body: { campaignId: string },
     @UploadedFile() file: MulterFileDTO,
-  ): Promise<void> {
-    await this.usersService.processCampaignImage(file, +body.campaignId);
+  ) {
+    return await this.usersService.processCampaignImage(file, +body.campaignId);
   }
 
   @Post('upload-creator-image/:creatorId')

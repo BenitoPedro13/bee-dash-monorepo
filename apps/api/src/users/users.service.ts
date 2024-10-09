@@ -23,7 +23,7 @@ export class UsersService {
     file: MulterFileDTO,
     userEmail: string,
     // campaignId: number,
-  ): Promise<void> {
+  ) {
     const nameToSaveOnDB = `${Date.now()}-${userEmail}-${
       file?.originalname ?? ''
     }`;
@@ -57,7 +57,7 @@ export class UsersService {
       },
     });
 
-    await this.prisma.user.update({
+    return await this.prisma.user.update({
       data: {
         urlProfilePicture: `/public/${nameToSaveOnDB}`,
       },
