@@ -292,7 +292,7 @@ export default function Home() {
             <div className="box-border flex-shrink-0 w-full h-min flex justify-start items-start overflow-visible relative content-start flex-nowrap gap-6 rounded-none">
               <PostsCreatorsTable
                 globalData={creatorPostsData.map((item, index) => {
-                  item.id = index;
+                  item.id = index + 1;
                   return item;
                 })}
               />
