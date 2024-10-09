@@ -577,7 +577,7 @@ export class CsvsService {
       const pageSize = end - start;
 
       const findManyPayload: Prisma.PerformanceFindManyArgs<DefaultArgs> = {
-        take: pageSize,
+        // take: pageSize,
         skip: start,
         orderBy: orderBy,
       };

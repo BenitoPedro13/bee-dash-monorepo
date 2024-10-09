@@ -46,7 +46,7 @@ export class CreatorsService {
       const pageSize = end - start;
 
       const result = await this.prismaService.creator.findMany({
-        take: pageSize,
+        // take: pageSize,
         skip: start,
         orderBy: orderBy,
         include: { categories: true, socialNetworks: true },

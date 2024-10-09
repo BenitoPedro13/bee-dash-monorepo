@@ -44,7 +44,7 @@ export class CampaignsService {
       const pageSize = end - start;
 
       const result = await this.prismaService.campaign.findMany({
-        take: pageSize,
+        // take: pageSize,
         skip: start,
         orderBy: orderBy,
         include: { postsPack: true, user: true },

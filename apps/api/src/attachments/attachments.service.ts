@@ -49,7 +49,7 @@ export class AttachmentsService {
     const pageSize = end - start;
 
     const result = await this.prismaService.attachments.findMany({
-      take: pageSize,
+      // take: pageSize,
       skip: start,
       orderBy: orderBy,
       where: {
