@@ -24,10 +24,13 @@ export class UsersService {
     userEmail: string,
     // campaignId: number,
   ): Promise<void> {
+    const nameToSaveOnDB = `${Date.now()}-${userEmail}-${
+      file?.originalname ?? ''
+    }`;
     console.log('processProfileImage', file);
 
     const multerFile = {
-      uniqueFilename: `${Date.now()}-${userEmail}-${file?.originalname ?? ''}`,
+      uniqueFilename: nameToSaveOnDB,
       buffer: file.buffer,
       originalname: file.originalname,
       userEmail: userEmail,
@@ -38,7 +41,7 @@ export class UsersService {
     fs.mkdirSync(directoryPath, { recursive: true });
 
     // Write the file to the /files folder
-    const filePath = path.join(directoryPath, multerFile.uniqueFilename);
+    const filePath = path.join(directoryPath, nameToSaveOnDB);
 
     fs.writeFile(filePath, multerFile.buffer, (error) => {
       if (error) {
@@ -56,7 +59,7 @@ export class UsersService {
 
     await this.prisma.user.update({
       data: {
-        urlProfilePicture: `/public/${multerFile.uniqueFilename}`,
+        urlProfilePicture: `/public/${nameToSaveOnDB}`,
       },
       where: { email: userEmail },
     });
@@ -66,12 +69,12 @@ export class UsersService {
     file: MulterFileDTO,
     creatorId: number,
   ): Promise<Attachments> {
-    console.log('processCreatorImage', file);
+    const nameToSaveOnDB = `${Date.now()}-creatorImage-${creatorId}-${
+      file?.originalname ?? ''
+    }`;
 
     const multerFile = {
-      uniqueFilename: `${Date.now()}-creatorImage-${creatorId}-${
-        file?.originalname ?? ''
-      }`,
+      uniqueFilename: nameToSaveOnDB,
       buffer: file.buffer,
       originalname: file.originalname,
     };
@@ -81,7 +84,7 @@ export class UsersService {
     fs.mkdirSync(directoryPath, { recursive: true });
 
     // Write the file to the /files folder
-    const filePath = path.join(directoryPath, multerFile.uniqueFilename);
+    const filePath = path.join(directoryPath, nameToSaveOnDB);
 
     fs.writeFile(filePath, multerFile.buffer, (error) => {
       if (error) {
@@ -93,7 +96,7 @@ export class UsersService {
 
     const a = await this.prisma.creator.update({
       data: {
-        urlProfilePicture: `/public/${multerFile.uniqueFilename}`,
+        urlProfilePicture: `/public/${nameToSaveOnDB}`,
       },
       where: { id: creatorId },
     });
@@ -110,7 +113,7 @@ export class UsersService {
 
     return await this.prisma.attachments.create({
       data: {
-        uniqueFilename: multerFile.uniqueFilename,
+        uniqueFilename: nameToSaveOnDB,
         originalFilename: file.originalname,
         fileSize: file.buffer.length,
       },
@@ -121,12 +124,13 @@ export class UsersService {
     file: MulterFileDTO,
     campaignId: number,
   ): Promise<Attachments> {
+    const nameToSaveOnDB = `${Date.now()}-campaignImage-${campaignId}-${
+      file?.originalname ?? ''
+    }`;
     console.log('processCampaignImage', file);
 
     const multerFile = {
-      uniqueFilename: `${Date.now()}-campaignImage-${campaignId}-${
-        file?.originalname ?? ''
-      }`,
+      uniqueFilename: nameToSaveOnDB,
       buffer: file.buffer,
       originalname: file.originalname,
     };
@@ -136,7 +140,7 @@ export class UsersService {
     fs.mkdirSync(directoryPath, { recursive: true });
 
     // Write the file to the /files folder
-    const filePath = path.join(directoryPath, multerFile.uniqueFilename);
+    const filePath = path.join(directoryPath, nameToSaveOnDB);
 
     fs.writeFile(filePath, multerFile.buffer, (error) => {
       if (error) {
@@ -148,7 +152,7 @@ export class UsersService {
 
     const a = await this.prisma.campaign.update({
       data: {
-        imageUrl: `/public/${multerFile.uniqueFilename}`,
+        imageUrl: `/public/${nameToSaveOnDB}`,
       },
       where: { id: campaignId },
     });
@@ -165,7 +169,7 @@ export class UsersService {
 
     return await this.prisma.attachments.create({
       data: {
-        uniqueFilename: multerFile.uniqueFilename,
+        uniqueFilename: nameToSaveOnDB,
         originalFilename: file.originalname,
         fileSize: file.buffer.length,
       },
