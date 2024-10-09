@@ -74,7 +74,7 @@ export class PostsService {
       const pageSize = end - start;
 
       const findManyPayload: Prisma.PostsFindManyArgs<DefaultArgs> = {
-        take: pageSize,
+        // take: pageSize,
         skip: start,
         orderBy: orderBy,
         include: {
@@ -124,7 +124,7 @@ export class PostsService {
     const pageSize = end - start;
 
     const result = await this.prisma.posts.findMany({
-      take: pageSize,
+      // take: pageSize,
       skip: start,
       orderBy: orderBy,
       where: {

@@ -43,7 +43,7 @@ export class PostsPackService {
       const pageSize = end - start;
 
       const result = await this.prismaService.postsPack.findMany({
-        take: pageSize,
+        // take: pageSize,
         skip: start,
         orderBy: orderBy,
         include: { creator: true, posts: true, campaign: true },

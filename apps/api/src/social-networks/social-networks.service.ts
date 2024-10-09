@@ -43,7 +43,7 @@ export class SocialNetworksService {
       const pageSize = end - start;
 
       const result = await this.prismaService.socialNetworks.findMany({
-        take: pageSize,
+        // take: pageSize,
         skip: start,
         orderBy: orderBy,
         include: { creator: true, posts: true },
