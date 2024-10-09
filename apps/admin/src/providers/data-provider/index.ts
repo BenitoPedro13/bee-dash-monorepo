@@ -1,10 +1,10 @@
 "use client";
 
-export const BACKEND_API_URL = "http://localhost:3000";
-export const LOCAL_API_URL = "http://localhost:3001/api";
+// export const BACKEND_API_URL = "http://localhost:3000";
+// export const LOCAL_API_URL = "http://localhost:3001/api";
 // export const BACKEND_API_URL = "https://api.thatsbee.co";
-// export const BACKEND_API_URL = "https://api1.thatsbee.co";
-// export const LOCAL_API_URL = "https://admin.thatsbee.co/api";
+export const BACKEND_API_URL = "https://api1.thatsbee.co";
+export const LOCAL_API_URL = "https://admin.thatsbee.co/api";
 
 import type { DataProvider } from "@refinedev/core";
 
