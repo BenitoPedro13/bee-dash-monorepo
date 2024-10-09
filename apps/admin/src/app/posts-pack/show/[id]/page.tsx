@@ -40,7 +40,7 @@ export default function CampaignShow() {
           }}
         >
           <img
-            src={baseApiUrl + record?.creator?.urlProfilePicture}
+            src={record?.creator?.urlProfilePicture}
             alt={record?.creator?.name}
             style={{ maxWidth: "250px", borderRadius: 30 }}
           />

@@ -440,7 +440,7 @@ export default function UsersEdit() {
         <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
           {data?.data.urlProfilePicture ? (
             <img
-              src={baseApiUrl + data?.data.urlProfilePicture}
+              src={data?.data.urlProfilePicture}
               alt={data?.data.name}
               style={{ maxWidth: "500px" }}
             />
