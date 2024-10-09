@@ -73,7 +73,7 @@ export default function CampaignList() {
             >
               {record.urlProfilePicture ? (
                 <img
-                  src={record.urlProfilePicture}
+                  src={baseApiUrl + record.urlProfilePicture}
                   alt={record.urlProfilePicture}
                   style={{ maxWidth: "100px", borderRadius: 9999 }}
                 />

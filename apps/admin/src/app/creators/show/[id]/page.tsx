@@ -25,7 +25,7 @@ export default function CampaignShow() {
       {record?.urlProfilePicture ? (
         <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
           <img
-            src={record.urlProfilePicture}
+            src={baseApiUrl + record.urlProfilePicture}
             alt={record.urlProfilePicture}
             style={{ maxWidth: "500px" }}
           />

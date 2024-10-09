@@ -350,7 +350,7 @@ export default function UsersEdit() {
           >
             {data?.data.urlProfilePicture ? (
               <img
-                src={data?.data.urlProfilePicture}
+                src={baseApiUrl + data?.data.urlProfilePicture}
                 alt={data?.data.name}
                 style={{ maxWidth: "250px", borderRadius: 30 }}
               />

@@ -353,7 +353,7 @@ export default function UsersEdit() {
           >
             {data?.data.imageUrl ? (
               <img
-                src={data?.data.imageUrl}
+                src={baseApiUrl + data?.data.imageUrl}
                 alt={data?.data.name}
                 style={{ maxWidth: "250px", borderRadius: 30 }}
               />
