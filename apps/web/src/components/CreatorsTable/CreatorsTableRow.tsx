@@ -81,6 +81,13 @@ const CreatorsTableRow = ({ data }: CreatorsTableRowProps) => {
       </td>
       <td>
         <p
+          className={`flex-shrink-0 flex-grow w-auto h-auto whitespace-pre-wrap break-words relative ${inter.className} text-[#475466] text-sm`}
+        >
+          {Number.parseFloat(data.Cadastros).toLocaleString("pt-BR")}
+        </p>
+      </td>
+      <td>
+        <p
           className={`flex-shrink-0 flex-grow w-auto h-auto whitespace-nowrap break-words relative ${inter.className} text-[#475466] text-sm`}
         >
           {Number.parseInt(data.Posts).toLocaleString("pt-BR")}

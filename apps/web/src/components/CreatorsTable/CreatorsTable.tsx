@@ -88,6 +88,7 @@ const CreatorsTable = () => {
           return a[sortColumn].localeCompare(b[sortColumn]);
 
         case "Investimento":
+        case "Cadastros":
         case "Posts":
         case "Stories":
         case "Reels":
@@ -368,6 +369,26 @@ const CreatorsTable = () => {
                     sortColumn={sortColumn}
                     sortOrder={sortOrder}
                     actualColumn={"Investimento"}
+                  />
+                </div>
+              </th>
+              <th
+                className={`cursor-pointer flex-shrink-0 w-auto max-w-[300px] h-auto whitespace-pre-wrap break-words relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
+                onClick={() =>
+                  handleSort(
+                    "Cadastros",
+                    sortColumn,
+                    setSortColumn,
+                    setSortOrder
+                  )
+                }
+              >
+                <div className="flex justify-start items-center gap-6 whitespace-nowrap">
+                  Cadastros
+                  <TableSortingIcon
+                    sortColumn={sortColumn}
+                    sortOrder={sortOrder}
+                    actualColumn={"Cadastros"}
                   />
                 </div>
               </th>
