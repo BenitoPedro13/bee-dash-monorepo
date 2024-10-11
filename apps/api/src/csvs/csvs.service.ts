@@ -443,12 +443,15 @@ export class CsvsService {
         return acc;
       }, {});
 
+      let registrations = 0;
+
       for (const postsPackId in groupedPostsPack) {
         let mediumPrice = 0;
 
         const postsPack = groupedPostsPack[postsPackId];
         const posts = groupedPostsByPostsPack[postsPackId];
 
+        registrations += postsPack.registrations;
         mediumPrice = postsPack.price / posts.length;
 
         groupedPostsByPostsPack[postsPackId].forEach(
@@ -502,6 +505,7 @@ export class CsvsService {
         Username: instagram?.username ?? tiktok?.username,
         Cidade: city ?? '-',
         Investimento: price.toString(),
+        Cadastros: registrations.toString(),
         'Investimento Instagram': instagramInvestment,
         'Investimento Tiktok': tiktokInvestment,
         Posts: posts.length.toString(),

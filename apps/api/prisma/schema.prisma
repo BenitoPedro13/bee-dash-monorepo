@@ -111,15 +111,16 @@ model Attachments {
 }
 
 model PostsPack {
-  id         Int       @id @default(autoincrement())
-  price      Float
-  posts      Posts[]
-  campaign   Campaign? @relation(fields: [campaignId], references: [id])
-  campaignId Int?
-  creator    Creator?  @relation(fields: [creatorId], references: [id])
-  creatorId  Int?
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
+  id            Int       @id @default(autoincrement())
+  price         Float
+  registrations Int       @default(0)
+  posts         Posts[]
+  campaign      Campaign? @relation(fields: [campaignId], references: [id])
+  campaignId    Int?
+  creator       Creator?  @relation(fields: [creatorId], references: [id])
+  creatorId     Int?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 }
 
 model Posts {
