@@ -40,7 +40,9 @@ const inter = Inter({ subsets: ["latin"] });
 
 const CreatorsTable = () => {
   const { data: globalData } = useDataStore((state) => state.data);
-  const { campaigns, color } = useDataStore((state) => state.session.user);
+  const { campaigns, color, email } = useDataStore(
+    (state) => state.session.user
+  );
   const hexColor =
     color === undefined ? "#FF8C00" : color.length !== 7 ? "#FF8C00" : color;
   const [data, setData] = useState([...globalData]);
@@ -372,26 +374,28 @@ const CreatorsTable = () => {
                   />
                 </div>
               </th>
-              <th
-                className={`cursor-pointer flex-shrink-0 w-auto max-w-[300px] h-auto whitespace-pre-wrap break-words relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
-                onClick={() =>
-                  handleSort(
-                    "Cadastros",
-                    sortColumn,
-                    setSortColumn,
-                    setSortOrder
-                  )
-                }
-              >
-                <div className="flex justify-start items-center gap-6 whitespace-nowrap">
-                  Cadastros
-                  <TableSortingIcon
-                    sortColumn={sortColumn}
-                    sortOrder={sortOrder}
-                    actualColumn={"Cadastros"}
-                  />
-                </div>
-              </th>
+              {email === "bitybank1@thatsbee.co" && (
+                <th
+                  className={`cursor-pointer flex-shrink-0 w-auto max-w-[300px] h-auto whitespace-pre-wrap break-words relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
+                  onClick={() =>
+                    handleSort(
+                      "Cadastros",
+                      sortColumn,
+                      setSortColumn,
+                      setSortOrder
+                    )
+                  }
+                >
+                  <div className="flex justify-start items-center gap-6 whitespace-nowrap">
+                    Cadastros
+                    <TableSortingIcon
+                      sortColumn={sortColumn}
+                      sortOrder={sortOrder}
+                      actualColumn={"Cadastros"}
+                    />
+                  </div>
+                </th>
+              )}
               <th
                 className={`cursor-pointer flex-shrink-0 w-auto max-w-[300px] h-auto whitespace-pre-wrap break-words relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
                 onClick={() =>
@@ -800,6 +804,7 @@ const CreatorsTable = () => {
                 <CreatorsTableRow
                   data={item}
                   key={`${item.Username}-${index}`}
+                  userEmail={email}
                 />
               );
             })}

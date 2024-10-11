@@ -16,9 +16,10 @@ const inter = Inter({ subsets: ["latin"] });
 
 type CreatorsTableRowProps = {
   data: Influencer;
+  userEmail: string;
 };
 
-const CreatorsTableRow = ({ data }: CreatorsTableRowProps) => {
+const CreatorsTableRow = ({ data, userEmail }: CreatorsTableRowProps) => {
   const params = useParams(); // Extract dynamic route parameters
 
   const campaignId = getParam(params.campaignId);
@@ -79,13 +80,15 @@ const CreatorsTableRow = ({ data }: CreatorsTableRowProps) => {
           })}
         </p>
       </td>
-      <td>
-        <p
-          className={`flex-shrink-0 flex-grow w-auto h-auto whitespace-pre-wrap break-words relative ${inter.className} text-[#475466] text-sm`}
-        >
-          {Number.parseFloat(data.Cadastros).toLocaleString("pt-BR")}
-        </p>
-      </td>
+      {userEmail === "bitybank1@thatsbee.co" && (
+        <td>
+          <p
+            className={`flex-shrink-0 flex-grow w-auto h-auto whitespace-pre-wrap break-words relative ${inter.className} text-[#475466] text-sm`}
+          >
+            {Number.parseFloat(data.Cadastros).toLocaleString("pt-BR")}
+          </p>
+        </td>
+      )}
       <td>
         <p
           className={`flex-shrink-0 flex-grow w-auto h-auto whitespace-nowrap break-words relative ${inter.className} text-[#475466] text-sm`}
