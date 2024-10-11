@@ -26,6 +26,11 @@ export default function CampaignShow() {
         })}
       />
 
+      <Title level={5}>Registrations</Title>
+      <TextField
+        value={((record?.registrations as number) ?? 0).toLocaleString("pt-BR")}
+      />
+
       <Title level={5}>Posts Quantity</Title>
       <TextField value={record?.posts?.length ?? 0} />
 

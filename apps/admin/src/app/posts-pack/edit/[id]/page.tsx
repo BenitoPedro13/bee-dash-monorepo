@@ -106,6 +106,20 @@ export default function UsersEdit() {
         >
           <InputNumber min={0} />
         </Form.Item>
+
+        <Form.Item
+          label={"Registrations"}
+          name={["registrations"]}
+          initialValue={data?.data?.price}
+          rules={[
+            {
+              required: true,
+              message: "Please enter a valid number",
+            },
+          ]}
+        >
+          <InputNumber min={0} />
+        </Form.Item>
       </Form>
     </Edit>
   );

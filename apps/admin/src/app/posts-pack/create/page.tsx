@@ -63,6 +63,20 @@ export default function UserCreate() {
           <InputNumber min={0} />
         </Form.Item>
       </Form>
+
+      <Form.Item
+        label={"Registrations"}
+        name={["registrations"]}
+        // initialValue={0}
+        rules={[
+          {
+            required: true,
+            message: "Please enter a valid number",
+          },
+        ]}
+      >
+        <InputNumber min={0} />
+      </Form.Item>
     </Create>
   );
 }
