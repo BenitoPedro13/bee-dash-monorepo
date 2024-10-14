@@ -51,7 +51,7 @@ export class UsersController {
     @Body() body: { user_email: string },
     @UploadedFile() file: MulterFileDTO,
     @Param('creatorId') creatorId: string,
-  ): Promise<Attachments> {
+  ) {
     return await this.usersService.processCreatorImage(file, +creatorId);
   }
 

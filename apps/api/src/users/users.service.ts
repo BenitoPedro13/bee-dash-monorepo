@@ -9,9 +9,15 @@ import { DefaultArgs } from '@prisma/client/runtime/library';
 import { MulterFileDTO } from 'src/csvs/csvs.service';
 import path from 'path';
 import fs from 'fs';
+import { CreatorsService } from 'src/creators/creators.service';
+import { CampaignsService } from 'src/campaigns/campaigns.service';
 @Injectable()
 export class UsersService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly creatorsService: CreatorsService,
+    private readonly campaignsService: CampaignsService,
+  ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User | null> {
     return this.prisma.user.create({
@@ -27,7 +33,7 @@ export class UsersService {
     const nameToSaveOnDB = `${Date.now()}-${userEmail}-${
       file?.originalname ?? ''
     }`;
-    console.log('processProfileImage', file);
+    // console.log('processProfileImage', file);
 
     const multerFile = {
       uniqueFilename: nameToSaveOnDB,
@@ -57,18 +63,23 @@ export class UsersService {
       },
     });
 
-    return await this.prisma.user.update({
-      data: {
-        urlProfilePicture: `/public/${nameToSaveOnDB}`,
-      },
-      where: { email: userEmail },
+    // return await this.prisma.user.update({
+    //   data: {
+    //     urlProfilePicture: `/public/${nameToSaveOnDB}`,
+    //   },
+    //   where: { email: userEmail },
+    // });
+
+    const a = await this.updateByEmail(userEmail, {
+      urlProfilePicture: `/public/${nameToSaveOnDB}`,
     });
+
+    console.log('processProfileImage', a);
+
+    return a;
   }
 
-  async processCreatorImage(
-    file: MulterFileDTO,
-    creatorId: number,
-  ): Promise<Attachments> {
+  async processCreatorImage(file: MulterFileDTO, creatorId: number) {
     const nameToSaveOnDB = `${Date.now()}-creatorImage-${creatorId}-${
       file?.originalname ?? ''
     }`;
@@ -94,15 +105,6 @@ export class UsersService {
 
     // console.log(multerFile, `/public/${multerFile.uniqueFilename}`);
 
-    const a = await this.prisma.creator.update({
-      data: {
-        urlProfilePicture: `/public/${nameToSaveOnDB}`,
-      },
-      where: { id: creatorId },
-    });
-
-    console.log(a);
-
     await this.prisma.attachments.deleteMany({
       where: {
         uniqueFilename: {
@@ -111,23 +113,35 @@ export class UsersService {
       },
     });
 
-    return await this.prisma.attachments.create({
+    await this.prisma.attachments.create({
       data: {
         uniqueFilename: nameToSaveOnDB,
         originalFilename: file.originalname,
         fileSize: file.buffer.length,
       },
     });
+
+    const a = await this.creatorsService.update(creatorId, {
+      urlProfilePicture: `/public/${nameToSaveOnDB}`,
+    });
+
+    // const a = await this.prisma.creator.update({
+    //   data: {
+    //     urlProfilePicture: `/public/${nameToSaveOnDB}`,
+    //   },
+    //   where: { id: creatorId },
+    // });
+
+    console.log('processCreatorImage', a);
+
+    return a;
   }
 
-  async processCampaignImage(
-    file: MulterFileDTO,
-    campaignId: number,
-  ): Promise<Attachments> {
+  async processCampaignImage(file: MulterFileDTO, campaignId: number) {
     const nameToSaveOnDB = `${Date.now()}-campaignImage-${campaignId}-${
       file?.originalname ?? ''
     }`;
-    console.log('processCampaignImage', file);
+    // console.log('processCampaignImage', file);
 
     const multerFile = {
       uniqueFilename: nameToSaveOnDB,
@@ -150,15 +164,6 @@ export class UsersService {
 
     // console.log(multerFile, `/public/${multerFile.uniqueFilename}`);
 
-    const a = await this.prisma.campaign.update({
-      data: {
-        imageUrl: `/public/${nameToSaveOnDB}`,
-      },
-      where: { id: campaignId },
-    });
-
-    console.log(a);
-
     await this.prisma.attachments.deleteMany({
       where: {
         uniqueFilename: {
@@ -167,13 +172,21 @@ export class UsersService {
       },
     });
 
-    return await this.prisma.attachments.create({
+    await this.prisma.attachments.create({
       data: {
         uniqueFilename: nameToSaveOnDB,
         originalFilename: file.originalname,
         fileSize: file.buffer.length,
       },
     });
+
+    const a = await this.campaignsService.update(campaignId, {
+      imageUrl: `/public/${nameToSaveOnDB}`,
+    });
+
+    console.log('processCampaignImage', a);
+
+    return a;
   }
 
   async processAttachment(
@@ -308,6 +321,16 @@ export class UsersService {
   async update(id: number, updateUserDto: UpdateUserDto): Promise<User | null> {
     return await this.prisma.user.update({
       where: { id },
+      data: updateUserDto as Prisma.PostsUpdateInput,
+    });
+  }
+
+  async updateByEmail(
+    email: string,
+    updateUserDto: UpdateUserDto,
+  ): Promise<User | null> {
+    return await this.prisma.user.update({
+      where: { email },
       data: updateUserDto as Prisma.PostsUpdateInput,
     });
   }
