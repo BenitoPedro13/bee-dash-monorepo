@@ -13,7 +13,7 @@ export default function UsersEdit() {
   const { formProps, saveButtonProps } = useForm({});
 
   const { data, isLoading } = useOne({
-    resource: "social-network",
+    resource: "social-networks",
     id: params.id,
   });
 

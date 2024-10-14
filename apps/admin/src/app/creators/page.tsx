@@ -39,7 +39,8 @@ export default function CampaignList() {
     setPageSize: setCurrentPageSize,
   } = useTable({
     syncWithLocation: true,
-    pagination: { current, pageSize },
+
+    pagination: { mode: "client", current, pageSize },
     sorters: {
       initial: [{ field: "id", order: "asc" }],
     },
