@@ -11,27 +11,45 @@ export function getFilePath(dirname: string, fileName: string): string {
   return path.join(dirname, '..', '..', '..', 'files', fileName);
 }
 
-export async function listFilesWithSubstring(
-  directory: string,
-  substring: string,
-): Promise<string | undefined> {
-  try {
-    const files = await fs.promises.readdir(directory);
+const cache: Record<string, string> = {}; // Cache object
 
-    // Filter files that contain the substring
-    const matchingFiles = files.filter((file) => file.includes(substring));
-
-    // Get file with the largest number at the start
-    const file = getFileWithLargestNumber(matchingFiles);
-
-    return file;
-  } catch (err) {
-    console.error('Error reading directory:', err);
-    return undefined;
+// Invalidate the cache for a specific substring
+export function invalidateCache(substring: string) {
+  if (cache[substring]) {
+    console.log(`Invalidating cache for substring: ${substring}`);
+    delete cache[substring];
   }
 }
 
+export function listFilesWithSubstring(substring: string): string {
+  // Check if the result is already cached
+  if (cache[substring]) {
+    console.log(`Returning cached result for substring: ${substring}`);
+    return cache[substring];
+  }
+
+  const directoryPath = path.join(__dirname, '..', '..', 'files');
+  const files = fs.readdirSync(directoryPath);
+
+  // Filter files that contain the substring
+  const matchingFiles = files.filter((file) => file.includes(substring));
+
+  console.log('matchingFiles', matchingFiles);
+
+  // Get file with the largest number at the start
+  const file = getFileWithLargestNumber(matchingFiles);
+
+  // Cache the result
+  cache[substring] = file;
+
+  return file;
+}
+
 function getFileWithLargestNumber(files: string[]) {
+  if (files.length === 0) {
+    return '';
+  }
+
   const fileWithLargestNumber = files.reduce((maxFile, currentFile) => {
     // Extract the number at the beginning of each file name
     const currentNumber = parseInt(currentFile.split('-')[0], 10);
@@ -41,5 +59,5 @@ function getFileWithLargestNumber(files: string[]) {
     return currentNumber > maxNumber ? currentFile : maxFile;
   });
 
-  return fileWithLargestNumber;
+  return '/public/' + fileWithLargestNumber;
 }

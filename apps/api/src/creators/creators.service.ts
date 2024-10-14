@@ -4,6 +4,7 @@ import { UpdateCreatorDto } from './dto/update-creator.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { sortFields, sortOrder } from 'types/queyParams';
 import { Creator, Posts } from '@prisma/client';
+import { listFilesWithSubstring } from 'utils';
 
 @Injectable()
 export class CreatorsService {
@@ -52,6 +53,11 @@ export class CreatorsService {
         include: { categories: true, socialNetworks: true },
       });
 
+      result.forEach((creator) => {
+        const image = listFilesWithSubstring(`-creatorImage-${creator.id}-`);
+        creator.urlProfilePicture = image;
+      });
+
       return {
         result,
         total: await this.prismaService.creator.count(),
@@ -98,6 +104,13 @@ export class CreatorsService {
           },
           postsPack: true,
         },
+      });
+
+      posts.forEach((post) => {
+        const creatorId = post.socialNetwork.creatorId;
+
+        const image = listFilesWithSubstring(`-creatorImage-${creatorId}-`);
+        post.socialNetwork.creator.urlProfilePicture = image;
       });
 
       const groupedPosts = posts.reduce((acc, post) => {
@@ -187,6 +200,9 @@ export class CreatorsService {
           socialNetworks: true,
         },
       });
+
+      const image = listFilesWithSubstring(`-creatorImage-${creator.id}-`);
+      creator.urlProfilePicture = image;
 
       return creator;
     } catch (error) {

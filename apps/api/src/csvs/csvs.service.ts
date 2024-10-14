@@ -11,7 +11,7 @@ import { sortFields, sortOrder } from 'types/queyParams';
 import { Performance, Prisma } from '@prisma/client';
 import { DefaultArgs } from '@prisma/client/runtime/library';
 import { UpdateCsvDto } from './dto/update-csv.dto';
-import { getFilePath, getFilesFolderPath } from 'utils';
+import { getFilePath, getFilesFolderPath, listFilesWithSubstring } from 'utils';
 
 // import { CreatorService } from '../../externDB/services/CreatorService';
 export type MulterFileDTO = {
@@ -412,7 +412,12 @@ export class CsvsService {
       },
     });
 
-    // const creatorsData = await this.processPostsData(posts);
+    posts.forEach((post) => {
+      const creatorId = post.socialNetwork.creatorId;
+
+      const image = listFilesWithSubstring(`-creatorImage-${creatorId}-`);
+      post.postsPack.creator.urlProfilePicture = image;
+    });
 
     const groupedPosts = posts.reduce((acc, post) => {
       if (!acc[post.socialNetwork.creatorId]) {
