@@ -11,6 +11,7 @@ import path from 'path';
 import fs from 'fs';
 import { CreatorsService } from 'src/creators/creators.service';
 import { CampaignsService } from 'src/campaigns/campaigns.service';
+import { invalidateCache, listFilesWithSubstring } from 'utils';
 @Injectable()
 export class UsersService {
   constructor(
@@ -76,6 +77,8 @@ export class UsersService {
 
     console.log('processProfileImage', a);
 
+    invalidateCache(`-${userEmail}-`);
+
     return a;
   }
 
@@ -134,6 +137,8 @@ export class UsersService {
 
     console.log('processCreatorImage', a);
 
+    invalidateCache(`-creatorImage-${creatorId}-`);
+
     return a;
   }
 
@@ -185,6 +190,8 @@ export class UsersService {
     });
 
     console.log('processCampaignImage', a);
+
+    invalidateCache(`-campaignImage-${campaignId}-`);
 
     return a;
   }
@@ -306,10 +313,15 @@ export class UsersService {
   }
 
   async findOne(id: number): Promise<User | null> {
-    return await this.prisma.user.findUnique({
+    const user = await this.prisma.user.findUnique({
       where: { id },
       include: { campaign: true },
     });
+
+    const image = listFilesWithSubstring(`-${user.email}-`);
+    user.urlProfilePicture = image;
+
+    return user;
   }
 
   async findOneByEmail(email: string): Promise<User | null> {

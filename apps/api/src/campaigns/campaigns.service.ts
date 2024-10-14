@@ -5,6 +5,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { sortFields, sortOrder } from 'types/queyParams';
 import { Campaign, Prisma } from '@prisma/client';
 import { DefaultArgs } from '@prisma/client/runtime/library';
+import { listFilesWithSubstring } from 'utils';
 
 @Injectable()
 export class CampaignsService {
@@ -80,6 +81,9 @@ export class CampaignsService {
       });
 
       const campaignsWithFollowers = campaigns.map((campaign) => {
+        const image = listFilesWithSubstring(`-campaignImage-${campaign.id}-`);
+        campaign.imageUrl = image;
+
         const uniqueSocialNetworks = new Set<number>();
         let totalFollowers = 0;
 
@@ -87,6 +91,11 @@ export class CampaignsService {
         let totalImpressions = 0;
 
         campaign.postsPack.forEach((postPack) => {
+          const image = listFilesWithSubstring(
+            `-creatorImage-${postPack.creatorId}-`,
+          );
+          postPack.creator.urlProfilePicture = image;
+
           postPack.creator.socialNetworks.forEach((network) => {
             if (!uniqueSocialNetworks.has(network.id)) {
               totalFollowers += network.followers || 0;
@@ -133,6 +142,9 @@ export class CampaignsService {
           postsPack: true,
         },
       });
+
+      const image = listFilesWithSubstring(`-campaignImage-${campaign.id}-`);
+      campaign.imageUrl = image;
 
       return campaign;
     } catch (error) {

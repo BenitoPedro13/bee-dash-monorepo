@@ -8,6 +8,7 @@ import { JwtService } from '@nestjs/jwt';
 import { SignInDto } from './dto/sign-in.dto';
 import { CampaignsService } from 'src/campaigns/campaigns.service';
 import { CreatorsService } from 'src/creators/creators.service';
+import { listFilesWithSubstring } from 'utils';
 
 @Injectable()
 @Dependencies(UsersService, JwtService, CampaignsService, CreatorsService)
@@ -40,6 +41,9 @@ export class AuthService {
     const userCreators = await this.creatorsService.findAllByUserId(user.id);
 
     const payload = { email: user.email, sub: user.id };
+
+    const image = listFilesWithSubstring(`-${user.email}-`);
+    user.urlProfilePicture = image;
 
     return {
       access_token: await this.jwtService.signAsync(payload, {
@@ -78,6 +82,9 @@ export class AuthService {
       );
 
       const userCreators = await this.creatorsService.findAllByUserId(user.id);
+
+      const image = listFilesWithSubstring(`-${user.email}-`);
+      user.urlProfilePicture = image;
 
       return {
         user: {
