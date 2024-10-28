@@ -1,13 +1,16 @@
 import Image from "next/image";
 import Link from "next/link";
 import useDataStore, { baseApiUrl } from "@/store";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { destroyCookie } from "nookies";
 
 import BeeLogoIcon from "@/../public/bee-logo-icon.svg";
 import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
 
+const tabs = ["home", "campaigns", "creators"];
+
 const Header = () => {
+  const path = usePathname();
   const router = useRouter();
   const session = useDataStore((state) => state.session);
 
@@ -20,48 +23,10 @@ const Header = () => {
   };
 
   return (
-    // <header className="bg-white h-[72px] border-b border-gray-100 shadow-header lg:h-20 xl:hidden">
-    //   <div className="flex flex-col justify-center items-center p-0 absolute h-[72px] left-0 right-0 top-0 lg:h-20">
-    //     <div className="flex flex-row justify-between items-center pr-3 pl-4 h-10 w-[100%] lg:px-8">
-    //       <div className="flex flex-row items-center gap-10 lg:gap-[94px]">
-    //         <div className="flex flex-row items-start p-0 h-8 w-auto cursor-pointer">
-    //           <div className="flex items-center h-8 w-auto">
-    //             <Link href="/">
-    //               <Image src={logo} height={undefined} alt="Logo" />
-    //             </Link>
-    //           </div>
-    //         </div>
-    //       </div>
-    //       <div className="flex flex-row justify-center items-center p-2 gap-2 w-10 h-10 cursor-pointer lg:p-0 lg:flex-col">
-    //         <div className="w-fit h-fit flex justify-center items-center">
-    //           <button
-    //             onClick={() => handleLogout()}
-    //             className="btn btn-ghost box-border flex-shrink-0 w-12 h-12 flex flex-row justify-start items-start p-3 bg-transparent overflow-hidden relative content-start flex-nowrap gap-2 rounded-full"
-    //           >
-    //             <svg
-    //               xmlns="http://www.w3.org/2000/svg"
-    //               fill="none"
-    //               viewBox="0 0 24 24"
-    //               strokeWidth={1.5}
-    //               stroke="#000"
-    //               className="w-6 h-6"
-    //             >
-    //               <path
-    //                 strokeLinecap="round"
-    //                 strokeLinejoin="round"
-    //                 d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75"
-    //               />
-    //             </svg>
-    //           </button>
-    //         </div>
-    //       </div>
-    //     </div>
-    //   </div>
-    // </header>
     <header className="flex w-full h-[116px] px-8 justify-between items-center flex-shrink-0">
       <div className="flex items-center gap-4">
         <div className="flex items-start gap-1">
-          <Link href="/">
+          <Link href="/home">
             <div className="flex items-center gap-1">
               <Image src={BeeLogoIcon} alt="Bee Company logo" />
               <p className="text-[#171717] font-nexa text-base font-extrabold tracking-[3.124px] uppercase pt-[5px]">
@@ -72,8 +37,8 @@ const Header = () => {
         </div>
       </div>
       <Tabs
-        defaultValue={"home"}
-        // onValueChange={(value) => route}
+        defaultValue={tabs.find((item) => path.includes(item))}
+        onValueChange={(value) => router.push(`/${value}`)}
         className="flex p-[10px] items-center rounded-full border border-[#0000001a] h-[60px] bg-white"
       >
         <TabsList>
@@ -103,7 +68,7 @@ const Header = () => {
             </Link>
           </TabsTrigger>
           <TabsTrigger
-            value={"campanhas"}
+            value={"campaigns"}
             className="flex pt-2 px-3 items-center gap-2 rounded-full bg-white"
           >
             <Link href={"/campaigns"}>
