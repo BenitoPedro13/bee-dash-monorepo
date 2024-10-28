@@ -30,7 +30,7 @@ export default function Home() {
       <div className="w-full h-full flex xl:flex-row flex-col justify-start items-start z-20 p-0 xl:pl-[82px] content-start flex-nowrap gap-0 rounded-none relative">
         <div className="box-border flex-shrink-0 w-full h-min flex flex-col justify-start items-center xl:pt-8 xl:pb-8 py-[15px] overflow-visible content-center flex-nowrap xl:gap-6 gap-[15px] rounded-none">
           <div className="box-border flex-shrink-0 w-full xl:h-auto h-min flex flex-col justify-center items-start xl:px-8 px-[15px] overflow-visible relative content-start flex-nowrap gap-6 rounded-none">
-            <div className="flex justify-between items-center self-stretch">
+            {/* <div className="flex justify-between items-center self-stretch">
               <BreadcrumbComponent route={"home"} />
               <div className="w-fit flex items-start gap-4">
                 {!session?.user?.urlProfilePicture ? (
@@ -51,7 +51,7 @@ export default function Home() {
                   />
                 )}
               </div>
-            </div>
+            </div> */}
             <WelcomeTitle showFilters={false} />
           </div>
           <div className="box-border flex-shrink-0 w-full h-min flex flex-col xl:justify-center justify-start items-start xl:px-8 px-[15px] overflow-visible relative content-start flex-nowrap xl:gap-[22px] gap-6 rounded-none">

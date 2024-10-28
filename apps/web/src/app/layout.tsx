@@ -41,7 +41,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${nexa.variable} ${nexaBold.variable}`}>
+      <body className={`${nexa.variable} ${nexaBold.variable} bg-[#F5F7FA]`}>
         <Wrapper>{children}</Wrapper>
       </body>
     </html>

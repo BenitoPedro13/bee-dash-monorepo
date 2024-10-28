@@ -98,9 +98,9 @@ export default function Wrapper({ children }: { children: React.ReactNode }) {
       <>
         <Header />
         <main>
-          <SidenavDesktop />
+          {/* <SidenavDesktop /> */}
           <div className="relative bg-white overflow-hidden min-h-screen">
-            <Background color={color} />
+            {/* <Background color={color} /> */}
 
             {children}
 

@@ -1,15 +1,15 @@
-import logo from "@/../public/bee-logo.svg";
-import menu from "@/../public/menu.svg";
-import avatar from "@/../public/avatar.jpeg";
-
 import Image from "next/image";
 import Link from "next/link";
-import useDataStore from "@/store";
+import useDataStore, { baseApiUrl } from "@/store";
 import { useRouter } from "next/navigation";
 import { destroyCookie } from "nookies";
 
+import BeeLogoIcon from "@/../public/bee-logo-icon.svg";
+import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
+
 const Header = () => {
   const router = useRouter();
+  const session = useDataStore((state) => state.session);
 
   const handleLogout = () => {
     // Remove the authentication token or relevant cookie here
@@ -20,104 +20,179 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-white h-[72px] border-b border-gray-100 shadow-header lg:h-20 xl:hidden">
-      <div className="flex flex-col justify-center items-center p-0 absolute h-[72px] left-0 right-0 top-0 lg:h-20">
-        <div className="flex flex-row justify-between items-center pr-3 pl-4 h-10 w-[100%] lg:px-8">
-          <div className="flex flex-row items-center gap-10 lg:gap-[94px]">
-            <div className="flex flex-row items-start p-0 h-8 w-auto cursor-pointer">
-              <div className="flex items-center h-8 w-auto">
-                <Link href="/">
-                  <Image src={logo} height={undefined} alt="Logo" />
-                </Link>
-              </div>
+    // <header className="bg-white h-[72px] border-b border-gray-100 shadow-header lg:h-20 xl:hidden">
+    //   <div className="flex flex-col justify-center items-center p-0 absolute h-[72px] left-0 right-0 top-0 lg:h-20">
+    //     <div className="flex flex-row justify-between items-center pr-3 pl-4 h-10 w-[100%] lg:px-8">
+    //       <div className="flex flex-row items-center gap-10 lg:gap-[94px]">
+    //         <div className="flex flex-row items-start p-0 h-8 w-auto cursor-pointer">
+    //           <div className="flex items-center h-8 w-auto">
+    //             <Link href="/">
+    //               <Image src={logo} height={undefined} alt="Logo" />
+    //             </Link>
+    //           </div>
+    //         </div>
+    //       </div>
+    //       <div className="flex flex-row justify-center items-center p-2 gap-2 w-10 h-10 cursor-pointer lg:p-0 lg:flex-col">
+    //         <div className="w-fit h-fit flex justify-center items-center">
+    //           <button
+    //             onClick={() => handleLogout()}
+    //             className="btn btn-ghost box-border flex-shrink-0 w-12 h-12 flex flex-row justify-start items-start p-3 bg-transparent overflow-hidden relative content-start flex-nowrap gap-2 rounded-full"
+    //           >
+    //             <svg
+    //               xmlns="http://www.w3.org/2000/svg"
+    //               fill="none"
+    //               viewBox="0 0 24 24"
+    //               strokeWidth={1.5}
+    //               stroke="#000"
+    //               className="w-6 h-6"
+    //             >
+    //               <path
+    //                 strokeLinecap="round"
+    //                 strokeLinejoin="round"
+    //                 d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75"
+    //               />
+    //             </svg>
+    //           </button>
+    //         </div>
+    //       </div>
+    //     </div>
+    //   </div>
+    // </header>
+    <header className="flex w-full h-[116px] px-8 justify-between items-center flex-shrink-0">
+      <div className="flex items-center gap-4">
+        <div className="flex items-start gap-1">
+          <Link href="/">
+            <div className="flex items-center gap-1">
+              <Image src={BeeLogoIcon} alt="Bee Company logo" />
+              <p className="text-[#171717] font-nexa text-base font-extrabold tracking-[3.124px] uppercase pt-[5px]">
+                company
+              </p>
             </div>
-            {/* <nav className="hidden lg:flex items-center gap-8 w-fit h-8">
-              <button className="flex justify-center items-center gap-2 w-fit h-fit">
-                <p className="text-base font-semibold text-gray-600">Home</p>
-              </button>
-              <div className="flex flex-col items-center py-1 w-fit h-fit">
-                <button className="flex justify-center items-center gap-2 w-fit h-fit">
-                  <p className="text-base font-semibold text-gray-600">
-                    Products
-                  </p>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="w-6 h-6"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M19.5 8.25l-7.5 7.5-7.5-7.5"
-                    />
-                  </svg>
-                </button>
-              </div>
-              <div className="flex flex-col items-center py-1 w-fit h-fit">
-                <button className="flex justify-center items-center gap-2 w-fit h-fit">
-                  <p className="text-base font-semibold text-gray-600">
-                    Resources
-                  </p>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="w-6 h-6"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M19.5 8.25l-7.5 7.5-7.5-7.5"
-                    />
-                  </svg>
-                </button>
-              </div>
-              <button className="flex justify-center items-center gap-2 w-fit h-fit">
-                <p className="text-base font-semibold text-gray-600">Pricing</p>
-              </button>
-            </nav> */}
-          </div>
-          <div className="flex flex-row justify-center items-center p-2 gap-2 w-10 h-10 cursor-pointer lg:p-0 lg:flex-col">
-            <div className="w-fit h-fit flex justify-center items-center">
-              {/* <Image
-                src={menu}
-                width={18}
-                height={12}
-                alt="Menu Open Icon"
-                // className="lg:hidden"
-              /> */}
-              {/* <div className="avatar hidden lg:block">
-                <div className="mask mask-squircle w-10 h-10 aspect-square block rounded-full">
-                  <img src="/avatar.jpeg" alt="Avatar Picture" />
-                </div>
-              </div> */}
-              <button
-                onClick={() => handleLogout()}
-                className="btn btn-ghost box-border flex-shrink-0 w-12 h-12 flex flex-row justify-start items-start p-3 bg-transparent overflow-hidden relative content-start flex-nowrap gap-2 rounded-full"
-              >
+          </Link>
+        </div>
+      </div>
+      <Tabs
+        defaultValue={"home"}
+        // onValueChange={(value) => route}
+        className="flex p-[10px] items-center rounded-full border border-[#0000001a] h-[60px] bg-white"
+      >
+        <TabsList>
+          <TabsTrigger
+            value={"home"}
+            className="flex pt-2 px-3 items-center gap-2 rounded-full bg-white"
+          >
+            <Link href={"/home"}>
+              <div className="flex items-center gap-3">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
+                  width="25"
+                  height="24"
+                  viewBox="0 0 25 24"
                   fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="#000"
-                  className="w-6 h-6"
                 >
                   <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75"
+                    d="M21.0383 10.1887L13.5383 2.68875C13.2571 2.40766 12.8757 2.24976 12.478 2.24976C12.0804 2.24976 11.699 2.40766 11.4177 2.68875L3.91772 10.1887C3.77776 10.3277 3.66681 10.493 3.59133 10.6752C3.51584 10.8574 3.47733 11.0528 3.47804 11.25V20.25C3.47804 20.4489 3.55705 20.6397 3.69771 20.7803C3.83836 20.921 4.02912 21 4.22804 21H10.228C10.4269 21 10.6177 20.921 10.7584 20.7803C10.899 20.6397 10.978 20.4489 10.978 20.25V15H13.978V20.25C13.978 20.4489 14.0571 20.6397 14.1977 20.7803C14.3384 20.921 14.5291 21 14.728 21H20.728C20.927 21 21.1177 20.921 21.2584 20.7803C21.399 20.6397 21.478 20.4489 21.478 20.25V11.25C21.4787 11.0528 21.4402 10.8574 21.3647 10.6752C21.2893 10.493 21.1783 10.3277 21.0383 10.1887ZM19.978 19.5H15.478V14.25C15.478 14.0511 15.399 13.8603 15.2584 13.7197C15.1177 13.579 14.9269 13.5 14.728 13.5H10.228C10.0291 13.5 9.83836 13.579 9.69771 13.7197C9.55705 13.8603 9.47804 14.0511 9.47804 14.25V19.5H4.97804V11.25L12.478 3.75L19.978 11.25V19.5Z"
+                    fill="#344054"
                   />
                 </svg>
-              </button>
+
+                <p className="font-nexa text-base font-semibold text-[#344054] pt-[5px] leading-5">
+                  Home
+                </p>
+              </div>
+            </Link>
+          </TabsTrigger>
+          <TabsTrigger
+            value={"campanhas"}
+            className="flex pt-2 px-3 items-center gap-2 rounded-full bg-white"
+          >
+            <Link href={"/campaigns"}>
+              <div className="flex items-center gap-3">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="25"
+                  height="24"
+                  viewBox="0 0 25 24"
+                  fill="none"
+                >
+                  <path
+                    d="M22.7052 15.7294L20.5949 17.4722L21.2371 20.07C21.2723 20.2132 21.2646 20.3637 21.2148 20.5025C21.165 20.6414 21.0753 20.7624 20.957 20.8506C20.8388 20.9387 20.6971 20.9901 20.5498 20.9981C20.4026 21.0062 20.2562 20.9707 20.129 20.8959L17.728 19.4831L15.3271 20.8959C15.1999 20.9707 15.0535 21.0062 14.9062 20.9981C14.7589 20.9901 14.6173 20.9387 14.499 20.8506C14.3808 20.7624 14.2911 20.6414 14.2413 20.5025C14.1915 20.3637 14.1837 20.2132 14.219 20.07L14.8612 17.4722L12.7508 15.7294C12.6358 15.6342 12.5517 15.5068 12.5095 15.3636C12.4672 15.2204 12.4687 15.0678 12.5137 14.9254C12.5587 14.783 12.6452 14.6573 12.7621 14.5643C12.879 14.4714 13.021 14.4155 13.1699 14.4038L15.9674 14.1872L17.039 11.7028C17.0969 11.5681 17.193 11.4533 17.3155 11.3726C17.4379 11.2919 17.5814 11.249 17.728 11.249C17.8747 11.249 18.0181 11.2919 18.1406 11.3726C18.2631 11.4533 18.3592 11.5681 18.4171 11.7028L19.4887 14.1872L22.2862 14.4038C22.435 14.4155 22.577 14.4714 22.6939 14.5643C22.8108 14.6573 22.8973 14.783 22.9423 14.9254C22.9874 15.0678 22.9888 15.2204 22.9466 15.3636C22.9043 15.5068 22.8203 15.6342 22.7052 15.7294ZM12.5305 19.5C12.5305 19.6989 12.4515 19.8897 12.3109 20.0303C12.1702 20.171 11.9794 20.25 11.7805 20.25H4.1699C3.78765 20.2495 3.42119 20.0974 3.15089 19.8271C2.88059 19.5568 2.72852 19.1904 2.72803 18.8081V5.25001C2.72803 4.85218 2.88606 4.47065 3.16737 4.18935C3.44867 3.90804 3.8302 3.75001 4.22803 3.75001H9.16772C9.36477 3.74938 9.55999 3.78792 9.74201 3.86341C9.92404 3.93889 10.0892 4.0498 10.228 4.18969L12.7883 6.75001H20.728C21.1259 6.75001 21.5074 6.90804 21.7887 7.18935C22.07 7.47065 22.228 7.85218 22.228 8.25001V11.25C22.228 11.4489 22.149 11.6397 22.0084 11.7803C21.8677 11.921 21.6769 12 21.478 12C21.2791 12 21.0884 11.921 20.9477 11.7803C20.807 11.6397 20.728 11.4489 20.728 11.25V8.25001H4.22803V18.75H11.7805C11.9794 18.75 12.1702 18.829 12.3109 18.9697C12.4515 19.1103 12.5305 19.3011 12.5305 19.5ZM4.22803 6.75001H10.6677L9.16772 5.25001H4.22803V6.75001Z"
+                    fill="black"
+                  />
+                </svg>
+
+                <p className="font-nexa text-base font-semibold text-[#344054] pt-[5px] leading-5">
+                  Campanhas
+                </p>
+              </div>
+            </Link>
+          </TabsTrigger>
+          <TabsTrigger
+            value={"creators"}
+            className="flex pt-2 px-3 items-center gap-2 rounded-full bg-white"
+          >
+            <Link href={"/creators"}>
+              <div className="flex items-center gap-3">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="25"
+                  height="24"
+                  viewBox="0 0 25 24"
+                  fill="none"
+                >
+                  <path
+                    d="M3.02803 11.8499C3.10682 11.909 3.19648 11.952 3.29189 11.9764C3.3873 12.0009 3.48659 12.0063 3.58409 11.9924C3.68159 11.9784 3.7754 11.9454 3.86015 11.8953C3.9449 11.8451 4.01893 11.7787 4.07803 11.6999C4.53212 11.0944 5.12094 10.603 5.79786 10.2646C6.47478 9.9261 7.22121 9.7499 7.97803 9.7499C8.73485 9.7499 9.48127 9.9261 10.1582 10.2646C10.8351 10.603 11.4239 11.0944 11.878 11.6999C11.9975 11.8589 12.1753 11.9639 12.3722 11.9918C12.5691 12.0198 12.769 11.9684 12.928 11.849C12.9847 11.8068 13.0349 11.7566 13.0771 11.6999C13.5312 11.0944 14.12 10.603 14.7969 10.2646C15.4738 9.9261 16.2203 9.7499 16.9771 9.7499C17.7339 9.7499 18.4803 9.9261 19.1573 10.2646C19.8342 10.603 20.423 11.0944 20.8771 11.6999C20.9966 11.859 21.1744 11.9642 21.3714 11.9922C21.5684 12.0203 21.7684 11.9689 21.9276 11.8494C22.0867 11.73 22.1918 11.5522 22.2199 11.3552C22.2479 11.1582 22.1966 10.9581 22.0771 10.799C21.4132 9.90896 20.5279 9.20823 19.5093 8.76646C20.0677 8.25659 20.459 7.58979 20.6317 6.85358C20.8044 6.11737 20.7505 5.34614 20.4771 4.6411C20.2037 3.93607 19.7235 3.33017 19.0995 2.90293C18.4756 2.47569 17.737 2.24707 16.9808 2.24707C16.2246 2.24707 15.4861 2.47569 14.8622 2.90293C14.2382 3.33017 13.758 3.93607 13.4846 4.6411C13.2111 5.34614 13.1572 6.11737 13.33 6.85358C13.5027 7.58979 13.8939 8.25659 14.4524 8.76646C13.7169 9.0845 13.0487 9.53981 12.4837 10.108C11.9186 9.53981 11.2504 9.0845 10.5149 8.76646C11.0734 8.25659 11.4646 7.58979 11.6373 6.85358C11.8101 6.11737 11.7562 5.34614 11.4827 4.6411C11.2093 3.93607 10.7291 3.33017 10.1051 2.90293C9.4812 2.47569 8.74267 2.24707 7.98646 2.24707C7.23026 2.24707 6.49173 2.47569 5.86778 2.90293C5.24384 3.33017 4.76364 3.93607 4.4902 4.6411C4.21677 5.34614 4.16287 6.11737 4.33559 6.85358C4.50831 7.58979 4.89957 8.25659 5.45803 8.76646C4.43489 9.2068 3.54525 9.90797 2.87803 10.7999C2.81893 10.8787 2.77594 10.9683 2.75149 11.0638C2.72705 11.1592 2.72164 11.2585 2.73557 11.356C2.74949 11.4535 2.78249 11.5473 2.83267 11.632C2.88285 11.7168 2.94923 11.7908 3.02803 11.8499ZM16.978 3.74989C17.423 3.74989 17.858 3.88186 18.2281 4.12909C18.5981 4.37632 18.8865 4.72772 19.0568 5.13886C19.2271 5.54999 19.2716 6.00239 19.1848 6.43885C19.098 6.87531 18.8837 7.27622 18.569 7.59089C18.2543 7.90555 17.8534 8.11985 17.417 8.20666C16.9805 8.29348 16.5281 8.24892 16.117 8.07862C15.7059 7.90833 15.3545 7.61994 15.1072 7.24993C14.86 6.87992 14.728 6.4449 14.728 5.99989C14.728 5.40316 14.9651 4.83086 15.387 4.4089C15.809 3.98695 16.3813 3.74989 16.978 3.74989ZM7.97803 3.74989C8.42304 3.74989 8.85805 3.88186 9.22806 4.12909C9.59807 4.37632 9.88646 4.72772 10.0568 5.13886C10.2271 5.54999 10.2716 6.00239 10.1848 6.43885C10.098 6.87531 9.88369 7.27622 9.56902 7.59089C9.25435 7.90555 8.85344 8.11985 8.41698 8.20666C7.98052 8.29348 7.52812 8.24892 7.11699 8.07862C6.70586 7.90833 6.35445 7.61994 6.10722 7.24993C5.85999 6.87992 5.72803 6.4449 5.72803 5.99989C5.72803 5.40316 5.96508 4.83086 6.38704 4.4089C6.80899 3.98695 7.38129 3.74989 7.97803 3.74989ZM19.5093 18.5165C20.0677 18.0066 20.459 17.3398 20.6317 16.6036C20.8044 15.8674 20.7505 15.0961 20.4771 14.3911C20.2037 13.6861 19.7235 13.0802 19.0995 12.6529C18.4756 12.2257 17.737 11.9971 16.9808 11.9971C16.2246 11.9971 15.4861 12.2257 14.8622 12.6529C14.2382 13.0802 13.758 13.6861 13.4846 14.3911C13.2111 15.0961 13.1572 15.8674 13.33 16.6036C13.5027 17.3398 13.8939 18.0066 14.4524 18.5165C13.7169 18.8345 13.0487 19.2898 12.4837 19.858C11.9186 19.2898 11.2504 18.8345 10.5149 18.5165C11.0734 18.0066 11.4646 17.3398 11.6373 16.6036C11.8101 15.8674 11.7562 15.0961 11.4827 14.3911C11.2093 13.6861 10.7291 13.0802 10.1051 12.6529C9.4812 12.2257 8.74267 11.9971 7.98646 11.9971C7.23026 11.9971 6.49173 12.2257 5.86778 12.6529C5.24384 13.0802 4.76364 13.6861 4.4902 14.3911C4.21677 15.0961 4.16287 15.8674 4.33559 16.6036C4.50831 17.3398 4.89957 18.0066 5.45803 18.5165C4.43489 18.9568 3.54525 19.658 2.87803 20.5499C2.81893 20.6287 2.77594 20.7183 2.75149 20.8138C2.72705 20.9092 2.72164 21.0085 2.73557 21.106C2.74949 21.2035 2.78249 21.2973 2.83267 21.382C2.88285 21.4668 2.94923 21.5408 3.02803 21.5999C3.10682 21.659 3.19648 21.702 3.29189 21.7264C3.3873 21.7509 3.48659 21.7563 3.58409 21.7424C3.68159 21.7284 3.7754 21.6954 3.86015 21.6452C3.9449 21.5951 4.01893 21.5287 4.07803 21.4499C4.53212 20.8444 5.12094 20.353 5.79786 20.0146C6.47478 19.6761 7.22121 19.4999 7.97803 19.4999C8.73485 19.4999 9.48127 19.6761 10.1582 20.0146C10.8351 20.353 11.4239 20.8444 11.878 21.4499C11.9975 21.6089 12.1753 21.7139 12.3722 21.7418C12.5691 21.7698 12.769 21.7184 12.928 21.599C12.9847 21.5568 13.0349 21.5066 13.0771 21.4499C13.5312 20.8444 14.12 20.353 14.7969 20.0146C15.4738 19.6761 16.2203 19.4999 16.9771 19.4999C17.7339 19.4999 18.4803 19.6761 19.1573 20.0146C19.8342 20.353 20.423 20.8444 20.8771 21.4499C20.9966 21.609 21.1744 21.7142 21.3714 21.7422C21.5684 21.7703 21.7684 21.7189 21.9276 21.5994C22.0867 21.48 22.1918 21.3022 22.2199 21.1052C22.2479 20.9082 22.1966 20.7081 22.0771 20.549C21.4132 19.659 20.5279 18.9582 19.5093 18.5165ZM7.97803 13.4999C8.42304 13.4999 8.85805 13.6319 9.22806 13.8791C9.59807 14.1263 9.88646 14.4777 10.0568 14.8889C10.2271 15.3 10.2716 15.7524 10.1848 16.1888C10.098 16.6253 9.88369 17.0262 9.56902 17.3409C9.25435 17.6556 8.85344 17.8698 8.41698 17.9567C7.98052 18.0435 7.52812 17.9989 7.11699 17.8286C6.70586 17.6583 6.35445 17.3699 6.10722 16.9999C5.85999 16.6299 5.72803 16.1949 5.72803 15.7499C5.72803 15.1532 5.96508 14.5809 6.38704 14.1589C6.80899 13.7369 7.38129 13.4999 7.97803 13.4999ZM16.978 13.4999C17.423 13.4999 17.858 13.6319 18.2281 13.8791C18.5981 14.1263 18.8865 14.4777 19.0568 14.8889C19.2271 15.3 19.2716 15.7524 19.1848 16.1888C19.098 16.6253 18.8837 17.0262 18.569 17.3409C18.2543 17.6556 17.8534 17.8698 17.417 17.9567C16.9805 18.0435 16.5281 17.9989 16.117 17.8286C15.7059 17.6583 15.3545 17.3699 15.1072 16.9999C14.86 16.6299 14.728 16.1949 14.728 15.7499C14.728 15.1532 14.9651 14.5809 15.387 14.1589C15.809 13.7369 16.3813 13.4999 16.978 13.4999Z"
+                    fill="#344054"
+                  />
+                </svg>
+
+                <p className="font-nexa text-base font-semibold text-[#344054] pt-[5px] leading-5">
+                  Creators
+                </p>
+              </div>
+            </Link>
+          </TabsTrigger>
+        </TabsList>
+      </Tabs>
+      <div className="flex items-center gap-4">
+        <div className="w-fit flex items-start gap-4">
+          {!session?.user?.urlProfilePicture ? (
+            <div className="mask mask-squircle w-12 h-12 aspect-square block rounded-full border-black border-[1px] border-solid bg-[url('/bg-contact-cta.webp')] bg-cover bg-no-repeat bg-center relative">
+              <Image
+                src={BeeLogoIcon}
+                alt="Default Bee Company Avatar"
+                width={56}
+                height={56}
+              />
             </div>
-          </div>
+          ) : (
+            <img
+              src={`${baseApiUrl}${session.user.urlProfilePicture}`}
+              width="56"
+              height="56"
+              alt={`${session.user.name} Logo`}
+              className="rounded-full"
+            />
+          )}
         </div>
+
+        <button
+          onClick={() => handleLogout()}
+          className="w-14 h-14 flex p-4 flex-col items-start gap-[10px] rounded-full bg-white"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+          >
+            <path
+              d="M9.99927 23C9.99927 23.2652 9.89391 23.5196 9.70637 23.7071C9.51884 23.8946 9.26448 24 8.99927 24H0.999268C0.734051 24 0.479697 23.8946 0.292161 23.7071C0.104625 23.5196 -0.000732422 23.2652 -0.000732422 23V1C-0.000732422 0.734784 0.104625 0.48043 0.292161 0.292893C0.479697 0.105357 0.734051 0 0.999268 0H8.99927C9.26448 0 9.51884 0.105357 9.70637 0.292893C9.89391 0.48043 9.99927 0.734784 9.99927 1C9.99927 1.26522 9.89391 1.51957 9.70637 1.70711C9.51884 1.89464 9.26448 2 8.99927 2H1.99927V22H8.99927C9.26448 22 9.51884 22.1054 9.70637 22.2929C9.89391 22.4804 9.99927 22.7348 9.99927 23ZM23.7068 11.2925L18.7068 6.2925C18.5669 6.15249 18.3887 6.05712 18.1946 6.01847C18.0005 5.97982 17.7993 5.99963 17.6165 6.07538C17.4337 6.15113 17.2774 6.27942 17.1675 6.44402C17.0577 6.60861 16.9991 6.8021 16.9993 7V11H8.99927C8.73405 11 8.4797 11.1054 8.29216 11.2929C8.10462 11.4804 7.99927 11.7348 7.99927 12C7.99927 12.2652 8.10462 12.5196 8.29216 12.7071C8.4797 12.8946 8.73405 13 8.99927 13H16.9993V17C16.9991 17.1979 17.0577 17.3914 17.1675 17.556C17.2774 17.7206 17.4337 17.8489 17.6165 17.9246C17.7993 18.0004 18.0005 18.0202 18.1946 17.9815C18.3887 17.9429 18.5669 17.8475 18.7068 17.7075L23.7068 12.7075C23.7997 12.6146 23.8735 12.5043 23.9238 12.3829C23.9742 12.2615 24.0001 12.1314 24.0001 12C24.0001 11.8686 23.9742 11.7385 23.9238 11.6171C23.8735 11.4957 23.7997 11.3854 23.7068 11.2925Z"
+              fill="black"
+            />
+          </svg>
+        </button>
       </div>
     </header>
   );
