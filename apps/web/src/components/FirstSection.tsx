@@ -41,7 +41,7 @@ const metricConfig: Record<
 > = {
   tiktok: {
     className:
-      "flex-shrink-0 w-full xl:h-auto h-min xl:flex grid xl:justify-start xl:items-center grid-cols-metric auto-rows-fr grid-rows-1 p-0 overflow-visible relative content-center flex-nowrap xl:gap-6 gap-[10px] rounded-none",
+      "flex-shrink-0 w-full xl:h-auto h-min xl:flex grid xl:justify-start xl:items-center grid-cols-metric auto-rows-fr grid-rows-1 p-0 overflow-visible relative content-center flex-nowrap rounded-none",
     classNameCreator:
       "flex-shrink-0 w-full xl:h-auto h-min grid grid-cols-2 auto-rows-fr grid-rows-2 p-0 overflow-visible relative content-center flex-nowrap xl:gap-4 gap-[10px] rounded-none",
 
@@ -67,7 +67,7 @@ const metricConfig: Record<
   },
   instagram: {
     className:
-      "flex-shrink-0 w-full xl:h-auto h-min xl:flex grid xl:justify-start xl:items-center grid-cols-metric auto-rows-fr grid-rows-2 p-0 overflow-visible relative content-center flex-nowrap xl:gap-6 gap-[10px] rounded-none",
+      "flex-shrink-0 w-full xl:h-auto h-min xl:flex grid xl:justify-start xl:items-center grid-cols-metric auto-rows-fr grid-rows-2 p-0 overflow-visible relative content-center flex-nowrap rounded-none",
     classNameCreator:
       "flex-shrink-0 w-full xl:h-auto h-min grid grid-cols-2 auto-rows-fr grid-rows-2 p-0 overflow-visible relative content-center flex-nowrap xl:gap-4 gap-[10px] rounded-none",
 
