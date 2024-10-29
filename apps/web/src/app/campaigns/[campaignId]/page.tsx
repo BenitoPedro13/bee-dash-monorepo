@@ -76,7 +76,7 @@ export default function Home() {
       {/* <main> */}
       {/* <SidenavDesktop /> */}
       <div
-        className="w-full h-full flex xl:flex-row flex-col justify-start items-start p-0 xl:pl-[82px] content-start flex-nowrap gap-0 rounded-none relative"
+        className="w-full h-full flex xl:flex-row flex-col justify-start items-start p-0 content-start flex-nowrap gap-0 rounded-none relative"
         style={
           {
             // backgroundImage: 'url("/honeycomb.svg")',
@@ -88,18 +88,18 @@ export default function Home() {
         {/* <div className="absolute z-0">
             <DashboardBG />
           </div> */}
-        <div className="box-border flex-shrink-0 w-full h-min flex flex-col justify-start items-center xl:pt-8 xl:pb-8 py-[15px] overflow-visible content-center flex-nowrap xl:gap-6 gap-[15px] rounded-none">
+        <div className="box-border flex-shrink-0 w-full h-min flex flex-col justify-start items-center  xl:pt-3 xl:pb-8 py-[15px] overflow-visible content-center flex-nowrap xl:gap-6 gap-[15px] rounded-none">
           <div className="box-border flex-shrink-0 w-full xl:h-auto h-min flex flex-col justify-center items-start xl:px-8 px-[15px] overflow-visible relative content-start flex-nowrap gap-3 rounded-none">
             <BreadcrumbComponent route={`campaigns/${campaignId}`} />
             <WelcomeTitle />
           </div>
-          <div className="box-border flex-shrink-0 w-full h-min flex flex-col xl:justify-center justify-start items-start xl:px-[22px] px-[15px] overflow-visible relative content-start flex-nowrap xl:gap-[22px] gap-6 rounded-none">
+          <div className="box-border flex-shrink-0 w-full h-min flex flex-col xl:justify-center justify-start items-start xl:px-8 px-[15px] overflow-visible relative content-start flex-nowrap xl:gap-[22px] gap-6 rounded-none">
             <FirstSection />
           </div>
-          <div className="w-full flex-shrink-0 h-min flex flex-col justify-start items-start overflow-visible relative xl:px-[22px] p-0 content-start flex-nowrap gap-6 rounded-none">
+          <div className="w-full flex-shrink-0 h-min flex flex-col justify-start items-start overflow-visible relative xl:px-8 p-0 content-start flex-nowrap gap-6 rounded-none">
             <SecondSection />
           </div>
-          <div className="w-full flex-shrink-0 h-min flex justify-start items-start overflow-visible relative xl:px-[22px] px-[15px] content-start flex-nowrap xl:gap-6 gap-6 rounded-none">
+          <div className="w-full flex-shrink-0 h-min flex justify-start items-start overflow-visible relative xl:px-8 px-[15px] content-start flex-nowrap xl:gap-6 gap-6 rounded-none">
             <MetricsLineGraph data={postsData} />
 
             <MetricsDoughnutGraph
@@ -109,7 +109,7 @@ export default function Home() {
             {/* <Component /> */}
           </div>
 
-          <div className="w-full flex-shrink-0 h-min flex flex-col lg:hidden justify-start items-center overflow-visible relative xl:px-[22px] px-[15px] content-start flex-nowrap xl:gap-6 gap-[15px] rounded-none sm:flex-row sm:justify-start sm:items-start">
+          <div className="w-full flex-shrink-0 h-min flex flex-col lg:hidden justify-start items-center overflow-visible relative xl:px-8 px-[15px] content-start flex-nowrap xl:gap-6 gap-[15px] rounded-none sm:flex-row sm:justify-start sm:items-start">
             <MetricsDoughnutGraph
               mobile
               heading="Impacto Bruto"
@@ -118,18 +118,18 @@ export default function Home() {
             <MetricsBarStackGraph mobile heading="Audiência Diária" />
           </div>
 
-          <div className="w-full flex-shrink-0 h-min flex flex-col justify-start items-start overflow-visible relative xl:px-[22px] px-[15px] content-start flex-nowrap gap-6 rounded-none">
+          <div className="w-full flex-shrink-0 h-min flex flex-col justify-start items-start overflow-visible relative xl:px-8 px-[15px] content-start flex-nowrap gap-6 rounded-none">
             <div className="box-border flex-shrink-0 w-full h-min flex justify-start items-start overflow-visible relative content-start flex-nowrap gap-6 rounded-none">
               <CreatorsTable />
               <MetricsBarStackGraph heading="Audiência Diária" />
             </div>
           </div>
-          <div className="w-full flex-shrink-0 h-min flex flex-col justify-start items-start overflow-visible relative xl:px-[22px] px-[15px] content-start flex-nowrap gap-6 rounded-none">
+          <div className="w-full flex-shrink-0 h-min flex flex-col justify-start items-start overflow-visible relative xl:px-8 px-[15px] content-start flex-nowrap gap-6 rounded-none">
             <div className="box-border flex-shrink-0 w-full h-min flex flex-col justify-start items-start overflow-visible relative content-start flex-nowrap gap-6 rounded-none">
               <AttachmentsTable />
             </div>
           </div>
-          {/* <div className="xl:hidden box-border flex-shrink-0 xl:w-[379px] w-full flex-grow h-min flex flex-col justify-start items-center xl:pt-8 xl:pr-8 pb-10 px-[15px] bg-transparent overflow-visible content-center flex-nowrap xl:gap-[28px] gap-[15px] rounded-none z-10">
+          {/* <div className="xl:hidden box-border flex-shrink-0 xl:w-[379px] w-full flex-grow h-min flex flex-col justify-start items-center  xl:pt-3 xl:pr-8 pb-10 px-[15px] bg-transparent overflow-visible content-center flex-nowrap xl:gap-[28px] gap-[15px] rounded-none z-10">
               <MetricsDoughnutGraph
                 heading="Impressoes"
                 metric={total(data, "Impressoes")}

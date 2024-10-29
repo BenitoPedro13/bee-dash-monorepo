@@ -25,8 +25,8 @@ export default function Home() {
 
   return (
     <div>
-      <div className="w-full h-full flex xl:flex-row flex-col justify-start items-start p-0 xl:pl-[82px] content-start flex-nowrap gap-0 rounded-none relative">
-        <div className="box-border flex-shrink-0 w-full h-min flex flex-col justify-start items-center xl:pt-8 pt-8 pb-6 overflow-visible content-center flex-nowrap xl:gap-6 gap-[15px] rounded-none">
+      <div className="w-full h-full flex xl:flex-row flex-col justify-start items-start p-0   content-start flex-nowrap gap-0 rounded-none relative">
+        <div className="box-border flex-shrink-0 w-full h-min flex flex-col justify-start items-center  xl:pt-3 pt-8 pb-6 overflow-visible content-center flex-nowrap xl:gap-6 gap-[15px] rounded-none">
           <div className="box-border flex-shrink-0 w-full xl:h-auto h-min flex flex-col justify-center items-start xl:px-8 px-[15px] overflow-visible relative content-start flex-nowrap gap-6 rounded-none">
             {/* <div className="flex justify-between items-center self-stretch">
               <BreadcrumbComponent route="creators" />
@@ -56,7 +56,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="w-full h-full xl:pl-[114px] relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pb-6 xl:pr-8 p-0 px-[15px]">
+      <div className="w-full h-full relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pb-6 xl:px-8 p-0 px-[15px]">
         {creatorsIds.map((id: string) => {
           const posts = creators[id].posts;
           const mediumEngagement = creators[id].mediumEngagement;
