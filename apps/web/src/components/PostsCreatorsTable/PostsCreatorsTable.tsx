@@ -321,7 +321,7 @@ const PostsCreatorsTable = ({ globalData }: { globalData: Posts[] }) => {
       </div>
       <div className="overflow-x-auto w-full border-t border-gray">
         <table className="table">
-          <thead className="sticky top-0 z-20 bg-white">
+          <thead className="sticky top-0 bg-white">
             <tr className="border-box flex-shrink-0 w-full h-min bg-[#f8f9fb] overflow-visible relative content-center flex-nowrap gap-[5px] rounded-none border-b border-[#eaecf0]">
               <th
                 className={`cursor-pointer flex-shrink-0 w-auto max-w-[300px] h-auto whitespace-pre-wrap break-words relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}

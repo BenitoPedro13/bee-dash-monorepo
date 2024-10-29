@@ -76,7 +76,7 @@ export default function Home() {
       {/* <main> */}
       {/* <SidenavDesktop /> */}
       <div
-        className="w-full h-full flex xl:flex-row flex-col justify-start items-start z-20 p-0 xl:pl-[82px] content-start flex-nowrap gap-0 rounded-none relative"
+        className="w-full h-full flex xl:flex-row flex-col justify-start items-start p-0 xl:pl-[82px] content-start flex-nowrap gap-0 rounded-none relative"
         style={
           {
             // backgroundImage: 'url("/honeycomb.svg")',

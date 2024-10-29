@@ -27,7 +27,7 @@ export default function Home() {
 
   return (
     <>
-      <div className="w-full h-full flex xl:flex-row flex-col justify-start items-start z-20 p-0 xl:pl-[82px] content-start flex-nowrap gap-0 rounded-none relative">
+      <div className="w-full h-full flex xl:flex-row flex-col justify-start items-start p-0 xl:pl-[82px] content-start flex-nowrap gap-0 rounded-none relative">
         <div className="box-border flex-shrink-0 w-full h-min flex flex-col justify-start items-center xl:pt-8 xl:pb-8 py-[15px] overflow-visible content-center flex-nowrap xl:gap-6 gap-[15px] rounded-none">
           <div className="box-border flex-shrink-0 w-full xl:h-auto h-min flex flex-col justify-center items-start xl:px-8 px-[15px] overflow-visible relative content-start flex-nowrap gap-6 rounded-none">
             {/* <div className="flex justify-between items-center self-stretch">
@@ -64,7 +64,7 @@ export default function Home() {
           <div className="w-full xl:px-8 px-[15px]">
             <TitleWithoutFilters title="Top 3 Campanhas" />
           </div>
-          <div className="w-full h-full xl:px-8 px-[15px] relative z-20 grid grid-cols-1 sm:grid-cols-2 pb-4 lg:grid-cols-3 gap-4 xl:pr-8 p-0">
+          <div className="w-full h-full xl:px-8 px-[15px] relative grid grid-cols-1 sm:grid-cols-2 pb-4 lg:grid-cols-3 gap-4 xl:pr-8 p-0">
             {campaigns
               .sort((a, b) => {
                 return b.mediumEngagement - a.mediumEngagement;
@@ -92,7 +92,7 @@ export default function Home() {
           <div className="w-full xl:px-8 px-[15px]">
             <TitleWithoutFilters title="Top 3 Creators" />
           </div>
-          <div className="w-full h-full xl:px-8 px-[15px] relative z-20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 xl:pr-8 p-0">
+          <div className="w-full h-full xl:px-8 px-[15px] relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 xl:pr-8 p-0">
             {Object.entries(creators)
               .sort(([, creatorA], [, creatorB]) => {
                 return creatorB.mediumEngagement - creatorA.mediumEngagement;

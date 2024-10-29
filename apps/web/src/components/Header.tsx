@@ -6,24 +6,61 @@ import { destroyCookie } from "nookies";
 
 import BeeLogoIcon from "@/../public/bee-logo-icon.svg";
 import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
+import { useEffect, useRef, useState } from "react";
 
 const tabs = ["home", "campaigns", "creators"];
+const scrollThreshold = 50;
 
 const Header = () => {
   const path = usePathname();
   const router = useRouter();
   const session = useDataStore((state) => state.session);
 
+  const [isVisible, setIsVisible] = useState(true);
+  // const lastScrollY = useRef(0);
+  const lastScrollY = useRef(0);
+  const initialScrollY = useRef(0);
+
+  const [activeTab, setActiveTab] = useState<string>();
+
+  useEffect(() => {
+    setActiveTab(() => tabs.find((item) => path.includes(item)));
+  }, [path]);
+
+  useEffect(() => {
+    initialScrollY.current = window.scrollY;
+
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      if (currentScrollY <= initialScrollY.current) {
+        setIsVisible(true); // Show header when scrolled back to the top
+      } else if (currentScrollY < lastScrollY.current) {
+        setIsVisible(true); // Show header when scrolling up
+      } else if (currentScrollY > lastScrollY.current) {
+        setIsVisible(false); // Hide header when scrolling down
+      }
+
+      lastScrollY.current = currentScrollY;
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const handleLogout = () => {
-    // Remove the authentication token or relevant cookie here
     destroyCookie(null, "bee-dash-token");
 
-    // Redirect to the login page or any other page after logout
-    router.push("/"); // Change '/login' to the desired destination
+    router.push("/");
   };
 
   return (
-    <header className="flex w-full h-[116px] px-8 justify-between items-center flex-shrink-0">
+    <header
+      className={`flex w-full h-[116px] px-8 justify-between items-center transition-transform duration-200 z-10 bg-[#F5F7FA] sticky top-0 ${
+        isVisible ? "transform-none" : "-translate-y-full"
+      }`}
+    >
       <div className="flex items-center gap-4">
         <div className="flex items-start gap-1">
           <Link href="/home">
@@ -39,6 +76,7 @@ const Header = () => {
       <Tabs
         defaultValue={tabs.find((item) => path.includes(item))}
         onValueChange={(value) => router.push(`/${value}`)}
+        value={activeTab}
         className="flex p-[10px] items-center rounded-full border border-[#0000001a] h-[60px] bg-white"
       >
         <TabsList>
@@ -143,7 +181,7 @@ const Header = () => {
 
         <button
           onClick={() => handleLogout()}
-          className="w-14 h-14 flex p-4 flex-col items-start gap-[10px] rounded-full bg-white"
+          className="w-14 h-14 flex p-4 flex-col items-start gap-[10px] rounded-full bg-white border border-[#0000001a] "
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
