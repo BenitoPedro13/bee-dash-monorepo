@@ -25,6 +25,10 @@ import {
 } from "../../utils/utils";
 import CostPerMetric from "./CostPerMetric";
 import Metrics from "./Metrics";
+import MediumEngagement from "./MetricsIcons/MediumEngagement";
+import LinkClicks from "./MetricsIcons/LinkClicks";
+import CPV from "./MetricsIcons/CPV";
+import Investment from "./MetricsIcons/Investment";
 
 const metricConfig: Record<
   DashboardMode,
@@ -36,6 +40,7 @@ const metricConfig: Record<
       DashbordDateRange,
       { total: number | string; variation: number | null }
     >[];
+    icon: JSX.Element | null;
     sigla?: string[];
   }[]
 > = {
@@ -57,6 +62,7 @@ const metricConfig: Record<
         //   true
         // ),
       ],
+      icon: <MediumEngagement />,
     },
     {
       heading: ["Cliques", "Taxa de Cliques"],
@@ -74,6 +80,8 @@ const metricConfig: Record<
           ["TIKTOK"]
         ),
       ],
+
+      icon: <LinkClicks />,
     },
     {
       heading: ["Views", "Custo por View", "Custo por Mil Views"],
@@ -87,6 +95,7 @@ const metricConfig: Record<
         calculatePostsVariationsCPV(data, ["impressions"], ["TIKTOK"]),
         // calculateVariationsCPV(data, "Impressoes Tiktok", true),
       ],
+      icon: <CPV />,
     },
     {
       heading: ["Investimento Total", "Investimento Médio"],
@@ -104,6 +113,7 @@ const metricConfig: Record<
           true
         ),
       ],
+      icon: <Investment />,
     },
   ],
   instagram: [
@@ -119,6 +129,7 @@ const metricConfig: Record<
         ),
         // calculateVariationsEngajamento(data, "Impressoes", "Interacoes", true),
       ],
+      icon: <MediumEngagement />,
     },
     {
       heading: ["Cliques", "Taxa de Cliques"],
@@ -136,6 +147,7 @@ const metricConfig: Record<
           ["INSTAGRAM"]
         ),
       ],
+      icon: <LinkClicks />,
     },
     {
       heading: ["Views", "Custo por View", "Custo por Mil Views"],
@@ -150,6 +162,7 @@ const metricConfig: Record<
         calculatePostsVariationsCPV(data, ["impressions"], ["INSTAGRAM"]),
         // calculateVariationsCPV(data, "Impressoes", true),
       ],
+      icon: <CPV />,
     },
     {
       heading: ["Investimento Total", "Investimento Médio"],
@@ -168,6 +181,7 @@ const metricConfig: Record<
           true
         ),
       ],
+      icon: <Investment />,
     },
   ],
   all: [
@@ -189,6 +203,7 @@ const metricConfig: Record<
         //   true
         // ),
       ],
+      icon: <MediumEngagement />,
     },
     {
       heading: ["Cliques", "Taxa de Cliques"],
@@ -206,6 +221,7 @@ const metricConfig: Record<
           ["INSTAGRAM", "TIKTOK"]
         ),
       ],
+      icon: <LinkClicks />,
     },
     {
       heading: ["Views", "Custo por View", "Custo por Mil Views"],
@@ -223,6 +239,7 @@ const metricConfig: Record<
         ),
         // calculateVariationsCPV(data, ["Impressoes", "Impressoes Tiktok"], true),
       ],
+      icon: <CPV />,
     },
     {
       heading: ["Investimento Total", "Investimento Médio"],
@@ -240,27 +257,37 @@ const metricConfig: Record<
           true
         ),
       ],
+      icon: <Investment />,
     },
   ],
 };
 
-const SecondSection = ({ data }: { data?: Posts[] }) => {
+const SecondSection = ({ data, title }: { data?: Posts[]; title?: string }) => {
   const postsData = useDataStore((state) => state.postsData);
   const mode = useDataStore((state) => state.mode);
   const metrics = metricConfig[mode] || [];
 
   return (
-    <div className="box-border flex-shrink-0 w-full h-min flex flex-col justify-start items-start xl:p-0 px-[15px] overflow-visible relative content-start flex-nowrap xl:gap-[22px] gap-6 rounded-none">
-      <div className="flex-shrink-0 flex-grow xl:flex-grow-0 w-full h-min flex xl:flex-row flex-col justify-start items-center overflow-visible relative p-0 content-center flex-nowrap xl:gap-6 gap-[15px] rounded-none">
-        {metrics.map(({ heading, sigla, variation }) => (
-          <CostPerMetric
-            key={heading.join("-")}
-            heading={heading}
-            sigla={sigla}
-            // metric={metric(data)}
-            variation={variation(data ?? postsData)}
-          />
-        ))}
+    <div className="flex flex-col items-start gap-2 self-stretch">
+      {title && (
+        <h3 className="font-nexa text-[#475467] text-lg font-bold leading-[22px]">
+          {title}
+        </h3>
+      )}
+
+      <div className="box-border flex-shrink-0 w-full h-min flex flex-col justify-start items-start xl:p-0 px-[15px] overflow-visible relative content-start flex-nowrap rounded-none">
+        <div className="flex-shrink-0 flex-grow xl:flex-grow-0 w-full h-min flex xl:flex-row flex-col justify-start items-center overflow-visible relative p-0 content-center flex-nowrap rounded-none">
+          {metrics.map(({ heading, sigla, variation, icon }) => (
+            <CostPerMetric
+              key={heading.join("-")}
+              heading={heading}
+              sigla={sigla}
+              variation={variation(data ?? postsData)}
+            >
+              {icon}
+            </CostPerMetric>
+          ))}
+        </div>
       </div>
     </div>
   );

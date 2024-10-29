@@ -13,6 +13,7 @@ import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
 const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
 type CostPerMetricProps = {
+  children?: React.ReactNode;
   heading: string[];
   sigla?: string[];
   metric?: string[];
@@ -23,6 +24,7 @@ type CostPerMetricProps = {
 };
 
 const CostPerMetric = ({
+  children,
   heading,
   sigla,
   metric,
@@ -40,13 +42,13 @@ const CostPerMetric = ({
 
   return (
     <div
-      className="box-border w-full sm:min-w-[200px] h-min flex flex-col items-start p-4 py-5 bg-white overflow-visible content-center flex-nowrap gap-2 rounded-xl border-[#D4D4D4] border"
+      className="first:border-l border-l-0 first:rounded-bl-3xl first:rounded-tl-3xl last:rounded-br-3xl last:rounded-tr-3xl box-border w-full sm:min-w-[200px] h-min flex flex-col items-start p-4 py-5 bg-white overflow-visible content-center flex-nowrap gap-2 border-[#D4D4D4] border"
       // initial={false}
       // whileHover={{ boxShadow: "2px 2px 0px 0px #898989" }}
       // animate={{ boxShadow: "2px 2px 2px 0px rgba(16, 24, 40, 0.06)" }}
       // transition={{ duration: 0.3, ease: "linear" }}
     >
-      <div className="flex items-center justify-between self-stretch">
+      {/* <div className="flex items-center justify-between self-stretch">
         <p className="text-sm font-nexa font-medium text-[#475467]">
           {heading[siglaActive]}
         </p>
@@ -88,6 +90,58 @@ const CostPerMetric = ({
             <Badge number={variationValue} />
           </div>
         )}
+      </div> */}
+      <div className="flex justify-between items-center self-stretch">
+        <div className="flex w-9 h-9 flex-col items-center justify-center gap-3 rounded-full bg-[#EEEDEC]">
+          {children}
+        </div>
+
+        {typeof variationValue === "number" && (
+          <div>
+            <Badge number={variationValue} />
+          </div>
+        )}
+      </div>
+      <div className="flex justify-between items-center self-stretch">
+        <div className="flex flex-col items-start">
+          <p className="flex-shrink-0 w-auto h-auto whitespace-pre relative font-bold font-nexa-bold text-[#101828] text-3xl leading-[38px]">
+            {heading[siglaActive].includes("Investimento ")
+              ? new Intl.NumberFormat("pt-BR", {
+                  style: "currency",
+                  currency: "BRL",
+                }).format(
+                  +Number.parseFloat(
+                    (total as string).replaceAll(".", "").replaceAll(",", ".")
+                  ).toFixed(2)
+                )
+              : total}
+          </p>
+          <p className="text-sm font-nexa font-medium text-[#475467]">
+            {heading[siglaActive]}
+          </p>
+        </div>
+        <Tabs
+          defaultValue="0"
+          onValueChange={(value) => setSiglaActive(+value as 0 | 1)}
+          className="flex p-[5px] items-center border border-[#E2E8F0] h-[42px] rounded-full"
+          style={{
+            visibility: hasOptions ? "visible" : "hidden",
+          }}
+        >
+          <TabsList>
+            <TabsTrigger value="0" className="rounded-full">
+              {sigla ? sigla[0] : ""}
+            </TabsTrigger>
+            <TabsTrigger value="1" className="rounded-full">
+              {sigla ? sigla[1] : ""}
+            </TabsTrigger>
+            {sigla?.length === 3 ? (
+              <TabsTrigger value="2" className="rounded-full">
+                {sigla ? sigla[2] : ""}
+              </TabsTrigger>
+            ) : null}
+          </TabsList>
+        </Tabs>
       </div>
     </div>
   );

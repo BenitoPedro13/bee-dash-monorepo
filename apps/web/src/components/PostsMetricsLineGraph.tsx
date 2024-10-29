@@ -163,7 +163,7 @@ const PostsMetricsGraph = ({ data }: MetricsGraphProps) => {
                 className="flex p-[5px] items-center rounded-lg border border-[#E2E8F0] h-[42px]"
               >
                 <TabsList>
-                  <TabsTrigger value={"Impressoes"} className="text-black">
+                  <TabsTrigger value={"Impressoes"} className="">
                     Impressões
                   </TabsTrigger>
                   <TabsTrigger value={"Interacoes"}>Interações</TabsTrigger>

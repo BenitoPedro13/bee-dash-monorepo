@@ -51,7 +51,7 @@ const metricConfig: Record<
         classNameCreator: "col-span-2 h-[117px]",
         heading: "Posts",
         metric: (data) => countPostsByType(data, ["TIKTOK"]),
-        icon: null,
+        icon: <CameraIcon />,
         variation: (data) => calculatePostsCountVariations(data, ["TIKTOK"]),
       },
       {
@@ -78,7 +78,7 @@ const metricConfig: Record<
 
         heading: "Posts",
         metric: (data) => countPostsByType(data, ["STORIES", "FEED", "REELS"]),
-        icon: null,
+        icon: <CameraIcon />,
         variation: (data) =>
           calculatePostsCountVariations(data, ["STORIES", "FEED", "REELS"]),
       },
