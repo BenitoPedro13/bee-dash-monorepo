@@ -275,7 +275,7 @@ const SecondSection = ({ data, title }: { data?: Posts[]; title?: string }) => {
         </h3>
       )}
 
-      <div className="box-border flex-shrink-0 w-full h-min flex flex-col justify-start items-start xl:p-0 px-[15px] overflow-visible relative content-start flex-nowrap rounded-none">
+      <div className="box-border flex-shrink-0 w-full h-min flex flex-col justify-start items-start overflow-visible relative content-start flex-nowrap rounded-none">
         <div className="flex-shrink-0 flex-grow xl:flex-grow-0 w-full h-min flex xl:flex-row flex-col justify-start items-center overflow-visible relative p-0 content-center flex-nowrap rounded-none">
           {metrics.map(({ heading, sigla, variation, icon }) => (
             <CostPerMetric

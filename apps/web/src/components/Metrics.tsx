@@ -33,7 +33,7 @@ const Metrics = ({
   return (
     <div
       className={
-        `first:rounded-bl-3xl first:rounded-tl-3xl last:rounded-br-3xl last:rounded-tr-3xl first:border-l border-l-0 box-border w-full sm:min-w-[200px] h-min flex flex-col items-start p-4 bg-white overflow-visible content-center flex-nowrap gap-2 border-[#D4D4D4] border ` +
+        `box-border w-full sm:min-w-[200px] h-min flex flex-col items-start p-4 bg-white overflow-visible content-center flex-nowrap gap-2 border-[#D4D4D4] border ` +
         className
       }
     >

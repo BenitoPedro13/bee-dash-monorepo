@@ -47,7 +47,7 @@ const metricConfig: Record<
 
     config: [
       {
-        className: "",
+        className: "rounded-bl-3xl rounded-tl-3xl",
         classNameCreator: "col-span-2 h-[117px]",
         heading: "Posts",
         metric: (data) => countPostsByType(data, ["TIKTOK"]),
@@ -55,7 +55,7 @@ const metricConfig: Record<
         variation: (data) => calculatePostsCountVariations(data, ["TIKTOK"]),
       },
       {
-        className: "",
+        className: "rounded-br-3xl rounded-tr-3xl border-l-0",
         classNameCreator: "col-span-2 h-[117px]",
 
         heading: "TikToks",
@@ -73,7 +73,7 @@ const metricConfig: Record<
 
     config: [
       {
-        className: "",
+        className: "xl:rounded-bl-3xl rounded-tl-3xl border-b-0 xl:border-b",
         classNameCreator: "col-span-1 h-[117px]",
 
         heading: "Posts",
@@ -83,7 +83,8 @@ const metricConfig: Record<
           calculatePostsCountVariations(data, ["STORIES", "FEED", "REELS"]),
       },
       {
-        className: "",
+        className:
+          " border-l-0 border-b-0 xl:border-b rounded-tr-3xl xl:rounded-tr-none",
         classNameCreator: "col-span-1",
 
         heading: "Stories",
@@ -96,7 +97,7 @@ const metricConfig: Record<
         variation: (data) => calculatePostsCountVariations(data, ["STORIES"]),
       },
       {
-        className: "",
+        className: "rounded-bl-3xl xl:rounded-bl-none xl:border-l-0",
         classNameCreator: "col-span-1 h-[117px]",
 
         heading: "Feed",
@@ -105,7 +106,8 @@ const metricConfig: Record<
         variation: (data) => calculatePostsCountVariations(data, ["FEED"]),
       },
       {
-        className: "",
+        className:
+          " rounded-br-3xl  xl:rounded-bl-none xl:rounded-tr-3xl border-l-0",
         classNameCreator: "col-span-1 h-[117px]",
 
         heading: "Reels",
@@ -123,7 +125,7 @@ const metricConfig: Record<
 
     config: [
       {
-        className: "",
+        className: "xl:rounded-bl-3xl rounded-tl-3xl border-b-0 xl:border-b",
         classNameCreator: "col-span-2 h-[117px]",
         heading: "Posts",
         metric: (data) =>
@@ -138,7 +140,8 @@ const metricConfig: Record<
           ]),
       },
       {
-        className: "",
+        className:
+          "xl:rounded-tr-none rounded-tr-3xl border-b-0 xl:border-b border-l-0",
         classNameCreator: "col-span-2 h-[117px]",
         heading: "Stories",
         metric: (data) => countPostsByType(data, ["STORIES"]),
@@ -150,7 +153,7 @@ const metricConfig: Record<
         variation: (data) => calculatePostsCountVariations(data, ["STORIES"]),
       },
       {
-        className: "",
+        className: " border-b-0 xl:border-b xl:border-l-0",
         classNameCreator: "col-span-2 h-[117px]",
         heading: "Feed",
         metric: (data) => countPostsByType(data, ["FEED"]),
@@ -158,7 +161,7 @@ const metricConfig: Record<
         variation: (data) => calculatePostsCountVariations(data, ["FEED"]),
       },
       {
-        className: "",
+        className: " border-b-0 xl:border-b border-l-0",
         classNameCreator: "col-span-3 h-[117px]",
         heading: "Reels",
         metric: (data) => countPostsByType(data, ["REELS"]),
@@ -166,7 +169,8 @@ const metricConfig: Record<
         variation: (data) => calculatePostsCountVariations(data, ["REELS"]),
       },
       {
-        className: "col-span-2",
+        className:
+          "col-span-2 rounded-br-3xl rounded-bl-3xl xl:rounded-bl-none xl:rounded-tr-3xl xl:border-l-0",
         classNameCreator: "col-span-3 h-[117px]",
         heading: "TikToks",
         metric: (data) => countPostsByType(data, ["TIKTOK"]),
