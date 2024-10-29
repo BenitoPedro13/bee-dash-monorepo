@@ -33,33 +33,30 @@ const Metrics = ({
   return (
     <div
       className={
-        `box-border w-full sm:min-w-[200px] h-min flex flex-col items-start p-4 bg-white overflow-visible content-center flex-nowrap gap-2 rounded-xl border-[#D4D4D4] border ` +
+        `first:rounded-bl-3xl first:rounded-tl-3xl last:rounded-br-3xl last:rounded-tr-3xl first:border-l border-l-0 box-border w-full sm:min-w-[200px] h-min flex flex-col items-start p-4 bg-white overflow-visible content-center flex-nowrap gap-2 border-[#D4D4D4] border ` +
         className
       }
-      // initial={false}
-      // whileHover={{ boxShadow: "2px 2px 0px 0px #898989" }}
-      // animate={{ boxShadow: "2px 2px 2px 0px rgba(16, 24, 40, 0.06)" }}
-      // transition={{ duration: 0.3, ease: "linear" }}
     >
       <div className="flex justify-between items-center self-stretch">
-        <h5
-          className={`flex-shrink-0 w-auto h-auto whitespace-pre relative font-medium font-nexa text-[#475467] text-sm`}
-        >
-          {heading}
-        </h5>
+        <div className="flex w-9 h-9 flex-col items-center justify-center gap-3 rounded-full bg-[#EEEDEC]">
+          {children}
+        </div>
 
-        {children}
-      </div>
-      <div className="flex flex-col items-start self-stretch gap-[2px]">
-        <p className="flex-shrink-0 w-auto h-auto whitespace-pre relative font-bold font-nexa-bold text-[#101828] text-3xl leading-[38px]">
-          {dateRange !== "0" ? total : metric}
-        </p>
-        {/* <Badge number={variationValue} /> */}
         {typeof variationValue === "number" && (
           <div>
             <Badge number={variationValue} />
           </div>
         )}
+      </div>
+      <div className="flex flex-col items-start self-stretch">
+        <p className="flex-shrink-0 w-auto h-auto whitespace-pre relative font-bold font-nexa-bold text-[#101828] text-3xl leading-[38px]">
+          {dateRange !== "0" ? total : metric}
+        </p>
+        <h5
+          className={`flex-shrink-0 w-auto h-auto whitespace-pre relative font-medium font-nexa text-[#475467] text-sm`}
+        >
+          {heading}
+        </h5>
       </div>
     </div>
   );

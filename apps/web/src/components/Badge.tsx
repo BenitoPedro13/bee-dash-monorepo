@@ -60,7 +60,7 @@ const Badge = ({
   return (
     <div
       className={
-        "flex py-[2px] pl-2 pr-[10px] max-h-[15px] items-center gap-1 rounded-2xl mix-blend-multiply " +
+        "flex py-[2px] pl-2 pr-[10px] max-h-[19px] items-center gap-1 rounded-2xl mix-blend-multiply " +
         className
       }
       style={{
