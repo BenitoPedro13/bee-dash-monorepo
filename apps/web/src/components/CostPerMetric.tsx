@@ -14,6 +14,7 @@ const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
 type CostPerMetricProps = {
   children?: React.ReactNode;
+  classname: string;
   heading: string[];
   sigla?: string[];
   metric?: string[];
@@ -29,6 +30,7 @@ const CostPerMetric = ({
   sigla,
   metric,
   variation,
+  classname,
 }: CostPerMetricProps) => {
   const dateRange = useDataStore((store) => store.dateRange);
 
@@ -42,7 +44,10 @@ const CostPerMetric = ({
 
   return (
     <div
-      className="first:border-l border-l-0 first:rounded-bl-3xl first:rounded-tl-3xl last:rounded-br-3xl last:rounded-tr-3xl box-border w-full sm:min-w-[200px] h-min flex flex-col items-start p-4 py-5 bg-white overflow-visible content-center flex-nowrap gap-2 border-[#D4D4D4] border"
+      className={
+        "box-border w-full sm:min-w-[200px] h-min flex flex-col items-start p-4 py-5 bg-white overflow-visible content-center flex-nowrap gap-2 border-[#D4D4D4] border " +
+        classname
+      }
       // initial={false}
       // whileHover={{ boxShadow: "2px 2px 0px 0px #898989" }}
       // animate={{ boxShadow: "2px 2px 2px 0px rgba(16, 24, 40, 0.06)" }}

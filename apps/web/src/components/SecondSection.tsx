@@ -33,6 +33,7 @@ import Investment from "./MetricsIcons/Investment";
 const metricConfig: Record<
   DashboardMode,
   {
+    classname: string;
     heading: string[];
     variation: (
       data: Posts[]
@@ -46,6 +47,7 @@ const metricConfig: Record<
 > = {
   tiktok: [
     {
+      classname: "",
       heading: ["Engajamento Médio", "Custo por Engajamento"],
       sigla: ["Total"],
       variation: (data) => [
@@ -65,6 +67,7 @@ const metricConfig: Record<
       icon: <MediumEngagement />,
     },
     {
+      classname: "",
       heading: ["Cliques", "Taxa de Cliques"],
       sigla: ["Total", "CTR"],
       variation: (data) => [
@@ -84,6 +87,7 @@ const metricConfig: Record<
       icon: <LinkClicks />,
     },
     {
+      classname: "",
       heading: ["Views", "Custo por View", "Custo por Mil Views"],
       sigla: ["Total", "CPV"],
       variation: (data) => [
@@ -98,6 +102,7 @@ const metricConfig: Record<
       icon: <CPV />,
     },
     {
+      classname: "",
       heading: ["Investimento Total", "Investimento Médio"],
       sigla: ["Total", "Média"],
       variation: (data) => [
@@ -118,6 +123,7 @@ const metricConfig: Record<
   ],
   instagram: [
     {
+      classname: "",
       heading: ["Engajamento Médio", "Custo por Engajamento"],
       sigla: ["Total"],
       variation: (data) => [
@@ -132,6 +138,7 @@ const metricConfig: Record<
       icon: <MediumEngagement />,
     },
     {
+      classname: "",
       heading: ["Cliques", "Taxa de Cliques"],
       sigla: ["Total", "CTR"],
       variation: (data) => [
@@ -150,6 +157,7 @@ const metricConfig: Record<
       icon: <LinkClicks />,
     },
     {
+      classname: "",
       heading: ["Views", "Custo por View", "Custo por Mil Views"],
       sigla: ["Total", "CPV"],
 
@@ -165,6 +173,7 @@ const metricConfig: Record<
       icon: <CPV />,
     },
     {
+      classname: "",
       heading: ["Investimento Total", "Investimento Médio"],
 
       sigla: ["Total", "Média"],
@@ -186,6 +195,8 @@ const metricConfig: Record<
   ],
   all: [
     {
+      classname:
+        "xl:rounded-bl-3xl rounded-tl-3xl rounded-tr-3xl xl:rounded-tr-none border-b-0 xl:border-b",
       heading: ["Engajamento Médio", "Custo por Engajamento"],
       sigla: ["Total"],
 
@@ -206,6 +217,7 @@ const metricConfig: Record<
       icon: <MediumEngagement />,
     },
     {
+      classname: "xl:border-l-0 border-b-0 xl:border-b",
       heading: ["Cliques", "Taxa de Cliques"],
       sigla: ["Total", "CTR"],
       variation: (data) => [
@@ -224,6 +236,7 @@ const metricConfig: Record<
       icon: <LinkClicks />,
     },
     {
+      classname: "xl:border-l-0 border-b-0 xl:border-b",
       heading: ["Views", "Custo por View", "Custo por Mil Views"],
       sigla: ["Total", "CPV"],
       variation: (data) => [
@@ -242,6 +255,8 @@ const metricConfig: Record<
       icon: <CPV />,
     },
     {
+      classname:
+        "rounded-br-3xl xl:rounded-tr-3xl xl:border-l-0 rounded-bl-3xl xl:rounded-bl-none ",
       heading: ["Investimento Total", "Investimento Médio"],
       sigla: ["Total", "Média"],
       variation: (data) => [
@@ -277,8 +292,9 @@ const SecondSection = ({ data, title }: { data?: Posts[]; title?: string }) => {
 
       <div className="box-border flex-shrink-0 w-full h-min flex flex-col justify-start items-start overflow-visible relative content-start flex-nowrap rounded-none">
         <div className="flex-shrink-0 flex-grow xl:flex-grow-0 w-full h-min flex xl:flex-row flex-col justify-start items-center overflow-visible relative p-0 content-center flex-nowrap rounded-none">
-          {metrics.map(({ heading, sigla, variation, icon }) => (
+          {metrics.map(({ heading, sigla, variation, icon, classname }) => (
             <CostPerMetric
+              classname={classname}
               key={heading.join("-")}
               heading={heading}
               sigla={sigla}
