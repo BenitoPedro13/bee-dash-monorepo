@@ -44,7 +44,7 @@ const WelcomeTitle = ({ showFilters = true }: { showFilters?: boolean }) => {
             <TabsList>
               <TabsTrigger
                 value={DashboardMode.ALL}
-                className="text-black gap-2 rounded-full font-normal"
+                className="text-black gap-2 rounded-full font-normal h-6"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -86,7 +86,7 @@ const WelcomeTitle = ({ showFilters = true }: { showFilters?: boolean }) => {
               </TabsTrigger>
               <TabsTrigger
                 value={DashboardMode.INSTAGRAM}
-                className="text-black rounded-full"
+                className="text-black rounded-full h-6"
               >
                 <svg
                   className="w-4 h-4"
@@ -100,7 +100,7 @@ const WelcomeTitle = ({ showFilters = true }: { showFilters?: boolean }) => {
               </TabsTrigger>
               <TabsTrigger
                 value={DashboardMode.TIKTOK}
-                className="text-black rounded-full"
+                className="text-black rounded-full h-6"
               >
                 <svg
                   className="w-4 h-4"
