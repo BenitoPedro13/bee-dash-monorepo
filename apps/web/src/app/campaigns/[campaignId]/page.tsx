@@ -89,42 +89,8 @@ export default function Home() {
             <DashboardBG />
           </div> */}
         <div className="box-border flex-shrink-0 w-full h-min flex flex-col justify-start items-center xl:pt-8 xl:pb-8 py-[15px] overflow-visible content-center flex-nowrap xl:gap-6 gap-[15px] rounded-none">
-          <div className="box-border flex-shrink-0 w-full xl:h-auto h-min flex flex-col justify-center items-start xl:px-8 px-[15px] overflow-visible relative content-start flex-nowrap gap-6 rounded-none">
-            <div className="flex justify-between items-center self-stretch">
-              <BreadcrumbComponent route={`campaigns/${campaignId}`} />
-              <div className="w-fit flex items-start gap-4">
-                {/* <div className="w-fit flex flex-col items-start gap-[6px]">
-                    <div className="w-full min-w-[384px] flex items-center gap-2">
-                      <div className="w-full flex flex-col items-start gap-[6px] flex-grow flex-shrink-0">
-                        <div className="w-full flex py-2 pr-14 pl-3 items-center gap-1 self-stretch rounded-lg border border-[#E2E8F0]">
-                          <SearchIcon className="w-5 h-5 text-[#64748B]" />
-                          <input
-                            placeholder="Procure por creators..."
-                            className="w-full outline-none text-sm leading-6 font-nexa bg-white"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div> */}
-                {!session?.user?.urlProfilePicture ? (
-                  <div className="mask mask-squircle w-12 h-12 aspect-square block rounded-full border-black border-[1px] border-solid bg-[url('/bg-contact-cta.webp')] bg-cover bg-no-repeat bg-center relative">
-                    <img
-                      src="/juicy-artwork-limo.svg"
-                      alt="Default Bee Company Avatar"
-                      className="absolute right-[3px]"
-                    />
-                  </div>
-                ) : (
-                  <img
-                    src={`${baseApiUrl}${session.user.urlProfilePicture}`}
-                    width="40"
-                    height="40"
-                    alt={`${session.user.name} Logo`}
-                    className="border-black border-[1px] border-solid rounded-full"
-                  />
-                )}
-              </div>
-            </div>
+          <div className="box-border flex-shrink-0 w-full xl:h-auto h-min flex flex-col justify-center items-start xl:px-8 px-[15px] overflow-visible relative content-start flex-nowrap gap-3 rounded-none">
+            <BreadcrumbComponent route={`campaigns/${campaignId}`} />
             <WelcomeTitle />
           </div>
           <div className="box-border flex-shrink-0 w-full h-min flex flex-col xl:justify-center justify-start items-start xl:px-[22px] px-[15px] overflow-visible relative content-start flex-nowrap xl:gap-[22px] gap-6 rounded-none">

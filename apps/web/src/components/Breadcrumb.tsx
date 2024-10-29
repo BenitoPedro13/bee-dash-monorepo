@@ -38,13 +38,6 @@ const BreadcrumbComponent = ({ route, creator }: BreadcrumbProps) => {
     <div className="flex w-fit h-auto flex-col justify-center items-start gap-3">
       <Breadcrumb>
         <BreadcrumbList className="flex items-center">
-          {/* Home icon */}
-          <BreadcrumbItem className="flex items-center gap-2">
-            <Link href="/home">
-              <Image src={house} alt="Home Icon" />
-            </Link>
-          </BreadcrumbItem>
-
           {/* Map through the path segments to create breadcrumb items */}
           {pathSegments.map((segment, index) => {
             // Handle dynamic segments like campaignId and creatorSlug
@@ -62,9 +55,22 @@ const BreadcrumbComponent = ({ route, creator }: BreadcrumbProps) => {
 
             return (
               <React.Fragment key={segment}>
-                <BreadcrumbSeparator>
-                  <Image src={chevronright} alt="Chevron Right Icon" />
-                </BreadcrumbSeparator>
+                {index > 0 && index <= pathSegments.length - 1 && (
+                  <BreadcrumbSeparator>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 16 16"
+                      fill="none"
+                    >
+                      <path
+                        d="M9.662 2H11.454L6.778 13.872H5L9.662 2Z"
+                        fill="black"
+                      />
+                    </svg>
+                  </BreadcrumbSeparator>
+                )}
                 <BreadcrumbItem>
                   <Link
                     href={
@@ -73,7 +79,14 @@ const BreadcrumbComponent = ({ route, creator }: BreadcrumbProps) => {
                         : `/${pathSegments.slice(0, index + 1).join("/")}`
                     }
                   >
-                    <p className="text-black font-nexa text-sm font-medium">
+                    <p
+                      className={
+                        (index === pathSegments.length - 1
+                          ? "text-black"
+                          : "text-[#525866]") +
+                        " font-nexa-bold text-sm font-bold"
+                      }
+                    >
                       {displayName || segment}
                     </p>
                   </Link>
@@ -86,7 +99,18 @@ const BreadcrumbComponent = ({ route, creator }: BreadcrumbProps) => {
           {creator && creatorId && !pathSegments.includes(creatorId) && (
             <>
               <BreadcrumbSeparator>
-                <Image src={chevronright} alt="Chevron Right Icon" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                >
+                  <path
+                    d="M9.662 2H11.454L6.778 13.872H5L9.662 2Z"
+                    fill="black"
+                  />
+                </svg>
               </BreadcrumbSeparator>
               <BreadcrumbItem>
                 <p className="text-black font-nexa text-sm font-medium">

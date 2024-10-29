@@ -23,7 +23,7 @@ export function ModalRelatorio() {
   if (isDesktop) {
     return (
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger asChild>
+        <DialogTrigger asChild className="rounded-full h-9">
           <Button variant="custom">Ver Relatório</Button>
         </DialogTrigger>
 
@@ -36,7 +36,7 @@ export function ModalRelatorio() {
 
   return (
     <Drawer open={open} onOpenChange={setOpen}>
-      <DrawerTrigger asChild>
+      <DrawerTrigger asChild className="rounded-full h-9">
         <Button variant="custom">Ver Relatório</Button>
       </DrawerTrigger>
       <DrawerContent>
