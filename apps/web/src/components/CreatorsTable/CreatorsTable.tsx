@@ -223,7 +223,7 @@ const CreatorsTable = () => {
       >
         <div
           id="table-header-clip"
-          className="absolute top-0 h-[28.5px] left-0 bg-transparent w-[2938.28px] z-30"
+          className="absolute top-0 h-[28.5px] left-0 bg-transparent w-[2938.28px] z-30 pointer-events-none"
           style={{
             boxShadow: "0 0 0 10px white",
             margin: "10px",
@@ -231,7 +231,7 @@ const CreatorsTable = () => {
         ></div>
         <div
           id="table-header-clip"
-          className="absolute top-0 h-[28.5px] right-0 bg-transparent w-[calc(100%-20px)] z-40 rounded-md"
+          className="absolute top-0 h-[28.5px] right-0 bg-transparent w-[calc(100%-20px)] z-40 rounded-md  pointer-events-none"
           style={{
             boxShadow: "0 0 0 10px white",
             margin: "10px",
