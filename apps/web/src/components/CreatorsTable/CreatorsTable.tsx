@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import performanceIcon from "@/../public/performanceIcon.png";
 import Image from "next/image";
 import { Plus_Jakarta_Sans, Inter } from "next/font/google";
@@ -43,10 +43,39 @@ const CreatorsTable = () => {
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc"); // Initial sort order
   const [sortColumn, setSortColumn] = useState<keyof Influencer>("Influencer"); // Initial sort column
 
+  // Ref for the scrollable table container
+  const tableContainerRef = useRef<HTMLDivElement>(null);
+  const [headerOffset, setHeaderOffset] = useState(0);
+  const [headerWidth, setHeaderWidth] = useState(0);
+
   // const toggleOpen = () => setOpen(!open);
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
   };
+
+  const handleScroll = () => {
+    if (tableContainerRef.current) {
+      if (
+        tableContainerRef.current.scrollLeft <
+        2938.28 - tableContainerRef.current.getBoundingClientRect().width
+      ) {
+        setHeaderOffset(tableContainerRef.current.scrollLeft);
+        setHeaderWidth(tableContainerRef.current.getBoundingClientRect().width);
+      }
+    }
+  };
+
+  useEffect(() => {
+    const container = tableContainerRef.current;
+    if (container) {
+      container.addEventListener("scroll", handleScroll);
+    }
+    return () => {
+      if (container) {
+        container.removeEventListener("scroll", handleScroll);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     // Update attachments whenever globalAttachments changes
@@ -121,7 +150,7 @@ const CreatorsTable = () => {
   }, [data, sortColumn, sortOrder, currentPage, itemsPerPage]);
 
   return (
-    <div className="box-border lg:w-[calc(100%-384px)] w-full flex flex-col justify-start items-start self-stretch bg-white overflow-hidden p-0 content-start flex-nowrap gap-0 rounded-xl border border-[#D4D4D4]">
+    <div className="box-border lg:w-[calc(100%-384px)] w-full flex flex-col justify-start items-start self-stretch bg-white overflow-hidden p-0 content-start flex-nowrap gap-0 rounded-3xl border border-[#D4D4D4]">
       <div className="flex-shrink-0 w-full h-min flex flex-col justify-start items-start  self-stretch overflow-visible relative p-0 content-start flex-nowrap sm:gap-5 gap-0 rounded-none">
         <div className="flex flex-col items-start self-stretch">
           <div className="flex px-5 py-6 items-start gap-4 self-stretch">
@@ -188,9 +217,34 @@ const CreatorsTable = () => {
           </div>
         </div>
       </div>
-      <div className="overflow-x-auto w-full border-t border-gray">
+      <div
+        className="overflow-x-auto w-full border-t border-gray relative"
+        ref={tableContainerRef}
+      >
+        <div
+          id="table-header-clip"
+          className="absolute top-0 h-[28.5px] left-0 bg-transparent w-[2938.28px] z-30"
+          style={{
+            boxShadow: "0 0 0 10px white",
+            margin: "10px",
+          }}
+        ></div>
+        <div
+          id="table-header-clip"
+          className="absolute top-0 h-[28.5px] right-0 bg-transparent w-[calc(100%-20px)] z-40 rounded-md"
+          style={{
+            boxShadow: "0 0 0 10px white",
+            margin: "10px",
+            transform: `translateX(${headerOffset}px)`,
+          }}
+        >
+          <div className="flex justify-between w-full h-full relative">
+            <div className="bg-white w-10 h-full absolute -left-10"></div>
+            <div className="bg-white w-10 h-full absolute -right-10"></div>
+          </div>
+        </div>
         <table className="table">
-          <thead className="sticky top-0 bg-white">
+          <thead className="sticky top-0 bg-white z-20">
             <tr className="border-box flex-shrink-0 w-full h-min bg-[#f8f9fb] overflow-visible relative content-center flex-nowrap gap-[5px] rounded-none border-b border-[#eaecf0]">
               <th
                 className={`cursor-pointer flex-shrink-0 w-auto max-w-[300px] h-auto whitespace-pre-wrap break-words relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}

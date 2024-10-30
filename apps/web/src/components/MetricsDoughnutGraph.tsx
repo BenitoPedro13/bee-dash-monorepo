@@ -70,7 +70,7 @@ const MetricsDoughnutGraph = ({
     <div
       className={`box-border lg:w-[360px] w-full max-h-[428px] h-full lg:flex ${
         mobile ? "lg:hidden" : "hidden"
-      } flex-col justify-start items-start shadow-metrics   bg-white overflow-hidden p-0 content-start flex-nowrap gap-0 rounded-xl border-[#D4D4D4] border`}
+      } flex-col justify-start items-start shadow-metrics   bg-white overflow-hidden p-0 content-start flex-nowrap gap-0 rounded-3xl border-[#D4D4D4] border`}
     >
       <div className="box-border flex-shrink-0 w-full h-min flex flex-col justify-start items-center p-5 overflow-visible relative content-start flex-nowrap gap-5 rounded-none">
         <div className="flex-shrink-0 w-full h-min flex flex-col justify-center items-center overflow-visible relative p-0 content-center flex-nowrap gap-3 rounded-none">

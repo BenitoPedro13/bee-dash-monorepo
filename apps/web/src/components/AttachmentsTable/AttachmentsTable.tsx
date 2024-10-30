@@ -81,7 +81,7 @@ const AttachmentsTable = () => {
 
   return (
     <div
-      className="box-border lg:w-[calc(100%-384px)] w-full flex flex-col justify-start items-start bg-white overflow-hidden p-0 content-start flex-nowrap gap-0 rounded-xl border border-[#D4D4D4]"
+      className="box-border lg:w-[calc(100%-384px)] w-full flex flex-col justify-start items-start bg-white overflow-hidden p-0 content-start flex-nowrap gap-0 rounded-3xl border border-[#D4D4D4]"
       // initial={false}
       // animate={{
       //   boxShadow: "2px 2px 2px 0px rgba(16, 24, 40, 0.06)",

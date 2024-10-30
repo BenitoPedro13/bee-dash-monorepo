@@ -47,7 +47,8 @@ const metricConfig: Record<
 > = {
   tiktok: [
     {
-      classname: "",
+      classname:
+        "xl:rounded-bl-3xl rounded-tl-3xl rounded-tr-3xl xl:rounded-tr-none border-b-0 xl:border-b",
       heading: ["Engajamento Médio", "Custo por Engajamento"],
       sigla: ["Total"],
       variation: (data) => [
@@ -67,7 +68,7 @@ const metricConfig: Record<
       icon: <MediumEngagement />,
     },
     {
-      classname: "",
+      classname: "xl:border-l-0 border-b-0 xl:border-b",
       heading: ["Cliques", "Taxa de Cliques"],
       sigla: ["Total", "CTR"],
       variation: (data) => [
@@ -87,7 +88,7 @@ const metricConfig: Record<
       icon: <LinkClicks />,
     },
     {
-      classname: "",
+      classname: "xl:border-l-0 border-b-0 xl:border-b",
       heading: ["Views", "Custo por View", "Custo por Mil Views"],
       sigla: ["Total", "CPV"],
       variation: (data) => [
@@ -102,7 +103,8 @@ const metricConfig: Record<
       icon: <CPV />,
     },
     {
-      classname: "",
+      classname:
+        "rounded-br-3xl xl:rounded-tr-3xl xl:border-l-0 rounded-bl-3xl xl:rounded-bl-none  xl:!min-w-[367px] ",
       heading: ["Investimento Total", "Investimento Médio"],
       sigla: ["Total", "Média"],
       variation: (data) => [
@@ -123,7 +125,8 @@ const metricConfig: Record<
   ],
   instagram: [
     {
-      classname: "",
+      classname:
+        "xl:rounded-bl-3xl rounded-tl-3xl rounded-tr-3xl xl:rounded-tr-none border-b-0 xl:border-b",
       heading: ["Engajamento Médio", "Custo por Engajamento"],
       sigla: ["Total"],
       variation: (data) => [
@@ -138,7 +141,7 @@ const metricConfig: Record<
       icon: <MediumEngagement />,
     },
     {
-      classname: "",
+      classname: "xl:border-l-0 border-b-0 xl:border-b",
       heading: ["Cliques", "Taxa de Cliques"],
       sigla: ["Total", "CTR"],
       variation: (data) => [
@@ -157,7 +160,7 @@ const metricConfig: Record<
       icon: <LinkClicks />,
     },
     {
-      classname: "",
+      classname: "xl:border-l-0 border-b-0 xl:border-b",
       heading: ["Views", "Custo por View", "Custo por Mil Views"],
       sigla: ["Total", "CPV"],
 
@@ -173,7 +176,8 @@ const metricConfig: Record<
       icon: <CPV />,
     },
     {
-      classname: "",
+      classname:
+        "rounded-br-3xl xl:rounded-tr-3xl xl:border-l-0 rounded-bl-3xl xl:rounded-bl-none  xl:!min-w-[367px] ",
       heading: ["Investimento Total", "Investimento Médio"],
 
       sigla: ["Total", "Média"],

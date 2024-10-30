@@ -71,7 +71,7 @@ const MetricsBarStackGraph = ({
     <div
       className={`box-border lg:w-[360px] w-full max-h-[428px] h-full lg:flex flex-col justify-start items-start shadow-metrics ${
         mobile ? "lg:hidden" : "hidden"
-      }  bg-white overflow-hidden p-0 content-start flex-nowrap gap-0 rounded-xl border-[#D4D4D4] border`}
+      }  bg-white overflow-hidden p-0 content-start flex-nowrap gap-0 rounded-3xl border-[#D4D4D4] border`}
       // initial={false}
       // whileHover={{ boxShadow: "2px 2px 0px 0px #898989" }}
       // animate={{ boxShadow: "2px 2px 2px 0px rgba(16, 24, 40, 0.06)" }}
