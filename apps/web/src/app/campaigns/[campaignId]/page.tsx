@@ -102,26 +102,27 @@ export default function Home() {
           <div className="w-full flex-shrink-0 h-min flex justify-start items-start overflow-visible relative xl:px-8 px-[15px] content-start flex-nowrap xl:gap-6 gap-6 rounded-none">
             <MetricsLineGraph data={postsData} />
 
-            <MetricsDoughnutGraph
-              heading="Impacto Bruto"
-              metric={total(data, ["Interacoes", "Impressoes"])}
-            />
+            <MetricsBarStackGraph heading="Audiência Diária" />
             {/* <Component /> */}
           </div>
 
           <div className="w-full flex-shrink-0 h-min flex flex-col lg:hidden justify-start items-center overflow-visible relative xl:px-8 px-[15px] content-start flex-nowrap xl:gap-6 gap-[15px] rounded-none sm:flex-row sm:justify-start sm:items-start">
+            <MetricsBarStackGraph mobile heading="Audiência Diária" />
+
             <MetricsDoughnutGraph
               mobile
               heading="Impacto Bruto"
               metric={total(data, ["Interacoes", "Impressoes"])}
             />
-            <MetricsBarStackGraph mobile heading="Audiência Diária" />
           </div>
 
           <div className="w-full flex-shrink-0 h-min flex flex-col justify-start items-start overflow-visible relative xl:px-8 px-[15px] content-start flex-nowrap gap-6 rounded-none">
             <div className="box-border flex-shrink-0 w-full h-min flex justify-start items-start overflow-visible relative content-start flex-nowrap gap-6 rounded-none">
               <CreatorsTable />
-              <MetricsBarStackGraph heading="Audiência Diária" />
+              <MetricsDoughnutGraph
+                heading="Impacto Bruto"
+                metric={total(data, ["Interacoes", "Impressoes"])}
+              />
             </div>
           </div>
           <div className="w-full flex-shrink-0 h-min flex flex-col justify-start items-start overflow-visible relative xl:px-8 px-[15px] content-start flex-nowrap gap-6 rounded-none">

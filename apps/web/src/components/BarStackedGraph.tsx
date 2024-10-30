@@ -96,8 +96,8 @@ export function Component() {
   } satisfies ChartConfig;
 
   return (
-    <ChartContainer config={chartConfig} width="100%" height="288px">
-      <BarChart accessibilityLayer data={chartDataState}>
+    <ChartContainer config={chartConfig} width="100%" height="326px">
+      <BarChart accessibilityLayer data={chartDataState} barSize={24}>
         <CartesianGrid vertical={false} />
         <XAxis
           dataKey="month"
@@ -113,7 +113,7 @@ export function Component() {
             dataKey="instagram"
             stackId="a"
             fill="var(--color-instagram)"
-            radius={[0, 0, 4, 4]}
+            radius={[0, 0, 24, 24]}
           />
         )}
         {["tiktok", "all"].includes(mode) && (
@@ -121,7 +121,7 @@ export function Component() {
             dataKey="tiktok"
             stackId="a"
             fill="var(--color-tiktok)"
-            radius={[4, 4, 0, 0]}
+            radius={[24, 24, 0, 0]}
           />
         )}
       </BarChart>

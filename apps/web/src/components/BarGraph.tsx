@@ -183,6 +183,7 @@ export default function BarGraph({ typeOfGraph }: { typeOfGraph: GraphTypes }) {
         margin={{
           top: 20,
         }}
+        barSize={24}
       >
         <CartesianGrid vertical={false} />
         <XAxis

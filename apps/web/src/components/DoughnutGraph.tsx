@@ -84,7 +84,7 @@ export default function DoughnutGraph() {
           data={chartDataState}
           dataKey="Impressoes"
           nameKey="influencer"
-          innerRadius={80}
+          innerRadius={110}
           outerRadius={135}
         />
         {/* <ChartLegend content={<ChartLegendContent />} /> */}

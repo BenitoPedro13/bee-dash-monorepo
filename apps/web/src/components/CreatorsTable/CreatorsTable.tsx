@@ -17,26 +17,7 @@ import PerformanceIcon from "../MetricsIcons/PerformanceIcon";
 import { SearchIcon, X } from "lucide-react";
 import Link from "next/link";
 
-const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 const inter = Inter({ subsets: ["latin"] });
-
-// export interface Influencer {
-//   id: number;
-//   influencer: string;
-//   username: string;
-//   city: string;
-//   posts: string;
-//   impressions: string;
-//   interactions: string;
-//   clicks: string;
-//   videoViews: string;
-//   cpe: string;
-//   ctr: string;
-//   cpc: string;
-//   cpv: string;
-//   createdAt: string;
-//   updatedAt: string;
-// }
 
 const CreatorsTable = () => {
   const { data: globalData } = useDataStore((state) => state.data);
@@ -140,124 +121,16 @@ const CreatorsTable = () => {
   }, [data, sortColumn, sortOrder, currentPage, itemsPerPage]);
 
   return (
-    <div
-      className="box-border lg:w-[calc(100%-384px)] w-full flex flex-col justify-start items-start self-stretch bg-white overflow-hidden p-0 content-start flex-nowrap gap-0 rounded-xl border border-[#D4D4D4]"
-      // initial={false}
-      // animate={{
-      //   boxShadow: "2px 2px 2px 0px rgba(16, 24, 40, 0.06)",
-      //   height:
-      //     currentData.length / itemsPerPage < 1 ? "fit-content" : "fit-content",
-      // }}
-      // transition={{ duration: 0.3, ease: "linear" }}
-      // whileHover={{ boxShadow: "2px 2px 0px 0px #898989" }}
-    >
+    <div className="box-border lg:w-[calc(100%-384px)] w-full flex flex-col justify-start items-start self-stretch bg-white overflow-hidden p-0 content-start flex-nowrap gap-0 rounded-xl border border-[#D4D4D4]">
       <div className="flex-shrink-0 w-full h-min flex flex-col justify-start items-start  self-stretch overflow-visible relative p-0 content-start flex-nowrap sm:gap-5 gap-0 rounded-none">
-        {/* <div className="box-border flex-shrink-0 w-full h-min flex sm:flex-row flex-col justify-start sm:items-center items-start xl:pt-5 xl:pb-0 py-5 px-6 overflow-visible relative sm:content-center content-start flex-nowrap gap-4 rounded-none">
-          <Image
-            src={performanceIcon}
-            alt="Performance Icon"
-            width={40}
-            height={40}
-            className="hidden sm:block"
-          />
-
-          <PerformanceIcon className="hidden sm:block" />
-
-          <div className="sm:hidden flex w-full h-min flex-shrink-0 justify-between items-center flex-nowrap">
-            <Image
-              src={performanceIcon}
-              alt="Performance Icon"
-              width={40}
-              height={40}
-              className="sm:hidden block"
-            />
-
-            <PerformanceIcon />
-
-            <div className="flex-shrink-0 w-min h-min flex justify-start items-center overflow-visible relative p-0 content-center flex-nowrap gap-3 rounded-none">
-              <motion.div
-                onClick={toggleOpen}
-                className="btn btn-ghost box-border flex-shrink-0 w-min h-auto flex justify-center items-center py-[10px] px-[8px] shadow-cost-per-metrics bg-white overflow-hidden self-stretch relative content-center flex-nowrap gap-2 rounded-lg border border-solid border-[#cfd4dc]"
-                initial={false}
-                animate={{ rotate: open ? -90 : 0 }}
-                transition={{ duration: 0.3, ease: "linear" }}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="#2d3442"
-                  className="w-6 h-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M15.75 19.5L8.25 12l7.5-7.5"
-                  />
-                </svg>
-              </motion.div>
-            </div>
-          </div>
-          <div className="flex-shrink-0 flex-grow w-auto sm:h-full h-[52px] flex flex-col justify-center items-start self-stretch overflow-visible relative p-0 content-start flex-nowrap gap-1 rounded-none">
-            <h3
-              className={`flex-shrink-0 flex-grow w-auto h-auto whitespace-pre-wrap break-words relative font-semibold ${jakarta.className} text-[#0f1728] text-lg`}
-            >
-              Performance dos Influencers
-            </h3>
-            <p
-              className={`flex-shrink-0 flex-grow w-auto h-auto whitespace-pre-wrap break-words relative ${inter.className} text-[#475466] text-sm`}
-            >
-              Acompanhe a tabela de todos os dados dos seus creators
-            </p>
-          </div>
-          <div className="hidden sm:flex flex-shrink-0 w-min h-min justify-start items-center overflow-visible relative p-0 content-center flex-nowrap gap-3 rounded-none">
-            <motion.div
-              onClick={toggleOpen}
-              className="btn btn-ghost box-border flex-shrink-0 w-min h-auto flex justify-center items-center py-[10px] px-[8px] shadow-cost-per-metrics bg-white overflow-hidden self-stretch relative content-center flex-nowrap gap-2 rounded-lg border border-solid border-[#cfd4dc]"
-              initial={false}
-              animate={{ rotate: open ? -90 : 0 }}
-              transition={{ duration: 0.3, ease: "linear" }}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="#2d3442"
-                className="w-6 h-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M15.75 19.5L8.25 12l7.5-7.5"
-                />
-              </svg>
-            </motion.div>
-          </div>
-        </div>
-        <svg
-          width="1098"
-          height="3"
-          viewBox="-1 -1 1098 3"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            fillRule="evenodd"
-            clipRule="evenodd"
-            d="M1096 1H0V0H1096V1Z"
-            fill="transparent"
-          ></path>
-        </svg> */}
         <div className="flex flex-col items-start self-stretch">
           <div className="flex px-5 py-6 items-start gap-4 self-stretch">
             <div className="flex flex-col justify-center items-start gap-1 flex-grow self-stretch">
               <h3 className="font-nexa-bold text-lg font-semibold text-[#101828] self-stretch">
-                Performance dos Influencers
+                Seus Criadores
               </h3>
               <p className="font-nexa text-sm text-[#475467] self-stretch">
-                Acompanhe a tabela de todos os dados dos seus creators
+                Veja a performance que cada criador está tendo
               </p>
             </div>
 
@@ -546,26 +419,6 @@ const CreatorsTable = () => {
                   />
                 </div>
               </th>
-              {/* <th
-                className={`cursor-pointer flex-shrink-0 w-auto max-w-[300px] h-auto relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
-                onClick={() =>
-                  handleSort(
-                    "Video Views",
-                    sortColumn,
-                    setSortColumn,
-                    setSortOrder
-                  )
-                }
-              >
-                <div className="flex justify-start items-center gap-6 whitespace-nowrap">
-                  Video Views
-                  <TableSortingIcon
-                    sortColumn={sortColumn}
-                    sortOrder={sortOrder}
-                    actualColumn={"Video Views"}
-                  />
-                </div>
-              </th> */}
               <th
                 className={`cursor-pointer flex-shrink-0 w-auto max-w-[300px] h-auto relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
                 onClick={() =>
@@ -686,21 +539,6 @@ const CreatorsTable = () => {
                   />
                 </div>
               </th>
-              {/* <th
-                className={`cursor-pointer flex-shrink-0 w-auto max-w-[300px] h-auto whitespace-pre-wrap break-words relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
-                onClick={() =>
-                  handleSort("CPE", sortColumn, setSortColumn, setSortOrder)
-                }
-              >
-                <div className="flex justify-start items-center gap-6 whitespace-nowrap">
-                  CPE
-                  <TableSortingIcon
-                    sortColumn={sortColumn}
-                    sortOrder={sortOrder}
-                    actualColumn={"CPE"}
-                  />
-                </div>
-              </th> */}
               <th
                 className={`cursor-pointer flex-shrink-0 w-auto max-w-[300px] h-auto whitespace-pre-wrap break-words relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
                 onClick={() =>
@@ -731,26 +569,6 @@ const CreatorsTable = () => {
                   />
                 </div>
               </th>
-              {/* <th
-                className={`cursor-pointer flex-shrink-0 w-auto max-w-[300px] h-auto whitespace-pre-wrap break-words relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
-                onClick={() =>
-                  handleSort(
-                    "CPE Tiktok",
-                    sortColumn,
-                    setSortColumn,
-                    setSortOrder
-                  )
-                }
-              >
-                <div className="flex justify-start items-center gap-6 whitespace-nowrap">
-                  CPE Tiktok
-                  <TableSortingIcon
-                    sortColumn={sortColumn}
-                    sortOrder={sortOrder}
-                    actualColumn={"CPE Tiktok"}
-                  />
-                </div>
-              </th> */}
               <th
                 className={`cursor-pointer flex-shrink-0 w-auto max-w-[300px] h-auto whitespace-pre-wrap break-words relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
                 onClick={() =>
