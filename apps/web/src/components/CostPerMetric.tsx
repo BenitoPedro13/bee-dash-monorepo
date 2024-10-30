@@ -121,7 +121,7 @@ const CostPerMetric = ({
                 )
               : total}
           </p>
-          <p className="text-sm font-nexa font-medium text-[#475467]">
+          <p className="text-sm font-nexa font-bold text-[#475467]">
             {heading[siglaActive]}
           </p>
         </div>

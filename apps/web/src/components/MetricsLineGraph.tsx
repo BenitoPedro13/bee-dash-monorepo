@@ -17,6 +17,8 @@ import {
 import BarGraph from "./BarGraph";
 import Badge from "./Badge";
 import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
+import MediumEngagement from "./MetricsIcons/MediumEngagement";
+import ImpressionsIcon from "./MetricsIcons/ImpressionsIcon";
 
 const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
@@ -149,9 +151,16 @@ const MetricsGraph = ({ data }: MetricsGraphProps) => {
         <div className="flex-shrink-0 w-full h-min flex flex-col justify-start items-start overflow-visible relative p-0 content-start flex-nowrap gap-2 rounded-none">
           <div className="flex-shrink-0 w-full h-min flex flex-col justify-start items-start overflow-visible relative p-0 content-start flex-nowrap gap-5 rounded-none">
             <div className="flex-shrink-0 w-full h-min flex justify-start items-center overflow-visible relative p-0 content-center flex-nowrap gap-4 rounded-none">
-              <div className="flex-shrink-0 flex-grow w-auto h-full flex flex-col justify-center items-start overflow-visible relative p-0 content-start flex-nowrap gap-1 rounded-none">
+              <div className="flex-shrink-0 flex-grow w-auto h-full flex flex-row items-center justify-start overflow-visible relative p-0 content-start flex-nowrap gap-2 rounded-none">
+                <div className="flex w-9 h-9 flex-col items-center justify-center gap-3 rounded-full bg-[#EEEDEC]">
+                  {typeOfGraph === "Impressoes" ? (
+                    <ImpressionsIcon />
+                  ) : (
+                    <MediumEngagement />
+                  )}
+                </div>
                 <p
-                  className={`flex-shrink-0 w-full h-auto whitespace-pre-wrap break-words relative font-medium font-nexa text-[#475467] text-sm`}
+                  className={`flex-shrink-0 w-fit h-auto whitespace-pre-wrap break-words relative font-bold font-nexa text-[#475467] text-sm pt-[4px]`}
                 >
                   {heading}
                 </p>
@@ -159,20 +168,22 @@ const MetricsGraph = ({ data }: MetricsGraphProps) => {
               <Tabs
                 defaultValue={typeOfGraph}
                 onValueChange={(value) => setTypeOfGraph(value as GraphTypes)}
-                className="flex p-[5px] items-center rounded-lg border border-[#E2E8F0] h-[42px]"
+                className="flex p-[5px] items-center border border-[#E2E8F0] h-[42px] rounded-full"
               >
                 <TabsList>
-                  <TabsTrigger value={"Impressoes"} className="">
+                  <TabsTrigger value={"Impressoes"} className="rounded-full">
                     Impressões
                   </TabsTrigger>
-                  <TabsTrigger value={"Interacoes"}>Interações</TabsTrigger>
+                  <TabsTrigger value={"Interacoes"} className="rounded-full">
+                    Interações
+                  </TabsTrigger>
                 </TabsList>
               </Tabs>
             </div>
           </div>
 
           <div className="flex items-center gap-4 self-stretch">
-            <p className="flex-shrink-0 w-auto h-auto whitespace-pre relative font-bold font-nexa-bold text-[#101828] text-3xl leading-[38px]">
+            <p className=" w-full h-auto whitespace-pre relative font-bold font-nexa-bold text-[#101828] text-3xl leading-[38px]">
               {metric}
             </p>
             {typeof metricVariation === "number" && (

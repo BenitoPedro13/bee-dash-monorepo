@@ -53,7 +53,7 @@ const Metrics = ({
           {dateRange !== "0" ? total : metric}
         </p>
         <h5
-          className={`flex-shrink-0 w-auto h-auto whitespace-pre relative font-medium font-nexa text-[#475467] text-sm`}
+          className={`flex-shrink-0 w-auto h-auto whitespace-pre relative font-bold font-nexa text-[#475467] text-sm`}
         >
           {heading}
         </h5>

@@ -11,6 +11,7 @@ import useDataStore, {
   Influencer,
 } from "@/store";
 import { calculateVariations, total, totalCount } from "../../utils/utils";
+import Investment from "./MetricsIcons/Investment";
 
 const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
@@ -75,9 +76,12 @@ const MetricsDoughnutGraph = ({
         <div className="flex-shrink-0 w-full h-min flex flex-col justify-center items-center overflow-visible relative p-0 content-center flex-nowrap gap-3 rounded-none">
           <div className="flex-shrink-0 w-full h-min flex flex-col justify-start items-start overflow-visible relative p-0 content-start flex-nowrap gap-5 rounded-none">
             <div className="flex-shrink-0 w-full h-10 flex justify-start items-center overflow-visible relative p-0 content-center flex-nowrap gap-4 rounded-none">
-              <div className="flex-shrink-0 flex-grow w-auto h-full flex flex-col justify-center items-start overflow-visible relative p-0 content-start flex-nowrap gap-1 rounded-none">
+              <div className="flex-shrink-0 flex-grow w-auto h-full flex flex-row justify-start items-center overflow-visible relative p-0 content-start flex-nowrap gap-2 rounded-none">
+                <div className="flex w-9 h-9 flex-col items-center justify-center gap-3 rounded-full bg-[#EEEDEC]">
+                  <Investment />
+                </div>
                 <p
-                  className={`flex-shrink-0 w-full h-auto whitespace-pre-wrap break-words relative font-medium font-nexa text-[#475467] text-sm`}
+                  className={` w-full h-auto whitespace-pre-wrap break-words relative font-bold font-nexa text-[#475467] text-sm`}
                 >
                   {heading}
                 </p>

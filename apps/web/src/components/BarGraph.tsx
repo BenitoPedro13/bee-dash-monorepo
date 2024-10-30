@@ -215,7 +215,7 @@ export default function BarGraph({ typeOfGraph }: { typeOfGraph: GraphTypes }) {
           ))}
         </defs>
 
-        <Bar dataKey={typeOfGraph} radius={4}>
+        <Bar dataKey={typeOfGraph} radius={24}>
           {/* {data.map((_item, index) => (
             <Cell
               key={`cell-${index}`}
