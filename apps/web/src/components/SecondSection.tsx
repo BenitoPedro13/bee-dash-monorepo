@@ -256,7 +256,7 @@ const metricConfig: Record<
     },
     {
       classname:
-        "rounded-br-3xl xl:rounded-tr-3xl xl:border-l-0 rounded-bl-3xl xl:rounded-bl-none ",
+        "rounded-br-3xl xl:rounded-tr-3xl xl:border-l-0 rounded-bl-3xl xl:rounded-bl-none  xl:!min-w-[367px] ",
       heading: ["Investimento Total", "Investimento Médio"],
       sigla: ["Total", "Média"],
       variation: (data) => [

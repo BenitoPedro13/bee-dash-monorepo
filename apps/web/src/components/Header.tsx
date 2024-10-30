@@ -26,6 +26,8 @@ const Header = () => {
 
   const isDesktop = useMediaQuery("(min-width: 815px)");
 
+  const isMobileXs = useMediaQuery("(max-width: 445px)");
+
   useEffect(() => {
     setActiveTab(() => tabs.find((item) => path.includes(item)));
   }, [path]);
@@ -218,7 +220,7 @@ const Header = () => {
             <TabsList>
               <TabsTrigger
                 value={"home"}
-                className="flex pt-2 px-3 items-center gap-2 rounded-full bg-white"
+                className="flex pt-2 px-3 items-center gap-2 rounded-full bg-white "
               >
                 <Link href={"/home"}>
                   <div className="flex items-center gap-3">
@@ -235,7 +237,16 @@ const Header = () => {
                       />
                     </svg>
 
-                    <p className="font-nexa text-base font-semibold text-[#344054] pt-[5px] leading-5">
+                    <p
+                      className={
+                        "font-nexa text-base font-semibold text-[#344054] pt-[5px] leading-5 " +
+                        (!isMobileXs
+                          ? "block"
+                          : isMobileXs && activeTab === "home"
+                          ? "block"
+                          : "hidden")
+                      }
+                    >
                       Home
                     </p>
                   </div>
@@ -243,7 +254,7 @@ const Header = () => {
               </TabsTrigger>
               <TabsTrigger
                 value={"campaigns"}
-                className="flex pt-2 px-3 items-center gap-2 rounded-full bg-white"
+                className="flex pt-2 px-3 items-center gap-2 rounded-full bg-white "
               >
                 <Link href={"/campaigns"}>
                   <div className="flex items-center gap-3">
@@ -260,7 +271,16 @@ const Header = () => {
                       />
                     </svg>
 
-                    <p className="font-nexa text-base font-semibold text-[#344054] pt-[5px] leading-5">
+                    <p
+                      className={
+                        "font-nexa text-base font-semibold text-[#344054] pt-[5px] leading-5 " +
+                        (!isMobileXs
+                          ? "block"
+                          : isMobileXs && activeTab === "campaigns"
+                          ? "block"
+                          : "hidden")
+                      }
+                    >
                       Campanhas
                     </p>
                   </div>
@@ -268,7 +288,7 @@ const Header = () => {
               </TabsTrigger>
               <TabsTrigger
                 value={"creators"}
-                className="flex pt-2 px-3 items-center gap-2 rounded-full bg-white"
+                className="flex pt-2 px-3 items-center gap-2 rounded-full bg-white  "
               >
                 <Link href={"/creators"}>
                   <div className="flex items-center gap-3">
@@ -285,7 +305,16 @@ const Header = () => {
                       />
                     </svg>
 
-                    <p className="font-nexa text-base font-semibold text-[#344054] pt-[5px] leading-5">
+                    <p
+                      className={
+                        "font-nexa text-base font-semibold text-[#344054] pt-[5px] leading-5 " +
+                        (!isMobileXs
+                          ? "block"
+                          : isMobileXs && activeTab === "creators"
+                          ? "block"
+                          : "hidden")
+                      }
+                    >
                       Creators
                     </p>
                   </div>
