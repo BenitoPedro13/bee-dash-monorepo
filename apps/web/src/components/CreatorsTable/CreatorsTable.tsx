@@ -6,6 +6,7 @@ import { Plus_Jakarta_Sans, Inter } from "next/font/google";
 import CreatorsTableRow from "./CreatorsTableRow";
 import useDataStore, { Influencer } from "@/store";
 import {
+  generatePastelColor,
   handleSort,
   parseCurrencyString,
   parsePercentageString,
@@ -46,7 +47,8 @@ const CreatorsTable = () => {
   // Ref for the scrollable table container
   const tableContainerRef = useRef<HTMLDivElement>(null);
   const [headerOffset, setHeaderOffset] = useState(0);
-  const [headerWidth, setHeaderWidth] = useState(0);
+
+  const pastelColor = generatePastelColor(hexColor);
 
   // const toggleOpen = () => setOpen(!open);
   const handlePageChange = (pageNumber: number) => {
@@ -55,12 +57,10 @@ const CreatorsTable = () => {
 
   const handleScroll = () => {
     if (tableContainerRef.current) {
-      if (
-        tableContainerRef.current.scrollLeft <
-        2938.28 - tableContainerRef.current.getBoundingClientRect().width
-      ) {
+      const diference =
+        2938.28 - tableContainerRef.current.getBoundingClientRect().width;
+      if (tableContainerRef.current.scrollLeft < diference) {
         setHeaderOffset(tableContainerRef.current.scrollLeft);
-        setHeaderWidth(tableContainerRef.current.getBoundingClientRect().width);
       }
     }
   };
@@ -245,7 +245,12 @@ const CreatorsTable = () => {
         </div>
         <table className="table">
           <thead className="sticky top-0 bg-white z-20">
-            <tr className="border-box flex-shrink-0 w-full h-min bg-[#f8f9fb] overflow-visible relative content-center flex-nowrap gap-[5px] rounded-none border-b border-[#eaecf0]">
+            <tr
+              className="border-box flex-shrink-0 w-full h-min overflow-visible relative content-center flex-nowrap gap-[5px] rounded-none border-b border-[#eaecf0]"
+              style={{
+                background: pastelColor,
+              }}
+            >
               <th
                 className={`cursor-pointer flex-shrink-0 w-auto max-w-[300px] h-auto whitespace-pre-wrap break-words relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
                 onClick={() =>

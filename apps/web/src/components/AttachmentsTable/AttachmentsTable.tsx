@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import attachmentsIcon from "@/../public/attachmentsIcon.png";
 import Image from "next/image";
 import { Plus_Jakarta_Sans, Inter } from "next/font/google";
@@ -10,7 +10,7 @@ import TableSortingIcon from "../TableSortingIcon";
 import arrowLeft from "@/../public/arrow-left.svg";
 import arrowRight from "@/../public/arrow-right.svg";
 
-import { handleSort } from "../../../utils/utils";
+import { generatePastelColor, handleSort } from "../../../utils/utils";
 import AttachmentIcon from "../MetricsIcons/AttachmentIcon";
 
 const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
@@ -24,6 +24,9 @@ const inter = Inter({ subsets: ["latin"] });
 // updatedAt: string;
 
 const AttachmentsTable = () => {
+  const { color } = useDataStore((state) => state.session.user);
+  const hexColor =
+    color === undefined ? "#FF8C00" : color.length !== 7 ? "#FF8C00" : color;
   const globalAttachments = useDataStore((state) => state.attachments);
   const [attachments, setAttachments] = useState([...globalAttachments]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -40,11 +43,43 @@ const AttachmentsTable = () => {
   const [sortColumn, setSortColumn] =
     useState<keyof Attachment>("originalFilename"); // Initial sort column
 
-  // const toggleOpen = () => setOpen(!open);
+  // Ref for the scrollable table container
+  const tableContainerRef = useRef<HTMLDivElement>(null);
+  const [headerOffset, setHeaderOffset] = useState(0);
+  const [headerWidth, setHeaderWidth] = useState(0);
+
+  const pastelColor = generatePastelColor(hexColor);
 
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
   };
+
+  const handleScroll = () => {
+    if (tableContainerRef.current) {
+      setHeaderWidth(tableContainerRef.current.getBoundingClientRect().width);
+      if (
+        tableContainerRef.current.scrollLeft <
+        tableContainerRef.current.getBoundingClientRect().width -
+          tableContainerRef.current.getBoundingClientRect().width
+      ) {
+        setHeaderOffset(tableContainerRef.current.scrollLeft);
+      }
+    }
+  };
+
+  useEffect(() => {
+    const container = tableContainerRef.current;
+    if (container) {
+      container.addEventListener("scroll", handleScroll);
+      window.addEventListener("resize", handleScroll);
+    }
+    return () => {
+      if (container) {
+        container.removeEventListener("scroll", handleScroll);
+        window.removeEventListener("resize", handleScroll);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     // Update attachments whenever globalAttachments changes
@@ -80,126 +115,8 @@ const AttachmentsTable = () => {
   }, [attachments, currentPage, sortColumn, sortOrder, itemsPerPage]);
 
   return (
-    <div
-      className="box-border lg:w-[calc(100%-384px)] w-full flex flex-col justify-start items-start bg-white overflow-hidden p-0 content-start flex-nowrap gap-0 rounded-3xl border border-[#D4D4D4]"
-      // initial={false}
-      // animate={{
-      //   boxShadow: "2px 2px 2px 0px rgba(16, 24, 40, 0.06)",
-      //   height:
-      //     currentAttachments.length / itemsPerPage < 1
-      //       ? "fit-content"
-      //       : "fit-content",
-      // }}
-      // transition={{ duration: 0.3, ease: "linear" }}
-      // whileHover={{ boxShadow: "2px 2px 0px 0px #898989" }}
-    >
+    <div className="box-border lg:w-[calc(100%-384px)] w-full flex flex-col justify-start items-start bg-white overflow-hidden p-0 content-start flex-nowrap gap-0 rounded-3xl border border-[#D4D4D4]">
       <div className="flex-shrink-0 w-full h-min flex flex-col justify-start items-start overflow-visible relative p-0 content-start flex-nowrap sm:gap-5 gap-0 rounded-none">
-        {/* <div className="box-border flex-shrink-0 w-full h-min flex sm:flex-row flex-col justify-start sm:items-center items-start xl:pt-5 xl:pb-0 py-5 px-6 overflow-visible relative sm:content-center content-start flex-nowrap gap-4 rounded-none">
-          <Image
-            src={attachmentsIcon}
-            alt="Performance Icon"
-            width={40}
-            height={40}
-            className="hidden sm:block"
-          />
-
-          <AttachmentIcon className="hidden sm:block" />
-
-          <div className="sm:hidden flex w-full h-min flex-shrink-0 justify-between items-center flex-nowrap">
-            <Image
-              src={attachmentsIcon}
-              alt="Performance Icon"
-              width={40}
-              height={40}
-              className="sm:hidden block"
-            />
-
-            <AttachmentIcon />
-
-            <div className="flex-shrink-0 w-min h-min flex justify-start items-center overflow-visible relative p-0 content-center flex-nowrap gap-3 rounded-none">
-              <FileUploadButton
-                attachments={currentAttachments}
-                setAttachments={setCurrentAttachments}
-              />
-              <motion.div
-                onClick={toggleOpen}
-                className="btn btn-ghost box-border flex-shrink-0 w-min h-auto flex justify-center items-center py-[10px] px-[8px] shadow-cost-per-metrics bg-white overflow-hidden self-stretch relative content-center flex-nowrap gap-2 rounded-lg border border-solid border-[#cfd4dc]"
-                initial={false}
-                animate={{ rotate: open ? -90 : 0 }}
-                transition={{ duration: 0.3, ease: "linear" }}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="#2d3442"
-                  className="w-6 h-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M15.75 19.5L8.25 12l7.5-7.5"
-                  />
-                </svg>
-              </motion.div>
-            </div>
-          </div>
-          <div className="flex-shrink-0 flex-grow w-auto sm:h-full h-[52px] flex flex-col justify-center items-start overflow-visible relative p-0 content-start flex-nowrap gap-1 rounded-none">
-            <h3
-              className={`flex-shrink-0 flex-grow w-auto h-auto whitespace-pre-wrap break-words relative font-semibold ${jakarta.className} text-[#0f1728] text-lg`}
-            >
-              Anexos
-            </h3>
-            <p
-              className={`flex-shrink-0 flex-grow w-auto h-auto whitespace-pre-wrap break-words relative ${inter.className} text-[#475466] text-sm`}
-            >
-              Arquivos e documentos anexados ao seu projeto Bee
-            </p>
-          </div>
-          <div className="hidden sm:flex flex-shrink-0 w-min h-min justify-start items-center overflow-visible relative p-0 content-center flex-nowrap gap-3 rounded-none">
-            <FileUploadButton
-              attachments={currentAttachments}
-              setAttachments={setCurrentAttachments}
-            />
-            <motion.div
-              onClick={toggleOpen}
-              className="btn btn-ghost box-border flex-shrink-0 w-min h-auto flex justify-center items-center py-[10px] px-[8px] shadow-cost-per-metrics bg-white overflow-hidden self-stretch relative content-center flex-nowrap gap-2 rounded-lg border border-solid border-[#cfd4dc]"
-              initial={false}
-              animate={{ rotate: open ? -90 : 0 }}
-              transition={{ duration: 0.3, ease: "linear" }}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="#2d3442"
-                className="w-6 h-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M15.75 19.5L8.25 12l7.5-7.5"
-                />
-              </svg>
-            </motion.div>
-          </div>
-        </div>
-        <svg
-          width="1098"
-          height="3"
-          viewBox="-1 -1 1098 3"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            fillRule="evenodd"
-            clipRule="evenodd"
-            d="M1096 1H0V0H1096V1Z"
-            fill="transparent"
-          ></path>
-        </svg> */}
         <div className="flex flex-col items-start self-stretch">
           <div className="flex px-5 py-6 items-start gap-4 self-stretch">
             <div className="flex flex-col justify-center items-start gap-1 flex-grow self-stretch">
@@ -210,19 +127,7 @@ const AttachmentsTable = () => {
                 Arquivos e outros documentos que ajudarão seu projeto
               </p>
             </div>
-            {/* <div className="w-fit flex flex-col items-start gap-[6px]">
-              <div className="w-full flex items-center gap-2">
-                <div className="w-full flex flex-col items-start gap-[6px] flex-grow flex-shrink-0">
-                  <div className="w-full flex py-[5px] pr-14 pl-3 items-center gap-1 self-stretch rounded-lg border border-[#E2E8F0]">
-                    <SearchIcon className="w-5 h-5 text-[#64748B]" />
-                    <input
-                      placeholder="Procure por creators..."
-                      className="w-full outline-none text-sm leading-6 font-nexa bg-white text-[#101828]"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div> */}
+
             <FileUploadButton
               attachments={currentAttachments}
               setAttachments={setCurrentAttachments}
@@ -230,10 +135,41 @@ const AttachmentsTable = () => {
           </div>
         </div>
       </div>
-      <div className="overflow-x-auto w-full no-scrollbar border-t border-gray">
+      <div
+        className="overflow-x-auto w-full no-scrollbar border-t border-gray relative"
+        ref={tableContainerRef}
+      >
+        <div
+          id="table-header-clip"
+          className="absolute top-0 h-[28.5px] left-0 bg-transparent z-30 pointer-events-none"
+          style={{
+            boxShadow: "0 0 0 10px white",
+            margin: "10px",
+            width: `${headerWidth}px`,
+          }}
+        ></div>
+        <div
+          id="table-header-clip"
+          className="absolute top-0 h-[28.5px] right-0 bg-transparent w-[calc(100%-20px)] z-40 rounded-md  pointer-events-none"
+          style={{
+            boxShadow: "0 0 0 10px white",
+            margin: "10px",
+            transform: `translateX(${headerOffset}px)`,
+          }}
+        >
+          <div className="flex justify-between w-full h-full relative">
+            <div className="bg-white w-10 h-full absolute -left-10"></div>
+            <div className="bg-white w-10 h-full absolute -right-10"></div>
+          </div>
+        </div>
         <table className="table">
           <thead className="sticky top-0 bg-white">
-            <tr className="border-box flex-shrink-0 w-full h-min bg-[#f8f9fb] overflow-visible relative content-center flex-nowrap gap-[5px] rounded-none border-b border-[#eaecf0]">
+            <tr
+              className="border-box flex-shrink-0 w-full h-min overflow-visible relative content-center flex-nowrap gap-[5px] rounded-none border-b border-[#eaecf0]"
+              style={{
+                background: pastelColor,
+              }}
+            >
               <th
                 className={`cursor-pointer flex-shrink-0 w-[40%] h-auto whitespace-pre-wrap break-words relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
                 onClick={() =>

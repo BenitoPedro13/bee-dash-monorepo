@@ -87,6 +87,74 @@ export function hexToRgba(hex: string, alpha: number = 1): string {
   return returnValue;
 }
 
+function clamp(value: number): number {
+  return Math.min(255, Math.round(value));
+}
+
+function redistributeRgb(
+  r: number,
+  g: number,
+  b: number
+): [number, number, number] {
+  const threshold = 255;
+  const maxChannel = Math.max(r, g, b);
+
+  // If all values are below the threshold, no redistribution is needed.
+  if (maxChannel <= threshold) {
+    return [clamp(r), clamp(g), clamp(b)];
+  }
+
+  // Calculate total and adjust if we are close to the limit.
+  const total = r + g + b;
+  if (total >= 3 * threshold) {
+    return [threshold, threshold, threshold];
+  }
+
+  // Calculate the factor for redistribution.
+  const factor = (3 * threshold - total) / (3 * maxChannel - total);
+  const gray = threshold - factor * maxChannel;
+
+  // Redistribute each channel proportionally.
+  const redistributedR = gray + factor * r;
+  const redistributedG = gray + factor * g;
+  const redistributedB = gray + factor * b;
+
+  return [clamp(redistributedR), clamp(redistributedG), clamp(redistributedB)];
+}
+
+export function generatePastelColor(mainColor: string) {
+  // Convert hex color to RGB
+  const [r, g, b] = colorConvert.hex.rgb(mainColor);
+
+  // Target whiteness as a percentage
+  const targetWhiteness = 0.93;
+
+  // Redistribute and adjust the color to increase brightness.
+  let factor = 1.0;
+  let adjustedColor: [number, number, number] = [r, g, b];
+
+  while (calculateWhiteness(...adjustedColor) < targetWhiteness) {
+    // Scale color by the current factor
+    const scaledR = r * factor;
+    const scaledG = g * factor;
+    const scaledB = b * factor;
+
+    // Apply redistribution to keep hue intact
+    adjustedColor = redistributeRgb(scaledR, scaledG, scaledB);
+
+    // Increment factor for next iteration if needed
+    factor += 0.1;
+  }
+
+  // Convert back to hex and return
+  const finalHexColor = colorConvert.rgb.hex(adjustedColor);
+  return `#${finalHexColor}`;
+}
+
+function calculateWhiteness(r: number, g: number, b: number): number {
+  return (r + g + b) / 3 / 255;
+}
+
 export function generateShadesAndTints(mainColor: string, count: number) {
   const [r, g, b] = colorConvert.hex.rgb(mainColor);
 
