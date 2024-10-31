@@ -189,6 +189,7 @@ export default function PostsBarGraph({
         margin={{
           top: 20,
         }}
+        barSize={24}
       >
         <CartesianGrid vertical={false} />
         <XAxis
@@ -221,7 +222,7 @@ export default function PostsBarGraph({
           ))}
         </defs>
 
-        <Bar dataKey={typeOfGraph} radius={4}>
+        <Bar dataKey={typeOfGraph} radius={24}>
           {/* {data.map((_item, index) => (
             <Cell
               key={`cell-${index}`}
