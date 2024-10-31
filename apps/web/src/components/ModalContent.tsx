@@ -301,7 +301,7 @@ export default function ModalContent({ hexColor, close }: ModalContentProps) {
             width={258}
             height={172}
             alt="Foto Creator"
-            className="rounded-xl object-cover"
+            className="rounded-3xl object-cover"
           />
 
           <svg

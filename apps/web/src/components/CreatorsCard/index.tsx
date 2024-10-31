@@ -26,7 +26,7 @@ export default function CreatorCard({
 
   return (
     <Link href={`/creators/${creator.id}`}>
-      <div className="bg-white rounded-xl border border-[#D4D4D4] overflow-hidden">
+      <div className="bg-white rounded-3xl border border-[#D4D4D4] overflow-hidden">
         <Image
           alt={creator.name}
           src={

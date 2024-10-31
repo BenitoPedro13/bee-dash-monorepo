@@ -85,7 +85,7 @@ export default function Home() {
         }
         className="h-full w-full flex items-center justify-center content-center relative gap-4 pb-6 xl:px-8 p-0 px-[15px] cursor-pointer"
       >
-        <div className="h-[400px] bg-white w-full rounded-xl border-[#D4D4D4] border flex flex-col items-center justify-center">
+        <div className="h-[400px] bg-white w-full rounded-3xl border-[#D4D4D4] border flex flex-col items-center justify-center">
           <svg
             width="58"
             height="57"

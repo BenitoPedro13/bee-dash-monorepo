@@ -20,7 +20,7 @@ export default function CampaingCard({ name, posts, campaign }: cardProps) {
 
   return (
     <Link href={`/campaigns/${campaign.id}`}>
-      <div className="bg-white rounded-xl border border-[#D4D4D4] overflow-hidden">
+      <div className="bg-white rounded-3xl border border-[#D4D4D4] overflow-hidden">
         <Image
           alt={campaign.name}
           src={

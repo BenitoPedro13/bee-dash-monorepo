@@ -48,7 +48,8 @@ const metricConfig: Record<
     config: [
       {
         className: "rounded-bl-3xl rounded-tl-3xl",
-        classNameCreator: "col-span-2 h-[135px]",
+        classNameCreator:
+          "rounded-bl-3xl rounded-tl-3xl rounded-br-3xl rounded-tr-3xl col-span-2 h-[135px]",
         heading: "Posts",
         metric: (data) => countPostsByType(data, ["TIKTOK"]),
         icon: <CameraIcon />,
@@ -56,7 +57,8 @@ const metricConfig: Record<
       },
       {
         className: "rounded-br-3xl rounded-tr-3xl border-l-0",
-        classNameCreator: "col-span-2 h-[135px]",
+        classNameCreator:
+          "rounded-bl-3xl rounded-tl-3xl rounded-br-3xl rounded-tr-3xl col-span-2 h-[135px]",
 
         heading: "TikToks",
         metric: (data) => countPostsByType(data, ["TIKTOK"]),
@@ -69,12 +71,12 @@ const metricConfig: Record<
     className:
       "flex-shrink-0 w-full xl:h-auto h-min xl:flex grid xl:justify-start xl:items-center grid-cols-metric auto-rows-fr grid-rows-2 p-0 overflow-visible relative content-center flex-nowrap rounded-none",
     classNameCreator:
-      "flex-shrink-0 w-full xl:h-auto h-min grid grid-cols-2 auto-rows-fr grid-rows-2 p-0 overflow-visible relative content-center flex-nowrap xl:gap-4 gap-[10px] rounded-none",
+      "flex-shrink-0 w-full xl:h-auto h-min grid grid-cols-2 auto-rows-fr grid-rows-2 p-0 overflow-visible relative content-center flex-nowrap xl:gap-y-4 gap-y-[10px] rounded-none",
 
     config: [
       {
         className: "xl:rounded-bl-3xl rounded-tl-3xl border-b-0 xl:border-b",
-        classNameCreator: "col-span-1 h-[135px]",
+        classNameCreator: "rounded-bl-3xl rounded-tl-3xl col-span-1 h-[135px]",
 
         heading: "Posts",
         metric: (data) => countPostsByType(data, ["STORIES", "FEED", "REELS"]),
@@ -85,7 +87,8 @@ const metricConfig: Record<
       {
         className:
           " border-l-0 border-b-0 xl:border-b rounded-tr-3xl xl:rounded-tr-none",
-        classNameCreator: "col-span-1",
+        classNameCreator:
+          "rounded-br-3xl rounded-tr-3xl col-span-1 border-l-0 h-[135px]",
 
         heading: "Stories",
         metric: (data) => countPostsByType(data, ["STORIES"]),
@@ -98,7 +101,7 @@ const metricConfig: Record<
       },
       {
         className: "rounded-bl-3xl xl:rounded-bl-none xl:border-l-0",
-        classNameCreator: "col-span-1 h-[135px]",
+        classNameCreator: "rounded-bl-3xl rounded-tl-3xl col-span-1 h-[135px]",
 
         heading: "Feed",
         metric: (data) => countPostsByType(data, ["FEED"]),
@@ -108,7 +111,8 @@ const metricConfig: Record<
       {
         className:
           " rounded-br-3xl  xl:rounded-bl-none xl:rounded-tr-3xl border-l-0",
-        classNameCreator: "col-span-1 h-[135px]",
+        classNameCreator:
+          "rounded-br-3xl rounded-tr-3xl  col-span-1 h-[135px]  border-l-0",
 
         heading: "Reels",
         metric: (data) => countPostsByType(data, ["REELS"]),
