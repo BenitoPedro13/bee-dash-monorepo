@@ -25,10 +25,15 @@ import {
 } from "../../utils/utils";
 import CostPerMetric from "./CostPerMetric";
 import Metrics from "./Metrics";
+import MediumEngagement from "./MetricsIcons/MediumEngagement";
+import LinkClicks from "./MetricsIcons/LinkClicks";
+import CPV from "./MetricsIcons/CPV";
+import Investment from "./MetricsIcons/Investment";
 
 const metricConfig: Record<
   DashboardMode,
   {
+    classname: string;
     heading: string[];
     variation: (
       data: Posts[]
@@ -36,11 +41,14 @@ const metricConfig: Record<
       DashbordDateRange,
       { total: number | string; variation: number | null }
     >[];
+    icon: JSX.Element | null;
     sigla?: string[];
   }[]
 > = {
   tiktok: [
     {
+      classname:
+        "xl:rounded-bl-3xl rounded-tl-3xl rounded-tr-3xl xl:rounded-tr-none border-b-0 xl:border-b",
       heading: ["Engajamento Médio", "Custo por Engajamento"],
       sigla: ["Total"],
       variation: (data) => [
@@ -57,8 +65,10 @@ const metricConfig: Record<
         //   true
         // ),
       ],
+      icon: <MediumEngagement />,
     },
     {
+      classname: "xl:border-l-0 border-b-0 xl:border-b",
       heading: ["Cliques", "Taxa de Cliques"],
       sigla: ["Total", "CTR"],
       variation: (data) => [
@@ -74,8 +84,10 @@ const metricConfig: Record<
           ["TIKTOK"]
         ),
       ],
+      icon: <LinkClicks />,
     },
     {
+      classname: "xl:border-l-0 border-b-0 xl:border-b",
       heading: ["Views", "Custo por View", "Custo por Mil Views"],
       sigla: ["Total", "CPV"],
       variation: (data) => [
@@ -87,8 +99,11 @@ const metricConfig: Record<
         calculatePostsVariationsCPV(data, ["impressions"], ["TIKTOK"]),
         // calculateVariationsCPV(data, "Impressoes Tiktok", true),
       ],
+      icon: <CPV />,
     },
     {
+      classname:
+        "rounded-br-3xl xl:rounded-tr-3xl xl:border-l-0 rounded-bl-3xl xl:rounded-bl-none  xl:!min-w-[367px] ",
       heading: ["Investimento Total", "Investimento Médio"],
       sigla: ["Total", "Média"],
       variation: (data) => [
@@ -104,10 +119,13 @@ const metricConfig: Record<
           true
         ),
       ],
+      icon: <Investment />,
     },
   ],
   instagram: [
     {
+      classname:
+        "xl:rounded-bl-3xl rounded-tl-3xl rounded-tr-3xl xl:rounded-tr-none border-b-0 xl:border-b",
       heading: ["Engajamento Médio", "Custo por Engajamento"],
       sigla: ["Total"],
       variation: (data) => [
@@ -119,8 +137,10 @@ const metricConfig: Record<
         ),
         // calculateVariationsEngajamento(data, "Impressoes", "Interacoes", true),
       ],
+      icon: <MediumEngagement />,
     },
     {
+      classname: "xl:border-l-0 border-b-0 xl:border-b",
       heading: ["Cliques", "Taxa de Cliques"],
       sigla: ["Total", "CTR"],
       variation: (data) => [
@@ -136,8 +156,10 @@ const metricConfig: Record<
           ["INSTAGRAM"]
         ),
       ],
+      icon: <LinkClicks />,
     },
     {
+      classname: "xl:border-l-0 border-b-0 xl:border-b",
       heading: ["Views", "Custo por View", "Custo por Mil Views"],
       sigla: ["Total", "CPV"],
 
@@ -150,8 +172,11 @@ const metricConfig: Record<
         calculatePostsVariationsCPV(data, ["impressions"], ["INSTAGRAM"]),
         // calculateVariationsCPV(data, "Impressoes", true),
       ],
+      icon: <CPV />,
     },
     {
+      classname:
+        "rounded-br-3xl xl:rounded-tr-3xl xl:border-l-0 rounded-bl-3xl xl:rounded-bl-none  xl:!min-w-[367px] ",
       heading: ["Investimento Total", "Investimento Médio"],
 
       sigla: ["Total", "Média"],
@@ -168,10 +193,13 @@ const metricConfig: Record<
           true
         ),
       ],
+      icon: <Investment />,
     },
   ],
   all: [
     {
+      classname:
+        "xl:rounded-bl-3xl rounded-tl-3xl rounded-tr-3xl xl:rounded-tr-none border-b-0 xl:border-b",
       heading: ["Engajamento Médio", "Custo por Engajamento"],
       sigla: ["Total"],
 
@@ -189,8 +217,10 @@ const metricConfig: Record<
         //   true
         // ),
       ],
+      icon: <MediumEngagement />,
     },
     {
+      classname: "xl:border-l-0 border-b-0 xl:border-b",
       heading: ["Cliques", "Taxa de Cliques"],
       sigla: ["Total", "CTR"],
       variation: (data) => [
@@ -206,8 +236,10 @@ const metricConfig: Record<
           ["INSTAGRAM", "TIKTOK"]
         ),
       ],
+      icon: <LinkClicks />,
     },
     {
+      classname: "xl:border-l-0 border-b-0 xl:border-b",
       heading: ["Views", "Custo por View", "Custo por Mil Views"],
       sigla: ["Total", "CPV"],
       variation: (data) => [
@@ -223,8 +255,11 @@ const metricConfig: Record<
         ),
         // calculateVariationsCPV(data, ["Impressoes", "Impressoes Tiktok"], true),
       ],
+      icon: <CPV />,
     },
     {
+      classname:
+        "rounded-br-3xl xl:rounded-tr-3xl xl:border-l-0 rounded-bl-3xl xl:rounded-bl-none  xl:!min-w-[367px] ",
       heading: ["Investimento Total", "Investimento Médio"],
       sigla: ["Total", "Média"],
       variation: (data) => [
@@ -240,6 +275,7 @@ const metricConfig: Record<
           true
         ),
       ],
+      icon: <Investment />,
     },
   ],
 };
@@ -255,15 +291,18 @@ const SecondSection = ({ data }: { data?: Posts[] }) => {
 
   return (
     <div className="box-border flex-shrink-0 w-full h-min flex flex-col justify-start items-start xl:p-0 px-[15px] overflow-visible relative content-start flex-nowrap xl:gap-[22px] gap-6 rounded-none">
-      <div className="flex-shrink-0 flex-grow xl:flex-grow-0 w-full h-min flex xl:flex-row flex-col justify-start items-center overflow-visible relative p-0 content-center flex-nowrap xl:gap-6 gap-[15px] rounded-none">
-        {metrics.map(({ heading, sigla, variation }) => (
+      <div className="flex-shrink-0 flex-grow xl:flex-grow-0 w-full h-min flex xl:flex-row flex-col justify-start items-center overflow-visible relative p-0 content-center flex-nowrap rounded-none">
+        {metrics.map(({ heading, sigla, variation, classname, icon }) => (
           <CostPerMetric
+            classname={classname}
             key={heading.join("-")}
             heading={heading}
             sigla={sigla}
             // metric={metric(data)}
             variation={variation(data ?? allPosts)}
-          />
+          >
+            {icon}
+          </CostPerMetric>
         ))}
       </div>
     </div>

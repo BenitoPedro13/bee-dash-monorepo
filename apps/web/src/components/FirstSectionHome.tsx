@@ -18,6 +18,7 @@ import TotalFeedIcon from "./MetricsIcons/TotalFeedIcon";
 import TotalStoriesIcon from "./MetricsIcons/TotalStoriesIcon";
 import TotalReelsIcon from "./MetricsIcons/TotalReelsIcon";
 import TotalTiktokIcon from "./MetricsIcons/TotalTiktokIcon";
+import CameraIcon from "./MetricsIcons/CameraIcon";
 
 const metricConfig: Record<
   DashboardMode,
@@ -51,7 +52,7 @@ const metricConfig: Record<
         classNameCreator: "col-span-2 h-[117px]",
         heading: "Total Posts",
         metric: (data) => countPostsByType(data, ["TIKTOK"]),
-        icon: null,
+        icon: <CameraIcon />,
         variation: (data) => calculatePostsCountVariations(data, ["TIKTOK"]),
       },
       {
@@ -77,7 +78,7 @@ const metricConfig: Record<
 
         heading: "Total Posts",
         metric: (data) => countPostsByType(data, ["STORIES", "FEED", "REELS"]),
-        icon: null,
+        icon: <CameraIcon />,
         variation: (data) =>
           calculatePostsCountVariations(data, ["STORIES", "FEED", "REELS"]),
       },
@@ -116,18 +117,18 @@ const metricConfig: Record<
   },
   all: {
     className:
-      "flex-shrink-0 w-full xl:h-auto h-min xl:flex grid xl:justify-start xl:items-center grid-cols-metric auto-rows-fr grid-rows-2 p-0 overflow-visible relative content-center flex-nowrap xl:gap-6 gap-[10px] rounded-none",
+      "flex-shrink-0 w-full xl:h-auto h-min xl:flex grid xl:justify-start xl:items-center grid-cols-metric auto-rows-fr grid-rows-2 p-0 overflow-visible relative content-center flex-nowrap rounded-none",
     classNameCreator:
       "w-full xl:h-auto h-min grid grid-cols-6 auto-rows-fr grid-rows-2 p-0 overflow-visible relative content-center flex-nowrap xl:gap-4 gap-[10px] rounded-none",
 
     config: [
       {
-        className: "",
+        className: "xl:rounded-bl-3xl rounded-tl-3xl border-b-0 xl:border-b",
         classNameCreator: "col-span-2 h-[117px]",
         heading: "Total Posts",
         metric: (data) =>
           countPostsByType(data, ["STORIES", "FEED", "REELS", "TIKTOK"]),
-        icon: null,
+        icon: <CameraIcon />,
         variation: (data) =>
           calculatePostsCountVariations(data, [
             "STORIES",
@@ -137,7 +138,8 @@ const metricConfig: Record<
           ]),
       },
       {
-        className: "",
+        className:
+          "xl:rounded-tr-none rounded-tr-3xl border-b-0 xl:border-b border-l-0",
         classNameCreator: "col-span-2 h-[117px]",
         heading: "Total Stories",
         metric: (data) => countPostsByType(data, ["STORIES"]),
@@ -149,7 +151,7 @@ const metricConfig: Record<
         variation: (data) => calculatePostsCountVariations(data, ["STORIES"]),
       },
       {
-        className: "",
+        className: " border-b-0 xl:border-b xl:border-l-0",
         classNameCreator: "col-span-2 h-[117px]",
         heading: "Total Feed",
         metric: (data) => countPostsByType(data, ["FEED"]),
@@ -157,7 +159,7 @@ const metricConfig: Record<
         variation: (data) => calculatePostsCountVariations(data, ["FEED"]),
       },
       {
-        className: "",
+        className: " border-b-0 xl:border-b border-l-0",
         classNameCreator: "col-span-3 h-[117px]",
         heading: "Total Reels",
         metric: (data) => countPostsByType(data, ["REELS"]),
@@ -165,7 +167,8 @@ const metricConfig: Record<
         variation: (data) => calculatePostsCountVariations(data, ["REELS"]),
       },
       {
-        className: "col-span-2",
+        className:
+          "col-span-2  rounded-br-3xl rounded-bl-3xl xl:rounded-bl-none xl:rounded-tr-3xl xl:border-l-0",
         classNameCreator: "col-span-3 h-[117px]",
         heading: "Total TikToks",
         metric: (data) => countPostsByType(data, ["TIKTOK"]),

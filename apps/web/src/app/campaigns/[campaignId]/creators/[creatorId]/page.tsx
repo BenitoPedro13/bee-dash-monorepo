@@ -102,12 +102,12 @@ export default function Home() {
               <img
                 src={baseApiUrl + creatorData[0]["Url Foto Perfil"]}
                 alt={creatorData[0].Influencer}
-                className="rounded-2xl  w-[404px] h-[404px]"
+                className="rounded-2xl  w-[408px] h-[408px]"
               />
             ) : (
-              <Skeleton className="!w-[404px] bg-slate-300 rounded-2xl h-[404px] block" />
+              <Skeleton className="!w-[408px] bg-slate-300 rounded-2xl h-[408px] block" />
             )}
-            <div className="lg:w-[calc(100%-384px)] w-full h-[404px] max-[660px]:h-auto gap-4 flex flex-col items-start justify-between">
+            <div className="lg:w-[calc(100%-384px)] w-full h-[408px] max-[660px]:h-auto gap-4 flex flex-col items-start justify-between">
               {creatorData[0] && creatorData[0].Influencer ? (
                 <>
                   <h1 className="flex-shrink-0 w-full h-auto whitespace-pre-wrap break-words relative font-Balgin-Display text-[#000] text-[36px] font-nexa font-bold leading-[56px]">
