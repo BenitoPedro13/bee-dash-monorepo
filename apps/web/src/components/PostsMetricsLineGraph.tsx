@@ -18,6 +18,8 @@ import BarGraph from "./BarGraph";
 import Badge from "./Badge";
 import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
 import PostsBarGraph from "./PostsBarGraph";
+import ImpressionsIcon from "./MetricsIcons/ImpressionsIcon";
+import MediumEngagement from "./MetricsIcons/MediumEngagement";
 
 const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
@@ -140,7 +142,7 @@ const PostsMetricsGraph = ({ data }: MetricsGraphProps) => {
 
   return (
     <div
-      className="box-border lg:w-[calc(100%)] w-full h-min flex flex-col justify-start items-start shadow-metrics   bg-white xl:overflow-hidden overflow-visible p-0 content-start flex-nowrap xl:gap-0 gap-5 rounded-xl border-[#D4D4D4] border"
+      className="box-border lg:w-[calc(100%)] w-full h-min flex flex-col justify-start items-start shadow-metrics   bg-white xl:overflow-hidden overflow-visible p-0 content-start flex-nowrap xl:gap-0 gap-5 rounded-3xl border-[#D4D4D4] border"
       // initial={false}
       // whileHover={{ boxShadow: "2px 2px 0px 0px #898989" }}
       // animate={{ boxShadow: "2px 2px 2px 0px rgba(16, 24, 40, 0.06)" }}
@@ -150,9 +152,16 @@ const PostsMetricsGraph = ({ data }: MetricsGraphProps) => {
         <div className="flex-shrink-0 w-full h-min flex flex-col justify-start items-start overflow-visible relative p-0 content-start flex-nowrap gap-2 rounded-none">
           <div className="flex-shrink-0 w-full h-min flex flex-col justify-start items-start overflow-visible relative p-0 content-start flex-nowrap gap-5 rounded-none">
             <div className="flex-shrink-0 w-full h-min flex justify-start items-center overflow-visible relative p-0 content-center flex-nowrap gap-4 rounded-none">
-              <div className="flex-shrink-0 flex-grow w-auto h-full flex flex-col justify-center items-start overflow-visible relative p-0 content-start flex-nowrap gap-1 rounded-none">
+              <div className="flex-shrink-0 flex-grow w-auto h-full flex flex-row justify-start items-center overflow-visible relative p-0 content-start flex-nowrap gap-2 rounded-none">
+                <div className="flex w-9 h-9 flex-col items-center justify-center gap-3 rounded-full bg-[#EEEDEC]">
+                  {typeOfGraph === "Impressoes" ? (
+                    <ImpressionsIcon />
+                  ) : (
+                    <MediumEngagement />
+                  )}
+                </div>
                 <p
-                  className={`flex-shrink-0 w-full h-auto whitespace-pre-wrap break-words relative font-medium font-nexa text-[#475467] text-sm`}
+                  className={`w-full h-auto whitespace-pre-wrap break-words relative font-bold font-nexa text-[#475467] text-sm`}
                 >
                   {heading}
                 </p>
@@ -160,13 +169,15 @@ const PostsMetricsGraph = ({ data }: MetricsGraphProps) => {
               <Tabs
                 defaultValue={typeOfGraph}
                 onValueChange={(value) => setTypeOfGraph(value as GraphTypes)}
-                className="flex p-[5px] items-center rounded-lg border border-[#E2E8F0] h-[42px]"
+                className="flex p-[5px] items-center border border-[#E2E8F0] h-[42px] rounded-full"
               >
                 <TabsList>
-                  <TabsTrigger value={"Impressoes"} className="">
+                  <TabsTrigger value={"Impressoes"} className="rounded-full">
                     Impressões
                   </TabsTrigger>
-                  <TabsTrigger value={"Interacoes"}>Interações</TabsTrigger>
+                  <TabsTrigger value={"Interacoes"} className="rounded-full">
+                    Interações
+                  </TabsTrigger>
                 </TabsList>
               </Tabs>
             </div>

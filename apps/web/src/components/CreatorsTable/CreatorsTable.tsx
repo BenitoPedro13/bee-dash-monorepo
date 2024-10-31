@@ -69,10 +69,13 @@ const CreatorsTable = () => {
     const container = tableContainerRef.current;
     if (container) {
       container.addEventListener("scroll", handleScroll);
+      window.addEventListener("resize", handleScroll);
     }
+
     return () => {
       if (container) {
         container.removeEventListener("scroll", handleScroll);
+        window.removeEventListener("resize", handleScroll);
       }
     };
   }, []);
@@ -227,6 +230,7 @@ const CreatorsTable = () => {
           style={{
             boxShadow: "0 0 0 10px white",
             margin: "10px",
+            // width: `${headerWidth}px`,
           }}
         ></div>
         <div

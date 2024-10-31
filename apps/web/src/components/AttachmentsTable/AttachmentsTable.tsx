@@ -70,6 +70,7 @@ const AttachmentsTable = () => {
   useEffect(() => {
     const container = tableContainerRef.current;
     if (container) {
+      setHeaderWidth(tableContainerRef.current.getBoundingClientRect().width);
       container.addEventListener("scroll", handleScroll);
       window.addEventListener("resize", handleScroll);
     }

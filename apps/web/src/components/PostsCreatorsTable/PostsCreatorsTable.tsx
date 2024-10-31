@@ -1,11 +1,12 @@
 import { motion } from "framer-motion";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import performanceIcon from "@/../public/performanceIcon.png";
 import Image from "next/image";
 import { Plus_Jakarta_Sans, Inter } from "next/font/google";
 import CreatorsTableRow from "./PostsCreatorsTableRow";
 import useDataStore, { Influencer, Posts } from "@/store";
 import {
+  generatePastelColor,
   handleSort,
   parseCurrencyString,
   parsePercentageString,
@@ -62,6 +63,11 @@ const PostsCreatorsTable = ({ globalData }: { globalData: Posts[] }) => {
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc"); // Initial sort order
   const [sortColumn, setSortColumn] = useState<keyof Posts>("id"); // Initial sort column
 
+  const tableContainerRef = useRef<HTMLDivElement>(null);
+  const [headerOffset, setHeaderOffset] = useState(0);
+  const [headerWidth, setHeaderWidth] = useState(0);
+  const pastelColor = generatePastelColor(hexColor);
+
   // const toggleOpen = () => setOpen(!open);
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
@@ -72,15 +78,31 @@ const PostsCreatorsTable = ({ globalData }: { globalData: Posts[] }) => {
     setData(globalData);
   }, [globalData]);
 
-  // useEffect(() => {
-  //   if (search.length > 0) {
-  //     const filteredData = data.filter((item) =>
-  //       item.Influencer.toLocaleLowerCase().includes(search.toLocaleLowerCase())
-  //     );
-  //     return setData(filteredData);
-  //   }
-  //   setData([...globalData]);
-  // }, [search]);
+  const handleScroll = () => {
+    if (tableContainerRef.current) {
+      setHeaderWidth(tableContainerRef.current.getBoundingClientRect().width);
+      const diference =
+        1374.91 - tableContainerRef.current.getBoundingClientRect().width;
+      if (tableContainerRef.current.scrollLeft < diference) {
+        setHeaderOffset(tableContainerRef.current.scrollLeft);
+      }
+    }
+  };
+
+  useEffect(() => {
+    const container = tableContainerRef.current;
+    if (container) {
+      setHeaderWidth(tableContainerRef.current.getBoundingClientRect().width);
+      container.addEventListener("scroll", handleScroll);
+      window.addEventListener("resize", handleScroll);
+    }
+    return () => {
+      if (container) {
+        container.removeEventListener("scroll", handleScroll);
+        window.removeEventListener("resize", handleScroll);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     const sortedData = data.sort((a, b) => {
@@ -144,7 +166,7 @@ const PostsCreatorsTable = ({ globalData }: { globalData: Posts[] }) => {
   }, [data, sortColumn, sortOrder, currentPage, itemsPerPage]);
 
   return (
-    <div className="box-border lg:w-[calc(100%)] w-full flex flex-col justify-start items-start self-stretch bg-white overflow-hidden p-0 content-start flex-nowrap gap-0 rounded-xl border border-[#D4D4D4]">
+    <div className="box-border lg:w-[calc(100%)] w-full flex flex-col justify-start items-start self-stretch bg-white overflow-hidden p-0 content-start flex-nowrap gap-0 rounded-3xl border border-[#D4D4D4]">
       <div className="flex-shrink-0 w-full h-min flex flex-col justify-start items-start  self-stretch overflow-visible relative p-0 content-start flex-nowrap sm:gap-5 gap-0 rounded-none">
         <div className="flex flex-col items-start self-stretch">
           <div className="flex px-5 py-6 items-start gap-4 self-stretch">
@@ -153,16 +175,48 @@ const PostsCreatorsTable = ({ globalData }: { globalData: Posts[] }) => {
                 Posts
               </h3>
               <p className="font-nexa text-sm text-[#475467] self-stretch">
-                Arquivos e outros documentos que ajudarão seu projeto
+                Métricas úteis de cada post
               </p>
             </div>
           </div>
         </div>
       </div>
-      <div className="overflow-x-auto w-full border-t border-gray">
+      <div
+        className="overflow-x-auto w-full border-t border-gray relative"
+        ref={tableContainerRef}
+      >
+        <div
+          id="table-header-clip"
+          className="absolute top-0 h-[28.5px] min-w-[1374.91px] left-0 bg-transparent z-30 pointer-events-none"
+          style={{
+            boxShadow: "0 0 0 10px white",
+            margin: "10px",
+            width: `${headerWidth}px`,
+            // transform: `translateX(${headerOffset}px)`,
+          }}
+        ></div>
+        <div
+          id="table-header-clip"
+          className="absolute top-0 h-[28.5px] right-0 bg-transparent w-[calc(100%-20px)] z-40 rounded-md  pointer-events-none"
+          style={{
+            boxShadow: "0 0 0 10px white",
+            margin: "10px",
+            transform: `translateX(${headerOffset}px)`,
+          }}
+        >
+          <div className="flex justify-between w-full h-full relative">
+            <div className="bg-white w-10 h-full absolute -left-10"></div>
+            <div className="bg-white w-10 h-full absolute -right-10"></div>
+          </div>
+        </div>
         <table className="table">
           <thead className="sticky top-0 bg-white">
-            <tr className="border-box flex-shrink-0 w-full h-min bg-[#f8f9fb] overflow-visible relative content-center flex-nowrap gap-[5px] rounded-none border-b border-[#eaecf0]">
+            <tr
+              className="border-box flex-shrink-0 w-full h-min bg-[#f8f9fb] overflow-visible relative content-center flex-nowrap gap-[5px] rounded-none border-b border-[#eaecf0]"
+              style={{
+                background: pastelColor,
+              }}
+            >
               <th
                 className={`cursor-pointer flex-shrink-0 w-auto max-w-[300px] h-auto whitespace-pre-wrap break-words relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
                 onClick={() =>
