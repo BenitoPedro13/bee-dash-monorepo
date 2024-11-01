@@ -210,7 +210,7 @@ const Header = () => {
       </header>
 
       {!isDesktop && (
-        <nav className="flex items-center justify-center w-full fixed bottom-7 z-20">
+        <nav className="flex items-center justify-center w-full fixed bottom-7 z-50">
           <Tabs
             defaultValue={tabs.find((item) => path.includes(item))}
             onValueChange={(value) => router.push(`/${value}`)}

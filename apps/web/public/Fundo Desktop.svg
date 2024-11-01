@@ -69,68 +69,68 @@
 </g>
 <defs>
 <radialGradient id="paint0_radial_2083_3639" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(320.029 187.278) rotate(90) scale(187.278 320.029)">
-<stop stop-color="#FF8C00"/>
-<stop offset="1" stop-color="#FF8C00" stop-opacity="0"/>
+<stop stop-color="currentColor"/>
+<stop offset="1" stop-color="currentColor" stop-opacity="0"/>
 </radialGradient>
 <radialGradient id="paint1_radial_2083_3639" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(320.029 937.078) rotate(90) scale(187.278 320.029)">
-<stop stop-color="#FF8C00"/>
-<stop offset="1" stop-color="#FF8C00" stop-opacity="0"/>
+<stop stop-color="currentColor"/>
+<stop offset="1" stop-color="currentColor" stop-opacity="0"/>
 </radialGradient>
 <radialGradient id="paint2_radial_2083_3639" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(320.029 562.178) rotate(90) scale(187.278 320.029)">
-<stop stop-color="#FF8C00"/>
-<stop offset="1" stop-color="#FF8C00" stop-opacity="0"/>
+<stop stop-color="currentColor"/>
+<stop offset="1" stop-color="currentColor" stop-opacity="0"/>
 </radialGradient>
 <radialGradient id="paint3_radial_2083_3639" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(320.029 1311.98) rotate(90) scale(187.278 320.029)">
-<stop stop-color="#FF8C00"/>
-<stop offset="1" stop-color="#FF8C00" stop-opacity="0"/>
+<stop stop-color="currentColor"/>
+<stop offset="1" stop-color="currentColor" stop-opacity="0"/>
 </radialGradient>
 <radialGradient id="paint4_radial_2083_3639" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(960.01 562.178) rotate(90) scale(187.278 320.029)">
-<stop stop-color="#FF8C00"/>
-<stop offset="1" stop-color="#FF8C00" stop-opacity="0"/>
+<stop stop-color="currentColor"/>
+<stop offset="1" stop-color="currentColor" stop-opacity="0"/>
 </radialGradient>
 <radialGradient id="paint5_radial_2083_3639" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(960.01 1311.98) rotate(90) scale(187.278 320.029)">
-<stop stop-color="#FF8C00"/>
-<stop offset="1" stop-color="#FF8C00" stop-opacity="0"/>
+<stop stop-color="currentColor"/>
+<stop offset="1" stop-color="currentColor" stop-opacity="0"/>
 </radialGradient>
 <radialGradient id="paint6_radial_2083_3639" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(960.01 187.278) rotate(90) scale(187.278 320.029)">
-<stop stop-color="#FF8C00"/>
-<stop offset="1" stop-color="#FF8C00" stop-opacity="0"/>
+<stop stop-color="currentColor"/>
+<stop offset="1" stop-color="currentColor" stop-opacity="0"/>
 </radialGradient>
 <radialGradient id="paint7_radial_2083_3639" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(960.01 937.078) rotate(90) scale(187.278 320.029)">
-<stop stop-color="#FF8C00"/>
-<stop offset="1" stop-color="#FF8C00" stop-opacity="0"/>
+<stop stop-color="currentColor"/>
+<stop offset="1" stop-color="currentColor" stop-opacity="0"/>
 </radialGradient>
 <radialGradient id="paint8_radial_2083_3639" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1599.99 187.278) rotate(90) scale(187.278 320.029)">
-<stop stop-color="#FF8C00"/>
-<stop offset="1" stop-color="#FF8C00" stop-opacity="0"/>
+<stop stop-color="currentColor"/>
+<stop offset="1" stop-color="currentColor" stop-opacity="0"/>
 </radialGradient>
 <radialGradient id="paint9_radial_2083_3639" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1599.99 937.078) rotate(90) scale(187.278 320.029)">
-<stop stop-color="#FF8C00"/>
-<stop offset="1" stop-color="#FF8C00" stop-opacity="0"/>
+<stop stop-color="currentColor"/>
+<stop offset="1" stop-color="currentColor" stop-opacity="0"/>
 </radialGradient>
 <radialGradient id="paint10_radial_2083_3639" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1599.99 562.178) rotate(90) scale(187.278 320.029)">
-<stop stop-color="#FF8C00"/>
-<stop offset="1" stop-color="#FF8C00" stop-opacity="0"/>
+<stop stop-color="currentColor"/>
+<stop offset="1" stop-color="currentColor" stop-opacity="0"/>
 </radialGradient>
 <radialGradient id="paint11_radial_2083_3639" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1599.99 1311.98) rotate(90) scale(187.278 320.029)">
-<stop stop-color="#FF8C00"/>
-<stop offset="1" stop-color="#FF8C00" stop-opacity="0"/>
+<stop stop-color="currentColor"/>
+<stop offset="1" stop-color="currentColor" stop-opacity="0"/>
 </radialGradient>
 <radialGradient id="paint12_radial_2083_3639" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(2239.97 562.178) rotate(90) scale(187.278 320.029)">
-<stop stop-color="#FF8C00"/>
-<stop offset="1" stop-color="#FF8C00" stop-opacity="0"/>
+<stop stop-color="currentColor"/>
+<stop offset="1" stop-color="currentColor" stop-opacity="0"/>
 </radialGradient>
 <radialGradient id="paint13_radial_2083_3639" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(2239.97 1311.98) rotate(90) scale(187.278 320.029)">
-<stop stop-color="#FF8C00"/>
-<stop offset="1" stop-color="#FF8C00" stop-opacity="0"/>
+<stop stop-color="currentColor"/>
+<stop offset="1" stop-color="currentColor" stop-opacity="0"/>
 </radialGradient>
 <radialGradient id="paint14_radial_2083_3639" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(2239.97 187.278) rotate(90) scale(187.278 320.029)">
-<stop stop-color="#FF8C00"/>
-<stop offset="1" stop-color="#FF8C00" stop-opacity="0"/>
+<stop stop-color="currentColor"/>
+<stop offset="1" stop-color="currentColor" stop-opacity="0"/>
 </radialGradient>
 <radialGradient id="paint15_radial_2083_3639" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(2239.97 937.078) rotate(90) scale(187.278 320.029)">
-<stop stop-color="#FF8C00"/>
-<stop offset="1" stop-color="#FF8C00" stop-opacity="0"/>
+<stop stop-color="currentColor"/>
+<stop offset="1" stop-color="currentColor" stop-opacity="0"/>
 </radialGradient>
 </defs>
 </svg>
