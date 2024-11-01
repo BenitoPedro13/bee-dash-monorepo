@@ -189,7 +189,6 @@ export default function PostsBarGraph({
         margin={{
           top: 20,
         }}
-        barSize={24}
       >
         <CartesianGrid vertical={false} />
         <XAxis

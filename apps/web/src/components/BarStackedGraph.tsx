@@ -97,7 +97,7 @@ export function Component() {
 
   return (
     <ChartContainer config={chartConfig} width="100%" height="326px">
-      <BarChart accessibilityLayer data={chartDataState} barSize={24}>
+      <BarChart accessibilityLayer data={chartDataState}>
         <CartesianGrid vertical={false} />
         <XAxis
           dataKey="month"

@@ -17,6 +17,7 @@ import arrowRight from "@/../public/arrow-right.svg";
 import PerformanceIcon from "../MetricsIcons/PerformanceIcon";
 import { SearchIcon, X } from "lucide-react";
 import Link from "next/link";
+import { set } from "react-hook-form";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -48,33 +49,58 @@ const CreatorsTable = () => {
   const tableContainerRef = useRef<HTMLDivElement>(null);
   const [headerOffset, setHeaderOffset] = useState(0);
 
-  const pastelColor = generatePastelColor(hexColor);
+  // const pastelColor = generatePastelColor(hexColor);
 
   // const toggleOpen = () => setOpen(!open);
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
   };
 
+  const hasBounced = useRef(false); // Track if bounce has already been triggered
+
   const handleScroll = () => {
     if (tableContainerRef.current) {
-      const diference =
+      const difference =
         2938.28 - tableContainerRef.current.getBoundingClientRect().width;
-      if (tableContainerRef.current.scrollLeft < diference) {
+      if (tableContainerRef.current.scrollLeft < difference) {
         setHeaderOffset(tableContainerRef.current.scrollLeft);
       }
     }
   };
 
+  const handleScrollEnd = () => {
+    if (tableContainerRef.current) {
+      setHeaderOffset(tableContainerRef.current.scrollLeft);
+
+      hasBounced.current = true; // Set bounce flag to prevent repeated bounces
+      // Apply smooth bounce effect
+      if (!hasBounced.current) {
+        tableContainerRef.current.scrollBy({ left: -10, behavior: "smooth" });
+        // Bounce back to the right
+        setTimeout(() => {
+          tableContainerRef.current?.scrollBy({ left: 10, behavior: "smooth" });
+        }, 100);
+      }
+
+      // Reset the bounce flag after the bounce completes
+      setTimeout(() => {
+        hasBounced.current = false;
+      }, 500);
+    }
+  };
+
+  // Adding scroll, scrollend, and resize event listeners
   useEffect(() => {
     const container = tableContainerRef.current;
     if (container) {
       container.addEventListener("scroll", handleScroll);
+      container.addEventListener("scrollend", handleScrollEnd);
       window.addEventListener("resize", handleScroll);
     }
-
     return () => {
       if (container) {
         container.removeEventListener("scroll", handleScroll);
+        container.removeEventListener("scrollend", handleScrollEnd);
         window.removeEventListener("resize", handleScroll);
       }
     };
@@ -243,17 +269,22 @@ const CreatorsTable = () => {
           }}
         >
           <div className="flex justify-between w-full h-full relative">
-            <div className="bg-white w-10 h-full absolute -left-10"></div>
-            <div className="bg-white w-10 h-full absolute -right-10"></div>
+            <div className={"bg-white w-96 h-full absolute -left-96 "}></div>
+            <div
+              className={
+                "bg-white w-96 h-full absolute -right-96 " +
+                (hasBounced.current ? "!w-10 !-right-10" : "block")
+              }
+            ></div>
           </div>
         </div>
         <table className="table">
           <thead className="sticky top-0 bg-white z-20">
             <tr
-              className="border-box flex-shrink-0 w-full h-min overflow-visible relative content-center flex-nowrap gap-[5px] rounded-none border-b border-[#eaecf0]"
-              style={{
-                background: pastelColor,
-              }}
+              className="border-box flex-shrink-0 w-full h-min overflow-visible bg-[#f8f9fb] relative content-center flex-nowrap gap-[5px] rounded-none border-b border-[#eaecf0]"
+              // style={{
+              //   background: pastelColor,
+              // }}
             >
               <th
                 className={`cursor-pointer flex-shrink-0 w-auto max-w-[300px] h-auto whitespace-pre-wrap break-words relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}

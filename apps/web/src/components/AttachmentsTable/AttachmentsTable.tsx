@@ -25,8 +25,8 @@ const inter = Inter({ subsets: ["latin"] });
 
 const AttachmentsTable = () => {
   const { color } = useDataStore((state) => state.session.user);
-  const hexColor =
-    color === undefined ? "#FF8C00" : color.length !== 7 ? "#FF8C00" : color;
+  // const hexColor =
+  //   color === undefined ? "#FF8C00" : color.length !== 7 ? "#FF8C00" : color;
   const globalAttachments = useDataStore((state) => state.attachments);
   const [attachments, setAttachments] = useState([...globalAttachments]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -48,7 +48,7 @@ const AttachmentsTable = () => {
   const [headerOffset, setHeaderOffset] = useState(0);
   const [headerWidth, setHeaderWidth] = useState(0);
 
-  const pastelColor = generatePastelColor(hexColor);
+  // const pastelColor = generatePastelColor(hexColor);
 
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
@@ -166,10 +166,10 @@ const AttachmentsTable = () => {
         <table className="table">
           <thead className="sticky top-0 bg-white">
             <tr
-              className="border-box flex-shrink-0 w-full h-min overflow-visible relative content-center flex-nowrap gap-[5px] rounded-none border-b border-[#eaecf0]"
-              style={{
-                background: pastelColor,
-              }}
+              className="border-box flex-shrink-0 w-full bg-[#f8f9fb] h-min overflow-visible relative content-center flex-nowrap gap-[5px] rounded-none border-b border-[#eaecf0]"
+              // style={{
+              //   background: pastelColor,
+              // }}
             >
               <th
                 className={`cursor-pointer flex-shrink-0 w-[40%] h-auto whitespace-pre-wrap break-words relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}

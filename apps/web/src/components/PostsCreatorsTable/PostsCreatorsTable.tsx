@@ -44,8 +44,8 @@ const PostsCreatorsTable = ({ globalData }: { globalData: Posts[] }) => {
   // const { data: globalData } = useDataStore((state) => state.data);
 
   const { campaigns, color } = useDataStore((state) => state.session.user);
-  const hexColor =
-    color === undefined ? "#FF8C00" : color.length !== 7 ? "#FF8C00" : color;
+  // const hexColor =
+  //   color === undefined ? "#FF8C00" : color.length !== 7 ? "#FF8C00" : color;
   const [data, setData] = useState(globalData);
   const [currentPage, setCurrentPage] = useState(1);
   // const [searchOpen, setSearchOpen] = useState(false);
@@ -66,7 +66,7 @@ const PostsCreatorsTable = ({ globalData }: { globalData: Posts[] }) => {
   const tableContainerRef = useRef<HTMLDivElement>(null);
   const [headerOffset, setHeaderOffset] = useState(0);
   const [headerWidth, setHeaderWidth] = useState(0);
-  const pastelColor = generatePastelColor(hexColor);
+  // const pastelColor = generatePastelColor(hexColor);
 
   // const toggleOpen = () => setOpen(!open);
   const handlePageChange = (pageNumber: number) => {
@@ -78,27 +78,57 @@ const PostsCreatorsTable = ({ globalData }: { globalData: Posts[] }) => {
     setData(globalData);
   }, [globalData]);
 
+  const hasBounced = useRef(false); // Track if bounce has already been triggered
+
   const handleScroll = () => {
     if (tableContainerRef.current) {
       setHeaderWidth(tableContainerRef.current.getBoundingClientRect().width);
-      const diference =
-        1374.91 - tableContainerRef.current.getBoundingClientRect().width;
-      if (tableContainerRef.current.scrollLeft < diference) {
+      const difference =
+        headerWidth === 0
+          ? 1374.91 - tableContainerRef.current.getBoundingClientRect().width
+          : tableContainerRef.current.getBoundingClientRect().width -
+            tableContainerRef.current.getBoundingClientRect().width;
+      if (tableContainerRef.current.scrollLeft < difference) {
         setHeaderOffset(tableContainerRef.current.scrollLeft);
       }
     }
   };
 
+  const handleScrollEnd = () => {
+    if (tableContainerRef.current) {
+      setHeaderWidth(tableContainerRef.current.getBoundingClientRect().width);
+      setHeaderOffset(tableContainerRef.current.scrollLeft);
+
+      hasBounced.current = true; // Set bounce flag to prevent repeated bounces
+      // Apply smooth bounce effect
+      if (!hasBounced.current) {
+        tableContainerRef.current.scrollBy({ left: -10, behavior: "smooth" });
+        // Bounce back to the right
+        setTimeout(() => {
+          tableContainerRef.current?.scrollBy({ left: 10, behavior: "smooth" });
+        }, 100);
+
+        // Reset the bounce flag after the bounce completes
+        setTimeout(() => {
+          hasBounced.current = false;
+        }, 500);
+      }
+    }
+  };
+
+  // Adding scroll, scrollend, and resize event listeners
   useEffect(() => {
     const container = tableContainerRef.current;
     if (container) {
       setHeaderWidth(tableContainerRef.current.getBoundingClientRect().width);
       container.addEventListener("scroll", handleScroll);
+      container.addEventListener("scrollend", handleScrollEnd);
       window.addEventListener("resize", handleScroll);
     }
     return () => {
       if (container) {
         container.removeEventListener("scroll", handleScroll);
+        container.removeEventListener("scrollend", handleScrollEnd);
         window.removeEventListener("resize", handleScroll);
       }
     };
@@ -205,17 +235,22 @@ const PostsCreatorsTable = ({ globalData }: { globalData: Posts[] }) => {
           }}
         >
           <div className="flex justify-between w-full h-full relative">
-            <div className="bg-white w-10 h-full absolute -left-10"></div>
-            <div className="bg-white w-10 h-full absolute -right-10"></div>
+            <div className={"bg-white w-96 h-full absolute -left-96 "}></div>
+            <div
+              className={
+                "bg-white w-96 h-full absolute -right-96 " +
+                (hasBounced.current ? "!w-10 !-right-10" : "block")
+              }
+            ></div>
           </div>
         </div>
         <table className="table">
           <thead className="sticky top-0 bg-white">
             <tr
               className="border-box flex-shrink-0 w-full h-min bg-[#f8f9fb] overflow-visible relative content-center flex-nowrap gap-[5px] rounded-none border-b border-[#eaecf0]"
-              style={{
-                background: pastelColor,
-              }}
+              // style={{
+              //   background: pastelColor,
+              // }}
             >
               <th
                 className={`cursor-pointer flex-shrink-0 w-auto max-w-[300px] h-auto whitespace-pre-wrap break-words relative font-medium ${inter.className} text-[#475466] text-xs leading-[18px]`}
