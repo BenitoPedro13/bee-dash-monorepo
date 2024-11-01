@@ -100,11 +100,16 @@ export default function Wrapper({ children }: { children: React.ReactNode }) {
         <main>
           {/* <SidenavDesktop /> */}
           <div className="relative overflow-hidden min-h-screen">
-            {/* <Background color={color} /> */}
+            <div className="absolute z-10 h-full w-full">
+              <Background />
+            </div>
+            {/* <Image src={} /> */}
 
             {children}
 
-            <Footer />
+            <div className="relative z-20 xl:px-8 pb-8 px-[15px]">
+              <Footer />
+            </div>
           </div>
         </main>
       </>
