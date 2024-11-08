@@ -58,6 +58,17 @@ export default function UsersEdit() {
   );
   const baseApiUrl = dataProvider.getApiUrl();
 
+  const { selectProps: categoriesSelectProps, queryResult: categoriesResult } =
+    useSelect({
+      resource: "categories",
+      optionLabel: "category",
+      optionValue: "id",
+      // defaultValue:
+      //   isLoading === false && Array.isArray(data?.data.categories)
+      //     ? data?.data.categories.map((item: { id: number }) => item.id)
+      //     : [],
+    });
+
   const [searchTerm, setSearchTerm] = useState("");
   const [creatorsSearch, setCreatorsSearch] = useState("");
   const [creators, setCreators] = useState<ICreatorsSearchResponse>([]);
@@ -413,6 +424,35 @@ export default function UsersEdit() {
           ]}
         >
           <Select {...usersSelectProps} />
+        </Form.Item>
+
+        <Form.Item
+          label={"Categories"}
+          name={["categories"]}
+          rules={[
+            {
+              required: true,
+              message: "Select the Categories this Creator has",
+            },
+          ]}
+          getValueProps={(categories?: { id: number }[]) => {
+            // console.log(categories, "categoeis");
+            return { value: categories?.map((item) => item?.id) };
+          }}
+          getValueFromEvent={(args: number[]) => {
+            return args.map((item) => ({
+              id: item,
+            }));
+          }}
+        >
+          <Select
+            {...categoriesSelectProps}
+            mode="multiple"
+            onChange={(value) => {
+              console.log(value, "value");
+              // formProps.form?.setFieldValue("categories", value);
+            }}
+          />
         </Form.Item>
 
         <Form.Item
