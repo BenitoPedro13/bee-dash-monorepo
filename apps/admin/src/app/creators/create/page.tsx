@@ -23,6 +23,19 @@ export default function UserCreate() {
         </Form.Item>
 
         <Form.Item
+          label={"Creator City"}
+          name={["city"]}
+          rules={[
+            {
+              required: true,
+              message: "Please enter the Creator City",
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item
           label={"Profile Picture URL"}
           name={["urlProfilePicture"]}
           rules={[

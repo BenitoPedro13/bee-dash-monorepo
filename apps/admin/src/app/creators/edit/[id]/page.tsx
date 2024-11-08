@@ -344,6 +344,19 @@ export default function UsersEdit() {
           <Input />
         </Form.Item>
 
+        <Form.Item
+          label={"Creator City"}
+          name={["city"]}
+          rules={[
+            {
+              required: true,
+              message: "Please enter the Creator City",
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
+
         <Form.Item label="Creator Profile Picture" name="urlProfilePicture">
           <div
             style={{ display: "flex", flexDirection: "column", gap: "1rem" }}

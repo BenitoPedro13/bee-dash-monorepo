@@ -21,6 +21,9 @@ export default function CampaignShow() {
       <Title level={5}>Creator Name</Title>
       <TextField value={record?.name} />
 
+      <Title level={5}>Creator City</Title>
+      <TextField value={record?.city} />
+
       <Title level={5}>Creator Profile Picture</Title>
       {record?.urlProfilePicture ? (
         <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
