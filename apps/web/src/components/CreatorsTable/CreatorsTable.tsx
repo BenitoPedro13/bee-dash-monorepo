@@ -250,7 +250,7 @@ const CreatorsTable = () => {
         className="overflow-x-auto w-full border-t border-gray relative"
         ref={tableContainerRef}
       >
-        <div
+        {/* <div
           id="table-header-clip"
           className="absolute top-0 h-[28.5px] left-0 bg-transparent w-[2938.28px] z-30 pointer-events-none"
           style={{
@@ -277,7 +277,7 @@ const CreatorsTable = () => {
               }
             ></div>
           </div>
-        </div>
+        </div> */}
         <table className="table">
           <thead className="sticky top-0 bg-white z-20">
             <tr

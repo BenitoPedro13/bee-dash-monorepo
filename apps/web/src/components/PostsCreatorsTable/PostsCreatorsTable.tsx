@@ -215,7 +215,7 @@ const PostsCreatorsTable = ({ globalData }: { globalData: Posts[] }) => {
         className="overflow-x-auto w-full border-t border-gray relative"
         ref={tableContainerRef}
       >
-        <div
+        {/* <div
           id="table-header-clip"
           className="absolute top-0 h-[28.5px] min-w-[1374.91px] left-0 bg-transparent z-30 pointer-events-none"
           style={{
@@ -243,7 +243,7 @@ const PostsCreatorsTable = ({ globalData }: { globalData: Posts[] }) => {
               }
             ></div>
           </div>
-        </div>
+        </div> */}
         <table className="table">
           <thead className="sticky top-0 bg-white">
             <tr
