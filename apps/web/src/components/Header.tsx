@@ -63,7 +63,7 @@ const Header = () => {
   return (
     <>
       <header
-        className={`flex w-full h-[116px] xl:px-8 px-[15px] justify-between items-center transition-transform duration-200 z-30 bg-[#F5F7FA] sticky top-0 ${
+        className={`flex w-full h-[116px] xl:px-8 px-[15px] justify-between items-center transition-transform duration-200 z-30 bg-white sticky top-0 ${
           isVisible ? "transform-none" : "-translate-y-full"
         }`}
       >
