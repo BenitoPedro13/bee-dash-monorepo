@@ -44,8 +44,8 @@ const PostsCreatorsTable = ({ globalData }: { globalData: Posts[] }) => {
   // const { data: globalData } = useDataStore((state) => state.data);
 
   const { campaigns, color } = useDataStore((state) => state.session.user);
-  // const hexColor =
-  //   color === undefined ? "#FF8C00" : color.length !== 7 ? "#FF8C00" : color;
+  const hexColor =
+    color === undefined ? "#FF8C00" : color.length !== 7 ? "#FF8C00" : color;
   const [data, setData] = useState(globalData);
   const [currentPage, setCurrentPage] = useState(1);
   // const [searchOpen, setSearchOpen] = useState(false);
@@ -66,7 +66,7 @@ const PostsCreatorsTable = ({ globalData }: { globalData: Posts[] }) => {
   const tableContainerRef = useRef<HTMLDivElement>(null);
   const [headerOffset, setHeaderOffset] = useState(0);
   const [headerWidth, setHeaderWidth] = useState(0);
-  // const pastelColor = generatePastelColor(hexColor);
+  const pastelColor = generatePastelColor(hexColor);
 
   // const toggleOpen = () => setOpen(!open);
   const handlePageChange = (pageNumber: number) => {
@@ -247,7 +247,7 @@ const PostsCreatorsTable = ({ globalData }: { globalData: Posts[] }) => {
         <table className="table">
           <thead className="sticky top-0 bg-white">
             <tr
-              className="border-box flex-shrink-0 w-full h-min bg-[#f8f9fb] overflow-visible relative content-center flex-nowrap gap-[5px] rounded-none border-b border-[#eaecf0]"
+              className="border-box flex-shrink-0 w-full h-min bg-white overflow-visible relative content-center flex-nowrap gap-[5px] rounded-none border-b border-[#eaecf0]"
               // style={{
               //   background: pastelColor,
               // }}

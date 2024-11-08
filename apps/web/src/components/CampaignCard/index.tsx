@@ -51,7 +51,7 @@ export default function CampaingCard({ name, posts, campaign }: cardProps) {
                     backgroundColor: hexColor,
                   }}
                 >
-                  {item.name}
+                  {item.category}
                 </p>
               ))}
             </div>

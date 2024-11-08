@@ -281,7 +281,7 @@ const CreatorsTable = () => {
         <table className="table">
           <thead className="sticky top-0 bg-white z-20">
             <tr
-              className="border-box flex-shrink-0 w-full h-min overflow-visible bg-[#f8f9fb] relative content-center flex-nowrap gap-[5px] rounded-none border-b border-[#eaecf0]"
+              className="border-box flex-shrink-0 w-full h-min overflow-visible bg-white relative content-center flex-nowrap gap-[5px] rounded-none border-b border-[#eaecf0]"
               // style={{
               //   background: pastelColor,
               // }}

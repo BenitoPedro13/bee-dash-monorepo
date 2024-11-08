@@ -166,7 +166,7 @@ const AttachmentsTable = () => {
         <table className="table">
           <thead className="sticky top-0 bg-white">
             <tr
-              className="border-box flex-shrink-0 w-full bg-[#f8f9fb] h-min overflow-visible relative content-center flex-nowrap gap-[5px] rounded-none border-b border-[#eaecf0]"
+              className="border-box flex-shrink-0 w-full bg-white h-min overflow-visible relative content-center flex-nowrap gap-[5px] rounded-none border-b border-[#eaecf0]"
               // style={{
               //   background: pastelColor,
               // }}

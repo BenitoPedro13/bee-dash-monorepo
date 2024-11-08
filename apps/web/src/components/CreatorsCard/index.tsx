@@ -57,7 +57,7 @@ export default function CreatorCard({
                     backgroundColor: hexColor,
                   }}
                 >
-                  {item.name}
+                  {item.category}
                 </p>
               ))}
             </div>
