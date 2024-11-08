@@ -182,9 +182,11 @@ const metricConfig: Record<
 const FirstSection = ({
   creator = false,
   data,
+  title
 }: {
   creator?: boolean;
   data?: Posts[];
+  title?: String;
 }) => {
   // const { data } = useDataStore((state) => state.data);
   const campaigns = useDataStore((state) => state.session.user.campaigns);
@@ -196,6 +198,13 @@ const FirstSection = ({
   );
 
   return (
+    <div className="flex flex-col items-start gap-2 self-stretch">
+      {title && (
+        <h3 className="font-nexa text-[#475467] text-lg font-bold leading-[22px]">
+          {title}
+        </h3>
+      )}
+    
     <div className={creator ? metrics?.classNameCreator : metrics?.className}>
       {metrics?.config.map(
         ({ className, classNameCreator, heading, metric, icon, variation }) => (
@@ -210,6 +219,8 @@ const FirstSection = ({
           </Metrics>
         )
       )}
+    </div>
+      
     </div>
   );
 };

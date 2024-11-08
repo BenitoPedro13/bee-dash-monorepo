@@ -97,7 +97,7 @@ export default function Home() {
             <FirstSection title="Suas Postagens" />
           </div>
           <div className="w-full flex-shrink-0 h-min flex flex-col justify-start items-start overflow-visible relative xl:px-8 px-[15px] content-start flex-nowrap gap-6 rounded-none">
-            <SecondSection title="Seu Engajamento" />
+            <SecondSection title="Seus big numbers" />
           </div>
           <div className="w-full flex-shrink-0 h-min flex justify-start items-start overflow-visible relative xl:px-8 px-[15px] content-start flex-nowrap xl:gap-6 gap-6 rounded-none">
             <MetricsLineGraph data={postsData} />

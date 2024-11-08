@@ -256,7 +256,7 @@ const metricConfig: Record<
         ),
         // calculateVariationsCPV(data, ["Impressoes", "Impressoes Tiktok"], true),
       ],
-      icon: <CPV />,
+      icon: <Investment />,
     },
     {
       classname:
@@ -276,7 +276,7 @@ const metricConfig: Record<
           true
         ),
       ],
-      icon: <Investment />,
+      icon: <CPV />,
     },
   ],
 };

@@ -125,7 +125,7 @@ const AttachmentsTable = () => {
                 Anexos
               </h3>
               <p className="font-nexa text-sm text-[#475467] self-stretch">
-                Arquivos e outros documentos que ajudarão seu projeto
+                Arquivos e documentos necessários para o projeto
               </p>
             </div>
 

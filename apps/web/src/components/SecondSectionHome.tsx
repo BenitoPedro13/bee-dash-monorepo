@@ -255,7 +255,7 @@ const metricConfig: Record<
         ),
         // calculateVariationsCPV(data, ["Impressoes", "Impressoes Tiktok"], true),
       ],
-      icon: <CPV />,
+      icon: <Investment />,
     },
     {
       classname:
@@ -275,12 +275,12 @@ const metricConfig: Record<
           true
         ),
       ],
-      icon: <Investment />,
+      icon: <CPV />,
     },
   ],
 };
 
-const SecondSection = ({ data }: { data?: Posts[] }) => {
+const SecondSection = ({ data, title }: { data?: Posts[], title?: String }) => {
   const creators = useDataStore((state) => state.session.user.creators);
   const mode = useDataStore((state) => state.mode);
   const metrics = metricConfig[mode] || [];
@@ -290,7 +290,13 @@ const SecondSection = ({ data }: { data?: Posts[] }) => {
     .flatMap((creators) => creators.posts);
 
   return (
-    <div className="box-border flex-shrink-0 w-full h-min flex flex-col justify-start items-start xl:p-0 px-[15px] overflow-visible relative content-start flex-nowrap xl:gap-[22px] gap-6 rounded-none">
+    <div className="flex flex-col items-start gap-2 self-stretch">
+      {title && (
+        <h3 className="font-nexa text-[#475467] text-lg font-bold leading-[22px]">
+          {title}
+        </h3>
+      )}
+
       <div className="flex-shrink-0 flex-grow xl:flex-grow-0 w-full h-min flex xl:flex-row flex-col justify-start items-center overflow-visible relative p-0 content-center flex-nowrap rounded-none">
         {metrics.map(({ heading, sigla, variation, classname, icon }) => (
           <CostPerMetric
