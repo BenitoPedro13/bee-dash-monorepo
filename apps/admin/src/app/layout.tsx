@@ -56,6 +56,16 @@ export default function RootLayout({
                         },
                       },
                       {
+                        name: "categories",
+                        list: "/categories",
+                        create: "/categories/create",
+                        edit: "/categories/edit/:id",
+                        show: "/categories/show/:id",
+                        meta: {
+                          canDelete: true,
+                        },
+                      },
+                      {
                         name: "campaigns",
                         list: "/campaigns",
                         create: "/campaigns/create",
