@@ -12,10 +12,12 @@ export class CreatorsService {
 
   async create(createCreatorDto: CreateCreatorDto) {
     try {
+      const { categories, ...rest } = createCreatorDto;
+
       const creator = await this.prismaService.creator.create({
         data: {
-          ...createCreatorDto,
-          urlProfilePicture: createCreatorDto?.urlProfilePicture ?? '',
+          ...rest,
+          urlProfilePicture: rest?.urlProfilePicture ?? '',
         },
       });
 
@@ -212,10 +214,32 @@ export class CreatorsService {
   }
 
   async update(id: number, updateCreatorDto: UpdateCreatorDto) {
+    let { categories, ...rest } = updateCreatorDto;
+
     try {
+      if (
+        Object.keys(updateCreatorDto).includes('categories') &&
+        categories &&
+        Array.isArray(categories)
+      ) {
+        delete updateCreatorDto.categories;
+
+        const creator = await this.prismaService.creator.update({
+          where: { id },
+          data: {
+            ...updateCreatorDto,
+            categories: {
+              set: categories,
+            },
+          },
+        });
+
+        return creator;
+      }
+
       const creator = await this.prismaService.creator.update({
         where: { id },
-        data: updateCreatorDto,
+        data: rest,
       });
 
       return creator;

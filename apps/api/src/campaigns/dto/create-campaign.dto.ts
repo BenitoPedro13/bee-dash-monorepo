@@ -4,4 +4,5 @@ export class CreateCampaignDto {
   byPosts: boolean;
   imageUrl?: string;
   urlTable?: string;
+  categories: { id: number }[];
 }
