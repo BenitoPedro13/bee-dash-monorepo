@@ -188,7 +188,7 @@ const CreatorsTable = () => {
                 Seus Criadores
               </h3>
               <p className="font-nexa text-sm text-[#475467] self-stretch">
-                Veja a performance que cada criador está tendo
+                Veja a performance de seus creators em realtime
               </p>
             </div>
 
