@@ -182,7 +182,7 @@ const metricConfig: Record<
 const FirstSection = ({
   creator = false,
   data,
-  title
+  title,
 }: {
   creator?: boolean;
   data?: Posts[];
@@ -190,8 +190,8 @@ const FirstSection = ({
 }) => {
   // const { data } = useDataStore((state) => state.data);
   const campaigns = useDataStore((state) => state.session.user.campaigns);
-  const mode = useDataStore((state) => state.mode);
-  const metrics = metricConfig[mode] || [];
+  // const mode = useDataStore((state) => state.mode);
+  const metrics = metricConfig[DashboardMode.ALL] || [];
 
   const allPosts: Posts[] = campaigns.flatMap((campaign) =>
     campaign.postsPack.flatMap((pack) => pack.posts)
@@ -204,23 +204,29 @@ const FirstSection = ({
           {title}
         </h3>
       )}
-    
-    <div className={creator ? metrics?.classNameCreator : metrics?.className}>
-      {metrics?.config.map(
-        ({ className, classNameCreator, heading, metric, icon, variation }) => (
-          <Metrics
-            className={creator ? classNameCreator : className}
-            key={heading}
-            heading={heading}
-            metric={metric(data ?? allPosts)}
-            variation={variation(data ?? allPosts)}
-          >
-            {icon}
-          </Metrics>
-        )
-      )}
-    </div>
-      
+
+      <div className={creator ? metrics?.classNameCreator : metrics?.className}>
+        {metrics?.config.map(
+          ({
+            className,
+            classNameCreator,
+            heading,
+            metric,
+            icon,
+            variation,
+          }) => (
+            <Metrics
+              className={creator ? classNameCreator : className}
+              key={heading}
+              heading={heading}
+              metric={metric(data ?? allPosts)}
+              variation={variation(data ?? allPosts)}
+            >
+              {icon}
+            </Metrics>
+          )
+        )}
+      </div>
     </div>
   );
 };

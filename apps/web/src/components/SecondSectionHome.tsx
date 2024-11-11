@@ -280,10 +280,10 @@ const metricConfig: Record<
   ],
 };
 
-const SecondSection = ({ data, title }: { data?: Posts[], title?: String }) => {
+const SecondSection = ({ data, title }: { data?: Posts[]; title?: String }) => {
   const creators = useDataStore((state) => state.session.user.creators);
-  const mode = useDataStore((state) => state.mode);
-  const metrics = metricConfig[mode] || [];
+  // const mode = useDataStore((state) => state.mode);
+  const metrics = metricConfig[DashboardMode.ALL] || [];
 
   const allPosts: Posts[] = Object.keys(creators)
     .map((item) => creators[item])

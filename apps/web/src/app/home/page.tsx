@@ -55,10 +55,10 @@ export default function Home() {
             <WelcomeTitle showFilters={false} />
           </div>
           <div className="box-border flex-shrink-0 w-full h-min flex flex-col xl:justify-center justify-start items-start xl:px-8 px-[15px] overflow-visible relative content-start flex-nowrap xl:gap-[22px] gap-6 rounded-none">
-            <FirstSectionHome title="Suas postagens"/>
+            <FirstSectionHome title="Suas postagens" />
           </div>
-          <div className="w-full flex-shrink-0 h-min flex flex-col justify-start items-start overflow-visible relative xl:px-8 p-0 content-start flex-nowrap gap-6 rounded-none pb-4">
-            <SecondSectionHome title="Seus big numbers"/>
+          <div className="w-full flex-shrink-0 h-min flex flex-col justify-start items-start overflow-visible relative xl:px-8 px-[15px] content-start flex-nowrap gap-6 rounded-none pb-4">
+            <SecondSectionHome title="Seus big numbers" />
           </div>
 
           <div className="w-full xl:px-8 px-[15px]">
