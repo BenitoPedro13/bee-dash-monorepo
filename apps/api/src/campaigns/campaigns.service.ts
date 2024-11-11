@@ -12,9 +12,11 @@ export class CampaignsService {
   constructor(private readonly prismaService: PrismaService) {}
 
   async create(createCampaignDto: CreateCampaignDto) {
+    let { categories, ...rest } = createCampaignDto;
+
     try {
       const campaign = await this.prismaService.campaign.create({
-        data: createCampaignDto,
+        data: rest,
       });
 
       return campaign;
@@ -48,7 +50,7 @@ export class CampaignsService {
         // take: pageSize,
         skip: start,
         orderBy: orderBy,
-        include: { postsPack: true, user: true },
+        include: { postsPack: true, user: true, categories: true },
       });
 
       return {
@@ -77,6 +79,7 @@ export class CampaignsService {
             },
           },
           attachments: true,
+          categories: true,
         },
       });
 
@@ -140,6 +143,7 @@ export class CampaignsService {
           attachments: true,
           performances: true,
           postsPack: true,
+          categories: true,
         },
       });
 
@@ -154,10 +158,32 @@ export class CampaignsService {
   }
 
   async update(id: number, updateCampaignDto: UpdateCampaignDto) {
+    let { categories, ...rest } = updateCampaignDto;
+
     try {
+      if (
+        Object.keys(updateCampaignDto).includes('categories') &&
+        categories &&
+        Array.isArray(categories)
+      ) {
+        delete updateCampaignDto.categories;
+
+        const creator = await this.prismaService.campaign.update({
+          where: { id },
+          data: {
+            ...updateCampaignDto,
+            categories: {
+              set: categories,
+            },
+          },
+        });
+
+        return creator;
+      }
+
       const campaign = await this.prismaService.campaign.update({
         where: { id },
-        data: updateCampaignDto,
+        data: rest,
       });
 
       return campaign;
