@@ -93,7 +93,7 @@ export interface Creator {
   name: string;
   city?: string;
   socialNetworks: SocialNetwork[];
-  categories?: { id: string; name: string }[];
+  categories?: { id: string; category: string }[];
   createdAt: string;
   updatedAt: string;
 }
@@ -126,7 +126,7 @@ export interface Campaign {
   urlTable?: string;
   imageUrl?: string;
   attachments: Attachment[];
-  categories?: { id: string; name: string }[];
+  categories?: { id: string; category: string }[];
   postsPack: PostsPack[];
   campaignOverview?: string;
   finalAnalysis?: string;
