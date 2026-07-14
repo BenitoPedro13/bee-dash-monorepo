@@ -2,9 +2,10 @@
   "name": "nesjs-api",
   "version": "0.0.1",
   "description": "",
-  "author": "",
-  "private": true,
+  "author": "Benito Pedro Xavier",
+  "private": false,
   "license": "UNLICENSED",
+  "packageManager": "pnpm@11.5.2",
   "engines": {
     "node": "20.x"
   },
