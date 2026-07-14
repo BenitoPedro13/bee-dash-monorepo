@@ -1,0 +1,267 @@
+"use client";
+
+import React, { useEffect, useState } from "react";
+
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import useDataStore, { Influencer, Posts } from "@/store";
+
+import { GraphTypes } from "./MetricsLineGraph";
+
+import { Bar, BarChart, CartesianGrid, Cell, LabelList, XAxis } from "recharts";
+
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
+import {
+  addAlphaToHex,
+  countPostsPropertiesBySocialNetworksType,
+  filterDataByDateRange,
+  filterPostsDataByDateRange,
+  generateShadesAndTints,
+  generateShadesAndTintsRandomly,
+} from "../../utils/utils";
+// import { TrendingUp } from "lucide-react";
+
+export default function PostsBarGraph({
+  typeOfGraph,
+  data,
+}: {
+  typeOfGraph: GraphTypes;
+  data: Posts[];
+}) {
+  // const { data } = useDataStore((state) => state.data);
+  const postsData = useDataStore((state) => state.postsData);
+  const { user } = useDataStore((state) => state.session);
+  const mode = useDataStore((store) => store.mode);
+  const dateRange = useDataStore((store) => store.dateRange);
+
+  const [chartDataState, setChartDataState] = useState<
+    | { post: string; Impressoes: number; fill: string }[]
+    | { post: string; Interacoes: number; fill: string }[]
+  >([]);
+
+  const mainColor = user?.color ? user.color : "#FF8C00";
+  const subVariations = generateShadesAndTintsRandomly(
+    mainColor,
+    data.length ? data.length : postsData.length
+  );
+
+  const chartConfig = {
+    desktop: {
+      label: typeOfGraph,
+      color: "#FF5100",
+    },
+  } satisfies ChartConfig;
+
+  const getChartData = (typeOfGraph: GraphTypes, data: Posts[]) => {
+    switch (typeOfGraph) {
+      case "Impressoes":
+        const impressionsDateFilteredPosts = filterPostsDataByDateRange(
+          data,
+          +dateRange
+        );
+
+        // const impressionsGroupedByCreator = impressionsDateFilteredPosts.reduce(
+        //   (acc: Record<string, Posts[]>, post) => {
+        //     if (!acc[post.socialNetwork.creatorId]) {
+        //       acc[post.socialNetwork.creatorId] = [];
+        //     }
+        //     acc[post.socialNetwork.creatorId].push(post);
+        //     return acc;
+        //   },
+        //   {}
+        // );
+
+        return impressionsDateFilteredPosts.map((item, index) => {
+          // const finalPosts = impressionsGroupedByCreator[key];
+
+          let metric: number = 0;
+
+          if (mode === "all") {
+            metric = countPostsPropertiesBySocialNetworksType(
+              [item],
+              ["impressions"],
+              ["INSTAGRAM", "TIKTOK"]
+            );
+          } else if (mode === "tiktok") {
+            metric = metric = countPostsPropertiesBySocialNetworksType(
+              [item],
+              ["impressions"],
+              ["TIKTOK"]
+            );
+          } else if (mode === "instagram") {
+            metric = metric = countPostsPropertiesBySocialNetworksType(
+              [item],
+              ["impressions"],
+              ["INSTAGRAM"]
+            );
+          }
+
+          return {
+            post: `Post nº ${index + 1}`,
+            Impressoes: metric,
+            fill: subVariations[index],
+          };
+        });
+      case "Interacoes":
+        const interactionsDateFilteredPosts = filterPostsDataByDateRange(
+          data,
+          +dateRange
+        );
+
+        // const interactionGroupedByCreator =
+        //   interactionsDateFilteredPosts.reduce(
+        //     (acc: Record<string, Posts[]>, post) => {
+        //       if (!acc[post.socialNetwork.creatorId]) {
+        //         acc[post.socialNetwork.creatorId] = [];
+        //       }
+        //       acc[post.socialNetwork.creatorId].push(post);
+        //       return acc;
+        //     },
+        //     {}
+        //   );
+        return interactionsDateFilteredPosts.map((item, index) => {
+          // const finalPosts = interactionGroupedByCreator[key];
+
+          let metric: number = 0;
+
+          if (mode === "all") {
+            metric = countPostsPropertiesBySocialNetworksType(
+              [item],
+              ["interactions"],
+              ["INSTAGRAM", "TIKTOK"]
+            );
+          } else if (mode === "tiktok") {
+            metric = metric = countPostsPropertiesBySocialNetworksType(
+              [item],
+              ["interactions"],
+              ["TIKTOK"]
+            );
+          } else if (mode === "instagram") {
+            metric = metric = countPostsPropertiesBySocialNetworksType(
+              [item],
+              ["interactions"],
+              ["INSTAGRAM"]
+            );
+          }
+
+          return {
+            post: `Post nº ${index + 1}`,
+            Interacoes: metric,
+            fill: subVariations[index],
+          };
+        });
+      default:
+        return [];
+    }
+  };
+
+  useEffect(() => {
+    const chartData = getChartData(typeOfGraph, data ?? postsData);
+
+    setChartDataState(chartData);
+  }, [data, postsData, mode, dateRange, typeOfGraph]);
+
+  return (
+    // <Card>
+    //   <CardHeader>
+    //     <CardTitle>Bar Chart - Label</CardTitle>
+    //     <CardDescription>January - June 2024</CardDescription>
+    //   </CardHeader>
+    //   <CardContent>
+    // <div className="w-full max-w-[880px] h-full max-h-[224px]">
+    <ChartContainer config={chartConfig} width="100%" height="288px">
+      <BarChart
+        accessibilityLayer
+        data={chartDataState}
+        margin={{
+          top: 20,
+        }}
+      >
+        <CartesianGrid vertical={false} />
+        <XAxis
+          hide
+          dataKey="post"
+          tickLine={false}
+          tickMargin={10}
+          axisLine={false}
+          // tickFormatter={(value) => value}
+        />
+        <ChartTooltip
+          // cursor={false}
+          content={<ChartTooltipContent className="w-[180px]" />}
+        />
+
+        <defs>
+          {chartDataState.map((item, index) => (
+            <linearGradient
+              key={index}
+              id={`colorUv${index}`}
+              x1="0"
+              y1="100%"
+              x2="0"
+              y2="0"
+              spreadMethod="reflect"
+            >
+              <stop offset="0" stopColor={item.fill} />
+              <stop offset="1" stopColor={item.fill} />
+            </linearGradient>
+          ))}
+        </defs>
+
+        <Bar dataKey={typeOfGraph} radius={24}>
+          {/* {data.map((_item, index) => (
+            <Cell
+              key={`cell-${index}`}
+              fill={`url(#colorUv${index})`}
+              style={{
+                // outlineOffset: "-2px",
+                border: `2px solid ${chartData[index].fill}`,
+                boxShadow: `0 -1px 0 #000`,
+                // border: `2px solid ${addAlphaToHex(
+                //   chartData[index].fill,
+                //   0.2
+                // )}`,
+              }}
+            /> 
+          ))}*/}
+          {/* <LabelList dataKey="pv" position="insideRight" fill="#f5f5f5" />
+          <LabelList dataKey="name" position="insideLeft" fill="#f5f5f5" /> */}
+        </Bar>
+
+        {/* <Bar dataKey={typeOfGraph} fill="var(--color-desktop)" radius={4}>
+          <LabelList
+            position="top"
+            offset={12}
+            className="fill-foreground"
+            fontSize={12}
+          />
+        </Bar> */}
+      </BarChart>
+    </ChartContainer>
+    // </div>
+
+    // </CardContent>
+    //   <CardFooter className="flex-col items-start gap-2 text-sm">
+    //     <div className="flex gap-2 font-medium leading-none">
+    //       Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+    //     </div>
+    //     <div className="leading-none text-muted-foreground">
+    //       Showing total visitors for the last 6 months
+    //     </div>
+    //   </CardFooter>
+    // </Card>
+  );
+}
