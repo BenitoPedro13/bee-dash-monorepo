@@ -48,3 +48,6 @@ lerna-debug.log*
 
 # leaked-credential CSV export, must never be re-added
 bee-dash-nodejs_bucket.csv
+
+# uploads now live in the Railway bucket, not local disk / git
+/files
