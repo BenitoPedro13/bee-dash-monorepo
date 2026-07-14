@@ -1,5 +1,19 @@
 # TASK: Merge the 3 Bee Dash repos into one pnpm-workspace monorepo
 
+> **Status (2026-07-14): DONE.** `bee-dash-monorepo` is live with full history for all 3
+> apps (`git filter-repo --to-subdirectory-filter` + merge, not squashed). Railway
+> (`apps/api`) and both Vercel projects (`apps/web`, `apps/admin`) redeploy automatically
+> on push to `main` — Root Directory set on each service/project, verified with real
+> deploys. `bee-dash-nestjs`/`-nextjs`/`-refine` are archived on GitHub (not deleted).
+> Two real bugs were found and fixed along the way, not just plumbing: (1) `apps/web` and
+> `apps/admin` hardcoded their API URL to `api1.thatsbee.co`, a stale DNS record for the
+> deleted AWS account — repointed to `https://api.thatsbee.co`; (2) pnpm's stricter
+> resolution exposed a phantom peer-dependency bug in `apps/admin` (`@refinedev/core`
+> peer-wants `@tanstack/react-query@^4.10.1`, but nothing pinned it so pnpm auto-installed
+> `5.101.2`, crashing the admin panel client-side) — fixed by declaring
+> `@tanstack/react-query@^4.44.0` directly in `apps/admin/package.json`. See §6 for the
+> full list of what shipped vs. the original plan below (kept for history).
+
 ## 1. Cenário actual
 
 Bee Dash today is **three separate git repos**, siblings on disk under
@@ -131,3 +145,62 @@ preserve history.
    once this migration lands.
 5. **Local sibling folders**: confirmed — leave `bee-dash-nestjs` / `bee-dash-nextjs` /
    `bee-dash-refine` on disk as-is, no deletion.
+
+## 6. What actually shipped (differs from the plan above)
+
+- **History merge used `git filter-repo --to-subdirectory-filter` + a real merge, not
+  `git subtree add`.** Tried `subtree add` first — it does put full history in the repo's
+  object graph (reachable via the merge commit's 2nd parent), but plain `git log`/`git
+  blame` on files under `apps/*` came back empty (only the merge commit), which fails the
+  actual goal ("commits, blame, and history carry over"). Fixed by making a
+  `--no-local`-cloned, `filter-repo`-rewritten copy of each source repo first (paths
+  rewritten to `apps/<name>/...` for every historical commit), then
+  `git merge --allow-unrelated-histories` — `git log`/`git blame` walk straight through
+  into pre-merge history this way.
+- **Repo visibility: public** (matching 2 of the original 3 repos), after confirming no
+  `.env`/credential-shaped files are tracked (the earlier `git filter-repo` secret scrub
+  in `bee-dash-nestjs`'s own history carried over cleanly).
+- **`gh` and `vercel` CLIs installed mid-task** (`brew install gh vercel-cli`) — `gh` was
+  already present; `vercel-cli` wasn't. Both authenticated via their own device-code flows.
+- **Railway's Root Directory build is isolated from the monorepo root** — confirmed the
+  open question from §1: with Root Directory = `apps/api`, Railway's pnpm install can't
+  see the root `pnpm-workspace.yaml`'s `allowBuilds`, so native postinstall scripts
+  (`@nestjs/core`, `prisma`, `@prisma/client`, `@prisma/engines`) get silently blocked
+  (`ERR_PNPM_IGNORED_BUILDS`). Fixed by keeping `apps/api`'s own `pnpm-workspace.yaml`
+  (`packages: ['.']` + the same `allowBuilds`) alongside the root one, not deleting it as
+  originally planned in §2 step 3.
+- **Railway also security-scans the whole root `pnpm-lock.yaml`**, not just `apps/api`'s
+  slice of it — a HIGH-severity CVE in `apps/web`/`apps/admin`'s pinned `next@14.2.13`
+  blocked an `apps/api`-only deploy. Fixed by bumping `next` to `14.2.35` in both
+  frontends (a real fix, not a scan bypass).
+- **Vercel Root Directory isn't a CLI flag either** — same shape of gotcha as Railway.
+  Set via a direct `PATCH https://api.vercel.com/v9/projects/{id}` call using the
+  Vercel CLI's own locally-stored token (`~/Library/Application Support/com.vercel.cli/auth.json`),
+  since `vercel project update` doesn't expose it.
+- **Vercel ended up Git-integrated after all**, reversing the §2/step 8 plan (which
+  assumed CLI-only `vercel --prod` deploys forever) — user asked for push-to-deploy once
+  the manual CLI deploys worked. `vercel git connect <repo-url>` (per-project, from
+  inside `apps/web`/`apps/admin`) + the Root Directory API call above; verified for real
+  with an empty test commit producing a `-git-main-` deployment alias.
+- **Two real, previously-latent bugs found and fixed**, beyond pure infrastructure
+  plumbing:
+  1. `apps/web`/`apps/admin` hardcoded their API base URL to `https://api1.thatsbee.co`
+     — stale DNS for the AWS account deleted during the Railway migration (dead TLS
+     cert). Repointed both to `https://api.thatsbee.co`.
+  2. `apps/admin` crashed client-side after login (`defaultMutationOptions is not a
+     function`, React error #419) — `@refinedev/core` peer-wants
+     `@tanstack/react-query@^4.10.1`, nothing in `apps/admin/package.json` pinned it, so
+     pnpm's peer auto-install grabbed `5.101.2` (silently violating the peer's own
+     semver range — pnpm only warns, doesn't block). A `pnpm.overrides`/`pnpm-workspace.yaml`
+     `overrides:` entry does **not** fix this, since overrides only affect real
+     `dependencies`, not peer-driven auto-install. Fixed by declaring
+     `@tanstack/react-query@^4.44.0` as a direct dependency in `apps/admin/package.json`.
+  Also found two phantom dependencies (`axios`, `prop-types`, used directly in
+  `apps/admin/src` but never declared) that only broke the build once pnpm's strict
+  `node_modules` replaced npm's flat hoisting — declared explicitly.
+- **Seeded real test data** against the live API (`test@thatsbee.co` / `Test1234!`,
+  3 categories, 3 creators, 2 campaigns, posts with metrics) via direct `curl` POSTs —
+  `apps/api`'s creation endpoints (`/users`, `/categories`, `/creators`, `/campaigns`,
+  etc.) have no auth guard.
+- **Old repos archived, not deleted** (`gh repo archive`) — reversible via
+  `gh repo unarchive` if ever needed.
