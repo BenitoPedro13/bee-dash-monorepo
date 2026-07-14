@@ -23,6 +23,7 @@
     "@refinedev/kbar": "^1.3.6",
     "@refinedev/nestjsx-crud": "^5.0.1",
     "@refinedev/nextjs-router": "^6.0.0",
+    "@tanstack/react-query": "^4.44.0",
     "algoliasearch": "^4.24.0",
     "antd": "^5.0.5",
     "axios": "^1.18.1",
