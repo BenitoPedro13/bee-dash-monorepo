@@ -1,0 +1,146 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum SocialNetworksType {
+  INSTAGRAM
+  TIKTOK
+}
+
+enum PostsType {
+  STORIES
+  FEED
+  TIKTOK
+  REELS
+}
+
+// User model
+model User {
+  id                Int        @id @default(autoincrement())
+  email             String     @unique
+  password          String
+  name              String
+  color             String?
+  urlProfilePicture String?    @map(name: "url_profile_picture")
+  campaign          Campaign[]
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @updatedAt
+}
+
+model Categories {
+  id        Int        @id @default(autoincrement())
+  category  String
+  creators  Creator[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  campaigns Campaign[]
+}
+
+model Creator {
+  id                Int              @id @default(autoincrement())
+  urlProfilePicture String
+  name              String
+  city              String?
+  categories        Categories[]
+  socialNetworks    SocialNetworks[]
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+  PostsPack         PostsPack[]
+}
+
+model SocialNetworks {
+  id        Int                @id @default(autoincrement())
+  type      SocialNetworksType
+  followers Int
+  username  String
+  creator   Creator?           @relation(fields: [creatorId], references: [id])
+  creatorId Int?
+  posts     Posts[]
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
+
+  @@unique([type, username])
+}
+
+model Campaign {
+  id               Int           @id @default(autoincrement())
+  name             String
+  attachments      Attachments[]
+  performances     Performance[]
+  user             User          @relation(fields: [userId], references: [id])
+  userId           Int
+  categories       Categories[]
+  postsPack        PostsPack[]
+  campaignOverview String?
+  finalAnalysis    String?
+  byPosts          Boolean       @default(false)
+  urlTable         String?       @map(name: "url_table")
+  imageUrl         String?
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+}
+
+model Performance {
+  id               Int       @id @default(autoincrement())
+  uniqueFilename   String
+  originalFilename String
+  fileSize         Int
+  campaign         Campaign? @relation(fields: [campaignId], references: [id])
+  campaignId       Int?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+}
+
+model Attachments {
+  id               Int       @id @default(autoincrement())
+  uniqueFilename   String
+  originalFilename String
+  fileSize         Int
+  campaign         Campaign? @relation(fields: [campaignId], references: [id])
+  campaignId       Int?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  Posts            Posts?    @relation(fields: [postsId], references: [id])
+  postsId          Int?
+}
+
+model PostsPack {
+  id            Int       @id @default(autoincrement())
+  price         Float
+  registrations Int       @default(0)
+  posts         Posts[]
+  campaign      Campaign? @relation(fields: [campaignId], references: [id])
+  campaignId    Int?
+  creator       Creator?  @relation(fields: [creatorId], references: [id])
+  creatorId     Int?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Posts {
+  id              Int             @id @default(autoincrement())
+  type            PostsType
+  impressions     Int?            @default(0)
+  interactions    Int?            @default(0)
+  likes           Int?            @default(0)
+  shares          Int?            @default(0)
+  comments        Int?            @default(0)
+  saves           Int?            @default(0)
+  clicks          Int?            @default(0)
+  stickerClicks   Int?            @default(0)
+  linkClicks      Int?            @default(0)
+  postDate        DateTime
+  socialNetworkId Int
+  socialNetwork   SocialNetworks? @relation(fields: [socialNetworkId], references: [id])
+  postsPackId     Int
+  postsPack       PostsPack?      @relation(fields: [postsPackId], references: [id])
+  attachments     Attachments[]
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+}
