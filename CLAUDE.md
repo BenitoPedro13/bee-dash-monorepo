@@ -30,10 +30,11 @@
 >   **Root Directory = `apps/api`**. See `apps/api/README.md` and
 >   `apps/api/docs/tasks/TASK-migrate-railway.md` for the prior AWS → Railway migration.
 > - **`apps/web`** — Next.js 14 public dashboard. Deployed on **Vercel**
->   (`https://www.thatsbee.co`), **not** Git-integrated — pushed via `vercel --prod`
->   from a local checkout, independent of what's on `main`.
+>   (`https://www.thatsbee.co`), Git-integrated to this repo (`main`, Root Directory
+>   `apps/web`) — pushing to `main` auto-deploys it, same as `apps/api` on Railway.
 > - **`apps/admin`** — Refine + Next.js 14 + antd admin panel. Deployed on **Vercel**
->   (`https://admin.thatsbee.co`), same CLI-deploy model as `apps/web`. **Known bug:**
+>   (`https://admin.thatsbee.co`), same Git-integrated auto-deploy model as `apps/web`
+>   (Root Directory `apps/admin`). **Known bug (fixed 2026-07-14):**
 >   `apps/admin/src/providers/data-provider/index.ts` and `apps/web/src/store.ts` both
 >   hardcode their backend URL to `https://api1.thatsbee.co` — a stale DNS record
 >   pointing at the now-deleted AWS account (dead TLS cert, unreachable). Login itself
