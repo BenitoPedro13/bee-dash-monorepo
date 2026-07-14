@@ -2,35 +2,41 @@
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
 </p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+**Bee Dash API** — backend for the Bee Company creator/influencer-marketing performance
+dashboard. It tracks brand **campaigns**, the **creators/influencers** in them (Instagram
++ TikTok), their **posts** and per-post performance metrics, grouped into **posts-packs**
+(a priced bundle of posts a creator delivers for a campaign), plus **categories**,
+**attachments**, and campaign **CSV performance imports**. Built with [NestJS](https://nestjs.com/)
+10 + [Prisma](https://www.prisma.io/) 5 + PostgreSQL. Auth is a custom `AuthGuard` + JWT
+(`@nestjs/jwt`), not a third-party auth provider. Deployed on [Railway](https://railway.com/).
+
+See `CLAUDE.md` for the full architecture/conventions rundown and
+`docs/tasks/TASK-migrate-railway.md` for the AWS → Railway migration history.
 
 ## Installation
 
 ```bash
 $ pnpm install
 ```
+
+Copy `.env.example` to `.env` and fill in real values for local development (a local
+Postgres `DATABASE_URL`, a `JWT_SECRET`, and bucket credentials if you need file uploads
+to work locally — see below).
+
+## File storage
+
+Uploads (attachments, CSV performance imports, creator/campaign/profile images) go to an
+S3-compatible bucket via `src/s3/s3.service.ts`, not local disk — Railway's filesystem
+doesn't persist across deploys. Files are served back at `/public/:key`
+(`src/s3/s3.controller.ts`), which streams the object from the bucket, so existing
+`/public/<uniqueFilename>` links keep working unchanged for consumers.
+
+In production this is Railway's own object-storage bucket
+(`railway bucket credentials --bucket <name>` for the S3-compatible endpoint/keys). Any
+S3-compatible provider works locally — set `AWS_ENDPOINT_URL`, `AWS_ACCESS_KEY_ID`,
+`AWS_SECRET_ACCESS_KEY`, `AWS_S3_BUCKET_NAME`, `AWS_REGION` in `.env`.
 
 ## Running the app
 
@@ -45,6 +51,18 @@ $ pnpm run start:dev
 $ pnpm run start:prod
 ```
 
+## Database
+
+Prisma owns the schema. After changing `prisma/schema.prisma`:
+
+```bash
+$ pnpm run prisma:migrate   # create + apply a migration locally
+$ pnpm run prisma:generate  # regenerate the Prisma Client
+```
+
+Production runs `npx prisma migrate deploy` automatically as part of the Railway start
+command (see `railway environment config`), applying any new migrations on every deploy.
+
 ## Test
 
 ```bash
@@ -58,15 +76,25 @@ $ pnpm run test:e2e
 $ pnpm run test:cov
 ```
 
-## Support
+## Deployment (Railway)
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+The app is deployed on Railway, connected directly to this repo's `main` branch (no CI
+gate — pushing to `main` triggers a build+deploy). Build/start commands and environment
+variables are configured on the Railway service itself (not in a repo file):
 
-## Stay in touch
+```bash
+railway environment config --json   # inspect current build/start/variables config
+```
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+Key pieces:
+- **Postgres**: a Railway-managed Postgres plugin; the app service's `DATABASE_URL`
+  references it directly (`${{Postgres.DATABASE_URL}}`), no manual composition from parts.
+- **Bucket**: a Railway object-storage bucket wired via the `AWS_*` variables described
+  above.
+- **Custom domain**: `api.thatsbee.co`, proxied to the app's internal port `3000` (the
+  domain's `targetPort` must match whatever port `src/main.ts` listens on).
+- **JWT_SECRET**: rotated as part of the Railway migration; not the same value that was
+  ever committed to git history.
 
 ## License
 

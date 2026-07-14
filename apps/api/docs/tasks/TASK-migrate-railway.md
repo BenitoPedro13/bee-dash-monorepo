@@ -1,5 +1,14 @@
 # TASK: Migrate hosting from AWS to Railway (Postgres + S3 uploads + secret rotation)
 
+> **Status (2026-07-14): DONE.** Live at https://api.thatsbee.co, on Railway project
+> `bee-dash` (workspace "Patricia Ribeiro's Projects"), service `bee-dash-nestjs`
+> (id `71b55178-b790-4907-9263-d448d932021d`). Verified end-to-end: `GET /`, `GET
+> /categories` return 200, and a real upload via `POST /users/upload-profile-image`
+> round-tripped correctly through the bucket via `GET /public/:key`. The AWS account
+> (VM + Lightsail Postgres) was fully deleted by the user during this migration, so
+> there was no data to migrate and no legacy fallback to keep running. See §6 for what
+> actually shipped vs. the original plan below (kept for history, not rewritten).
+
 ## 1. Cenário actual
 
 The API currently runs on an **AWS VM**, started via `forever start` (`package.json`
@@ -149,3 +158,49 @@ preference to keep using the existing S3 deps.
 4. **Custom domain / DNS**: is there a custom API domain currently pointed at the AWS
    VM (vs. hitting it by IP or an AWS-generated hostname) that needs to be repointed to
    Railway once it's live?
+
+## 6. What actually shipped (differs from the plan above)
+
+- **File storage**: a **Railway object-storage bucket** (`bee-dash-uploads`, S3-compatible,
+  region `iad`), not AWS S3 — no working AWS credentials existed on this machine to
+  provision IAM/S3, and the user opted to use Railway's own bucket instead of chasing new
+  AWS credentials. `src/s3/s3.service.ts` talks to it via `@aws-sdk/client-s3` pointed at
+  the bucket's `AWS_ENDPOINT_URL`; functionally identical to real S3 from the app's POV.
+- **`src/s3/s3.controller.ts`** (not in the original plan): a `GET /public/:key` proxy
+  that streams objects from the bucket, added because the DB stores `/public/<key>` links
+  in `urlProfilePicture`/`imageUrl` across `users`, `creators`, and `campaigns` — not just
+  attachments/csvs. Without it, every existing `/public/...` reference (frontend embeds,
+  `listFilesWithSubstring`-derived URLs) would 404 even for *new* uploads, not just the
+  171 old unmigrated files.
+- **Wider blast radius than attachments+csvs**: `listFilesWithSubstring`/`invalidateCache`
+  (the local-disk directory scan powering image lookups) was also used by
+  `auth.service.ts`, `users.service.ts`, `creators.service.ts`, and
+  `campaigns.service.ts` — all five were updated to use the new `S3Service`, and
+  `utils/index.ts` (the old implementation) was deleted outright.
+- **Package manager switched npm → pnpm** mid-task, on top of the original plan — not
+  originally scoped, but landed as part of this task since it touched the same build
+  config. `package-lock.json` removed, `pnpm-lock.yaml` + `pnpm-workspace.yaml` added.
+  `pnpm-workspace.yaml` needs a `packages:` array or older pnpm versions in Railway's
+  build image reject it ("packages field missing or empty"); `packageManager: "pnpm@11.5.2"`
+  is pinned in `package.json`, which required bumping `engines.node` to `22.x` (pnpm 11
+  needs Node ≥22.13 — pinning to `20.x` crashed corepack activation).
+- **No `railway.json` file** — build/start commands are configured directly on the
+  Railway service via `railway environment edit` (piping a JSON `EnvironmentConfig`
+  patch via stdin; the `--service-config` flag form silently no-ops in a non-interactive
+  shell), not a repo file. Final start command: `npx prisma migrate deploy && node
+  dist/src/main.js` — migrations run automatically on every deploy.
+- **Git history was scrubbed**, not just untracked going forward: `git filter-repo`
+  removed `.env`/`bee-dash-nodejs_bucket.csv` from all 87 commits across both branches
+  (`main`, `feature/new-db-format`), force-pushed. A full backup bundle was made first
+  (`../bee-dash-nestjs-backup-2026-07-14.bundle`, outside the repo). `files/` (171+ old
+  uploads) was untracked going forward (not scrubbed from history — lower sensitivity,
+  just clutter) and not migrated to the bucket, per the "fine to 404" decision.
+- **JWT_SECRET rotated**; DB password rotation was moot (old Lightsail Postgres and the
+  whole AWS account were deleted); the DigitalOcean `EXTERNAL_DB_*` credentials in the
+  old `.env` were confirmed dead/unused, no action needed.
+- **Custom domain bug found during verification**: `api.thatsbee.co`'s `targetPort` was
+  set to `443` (should point at the container's actual listening port). Caused a 502
+  until fixed with `railway domain update api.thatsbee.co --port 3000`. `src/main.ts`
+  still hardcodes `app.listen(3000)` rather than reading `process.env.PORT` — works
+  today because the domain's target port now matches, but worth revisiting if the
+  listen port ever changes.
