@@ -10,56 +10,90 @@
 
 ---
 
-## 0. Project context — Bee Dash API
+## 0. Project context — Bee Dash
 
-> **Bee Dash** is the backend API for a creator/influencer-marketing performance
-> dashboard ("Bee Company Dash"). It tracks **campaigns** run by brand users, the
-> **creators/influencers** in them (Instagram + TikTok), their **posts** (stories,
-> feed, reels, tiktok) and per-post performance metrics (impressions, interactions,
-> likes, clicks, etc.), grouped into **posts-packs** (a priced bundle of posts a
-> creator delivers for a campaign), plus **categories** tagging creators/campaigns,
-> **attachments** (uploaded files/media) and campaign **CSV performance imports**
-> (bulk metrics upload, parsed and cached as a `Performance` row). Auth is a small
-> custom **NestJS `AuthGuard` + JWT** (`@nestjs/jwt`, HS256, `process.env.JWT_SECRET`),
-> not Supabase. There is no separate `apps/`/`packages/` split — this repo **is** the
-> API (`package.json` name `nesjs-api`); the frontend(s) are separate projects,
-> reachable at `*.thatsbee.co`, `*.vercel.app`, `*.gopark.app.br` (see CORS allowlist
-> in `src/main.ts`).
+> **Bee Dash** is a creator/influencer-marketing performance dashboard ("Bee Company
+> Dash"). It tracks **campaigns** run by brand users, the **creators/influencers** in
+> them (Instagram + TikTok), their **posts** (stories, feed, reels, tiktok) and per-post
+> performance metrics (impressions, interactions, likes, clicks, etc.), grouped into
+> **posts-packs** (a priced bundle of posts a creator delivers for a campaign), plus
+> **categories** tagging creators/campaigns, **attachments** (uploaded files/media) and
+> campaign **CSV performance imports** (bulk metrics upload, parsed and cached as a
+> `Performance` row).
 >
-> **Status (2026-07-14): migrating hosting from AWS → Railway.** The app currently
-> runs on an AWS VM (`forever start` process manager) against an AWS Lightsail-managed
-> Postgres and serves uploads from local disk — see `docs/tasks/TASK-migrate-railway.md`
-> for the in-flight plan (new Railway Postgres, real S3 wiring for uploads, secret
-> rotation). A batch of real credentials (AWS keys, DB password, JWT secret) was found
-> committed in `.env` in git history and pushed to a **public** GitHub repo
-> (`BenitoPedro13/bee-dash-nestjs`); the AWS key has been deactivated, `.env` has been
-> untracked, and secret rotation is part of the migration task.
+> **Status (2026-07-14): this is a pnpm-workspace monorepo** merging three formerly
+> separate repos, each now an `apps/*` package:
+> - **`apps/api`** — NestJS 10 + Prisma 5 + PostgreSQL backend. Auth is a small custom
+>   **NestJS `AuthGuard` + JWT** (`@nestjs/jwt`, HS256, `process.env.JWT_SECRET`), not
+>   Supabase or a third-party provider. Deployed on **Railway**
+>   (`https://api.thatsbee.co`), auto-deploying from this repo's `main` branch with
+>   **Root Directory = `apps/api`**. See `apps/api/README.md` and
+>   `apps/api/docs/tasks/TASK-migrate-railway.md` for the prior AWS → Railway migration.
+> - **`apps/web`** — Next.js 14 public dashboard. Deployed on **Vercel**
+>   (`https://www.thatsbee.co`), **not** Git-integrated — pushed via `vercel --prod`
+>   from a local checkout, independent of what's on `main`.
+> - **`apps/admin`** — Refine + Next.js 14 + antd admin panel. Deployed on **Vercel**
+>   (`https://admin.thatsbee.co`), same CLI-deploy model as `apps/web`. **Known bug:**
+>   `apps/admin/src/providers/data-provider/index.ts` and `apps/web/src/store.ts` both
+>   hardcode their backend URL to `https://api1.thatsbee.co` — a stale DNS record
+>   pointing at the now-deleted AWS account (dead TLS cert, unreachable). Login itself
+>   works (it's a separate hardcoded-credential check against Vercel env vars, not a
+>   real API call — see `apps/admin/src/app/api/auth/login/route.ts`), but every data
+>   fetch in `apps/admin` after login hits the dead host. Fix: point both at
+>   `https://api.thatsbee.co`, ideally via an env var instead of a source constant.
+>
+> The merge preserved full git history/blame for all three (via
+> `git filter-repo --to-subdirectory-filter` + a real merge, not a squashed import) — see
+> `docs/tasks/TASK-monorepo-migration.md`.
+>
+> Prior incident (in `apps/api`'s history, now part of this repo's history): a batch of
+> real credentials (AWS keys, DB password, JWT secret) was found committed in `.env` and
+> pushed to the then-public `bee-dash-nestjs` repo. The AWS key was deactivated, `.env`
+> was scrubbed from history via `git filter-repo`, and the JWT secret was rotated before
+> this monorepo merge happened — no live secrets are present in this repo's history.
 
-**Locked decisions (as found — not aspirational):** npm (not pnpm) · single NestJS 10
-app, no monorepo/workspace · Prisma 5 + PostgreSQL, Prisma owns the whole schema ·
-uploads currently hit local disk via Multer `diskStorage` + `ServeStaticModule`
-(`./files`, served at `/public`) — **ephemeral on Railway, being migrated to S3** ·
-`@aws-sdk/client-s3` + legacy `aws-sdk` are both present as deps but unused in `src/`
-today (dead weight until the S3 migration wires them in) · `externDB/` is a **legacy,
-dead-code** connector to an old DigitalOcean Postgres (only referenced by a
-commented-out import in `src/csvs/csvs.service.ts`) — not part of the live request
-path · money/metrics fields are plain `Int`/`Float` (no cents convention) · locales/i18n:
-none, UI copy lives in the separate frontend.
+**Locked decisions (as found — not aspirational):** pnpm workspace monorepo
+(`apps/*` + `packages/*`, currently no `packages/*` — nothing shared cross-app yet) ·
+`apps/api`: Prisma 5 + PostgreSQL, Prisma owns the whole schema · uploads go to a
+Railway object-storage bucket via `apps/api/src/s3/s3.service.ts`, not local disk (S3
+API-compatible; Railway's filesystem is ephemeral per-deploy) · `apps/api/externDB/` is
+a **legacy, dead-code** connector to an old DigitalOcean Postgres (only referenced by a
+commented-out import in `apps/api/src/csvs/csvs.service.ts`) — not part of the live
+request path · money/metrics fields are plain `Int`/`Float` (no cents convention) ·
+locales/i18n: none · `apps/web`/`apps/admin` have no shared UI/type package with
+`apps/api` today — each app's `package.json` declares its own deps in full (no implicit
+hoisting relied upon; two phantom deps — `axios`, `prop-types` — had to be added
+explicitly to `apps/admin/package.json` when it moved from npm to pnpm, since pnpm's
+strict `node_modules` doesn't hoist transitive deps the way npm did).
 
 **Watch out:**
-- `.env` is **not** actually gitignore-safe by default in this repo's history — it was
-  tracked for 4 commits before being removed; always double-check `git ls-files` for
-  `.env`/credential-shaped files before assuming `.gitignore` is honored.
-- The `.env` `DATABASE_URL=${DB_TYPE}://${DB_USER}:...` composition relies on shell-style
-  variable expansion that **plain `dotenv` does not perform** (no `dotenv-expand` dep) —
-  on Railway, set `DATABASE_URL` directly from the Postgres plugin's connection string
-  instead of trying to compose it from parts.
-- `NODE_TLS_REJECT_UNAUTHORIZED=0` is set globally in `.env` (disables TLS cert
-  verification process-wide) — a workaround for the old Lightsail Postgres cert; drop it
-  once on Railway's managed Postgres.
-- `files/` has 171+ real uploaded files committed straight into git (test data mixed
-  with real creator/campaign images) — do not blindly `git add -A` in this repo, and
-  don't assume everything under `files/` is disposable without checking first.
+- `apps/api` carries its **own** `pnpm-workspace.yaml` (`packages: ['.']` +
+  `allowBuilds`) in addition to the root one. This is required, not redundant: Railway's
+  build with Root Directory = `apps/api` builds that subdirectory in isolation and does
+  **not** see the monorepo root's `pnpm-workspace.yaml`/`allowBuilds` — without its own
+  copy, native postinstall scripts (`@nestjs/core`, `prisma`, `@prisma/client`,
+  `@prisma/engines`) get silently blocked (`ERR_PNPM_IGNORED_BUILDS`) on Railway even
+  though a local `pnpm install` from the repo root works fine.
+- Railway also runs a security scan against **the whole root `pnpm-lock.yaml`** on every
+  `apps/api` deploy, even though only `apps/api`'s subset of dependencies actually ships
+  — a HIGH-severity CVE in `apps/web`/`apps/admin`'s `next` version blocked an
+  `apps/api`-only deploy once. Keep `next` (and other shared-lockfile deps) patched
+  across all three apps, not just the one you're actively changing.
+- `apps/web` and `apps/admin` are **not** Git-integrated on Vercel — pushing to `main`
+  does **not** redeploy them. Deploy explicitly: `vercel --prod` from inside
+  `apps/web`/`apps/admin` (after `vercel link --project <name> --scope
+  benitopedro13s-projects` once per machine).
+- `apps/api/.env` is **not** actually gitignore-safe by default in this repo's
+  pre-merge history — it was tracked for 4 commits in the old `bee-dash-nestjs` repo
+  before being removed; always double-check `git ls-files` for `.env`/credential-shaped
+  files before assuming `.gitignore` is honored.
+- The old `.env`'s `DATABASE_URL=${DB_TYPE}://${DB_USER}:...` composition relied on
+  shell-style variable expansion that **plain `dotenv` does not perform** (no
+  `dotenv-expand` dep) — on Railway, `DATABASE_URL` is consumed directly from the
+  Postgres plugin's connection string instead.
+- `apps/api/files/` (untracked, gitignored) held 171+ real uploaded files pre-migration
+  — not tracked in this repo, not migrated to the bucket; existing `/public/...` links
+  to those specific files 404 by design (per the original migration decision).
 
 ---
 
