@@ -5,11 +5,14 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { sortFields, sortOrder } from 'types/queyParams';
 import { Campaign, Prisma } from '@prisma/client';
 import { DefaultArgs } from '@prisma/client/runtime/library';
-import { listFilesWithSubstring } from 'utils';
+import { S3Service } from 'src/s3/s3.service';
 
 @Injectable()
 export class CampaignsService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly s3Service: S3Service,
+  ) {}
 
   async create(createCampaignDto: CreateCampaignDto) {
     let { categories, ...rest } = createCampaignDto;
@@ -83,46 +86,51 @@ export class CampaignsService {
         },
       });
 
-      const campaignsWithFollowers = campaigns.map((campaign) => {
-        const image = listFilesWithSubstring(`-campaignImage-${campaign.id}-`);
-        campaign.imageUrl = image;
-
-        const uniqueSocialNetworks = new Set<number>();
-        let totalFollowers = 0;
-
-        let totalInteractions = 0;
-        let totalImpressions = 0;
-
-        campaign.postsPack.forEach((postPack) => {
-          const image = listFilesWithSubstring(
-            `-creatorImage-${postPack.creatorId}-`,
+      const campaignsWithFollowers = await Promise.all(
+        campaigns.map(async (campaign) => {
+          campaign.imageUrl = await this.s3Service.findPublicUrlBySubstring(
+            `-campaignImage-${campaign.id}-`,
           );
-          postPack.creator.urlProfilePicture = image;
 
-          postPack.creator.socialNetworks.forEach((network) => {
-            if (!uniqueSocialNetworks.has(network.id)) {
-              totalFollowers += network.followers || 0;
-              uniqueSocialNetworks.add(network.id);
-            }
-          });
+          const uniqueSocialNetworks = new Set<number>();
+          let totalFollowers = 0;
 
-          postPack.posts.forEach((post) => {
-            totalImpressions += post.impressions;
-            totalInteractions += post.interactions;
-          });
-        });
+          let totalInteractions = 0;
+          let totalImpressions = 0;
 
-        const mediumEngagement =
-          totalImpressions === 0
-            ? 0
-            : (totalInteractions / totalImpressions) * 100;
+          await Promise.all(
+            campaign.postsPack.map(async (postPack) => {
+              postPack.creator.urlProfilePicture =
+                await this.s3Service.findPublicUrlBySubstring(
+                  `-creatorImage-${postPack.creatorId}-`,
+                );
 
-        return {
-          ...campaign,
-          totalFollowers,
-          mediumEngagement: +mediumEngagement.toFixed(2),
-        };
-      });
+              postPack.creator.socialNetworks.forEach((network) => {
+                if (!uniqueSocialNetworks.has(network.id)) {
+                  totalFollowers += network.followers || 0;
+                  uniqueSocialNetworks.add(network.id);
+                }
+              });
+
+              postPack.posts.forEach((post) => {
+                totalImpressions += post.impressions;
+                totalInteractions += post.interactions;
+              });
+            }),
+          );
+
+          const mediumEngagement =
+            totalImpressions === 0
+              ? 0
+              : (totalInteractions / totalImpressions) * 100;
+
+          return {
+            ...campaign,
+            totalFollowers,
+            mediumEngagement: +mediumEngagement.toFixed(2),
+          };
+        }),
+      );
 
       return campaignsWithFollowers;
     } catch (error) {
@@ -147,8 +155,9 @@ export class CampaignsService {
         },
       });
 
-      const image = listFilesWithSubstring(`-campaignImage-${campaign.id}-`);
-      campaign.imageUrl = image;
+      campaign.imageUrl = await this.s3Service.findPublicUrlBySubstring(
+        `-campaignImage-${campaign.id}-`,
+      );
 
       return campaign;
     } catch (error) {

@@ -4,11 +4,14 @@ import { UpdateCreatorDto } from './dto/update-creator.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { sortFields, sortOrder } from 'types/queyParams';
 import { Creator, Posts } from '@prisma/client';
-import { listFilesWithSubstring } from 'utils';
+import { S3Service } from 'src/s3/s3.service';
 
 @Injectable()
 export class CreatorsService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly s3Service: S3Service,
+  ) {}
 
   async create(createCreatorDto: CreateCreatorDto) {
     try {
@@ -55,10 +58,14 @@ export class CreatorsService {
         include: { categories: true, socialNetworks: true },
       });
 
-      result.forEach((creator) => {
-        const image = listFilesWithSubstring(`-creatorImage-${creator.id}-`);
-        creator.urlProfilePicture = image;
-      });
+      await Promise.all(
+        result.map(async (creator) => {
+          creator.urlProfilePicture =
+            await this.s3Service.findPublicUrlBySubstring(
+              `-creatorImage-${creator.id}-`,
+            );
+        }),
+      );
 
       return {
         result,
@@ -108,12 +115,16 @@ export class CreatorsService {
         },
       });
 
-      posts.forEach((post) => {
-        const creatorId = post.socialNetwork.creatorId;
+      await Promise.all(
+        posts.map(async (post) => {
+          const creatorId = post.socialNetwork.creatorId;
 
-        const image = listFilesWithSubstring(`-creatorImage-${creatorId}-`);
-        post.socialNetwork.creator.urlProfilePicture = image;
-      });
+          post.socialNetwork.creator.urlProfilePicture =
+            await this.s3Service.findPublicUrlBySubstring(
+              `-creatorImage-${creatorId}-`,
+            );
+        }),
+      );
 
       const groupedPosts = posts.reduce((acc, post) => {
         if (!acc[post.socialNetwork.creatorId]) {
@@ -203,8 +214,9 @@ export class CreatorsService {
         },
       });
 
-      const image = listFilesWithSubstring(`-creatorImage-${creator.id}-`);
-      creator.urlProfilePicture = image;
+      creator.urlProfilePicture = await this.s3Service.findPublicUrlBySubstring(
+        `-creatorImage-${creator.id}-`,
+      );
 
       return creator;
     } catch (error) {

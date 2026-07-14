@@ -5,8 +5,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { CsvsModule } from './csvs/csvs.module';
 // import { MulterModule } from '@nestjs/platform-express';
 import { AttachmentsModule } from './attachments/attachments.module';
-import { ServeStaticModule } from '@nestjs/serve-static';
-import { join } from 'path';
+import { S3Module } from './s3/s3.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { PostsModule } from './posts/posts.module';
@@ -21,10 +20,7 @@ import { CategoriesModule } from './categories/categories.module';
     PrismaModule,
     CsvsModule,
     AttachmentsModule,
-    ServeStaticModule.forRoot({
-      serveRoot: 'public',
-      rootPath: join(__dirname, '..', '..', 'files'),
-    }),
+    S3Module,
     AuthModule,
     UsersModule,
     PostsModule,

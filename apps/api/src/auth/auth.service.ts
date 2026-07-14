@@ -8,26 +8,29 @@ import { JwtService } from '@nestjs/jwt';
 import { SignInDto } from './dto/sign-in.dto';
 import { CampaignsService } from 'src/campaigns/campaigns.service';
 import { CreatorsService } from 'src/creators/creators.service';
-import { listFilesWithSubstring } from 'utils';
+import { S3Service } from 'src/s3/s3.service';
 
 @Injectable()
-@Dependencies(UsersService, JwtService, CampaignsService, CreatorsService)
+@Dependencies(UsersService, JwtService, CampaignsService, CreatorsService, S3Service)
 export class AuthService {
   usersService: UsersService;
   campaignsService: CampaignsService;
   creatorsService: CreatorsService;
   jwtService: JwtService;
+  s3Service: S3Service;
 
   constructor(
     usersService: UsersService,
     jwtService: JwtService,
     campaignsService: CampaignsService,
     creatorsService: CreatorsService,
+    s3Service: S3Service,
   ) {
     this.usersService = usersService;
     this.jwtService = jwtService;
     this.campaignsService = campaignsService;
     this.creatorsService = creatorsService;
+    this.s3Service = s3Service;
   }
 
   async signIn(signInDto: SignInDto) {
@@ -42,8 +45,9 @@ export class AuthService {
 
     const payload = { email: user.email, sub: user.id };
 
-    const image = listFilesWithSubstring(`-${user.email}-`);
-    user.urlProfilePicture = image;
+    user.urlProfilePicture = await this.s3Service.findPublicUrlBySubstring(
+      `-${user.email}-`,
+    );
 
     return {
       access_token: await this.jwtService.signAsync(payload, {
@@ -83,8 +87,9 @@ export class AuthService {
 
       const userCreators = await this.creatorsService.findAllByUserId(user.id);
 
-      const image = listFilesWithSubstring(`-${user.email}-`);
-      user.urlProfilePicture = image;
+      user.urlProfilePicture = await this.s3Service.findPublicUrlBySubstring(
+        `-${user.email}-`,
+      );
 
       return {
         user: {

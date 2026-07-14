@@ -1,17 +1,14 @@
 import csvParser from 'csv-parser';
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { createReadStream } from 'fs';
 
 import 'dotenv/config';
-import fs from 'fs';
 
-import path from 'path';
 import { sortFields, sortOrder } from 'types/queyParams';
 import { Performance, Prisma } from '@prisma/client';
 import { DefaultArgs } from '@prisma/client/runtime/library';
 import { UpdateCsvDto } from './dto/update-csv.dto';
-import { getFilePath, getFilesFolderPath, listFilesWithSubstring } from 'utils';
+import { S3Service } from 'src/s3/s3.service';
 
 // import { CreatorService } from '../../externDB/services/CreatorService';
 export type MulterFileDTO = {
@@ -19,11 +16,15 @@ export type MulterFileDTO = {
   buffer: Buffer;
   originalname: string;
   userEmail: string;
+  mimetype?: string;
 };
 
 @Injectable()
 export class CsvsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly s3Service: S3Service,
+  ) {}
 
   async processCsv(
     file: MulterFileDTO,
@@ -37,19 +38,11 @@ export class CsvsService {
       userEmail: userEmail,
     };
 
-    // Ensure the /files directory exists
-    const directoryPath = getFilesFolderPath(__dirname);
-
-    fs.mkdirSync(directoryPath, { recursive: true });
-
-    // Write the file to the /files folder
-    const filePath = path.join(directoryPath, multerFile.uniqueFilename);
-
-    fs.writeFile(filePath, multerFile.buffer, (error) => {
-      if (error) {
-        console.error('Error writing file:', error);
-      }
-    });
+    await this.s3Service.upload(
+      multerFile.uniqueFilename,
+      multerFile.buffer,
+      file.mimetype ?? 'text/csv',
+    );
 
     await this.prisma.performance.deleteMany({
       where: {
@@ -361,11 +354,11 @@ export class CsvsService {
         return { updatedAt: null, data: [] };
       }
 
-      const filePath = getFilePath(__dirname, performanceFile.uniqueFilename);
-
       try {
         const results: any[] = [];
-        const stream = createReadStream(filePath);
+        const { stream } = await this.s3Service.getObject(
+          performanceFile.uniqueFilename,
+        );
 
         const result = await new Promise<any[]>((resolve, reject) => {
           stream
@@ -412,12 +405,16 @@ export class CsvsService {
       },
     });
 
-    posts.forEach((post) => {
-      const creatorId = post.socialNetwork.creatorId;
+    await Promise.all(
+      posts.map(async (post) => {
+        const creatorId = post.socialNetwork.creatorId;
 
-      const image = listFilesWithSubstring(`-creatorImage-${creatorId}-`);
-      post.postsPack.creator.urlProfilePicture = image;
-    });
+        post.postsPack.creator.urlProfilePicture =
+          await this.s3Service.findPublicUrlBySubstring(
+            `-creatorImage-${creatorId}-`,
+          );
+      }),
+    );
 
     const groupedPosts = posts.reduce((acc, post) => {
       if (!acc[post.socialNetwork.creatorId]) {

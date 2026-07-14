@@ -1,23 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { Attachments, User } from '.prisma/client';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { sortFields, sortOrder } from 'types/queyParams';
-import { Prisma } from '@prisma/client';
+import { Attachments, Prisma, User } from '@prisma/client';
 import { DefaultArgs } from '@prisma/client/runtime/library';
 import { MulterFileDTO } from 'src/csvs/csvs.service';
-import path from 'path';
-import fs from 'fs';
 import { CreatorsService } from 'src/creators/creators.service';
 import { CampaignsService } from 'src/campaigns/campaigns.service';
-import { invalidateCache, listFilesWithSubstring } from 'utils';
+import { S3Service } from 'src/s3/s3.service';
 @Injectable()
 export class UsersService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly creatorsService: CreatorsService,
     private readonly campaignsService: CampaignsService,
+    private readonly s3Service: S3Service,
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User | null> {
@@ -43,18 +41,11 @@ export class UsersService {
       userEmail: userEmail,
     };
 
-    // Ensure the /files directory exists
-    const directoryPath = path.join(__dirname, '..', '..', '..', 'files');
-    fs.mkdirSync(directoryPath, { recursive: true });
-
-    // Write the file to the /files folder
-    const filePath = path.join(directoryPath, nameToSaveOnDB);
-
-    fs.writeFile(filePath, multerFile.buffer, (error) => {
-      if (error) {
-        console.error('Error writing file:', error);
-      }
-    });
+    await this.s3Service.upload(
+      nameToSaveOnDB,
+      multerFile.buffer,
+      file.mimetype,
+    );
 
     await this.prisma.attachments.deleteMany({
       where: {
@@ -77,7 +68,7 @@ export class UsersService {
 
     console.log('processProfileImage', a);
 
-    invalidateCache(`-${userEmail}-`);
+    this.s3Service.invalidateKeyList();
 
     return a;
   }
@@ -93,18 +84,11 @@ export class UsersService {
       originalname: file.originalname,
     };
 
-    // Ensure the /files directory exists
-    const directoryPath = path.join(__dirname, '..', '..', '..', 'files');
-    fs.mkdirSync(directoryPath, { recursive: true });
-
-    // Write the file to the /files folder
-    const filePath = path.join(directoryPath, nameToSaveOnDB);
-
-    fs.writeFile(filePath, multerFile.buffer, (error) => {
-      if (error) {
-        console.error('Error writing file:', error);
-      }
-    });
+    await this.s3Service.upload(
+      nameToSaveOnDB,
+      multerFile.buffer,
+      file.mimetype,
+    );
 
     // console.log(multerFile, `/public/${multerFile.uniqueFilename}`);
 
@@ -137,7 +121,7 @@ export class UsersService {
 
     console.log('processCreatorImage', a);
 
-    invalidateCache(`-creatorImage-${creatorId}-`);
+    this.s3Service.invalidateKeyList();
 
     return a;
   }
@@ -154,18 +138,12 @@ export class UsersService {
       originalname: file.originalname,
     };
     console.log(multerFile);
-    // Ensure the /files directory exists
-    const directoryPath = path.join(__dirname, '..', '..', '..', 'files');
-    fs.mkdirSync(directoryPath, { recursive: true });
 
-    // Write the file to the /files folder
-    const filePath = path.join(directoryPath, nameToSaveOnDB);
-
-    fs.writeFile(filePath, multerFile.buffer, (error) => {
-      if (error) {
-        console.error('Error writing file:', error);
-      }
-    });
+    await this.s3Service.upload(
+      nameToSaveOnDB,
+      multerFile.buffer,
+      file.mimetype,
+    );
 
     // console.log(multerFile, `/public/${multerFile.uniqueFilename}`);
 
@@ -191,7 +169,7 @@ export class UsersService {
 
     console.log('processCampaignImage', a);
 
-    invalidateCache(`-campaignImage-${campaignId}-`);
+    this.s3Service.invalidateKeyList();
 
     return a;
   }
@@ -208,18 +186,11 @@ export class UsersService {
       userEmail: userEmail,
     };
 
-    // Ensure the /files directory exists
-    const directoryPath = path.join(__dirname, '..', '..', '..', 'files');
-    fs.mkdirSync(directoryPath, { recursive: true });
-
-    // Write the file to the /files folder
-    const filePath = path.join(directoryPath, multerFile.uniqueFilename);
-
-    fs.writeFile(filePath, multerFile.buffer, (error) => {
-      if (error) {
-        console.error('Error writing file:', error);
-      }
-    });
+    await this.s3Service.upload(
+      multerFile.uniqueFilename,
+      multerFile.buffer,
+      file.mimetype,
+    );
 
     // await this.prisma.attachments.deleteMany({
     //   where: {
@@ -318,8 +289,9 @@ export class UsersService {
       include: { campaign: true },
     });
 
-    const image = listFilesWithSubstring(`-${user.email}-`);
-    user.urlProfilePicture = image;
+    user.urlProfilePicture = await this.s3Service.findPublicUrlBySubstring(
+      `-${user.email}-`,
+    );
 
     return user;
   }
