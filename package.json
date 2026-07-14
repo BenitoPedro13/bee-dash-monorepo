@@ -1,0 +1,17 @@
+{
+  "name": "bee-dash-monorepo",
+  "version": "0.0.1",
+  "private": true,
+  "license": "UNLICENSED",
+  "packageManager": "pnpm@11.5.2",
+  "engines": {
+    "node": "22.x"
+  },
+  "scripts": {
+    "dev:api": "pnpm --filter ./apps/api run start:dev",
+    "dev:web": "pnpm --filter ./apps/web run dev",
+    "dev:admin": "pnpm --filter ./apps/admin run dev",
+    "build": "pnpm -r run build",
+    "lint": "pnpm -r run lint"
+  }
+}

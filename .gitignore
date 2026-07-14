@@ -1,0 +1,19 @@
+# dependencies (each app also has its own more specific entry)
+node_modules
+.pnpm-store
+
+# OS
+.DS_Store
+
+# editors
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea
+
+# env files (never commit real secrets; per-app .env.example is fine)
+.env
+.env.local
+.env.*.local
