@@ -140,6 +140,12 @@ screenshots from two different stories by mistake), the response surfaces that a
    (avg watch time, skip rate, traffic sources, demographics) and its own review-panel
    design. Meaningfully bigger scope — proposed as a separate task once Stories ships
    and is validated in real use.
+   > **Update 2026-07-16: shipped.** See
+   > `TASK-screenshot-autofill-reels-and-full-metrics-table.md` — adds
+   > `POST /insights-extraction/reels` and generalizes the admin UI to both post types.
+   > That task also changed the "found in screenshot but not tracked yet" panel (added
+   > by this task) to show *every* extracted metric, not just unmapped ones — the
+   > `unmapped` response field described below was renamed to `allMetrics` accordingly.
 2. **Schema extension** to persist reach / profile visits / follows / story-navigation
    taps as real `Posts` columns (would need a Prisma migration + new form fields +
    likely new aggregate-reporting logic touching `csvs.service.ts`'s `getAllData`,

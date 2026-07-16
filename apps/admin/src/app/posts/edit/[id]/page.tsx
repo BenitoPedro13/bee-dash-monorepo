@@ -24,22 +24,37 @@ import { useParams } from "next/navigation";
 import { useState } from "react";
 import { dataProvider } from "@providers/data-provider";
 
-type StoriesMetricField =
+type PostsMetricField =
   | "impressions"
   | "likes"
   | "comments"
   | "shares"
+  | "saves"
   | "stickerClicks"
   | "linkClicks";
 
-const STORIES_METRIC_FIELDS: StoriesMetricField[] = [
-  "impressions",
-  "likes",
-  "comments",
-  "shares",
-  "stickerClicks",
-  "linkClicks",
-];
+interface ScreenshotExtractionConfig {
+  endpoint: string;
+  maxFiles: number;
+  fields: PostsMetricField[];
+}
+
+// Mirrors apps/api/src/insights-extraction/dto/extract-insights-response.dto.ts —
+// keep the field lists in sync with STORIES_METRIC_FIELDS / REELS_METRIC_FIELDS.
+const SCREENSHOT_EXTRACTION_CONFIG: Partial<
+  Record<string, ScreenshotExtractionConfig>
+> = {
+  STORIES: {
+    endpoint: "stories",
+    maxFiles: 6,
+    fields: ["impressions", "likes", "comments", "shares", "stickerClicks", "linkClicks"],
+  },
+  REELS: {
+    endpoint: "reels",
+    maxFiles: 8,
+    fields: ["impressions", "likes", "comments", "shares", "saves"],
+  },
+};
 
 interface ExtractedMetricField {
   found: boolean;
@@ -47,9 +62,9 @@ interface ExtractedMetricField {
   confidence: "high" | "low";
 }
 
-interface ExtractStoriesInsightsResponse {
-  extracted: Record<StoriesMetricField, ExtractedMetricField>;
-  unmapped: { label: string; value: string }[];
+interface ExtractInsightsResponse {
+  extracted: Partial<Record<PostsMetricField, ExtractedMetricField>>;
+  allMetrics: { label: string; value: string }[];
   warnings: string[];
   uniqueFilenames: string[];
 }
@@ -62,17 +77,18 @@ export default function UsersEdit() {
   const baseApiUrl = dataProvider.getApiUrl();
 
   const postType = Form.useWatch("type", formProps.form) ?? data?.data?.type;
+  const extractionConfig = SCREENSHOT_EXTRACTION_CONFIG[postType as string];
 
   const [screenshotFiles, setScreenshotFiles] = useState<UploadFile[]>([]);
   const [extracting, setExtracting] = useState(false);
   const [autoFilledFields, setAutoFilledFields] = useState<
-    Set<StoriesMetricField>
+    Set<PostsMetricField>
   >(new Set());
   const [lowConfidenceFields, setLowConfidenceFields] = useState<
-    StoriesMetricField[]
+    PostsMetricField[]
   >([]);
   const [warnings, setWarnings] = useState<string[]>([]);
-  const [unmapped, setUnmapped] = useState<
+  const [allMetrics, setAllMetrics] = useState<
     { label: string; value: string }[]
   >([]);
 
@@ -100,11 +116,11 @@ export default function UsersEdit() {
     });
 
   const handleExtractFromScreenshots = async () => {
-    if (screenshotFiles.length === 0) return;
+    if (!extractionConfig || screenshotFiles.length === 0) return;
 
     setExtracting(true);
     setWarnings([]);
-    setUnmapped([]);
+    setAllMetrics([]);
     setAutoFilledFields(new Set());
     setLowConfidenceFields([]);
 
@@ -114,17 +130,17 @@ export default function UsersEdit() {
         formData.append("files", (file.originFileObj ?? file) as RcFile);
       }
 
-      const { data: response } = await axios.post<ExtractStoriesInsightsResponse>(
-        `${baseApiUrl}/insights-extraction/stories`,
+      const { data: response } = await axios.post<ExtractInsightsResponse>(
+        `${baseApiUrl}/insights-extraction/${extractionConfig.endpoint}`,
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
 
-      const filled = new Set<StoriesMetricField>();
-      const lowConfidence: StoriesMetricField[] = [];
-      const formValues: Partial<Record<StoriesMetricField, number>> = {};
+      const filled = new Set<PostsMetricField>();
+      const lowConfidence: PostsMetricField[] = [];
+      const formValues: Partial<Record<PostsMetricField, number>> = {};
 
-      for (const field of STORIES_METRIC_FIELDS) {
+      for (const field of extractionConfig.fields) {
         const result = response.extracted[field];
         if (!result) continue;
 
@@ -142,7 +158,7 @@ export default function UsersEdit() {
       setAutoFilledFields(filled);
       setLowConfidenceFields(lowConfidence);
       setWarnings(response.warnings ?? []);
-      setUnmapped(response.unmapped ?? []);
+      setAllMetrics(response.allMetrics ?? []);
     } catch (error) {
       console.error("Error extracting insights from screenshots", error);
       setWarnings([
@@ -153,7 +169,7 @@ export default function UsersEdit() {
     }
   };
 
-  const fieldExtra = (field: StoriesMetricField) => {
+  const fieldExtra = (field: PostsMetricField) => {
     if (autoFilledFields.has(field)) {
       return "Auto-filled from screenshot — tap to edit";
     }
@@ -185,7 +201,7 @@ export default function UsersEdit() {
           </Select>
         </Form.Item>
 
-        {postType === "STORIES" && (
+        {extractionConfig && (
           <Form.Item label="Import from screenshot">
             <Space direction="vertical" style={{ width: "100%" }}>
               <Upload
@@ -194,7 +210,9 @@ export default function UsersEdit() {
                 fileList={screenshotFiles}
                 beforeUpload={() => false}
                 onChange={({ fileList }) =>
-                  setScreenshotFiles(fileList.slice(0, 6))
+                  setScreenshotFiles(
+                    fileList.slice(0, extractionConfig.maxFiles)
+                  )
                 }
                 onRemove={(file) =>
                   setScreenshotFiles((prev) =>
@@ -231,14 +249,14 @@ export default function UsersEdit() {
                 />
               )}
 
-              {unmapped.length > 0 && (
+              {allMetrics.length > 0 && (
                 <Descriptions
                   size="small"
                   bordered
                   column={1}
-                  title="Found in screenshot but not tracked yet"
+                  title="All metrics found in screenshot(s)"
                 >
-                  {unmapped.map((item, index) => (
+                  {allMetrics.map((item, index) => (
                     <Descriptions.Item key={index} label={item.label}>
                       {item.value}
                     </Descriptions.Item>
@@ -327,6 +345,7 @@ export default function UsersEdit() {
           label={"Saves"}
           initialValue={data?.data?.saves}
           name={["saves"]}
+          extra={fieldExtra("saves")}
           rules={[
             {
               type: "number",
