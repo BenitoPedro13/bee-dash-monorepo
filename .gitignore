@@ -17,3 +17,8 @@ node_modules
 .env
 .env.local
 .env.*.local
+
+# Vercel CLI local project link (each app has its own more specific entry; a
+# root-level .vercel/project.json is only ever a temporary deploy-workaround
+# link and should never be tracked — see apps/admin's Root Directory note)
+.vercel
