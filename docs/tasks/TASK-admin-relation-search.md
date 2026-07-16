@@ -98,12 +98,24 @@ but not for `posts-pack`, see correction below.**
 > `PostsPack` would not compile. Resolved (user confirmed): search/display posts-pack by
 > its related **creator's** name instead — `?name=` still hits the same query param
 > (`posts-pack.controller.ts`), but `posts-pack.service.ts` filters via
-> `where: { creator: { name: { contains, mode: 'insensitive' } } }`, and the two admin
-> pickers use `optionLabel: "creator.name"` (Refine's `useSelect` supports dot-path
-> accessors) so the dropdown now shows the creator's name per pack instead of blank
-> options. `total` count also now uses `count({ where })` when a filter is active
-> (matching the existing `users.service.ts` pattern), otherwise pagination totals would
-> stay unfiltered even though results are filtered.
+> `where: { creator: { name: { contains, mode: 'insensitive' } } }`. `total` count also
+> now uses `count({ where })` when a filter is active (matching the existing
+> `users.service.ts` pattern), otherwise pagination totals would stay unfiltered even
+> though results are filtered.
+>
+> **Follow-up (same day):** creator name alone wasn't distinctive enough — a creator can
+> have several posts-packs (different campaigns/prices). Changed `optionLabel` on both
+> posts-pack pickers (`posts/create/page.tsx`, `posts/edit/[id]/page.tsx`) from the string
+> `"creator.name"` to a function returning `"{creator name} · {campaign name} · {price}"`
+> (e.g. `Jane Doe · Summer Campaign · R$ 500,00`), using the same `Campaign.name` +
+> `PostsPack.price` fields already `include`d by `posts-pack.service.ts`. Note: Refine's
+> `useSelect` infers its generic record type from how `optionLabel`/`optionValue` are
+> used in the same call — switching `optionLabel` to a function (needed for the
+> multi-field label) made plain-string `optionValue: "id"` / `searchField: "name"` fail
+> to typecheck against the narrower inferred type. Fixed by casting the callback's
+> parameter to `Record<string, any>` inside the function body (not on the parameter
+> itself, which would re-poison the same inference) rather than fighting the generic
+> inference with explicit type parameters.
 
 **Status: Phase 1 — done (2026-07-16).** All 10 files above implemented; `apps/api` and
 `apps/admin` both typecheck clean. Phase 2 remains proposed/not started.
