@@ -14,6 +14,7 @@ import { CreatorsModule } from './creators/creators.module';
 import { SocialNetworksModule } from './social-networks/social-networks.module';
 import { PostsPackModule } from './posts-pack/posts-pack.module';
 import { CategoriesModule } from './categories/categories.module';
+import { InsightsExtractionModule } from './insights-extraction/insights-extraction.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { CategoriesModule } from './categories/categories.module';
     SocialNetworksModule,
     PostsPackModule,
     CategoriesModule,
+    InsightsExtractionModule,
   ],
   controllers: [AppController],
   providers: [AppService],
