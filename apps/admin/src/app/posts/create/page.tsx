@@ -83,11 +83,7 @@ export default function UserCreate() {
         const record = postsPack as Record<string, any>;
         const creatorName = record?.creator?.name ?? "Unknown creator";
         const campaignName = record?.campaign?.name ?? "No campaign";
-        const price = (record?.price ?? 0).toLocaleString("pt-BR", {
-          currency: "BRL",
-          style: "currency",
-        });
-        return `${creatorName} · ${campaignName} · ${price}`;
+        return `${creatorName} · ${campaignName}`;
       },
       optionValue: "id",
       searchField: "name",
