@@ -2,7 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { CreatePostsPackDto } from './dto/create-posts-pack.dto';
 import { UpdatePostsPackDto } from './dto/update-posts-pack.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { PostsPack } from '@prisma/client';
+import { PostsPack, Prisma } from '@prisma/client';
+import { DefaultArgs } from '@prisma/client/runtime/library';
 import { sortFields, sortOrder } from 'types/queyParams';
 
 @Injectable()
@@ -27,11 +28,13 @@ export class PostsPackService {
     end,
     sort,
     order,
+    name,
   }: {
     start: number;
     end: number;
     sort: sortFields<PostsPack>;
     order: sortOrder;
+    name: string | null;
   }) {
     try {
       const orderBy = sort.map((item, index) => {
@@ -42,16 +45,38 @@ export class PostsPackService {
 
       const pageSize = end - start;
 
-      const result = await this.prismaService.postsPack.findMany({
-        // take: pageSize,
+      const where: Prisma.PostsPackWhereInput = name
+        ? {
+            creator: {
+              name: {
+                contains: name,
+                mode: 'insensitive',
+              },
+            },
+          }
+        : undefined;
+
+      const findManyPayload: Prisma.PostsPackFindManyArgs<DefaultArgs> = {
+        take: pageSize,
         skip: start,
         orderBy: orderBy,
         include: { creator: true, posts: true, campaign: true },
-      });
+      };
+
+      if (where !== undefined) {
+        findManyPayload.where = where;
+      }
+
+      const result = await this.prismaService.postsPack.findMany(
+        findManyPayload,
+      );
 
       return {
         result,
-        total: await this.prismaService.postsPack.count(),
+        total:
+          where !== undefined
+            ? await this.prismaService.postsPack.count({ where })
+            : await this.prismaService.postsPack.count(),
       };
     } catch (error) {
       console.error('PostsPackService.findAll: Error', error);

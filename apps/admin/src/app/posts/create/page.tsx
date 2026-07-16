@@ -18,8 +18,10 @@ export default function UserCreate() {
   const { selectProps: postsPackSelectProps, queryResult: postsPackResult } =
     useSelect({
       resource: "posts-pack",
-      optionLabel: "name",
+      optionLabel: "creator.name",
       optionValue: "id",
+      searchField: "name",
+      debounce: 300,
     });
 
   return (

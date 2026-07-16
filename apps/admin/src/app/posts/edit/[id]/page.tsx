@@ -27,8 +27,10 @@ export default function UsersEdit() {
   const { selectProps: postsPackSelectProps, queryResult: postsPackResult } =
     useSelect({
       resource: "posts-pack",
-      optionLabel: "name",
+      optionLabel: "creator.name",
       optionValue: "id",
+      searchField: "name",
+      debounce: 300,
     });
 
   return (

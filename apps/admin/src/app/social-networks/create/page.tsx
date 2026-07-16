@@ -11,6 +11,8 @@ export default function UserCreate() {
       resource: "creators",
       optionLabel: "name",
       optionValue: "id",
+      searchField: "name",
+      debounce: 300,
     });
 
   return (

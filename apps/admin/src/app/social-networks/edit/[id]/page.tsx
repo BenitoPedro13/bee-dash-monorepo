@@ -22,6 +22,8 @@ export default function UsersEdit() {
       resource: "creators",
       optionLabel: "name",
       optionValue: "id",
+      searchField: "name",
+      debounce: 300,
     });
 
   return (

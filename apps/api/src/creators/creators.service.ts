@@ -3,7 +3,8 @@ import { CreateCreatorDto } from './dto/create-creator.dto';
 import { UpdateCreatorDto } from './dto/update-creator.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { sortFields, sortOrder } from 'types/queyParams';
-import { Creator, Posts } from '@prisma/client';
+import { Creator, Posts, Prisma } from '@prisma/client';
+import { DefaultArgs } from '@prisma/client/runtime/library';
 import { S3Service } from 'src/s3/s3.service';
 
 @Injectable()
@@ -36,11 +37,13 @@ export class CreatorsService {
     end,
     sort,
     order,
+    name,
   }: {
     start: number;
     end: number;
     sort: sortFields<Creator>;
     order: sortOrder;
+    name: string | null;
   }) {
     try {
       const orderBy = sort.map((item, index) => {
@@ -51,12 +54,27 @@ export class CreatorsService {
 
       const pageSize = end - start;
 
-      const result = await this.prismaService.creator.findMany({
-        // take: pageSize,
+      const where: Prisma.CreatorWhereInput = name
+        ? {
+            name: {
+              contains: name,
+              mode: 'insensitive',
+            },
+          }
+        : undefined;
+
+      const findManyPayload: Prisma.CreatorFindManyArgs<DefaultArgs> = {
+        take: pageSize,
         skip: start,
         orderBy: orderBy,
         include: { categories: true, socialNetworks: true },
-      });
+      };
+
+      if (where !== undefined) {
+        findManyPayload.where = where;
+      }
+
+      const result = await this.prismaService.creator.findMany(findManyPayload);
 
       await Promise.all(
         result.map(async (creator) => {
@@ -69,7 +87,10 @@ export class CreatorsService {
 
       return {
         result,
-        total: await this.prismaService.creator.count(),
+        total:
+          where !== undefined
+            ? await this.prismaService.creator.count({ where })
+            : await this.prismaService.creator.count(),
       };
     } catch (error) {
       console.error('CreatorsService.findAll: Error', error);
