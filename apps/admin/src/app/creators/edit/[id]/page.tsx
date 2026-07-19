@@ -22,6 +22,8 @@ export default function UsersEdit() {
       resource: "categories",
       optionLabel: "category",
       optionValue: "id",
+      searchField: "category",
+      debounce: 300,
       defaultValue:
         isLoading === false && Array.isArray(data?.data.categories)
           ? data?.data.categories.map((item: { id: number }) => item.id)

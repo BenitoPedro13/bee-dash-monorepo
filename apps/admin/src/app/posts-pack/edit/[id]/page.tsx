@@ -62,6 +62,8 @@ export default function UsersEdit() {
       resource: "campaigns",
       optionLabel: "name",
       optionValue: "id",
+      searchField: "name",
+      debounce: 300,
     });
 
   return (

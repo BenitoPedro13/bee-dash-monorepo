@@ -71,6 +71,7 @@ export class UsersController {
     @Query('_sort') sort?: string,
     @Query('_order') order?: string,
     @Query('name') nameFilterValue?: string,
+    @Query('email') emailFilterValue?: string,
   ) {
     const sortFields = (
       sort?.includes(',') ? sort?.split(',') : [sort]
@@ -85,6 +86,7 @@ export class UsersController {
       sort: sort ? sortFields : ['id'],
       order: order ? sortOrders : ['asc'],
       name: nameFilterValue ? nameFilterValue : null,
+      email: emailFilterValue ? emailFilterValue : null,
     });
   }
 

@@ -128,17 +128,19 @@ proven and if more pickers need the same treatment.
 
 ### Phase 2 — proposed follow-ups (not started without separate alignment)
 
-1. **Apply the same `where: contains` + `take` fix** to `campaigns`, `social-networks`,
+1. ~~**Apply the same `where: contains` + `take` fix** to `campaigns`, `social-networks`,
    and `categories` `findAll` endpoints (`apps/api/src/campaigns/campaigns.service.ts`,
    `apps/api/src/social-networks/social-networks.service.ts`,
    `apps/api/src/categories/categories.service.ts` + their controllers) — same bug, just
-   not the two relations explicitly named in this task.
-2. **Fix the `users` picker's field mismatch**: either change
+   not the two relations explicitly named in this task.~~ **Done (2026-07-19), see Phase
+   2a below.**
+2. ~~**Fix the `users` picker's field mismatch**: either change
    `apps/admin/src/app/campaigns/create/page.tsx:9-16` and
    `campaigns/edit/[id]/page.tsx:52-58` to `searchField: "name"` (matching what the API
    filters on), or extend `apps/api/src/users/users.service.ts` to also filter on
    `email`. Also fix `campaigns/edit/[id]/page.tsx:52-58` missing `searchField` entirely
-   (present on the create form, absent on edit).
+   (present on the create form, absent on edit).~~ **Done (2026-07-19), see Phase 2a
+   below.**
 3. **Add a visible search box to list pages** (`creators/page.tsx`, `posts-pack/page.tsx`,
    and siblings) wired to the existing-but-dead `filter_field`/`filter_value` URL-param
    logic — currently only reachable by hand-editing the URL. Switch `useTable`'s
@@ -160,6 +162,41 @@ proven and if more pickers need the same treatment.
    `function UsersList()` exports in `creators/page.tsx`, `posts-pack/page.tsx`,
    `social-networks/page.tsx`, `campaigns/page.tsx`, `categories/page.tsx` to match their
    actual resource.
+
+### Phase 2a — server-side search for `users`, `categories`, `campaigns`, `social-networks`
+
+Triggered by a follow-up user report ("all search fields are not filtering") with
+screenshots of the Usuario and Categories pickers on the campaign form returning
+unfiltered results. Root cause confirmed identical to Phase 1: for every picker where
+`apps/admin` relies on `useSelect`'s default `searchField` (i.e. `optionLabel` used
+as-is, no explicit `searchField`), the backing NestJS `findAll` either filtered on a
+different field name or didn't filter at all — the `contains` query param sent by
+Refine (`?email=`, `?category=`, `?name=` for campaigns, `?username=` for
+social-networks) was silently ignored, so every dropdown always returned the full
+unfiltered/unpaginated table. Confirmed working (no bug): `creators` and `posts-pack`,
+both fixed in Phase 1 with an explicit `searchField` matching a real backend filter.
+
+| File | Change |
+|---|---|
+| `apps/api/src/categories/categories.controller.ts` | `findAll()` → accepts `?category=` query param (previously took **no** params at all). |
+| `apps/api/src/categories/categories.service.ts` | `findAll()` → `findAll(category)`; adds `where: { category: { contains, mode: 'insensitive' } }`, `count({ where })`. |
+| `apps/api/src/campaigns/campaigns.controller.ts` | Adds `?name=` query param (existing `_start/_end/_sort/_order` params kept). |
+| `apps/api/src/campaigns/campaigns.service.ts` | Adds `name`-based `where: contains` filter; uncomments `take: pageSize` (was dead, full table always returned); `count({ where })` when filtering. |
+| `apps/api/src/social-networks/social-networks.controller.ts` | Adds `?username=` query param. |
+| `apps/api/src/social-networks/social-networks.service.ts` | Adds `username`-based `where: contains` filter; uncomments `take: pageSize`; `count({ where })` when filtering. |
+| `apps/api/src/users/users.controller.ts` | Adds `?email=` query param alongside the existing `?name=`. |
+| `apps/api/src/users/users.service.ts` | `findAll` now accepts both `name` and `email`, ANDs whichever are provided into `where`; uncomments `take: pageSize` (was dead). Kept `name` filtering rather than replacing it — no other caller uses it today, but it's a public endpoint shape, so additive is safer than a breaking rename. |
+| `apps/admin/src/app/campaigns/create/page.tsx` | Users picker: adds `debounce: 300` (already had `searchField: "email"`). |
+| `apps/admin/src/app/campaigns/edit/[id]/page.tsx` | Users picker: adds missing `searchField: "email"` + `debounce: 300` (create form had it, edit form didn't — same inconsistency Phase 1 found elsewhere). Categories picker: adds `searchField: "category"` + `debounce: 300`. |
+| `apps/admin/src/app/creators/edit/[id]/page.tsx` | Categories picker: adds `searchField: "category"` + `debounce: 300`. |
+| `apps/admin/src/app/posts-pack/create/page.tsx`, `posts-pack/edit/[id]/page.tsx` | Campaigns picker: adds `searchField: "name"` + `debounce: 300`. |
+| `apps/admin/src/app/posts/create/page.tsx`, `posts/edit/[id]/page.tsx` | Social-networks picker: adds `searchField: "username"` + `debounce: 300`. |
+
+**Status: Phase 2a — done (2026-07-19).** All files above implemented; `apps/api` and
+`apps/admin` both typecheck clean (`tsc --noEmit`). Phase 2 items 3–7 (visible list-page
+search boxes, shared `<Select>` components, loading/empty states, dead-code removal,
+naming cleanup) remain proposed/not started — out of scope for this pass, which was
+strictly about restoring picker search functionality.
 
 ## 3. Porquê
 
@@ -197,9 +234,27 @@ it's separated out for an explicit go/no-go rather than bundled into the same ch
 | `apps/admin/src/app/posts/edit/[id]/page.tsx` | edit | posts-pack picker: `searchField`, `debounce` |
 | `apps/admin/src/app/posts/create/page.tsx` | edit | posts-pack picker: `searchField`, `debounce` |
 
-**Phase 2 (proposed, pending alignment):** `apps/api/src/campaigns/*`,
-`apps/api/src/social-networks/*`, `apps/api/src/categories/*` (edit — pagination/filter
-parity), `apps/admin/src/app/campaigns/create/page.tsx` +
+**Phase 2a:**
+
+| File | Change type | Notes |
+|------|-------------|-------|
+| `apps/api/src/categories/categories.controller.ts` | edit | accept `?category=` query param (had none) |
+| `apps/api/src/categories/categories.service.ts` | edit | add `where: contains` filter + `count({ where })` |
+| `apps/api/src/campaigns/campaigns.controller.ts` | edit | accept `?name=` query param |
+| `apps/api/src/campaigns/campaigns.service.ts` | edit | add `where: contains` filter, uncomment `take` |
+| `apps/api/src/social-networks/social-networks.controller.ts` | edit | accept `?username=` query param |
+| `apps/api/src/social-networks/social-networks.service.ts` | edit | add `where: contains` filter, uncomment `take` |
+| `apps/api/src/users/users.controller.ts` | edit | accept `?email=` query param alongside existing `?name=` |
+| `apps/api/src/users/users.service.ts` | edit | filter on `name` AND/OR `email`, uncomment `take` |
+| `apps/admin/src/app/campaigns/create/page.tsx` | edit | users picker: `debounce` |
+| `apps/admin/src/app/campaigns/edit/[id]/page.tsx` | edit | users picker: `searchField`+`debounce`; categories picker: `searchField`+`debounce` |
+| `apps/admin/src/app/creators/edit/[id]/page.tsx` | edit | categories picker: `searchField`+`debounce` |
+| `apps/admin/src/app/posts-pack/create/page.tsx` | edit | campaigns picker: `searchField`+`debounce` |
+| `apps/admin/src/app/posts-pack/edit/[id]/page.tsx` | edit | campaigns picker: `searchField`+`debounce` |
+| `apps/admin/src/app/posts/create/page.tsx` | edit | social-networks picker: `searchField`+`debounce` |
+| `apps/admin/src/app/posts/edit/[id]/page.tsx` | edit | social-networks picker: `searchField`+`debounce` |
+
+**Phase 2 items 3–7 (proposed, pending alignment):** `apps/admin/src/app/campaigns/create/page.tsx` +
 `campaigns/edit/[id]/page.tsx` (edit — fix `users` search field mismatch), all 7 list
 `page.tsx` files under `apps/admin/src/app/*/page.tsx` (edit — real search box), a new
 `apps/admin/src/components/CreatorSelect.tsx` / `PostsPackSelect.tsx` (new — shared

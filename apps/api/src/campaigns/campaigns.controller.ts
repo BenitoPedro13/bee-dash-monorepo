@@ -29,6 +29,7 @@ export class CampaignsController {
     @Query('_end') end?: string,
     @Query('_sort') sort?: string,
     @Query('_order') order?: string,
+    @Query('name') nameFilterValue?: string,
   ) {
     try {
       const sortFields = (
@@ -43,6 +44,7 @@ export class CampaignsController {
         end: end ? +end : 10,
         sort: sort ? sortFields : ['id'],
         order: order ? sortOrders : ['asc'],
+        name: nameFilterValue ? nameFilterValue : null,
       });
     } catch (error) {
       console.error('CampaignsController.findAll: Error', error);

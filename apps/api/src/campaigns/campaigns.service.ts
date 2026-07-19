@@ -34,11 +34,13 @@ export class CampaignsService {
     end,
     sort,
     order,
+    name,
   }: {
     start: number;
     end: number;
     sort: sortFields<Campaign>;
     order: sortOrder;
+    name: string | null;
   }) {
     try {
       const orderBy = sort.map((item, index) => {
@@ -49,16 +51,29 @@ export class CampaignsService {
 
       const pageSize = end - start;
 
+      const where: Prisma.CampaignWhereInput = name
+        ? {
+            name: {
+              contains: name,
+              mode: 'insensitive',
+            },
+          }
+        : undefined;
+
       const result = await this.prismaService.campaign.findMany({
-        // take: pageSize,
+        take: pageSize,
         skip: start,
         orderBy: orderBy,
+        where,
         include: { postsPack: true, user: true, categories: true },
       });
 
       return {
         result,
-        total: await this.prismaService.campaign.count(),
+        total:
+          where !== undefined
+            ? await this.prismaService.campaign.count({ where })
+            : await this.prismaService.campaign.count(),
       };
     } catch (error) {
       console.error('CampaignsService.findAll: Error', error);

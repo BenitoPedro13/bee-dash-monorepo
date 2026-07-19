@@ -29,6 +29,7 @@ export class SocialNetworksController {
     @Query('_end') end?: string,
     @Query('_sort') sort?: string,
     @Query('_order') order?: string,
+    @Query('username') usernameFilterValue?: string,
   ) {
     try {
       const sortFields = (
@@ -43,6 +44,7 @@ export class SocialNetworksController {
         end: end ? +end : 10,
         sort: sort ? sortFields : ['id'],
         order: order ? sortOrders : ['asc'],
+        username: usernameFilterValue ? usernameFilterValue : null,
       });
     } catch (error) {
       console.error('SocialNetworksController.findAll: Error', error);

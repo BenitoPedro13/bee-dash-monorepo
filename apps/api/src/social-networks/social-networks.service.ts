@@ -3,7 +3,7 @@ import { CreateSocialNetworkDto } from './dto/create-social-network.dto';
 import { UpdateSocialNetworkDto } from './dto/update-social-network.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { sortFields, sortOrder } from 'types/queyParams';
-import { SocialNetworks } from '@prisma/client';
+import { Prisma, SocialNetworks } from '@prisma/client';
 
 @Injectable()
 export class SocialNetworksService {
@@ -27,11 +27,13 @@ export class SocialNetworksService {
     end,
     sort,
     order,
+    username,
   }: {
     start: number;
     end: number;
     sort: sortFields<SocialNetworks>;
     order: sortOrder;
+    username: string | null;
   }) {
     try {
       const orderBy = sort.map((item, index) => {
@@ -42,16 +44,29 @@ export class SocialNetworksService {
 
       const pageSize = end - start;
 
+      const where: Prisma.SocialNetworksWhereInput = username
+        ? {
+            username: {
+              contains: username,
+              mode: 'insensitive',
+            },
+          }
+        : undefined;
+
       const result = await this.prismaService.socialNetworks.findMany({
-        // take: pageSize,
+        take: pageSize,
         skip: start,
         orderBy: orderBy,
+        where,
         include: { creator: true, posts: true },
       });
 
       return {
         result,
-        total: await this.prismaService.socialNetworks.count(),
+        total:
+          where !== undefined
+            ? await this.prismaService.socialNetworks.count({ where })
+            : await this.prismaService.socialNetworks.count(),
       };
     } catch (error) {
       console.error('SocialNetworksService.findAll: Error', error);

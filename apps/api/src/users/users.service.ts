@@ -233,12 +233,14 @@ export class UsersService {
     sort,
     order,
     name,
+    email,
   }: {
     start: number;
     end: number;
     sort: sortFields<User>;
     order: sortOrder;
     name: string | null;
+    email: string | null;
   }) {
     try {
       const orderBy = sort.map((item, index) => {
@@ -249,17 +251,21 @@ export class UsersService {
 
       const pageSize = end - start;
 
-      const where: Prisma.UserWhereInput = name
-        ? {
-            name: {
-              contains: name,
-              mode: 'insensitive',
-            },
-          }
-        : undefined;
+      const andConditions: Prisma.UserWhereInput[] = [];
+      if (name) {
+        andConditions.push({ name: { contains: name, mode: 'insensitive' } });
+      }
+      if (email) {
+        andConditions.push({
+          email: { contains: email, mode: 'insensitive' },
+        });
+      }
+
+      const where: Prisma.UserWhereInput =
+        andConditions.length > 0 ? { AND: andConditions } : undefined;
 
       const findManyPayload: Prisma.UserFindManyArgs<DefaultArgs> = {
-        // take: pageSize,
+        take: pageSize,
         skip: start,
         orderBy: orderBy,
         include: { campaign: true },

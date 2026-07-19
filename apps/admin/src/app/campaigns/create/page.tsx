@@ -12,6 +12,7 @@ export default function UserCreate() {
       optionLabel: "email",
       searchField: "email",
       optionValue: "id",
+      debounce: 300,
     }
   );
 

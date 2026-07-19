@@ -20,6 +20,8 @@ export default function UserCreate() {
       resource: "campaigns",
       optionLabel: "name",
       optionValue: "id",
+      searchField: "name",
+      debounce: 300,
     });
 
   return (

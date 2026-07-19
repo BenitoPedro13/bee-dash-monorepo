@@ -90,6 +90,8 @@ export default function UserCreate() {
     resource: "social-networks",
     optionLabel: "username",
     optionValue: "id",
+    searchField: "username",
+    debounce: 300,
   });
 
   const { selectProps: postsPackSelectProps, queryResult: postsPackResult } =
