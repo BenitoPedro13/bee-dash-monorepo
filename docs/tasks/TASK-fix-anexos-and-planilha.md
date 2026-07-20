@@ -80,15 +80,47 @@ upload path instead of duplicating logic. Issue 3 is an independent, small UX
 correctness fix: a button that looks clickable but does nothing (or opens the wrong
 campaign's sheet) is worse than one that's visibly disabled with an explanatory tooltip.
 
+## 5. Follow-up (2026-07-19): multi-upload not live yet + missing delete action
+
+After the first pass deployed to `apps/api` only (Railway auto-deploy on push), the user
+tested against the still-live *old* `apps/web` build (not yet redeployed to Vercel) and
+reported: single-file upload now works (the 500 fix alone was enough for the old
+single-file code path to succeed), but multi-file selection still didn't work (expected —
+that code hadn't been deployed yet), and there was no way to delete an attachment at all.
+
+Delete was genuinely missing, not just undeployed: `apps/api/src/attachments/attachments.controller.ts`'s
+`DELETE /attachments/:id` route existed but had `@UseGuards(AuthGuard)` commented out (an
+unauthenticated delete-by-id endpoint) and `AttachmentsService.remove()` only deleted the
+Prisma row, never the underlying S3 object (`s3Service.upload` is called on create but no
+matching `s3Service.delete` on remove — confirmed `S3Service.delete(key)` exists and is
+used nowhere in `attachments.service.ts`). There was also no delete button anywhere in
+`apps/web`'s Anexos table — only a Download link.
+
+**Changes:**
+
+| File | Change |
+|---|---|
+| `apps/api/src/attachments/attachments.controller.ts` | Re-enable `@UseGuards(AuthGuard)` on `remove()` — closes an unauthenticated delete-by-id gap. |
+| `apps/api/src/attachments/attachments.service.ts` | Inject `S3Service` (already `@Global()`-exported, no module wiring needed); `remove()` now looks up the row first, deletes the matching S3 object via `s3Service.delete(uniqueFilename)`, then deletes the Prisma row — avoids orphaned S3 storage. |
+| `apps/web/src/store.ts` | Add `removeAttachment(id: number)` action, filtering the deleted id out of the global `attachments` array. |
+| `apps/web/src/components/AttachmentsTable/AttachmentsTableRow.tsx` | Add a delete (trash icon) button next to Download: `window.confirm`, `DELETE ${baseApiUrl}/attachments/:id` with the auth cookie, then `removeAttachment()` on success. |
+
+**Why:** delete is a basic, expected capability for an attachment list and was simply
+never built; fixing the missing `AuthGuard` and adding the S3 cleanup while wiring this up
+is the same-sized change as doing it without those fixes, and leaving either gap open
+(unauthenticated delete, or leaking storage on every delete) would be shipping a new
+security/cost bug alongside a bug fix.
+
 ## 4. Ficheiros afectados
 
 | File | Change type | Notes |
 |------|-------------|-------|
 | `apps/api/src/attachments/dto/create-attachment.dto.ts` | edit | remove dead `userEmail`, add `campaignId?: number` |
-| `apps/api/src/attachments/attachments.controller.ts` | edit | stop setting `userEmail`, coerce+set `campaignId`, drop unused `req` |
-| `apps/web/src/store.ts` | edit | add `addAttachments` action, add `campaignId` to `Attachment` type |
+| `apps/api/src/attachments/attachments.controller.ts` | edit | stop setting `userEmail`, coerce+set `campaignId`, drop unused `req`, re-enable `AuthGuard` on delete |
+| `apps/api/src/attachments/attachments.service.ts` | edit | `remove()` now also deletes the S3 object |
+| `apps/web/src/store.ts` | edit | add `addAttachments`/`removeAttachment` actions, add `campaignId` to `Attachment` type |
 | `apps/web/src/components/FileUploadButton.tsx` | edit | multi-file input, `response.ok` guard, `campaignId` via route, store-driven state |
 | `apps/web/src/components/AttachmentsTable/AttachmentsTable.tsx` | edit | drop prop-drilling to `FileUploadButton`, non-mutating null-safe sort |
 | `apps/web/utils/utils.ts` | edit | null-safe `parseUpdatedAt`, new `compareNullable` helper |
-| `apps/web/src/components/AttachmentsTable/AttachmentsTableRow.tsx` | edit | null-safe `formatFileSize`, fix date field to `createdAt` |
+| `apps/web/src/components/AttachmentsTable/AttachmentsTableRow.tsx` | edit | null-safe `formatFileSize`, fix date field to `createdAt`, add delete button |
 | `apps/web/src/components/CreatorsTable/CreatorsTable.tsx` | edit | resolve campaign from route, disable button when no `urlTable` |

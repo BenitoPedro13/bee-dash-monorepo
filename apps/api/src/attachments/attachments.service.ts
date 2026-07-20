@@ -7,9 +7,13 @@ import { Attachments } from '@prisma/client';
 import { MulterFileDTO } from 'src/csvs/csvs.service';
 import path from 'path';
 import fs from 'fs';
+import { S3Service } from 'src/s3/s3.service';
 @Injectable()
 export class AttachmentsService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly s3Service: S3Service,
+  ) {}
 
   async create(createAttachmentDto: CreateAttachmentDto) {
     return this.prismaService.attachments.create({
@@ -80,7 +84,15 @@ export class AttachmentsService {
     });
   }
 
-  remove(id: number) {
+  async remove(id: number) {
+    const attachment = await this.prismaService.attachments.findUnique({
+      where: { id },
+    });
+
+    if (attachment) {
+      await this.s3Service.delete(attachment.uniqueFilename);
+    }
+
     return this.prismaService.attachments.delete({
       where: { id },
     });

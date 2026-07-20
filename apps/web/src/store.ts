@@ -185,6 +185,7 @@ interface DataState {
   fetchData: (access_token: string, campaignId: number) => Promise<void>;
   fetchAttachment: (access_token: string, campaignId: number) => Promise<void>;
   addAttachments: (newAttachments: Attachment[]) => void;
+  removeAttachment: (id: number) => void;
 }
 
 const useDataStore = create<DataState>((set) => ({
@@ -343,6 +344,11 @@ const useDataStore = create<DataState>((set) => ({
   addAttachments: (newAttachments: Attachment[]) => {
     set((state) => ({
       attachments: [...newAttachments, ...state.attachments],
+    }));
+  },
+  removeAttachment: (id: number) => {
+    set((state) => ({
+      attachments: state.attachments.filter((attachment) => attachment.id !== id),
     }));
   },
 }));

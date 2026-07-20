@@ -101,7 +101,7 @@ export class AttachmentsController {
     return this.attachmentsService.update(+id, updateAttachmentDto);
   }
 
-  // @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   @Delete(':id')
   async remove(@Param('id') id: string) {
     return this.attachmentsService.remove(+id);

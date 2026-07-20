@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { Plus_Jakarta_Sans, Inter } from "next/font/google";
-import { Attachment, baseApiUrl } from "@/store";
+import useDataStore, { Attachment, baseApiUrl } from "@/store";
 import Image from "next/image";
 import fileIcon from "@/../public/fileIcon.svg";
 import Link from "next/link";
 import { addAlphaToHex, parseUpdatedAt } from "../../../utils/utils";
-import { File } from "lucide-react";
+import { File, Trash2 } from "lucide-react";
+import { parseCookies } from "nookies";
 
 const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 const inter = Inter({ subsets: ["latin"] });
@@ -30,6 +31,31 @@ function formatFileSize(fileSize: number | null | undefined): string {
 }
 
 const AttachmentsTableRow = ({ data }: AttachmentsTableRowProps) => {
+  const removeAttachment = useDataStore((state) => state.removeAttachment);
+  const [deleting, setDeleting] = useState(false);
+
+  const handleDelete = async () => {
+    if (!window.confirm(`Excluir "${data.originalFilename}"?`)) return;
+
+    setDeleting(true);
+    try {
+      const { "bee-dash-token": access_token } = parseCookies();
+      const response = await fetch(`${baseApiUrl}/attachments/${data.id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${access_token}` },
+      });
+
+      if (!response.ok) {
+        throw new Error("Falha ao excluir o anexo");
+      }
+
+      removeAttachment(data.id);
+    } catch (error) {
+      console.error("Erro ao excluir anexo:", error);
+      setDeleting(false);
+    }
+  };
+
   return (
     <tr className="!border-b-[#EAECF0]">
       <td>
@@ -71,19 +97,30 @@ const AttachmentsTableRow = ({ data }: AttachmentsTableRowProps) => {
         </p>
       </td>
       <th>
-        <button className="btn btn-ghost p-0 text-xs h-6 min-h-[24px] !bg-transparent">
-          <Link
-            href={`${baseApiUrl}/public/${data.uniqueFilename}`}
-            target="_blank"
-            download={data.originalFilename}
-          >
-            <p
-              className={`flex-shrink-0 w-auto h-auto whitespace-pre relative font-semibold ${jakarta.className} text-[#FF5100] text-sm`}
+        <div className="flex items-center gap-3">
+          <button className="btn btn-ghost p-0 text-xs h-6 min-h-[24px] !bg-transparent">
+            <Link
+              href={`${baseApiUrl}/public/${data.uniqueFilename}`}
+              target="_blank"
+              download={data.originalFilename}
             >
-              Download
-            </p>
-          </Link>
-        </button>
+              <p
+                className={`flex-shrink-0 w-auto h-auto whitespace-pre relative font-semibold ${jakarta.className} text-[#FF5100] text-sm`}
+              >
+                Download
+              </p>
+            </Link>
+          </button>
+          <button
+            type="button"
+            onClick={handleDelete}
+            disabled={deleting}
+            title="Excluir anexo"
+            className="btn btn-ghost p-0 text-xs h-6 min-h-[24px] !bg-transparent disabled:opacity-50"
+          >
+            <Trash2 size={16} className="text-[#98A2B3]" />
+          </button>
+        </div>
       </th>
     </tr>
   );
