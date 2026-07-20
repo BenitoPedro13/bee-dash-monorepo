@@ -18,6 +18,8 @@ import PerformanceIcon from "../MetricsIcons/PerformanceIcon";
 import { SearchIcon, X } from "lucide-react";
 import Link from "next/link";
 import { set } from "react-hook-form";
+import { useParams } from "next/navigation";
+import { getParam } from "@/lib/utils";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,6 +28,9 @@ const CreatorsTable = () => {
   const { campaigns, color, email } = useDataStore(
     (state) => state.session.user
   );
+  const params = useParams();
+  const campaignId = getParam(params.campaignId);
+  const currentCampaign = campaigns.find((c) => c.id === +campaignId);
   const hexColor =
     color === undefined ? "#FF8C00" : color.length !== 7 ? "#FF8C00" : color;
   const [data, setData] = useState([...globalData]);
@@ -231,18 +236,36 @@ const CreatorsTable = () => {
                 </div>
               </div>
             </div>
-            <Link
-              href={campaigns[0]?.urlTable ?? "#"}
-              target="_blank"
-              className="flex py-2 px-4 justify-center items-center gap-[10px] rounded-lg"
-              style={{
-                backgroundColor: hexColor,
-              }}
-            >
-              <p className="text-white opacity-95 font-nexa-bold text-sm font-semibold">
-                Abrir Planilha
-              </p>
-            </Link>
+            {currentCampaign?.urlTable ? (
+              <Link
+                href={currentCampaign.urlTable}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex py-2 px-4 justify-center items-center gap-[10px] rounded-lg"
+                style={{
+                  backgroundColor: hexColor,
+                }}
+              >
+                <p className="text-white opacity-95 font-nexa-bold text-sm font-semibold">
+                  Abrir Planilha
+                </p>
+              </Link>
+            ) : (
+              <button
+                type="button"
+                disabled
+                aria-disabled="true"
+                title="Nenhuma planilha vinculada a esta campanha"
+                className="flex py-2 px-4 justify-center items-center gap-[10px] rounded-lg opacity-50 cursor-not-allowed"
+                style={{
+                  backgroundColor: hexColor,
+                }}
+              >
+                <p className="text-white opacity-95 font-nexa-bold text-sm font-semibold">
+                  Abrir Planilha
+                </p>
+              </button>
+            )}
           </div>
         </div>
       </div>

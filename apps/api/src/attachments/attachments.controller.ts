@@ -35,16 +35,16 @@ export class AttachmentsController {
   async create(
     @UploadedFile() file: Express.Multer.File,
     @Body() createAttachmentDto: CreateAttachmentDto, // Add the Body decorator
-    @Req() req: any, // Inject the Request object using @Req()
   ) {
     const uniqueFilename = `${Date.now()}-${uuidv4()}-${file.originalname}`;
     await this.s3Service.upload(uniqueFilename, file.buffer, file.mimetype);
 
-    // Assign the userId from the request body to the CreateAttachmentDto
     createAttachmentDto.fileSize = file.size;
-    createAttachmentDto.userEmail = req.user.email;
     createAttachmentDto.originalFilename = file.originalname;
     createAttachmentDto.uniqueFilename = uniqueFilename;
+    createAttachmentDto.campaignId = createAttachmentDto.campaignId
+      ? Number(createAttachmentDto.campaignId)
+      : undefined;
 
     return await this.attachmentsService.create(createAttachmentDto);
   }

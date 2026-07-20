@@ -1,55 +1,92 @@
 "use client";
 
 import useDataStore, { Attachment, baseApiUrl } from "@/store";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { parseCookies } from "nookies";
+import { useParams } from "next/navigation";
+import { getParam } from "@/lib/utils";
 
-type FileUploadButtonProps = {
-  attachments: Attachment[];
-  setAttachments: React.Dispatch<React.SetStateAction<Attachment[]>>;
-};
-
-const FileUploadButton = ({
-  attachments,
-  setAttachments,
-}: FileUploadButtonProps) => {
+const FileUploadButton = () => {
   const { color } = useDataStore((state) => state.session.user);
+  const addAttachments = useDataStore((state) => state.addAttachments);
   const hexColor =
     color === undefined ? "#FF8C00" : color.length !== 7 ? "#FF8C00" : color;
   const { "bee-dash-token": access_token } = parseCookies();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const newAttachments = [...attachments];
+  const [uploadError, setUploadError] = useState<string | null>(null);
+
+  const params = useParams();
+  const campaignId = getParam(params.campaignId);
 
   const handleButtonClick = () => {
     fileInputRef.current?.click();
   };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      uploadFile(file);
+    const files = Array.from(event.target.files ?? []);
+    if (files.length > 0) {
+      uploadFiles(files);
     }
+    event.target.value = "";
   };
 
-  const uploadFile = (file: File) => {
+  const uploadFile = async (file: File): Promise<Attachment> => {
     const formData = new FormData();
     formData.append("file", file);
+    if (campaignId) {
+      formData.append("campaignId", campaignId);
+    }
 
-    fetch(`${baseApiUrl}/attachments`, {
+    const response = await fetch(`${baseApiUrl}/attachments`, {
       headers: {
         Authorization: `Bearer ${access_token}`, // Set the token in the Authorization header
       },
       method: "POST",
       body: formData,
-    })
-      .then(async (response) => {
-        const res: Attachment = await response.json();
-        newAttachments.unshift(res);
-        setAttachments(newAttachments);
-      })
-      .catch((error) => {
-        console.log("upload error:", error);
-      });
+    });
+
+    if (!response.ok) {
+      let message = `Falha ao enviar "${file.name}"`;
+      try {
+        const errorBody = await response.json();
+        message = errorBody?.message ?? message;
+      } catch {
+        // response body wasn't JSON, keep default message
+      }
+      throw new Error(message);
+    }
+
+    return (await response.json()) as Attachment;
+  };
+
+  const uploadFiles = async (files: File[]) => {
+    setUploadError(null);
+
+    const results = await Promise.allSettled(files.map(uploadFile));
+
+    const successful: Attachment[] = [];
+    const failures: string[] = [];
+
+    results.forEach((result) => {
+      if (result.status === "fulfilled") {
+        successful.push(result.value);
+      } else {
+        failures.push(
+          result.reason instanceof Error
+            ? result.reason.message
+            : "Falha ao enviar arquivo"
+        );
+      }
+    });
+
+    if (successful.length > 0) {
+      addAttachments(successful);
+    }
+
+    if (failures.length > 0) {
+      console.error("Erro ao enviar anexos:", failures);
+      setUploadError(failures.join(", "));
+    }
   };
 
   return (
@@ -98,33 +135,17 @@ const FileUploadButton = ({
         </p>
         <input
           type="file"
+          multiple
           ref={fileInputRef}
           onChange={handleFileChange}
           style={{ display: "none" }}
         />
       </button>
-      {/* <div className="btn btn-ghost box-border flex-shrink-0 w-min h-auto flex justify-center items-center py-[10px] px-[8px] shadow-cost-per-metrics bg-white overflow-hidden self-stretch relative content-center flex-nowrap gap-2 rounded-lg border border-solid border-[#cfd4dc]">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.25}
-          stroke="#2d3442"
-          className="w-6 h-6"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
-          />
-        </svg>
-      </div>
-      <input
-        type="file"
-        ref={fileInputRef}
-        onChange={handleFileChange}
-        style={{ display: "none" }}
-      /> */}
+      {uploadError && (
+        <p className="text-red-500 text-xs mt-1 max-w-[240px]">
+          {uploadError}
+        </p>
+      )}
     </div>
   );
 };

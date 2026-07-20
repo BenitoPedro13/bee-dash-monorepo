@@ -14,7 +14,9 @@ type AttachmentsTableRowProps = {
   data: Attachment;
 };
 
-function formatFileSize(fileSize: number): string {
+function formatFileSize(fileSize: number | null | undefined): string {
+  if (fileSize === null || fileSize === undefined) return "—";
+
   const KB = 1024;
   const MB = KB * KB;
 
@@ -65,7 +67,7 @@ const AttachmentsTableRow = ({ data }: AttachmentsTableRowProps) => {
         <p
           className={`flex-shrink-0 flex-grow w-auto h-auto whitespace-nowrap break-words relative ${inter.className} text-[#475466] text-sm`}
         >
-          {parseUpdatedAt(data.updatedAt)}
+          {parseUpdatedAt(data.createdAt)}
         </p>
       </td>
       <th>

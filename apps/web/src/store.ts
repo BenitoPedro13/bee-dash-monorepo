@@ -71,6 +71,7 @@ export interface Attachment {
   uniqueFilename: string;
   originalFilename: string;
   fileSize: number;
+  campaignId?: number | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -183,6 +184,7 @@ interface DataState {
   attachments: Attachment[];
   fetchData: (access_token: string, campaignId: number) => Promise<void>;
   fetchAttachment: (access_token: string, campaignId: number) => Promise<void>;
+  addAttachments: (newAttachments: Attachment[]) => void;
 }
 
 const useDataStore = create<DataState>((set) => ({
@@ -337,6 +339,11 @@ const useDataStore = create<DataState>((set) => ({
     } catch (error) {
       console.error("Error fetching attachments:", error);
     }
+  },
+  addAttachments: (newAttachments: Attachment[]) => {
+    set((state) => ({
+      attachments: [...newAttachments, ...state.attachments],
+    }));
   },
 }));
 

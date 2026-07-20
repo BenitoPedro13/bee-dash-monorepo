@@ -15,8 +15,12 @@ export function parseDateToPtBr(dateString: string) {
   return new Intl.DateTimeFormat("pt-BR").format(date);
 }
 
-export function parseUpdatedAt(updatedAt: string) {
+export function parseUpdatedAt(updatedAt: string | null | undefined) {
+  if (!updatedAt) return "—";
+
   const date = new Date(updatedAt);
+  if (Number.isNaN(date.getTime())) return "—";
+
   const day = date.getDate().toString().padStart(2, "0");
   const month = (date.getMonth() + 1).toString().padStart(2, "0");
   const year = date.getFullYear().toString().slice(-2);
@@ -24,6 +28,22 @@ export function parseUpdatedAt(updatedAt: string) {
   const minutes = date.getMinutes().toString().padStart(2, "0");
 
   return `${day}/${month}/${year} ${hours}:${minutes}`;
+}
+
+// Compares two possibly-missing values, always sorting missing values after present ones.
+export function compareNullable<T>(
+  a: T | null | undefined,
+  b: T | null | undefined,
+  compare: (a: T, b: T) => number
+): number {
+  const aMissing = a === null || a === undefined;
+  const bMissing = b === null || b === undefined;
+
+  if (aMissing && bMissing) return 0;
+  if (aMissing) return 1;
+  if (bMissing) return -1;
+
+  return compare(a, b);
 }
 
 // Helper function to parse date strings in 'dd/mm/yyyy' format

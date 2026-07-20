@@ -10,7 +10,11 @@ import TableSortingIcon from "../TableSortingIcon";
 import arrowLeft from "@/../public/arrow-left.svg";
 import arrowRight from "@/../public/arrow-right.svg";
 
-import { generatePastelColor, handleSort } from "../../../utils/utils";
+import {
+  compareNullable,
+  generatePastelColor,
+  handleSort,
+} from "../../../utils/utils";
 import AttachmentIcon from "../MetricsIcons/AttachmentIcon";
 
 const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
@@ -88,15 +92,19 @@ const AttachmentsTable = () => {
   }, [globalAttachments]);
 
   useEffect(() => {
-    const sortedAttachments = attachments.sort((a, b) => {
+    const sortedAttachments = [...attachments].sort((a, b) => {
       if (sortColumn === "originalFilename") {
-        return a.originalFilename.localeCompare(b.originalFilename);
+        return compareNullable(a.originalFilename, b.originalFilename, (x, y) =>
+          x.localeCompare(y)
+        );
       } else if (sortColumn === "fileSize") {
-        return a.fileSize - b.fileSize;
+        return compareNullable(a.fileSize, b.fileSize, (x, y) => x - y);
       } else if (sortColumn === "createdAt") {
-        const dateA = new Date(a.createdAt);
-        const dateB = new Date(b.createdAt);
-        return dateA.getTime() - dateB.getTime();
+        return compareNullable(
+          a.createdAt,
+          b.createdAt,
+          (x, y) => new Date(x).getTime() - new Date(y).getTime()
+        );
       }
       return 0;
     });
@@ -129,10 +137,7 @@ const AttachmentsTable = () => {
               </p>
             </div>
 
-            <FileUploadButton
-              attachments={currentAttachments}
-              setAttachments={setCurrentAttachments}
-            />
+            <FileUploadButton />
           </div>
         </div>
       </div>
